@@ -1,0 +1,289 @@
+[
+  {
+    "name": "io.streammachine.api.cli.commands.AuthRequest",
+    "allDeclaredConstructors": true,
+    "allPublicConstructors": true,
+    "allDeclaredMethods": true,
+    "allPublicMethods": true,
+    "fields": [
+      {
+        "name": "email"
+      },
+      {
+        "name": "password"
+      }
+    ]
+  },
+  {
+    "name": "io.streammachine.api.cli.commands.AuthResponse",
+    "allDeclaredConstructors": true,
+    "allPublicConstructors": true,
+    "allDeclaredMethods": true,
+    "allPublicMethods": true,
+    "fields": [
+      {
+        "name": "email",
+        "allowWrite": true
+      },
+      {
+        "name": "billingId",
+        "allowWrite": true
+      },
+      {
+        "name": "expiresAt",
+        "allowWrite": true
+      },
+      {
+        "name": "idToken",
+        "allowWrite":  true
+      },
+      {
+        "name": "refreshToken",
+        "allowWrite":  true
+      }
+    ]
+  },
+  {
+    "name": "io.streammachine.api.cli.commands.RefreshRequest",
+    "allDeclaredConstructors": true,
+    "allPublicConstructors": true,
+    "allDeclaredMethods": true,
+    "allPublicMethods": true,
+    "fields": [
+      {
+        "name": "refreshToken",
+        "allowWrite": true
+      }
+    ]
+  },
+  {
+    "name": "io.streammachine.api.cli.common.StreamCreateRequest",
+    "allDeclaredConstructors": true,
+    "allPublicConstructors": true,
+    "allDeclaredMethods": true,
+    "allPublicMethods": true,
+    "fields": [
+      {
+        "name": "name",
+        "allowWrite": true
+      },
+      {
+        "name": "description",
+        "allowWrite":  true
+      },
+      {
+        "name": "tags",
+        "allowWrite":  true
+      }
+    ]
+  },
+  {
+    "name": "io.streammachine.api.cli.common.OutputStreamCreateRequest",
+    "allDeclaredConstructors": true,
+    "allPublicConstructors": true,
+    "allDeclaredMethods": true,
+    "allPublicMethods": true,
+    "fields": [
+      {
+        "name": "name",
+        "allowWrite": true
+      },
+      {
+        "name": "description",
+        "allowWrite":  true
+      },
+      {
+        "name": "tags",
+        "allowWrite":  true
+      },
+      {
+        "name": "consentLevelType",
+        "allowWrite":  true
+      },
+      {
+        "name": "consentLevels",
+        "allowWrite":  true
+      },
+      {
+        "name": "decrypterName",
+        "allowWrite":  true
+      }
+    ]
+  },
+  {
+    "name": "io.streammachine.api.cli.common.SinkCreateRequest",
+    "allDeclaredConstructors": true,
+    "allPublicConstructors": true,
+    "allDeclaredMethods": true,
+    "allPublicMethods": true,
+    "fields": [
+      {
+        "name": "sinkType",
+        "allowWrite": true
+      },
+      {
+        "name": "sinkName",
+        "allowWrite":  true
+      },
+      {
+        "name": "bucketName",
+        "allowWrite":  true
+      },
+      {
+        "name": "credentials",
+        "allowWrite":  true
+      }
+    ]
+  },
+  {
+    "name": "io.streammachine.api.cli.common.ExporterCreateRequest",
+    "allDeclaredConstructors": true,
+    "allPublicConstructors": true,
+    "allDeclaredMethods": true,
+    "allPublicMethods": true,
+    "fields": [
+      {
+        "name": "name",
+        "allowWrite": true
+      },
+      {
+        "name": "sinkName",
+        "allowWrite":  true
+      },
+      {
+        "name": "sinkType",
+        "allowWrite":  true
+      },
+      {
+        "name": "intervalSecs",
+        "allowWrite":  true
+      },
+      {
+        "name": "type",
+        "allowWrite":  true
+      },
+      {
+        "name": "pathPrefix",
+        "allowWrite":  true
+      },
+      {
+        "name": "extraConfig",
+        "allowWrite":  true
+      }
+    ]
+  },
+  {
+    "name": "io.streammachine.api.cli.common.ConsentLevelMappingCreateRequest",
+    "allDeclaredConstructors": true,
+    "allPublicConstructors": true,
+    "allDeclaredMethods": true,
+    "allPublicMethods": true,
+    "fields": [
+      {
+        "name": "id",
+        "allowWrite": true
+      },
+      {
+        "name": "name",
+        "allowWrite":  true
+      }
+    ]
+  },
+  {
+    "name":"io.streammachine.api.cli.common.ConsentLevelType",
+    "fields":[
+      {"name":"GRANULAR"},
+      {"name":"CUMULATIVE"}
+    ]
+  },
+  {
+    "name":"io.streammachine.api.cli.common.SinkType",
+    "fields":[
+      {"name":"GCLOUD"},
+      {"name":"S3"}
+    ]
+  },
+  {
+    "name":"io.streammachine.api.cli.common.ExporterType",
+    "fields":[
+      {"name":"BATCH"}
+    ]
+  },
+  {
+    "name": "java.lang.Integer",
+    "methods": [
+      {
+        "name": "parseInt",
+        "parameterTypes": [
+          "java.lang.String"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "java.lang.Long",
+    "methods": [
+      {
+        "name": "parseLong",
+        "parameterTypes": [
+          "java.lang.String"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "java.lang.Boolean",
+    "methods": [
+      {
+        "name": "parseBoolean",
+        "parameterTypes": [
+          "java.lang.String"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "java.lang.Byte",
+    "methods": [
+      {
+        "name": "parseByte",
+        "parameterTypes": [
+          "java.lang.String"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "java.lang.Short",
+    "methods": [
+      {
+        "name": "parseShort",
+        "parameterTypes": [
+          "java.lang.String"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "java.lang.Float",
+    "methods": [
+      {
+        "name": "parseFloat",
+        "parameterTypes": [
+          "java.lang.String"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "java.lang.Double",
+    "methods": [
+      {
+        "name": "parseDouble",
+        "parameterTypes": [
+          "java.lang.String"
+        ]
+      }
+    ]
+  }
+]
