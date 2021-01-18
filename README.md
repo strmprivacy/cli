@@ -2,8 +2,11 @@
 
 ## Installation
 
-1. Make sure that you put the `strm` binary somewhere on your `PATH`.
-2. (only for initial setup) Add the following lines to your `.bashrc` / `.zshrc` or equivalent: `source <(strm --generate-completion <shell>)`. Don't forget to replace `<shell>` with the respective value for your shell type (`bash`, `zsh`, `fish`).
+1. Download the binary for your platform from the latest release.
+2. Rename the binary to `strm` and make sure it's executable
+3. Make sure that you put the `strm` binary somewhere on your `PATH`.
+4. (only for initial setup) Add the following lines to your `.bashrc` / `.zshrc` or equivalent: `source <(strm --generate-completion <shell>)`. Don't forget to replace `<shell>` with the respective value for your shell type (`bash`, `zsh`, `fish`).
+5. For macOS: please allow the binary to circumvent app notarization for now (we're looking into other solutions): `xattr -d -r com.apple.quarantine strm-v0.1.0-mac`
 
 ## Developer setup
 
