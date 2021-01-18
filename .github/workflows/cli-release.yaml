@@ -22,8 +22,8 @@ jobs:
       - name: 'Get Version Number'
         run: echo "VERSION=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_ENV
 
-      - name: 'Get Maven Version Number'
-        run: echo "POM_VERSION=$(./mvnw help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
+#      - name: 'Get Maven Version Number'
+#        run: echo "POM_VERSION=$(./mvnw help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
 
       - name: 'Build JAR'
         run: |
@@ -32,8 +32,8 @@ jobs:
       - name: 'Publish JAR'
         uses: actions/upload-artifact@v2
         with:
-          name: 'strm.jar'
-          path: 'target/strm-${{env.POM_VERSION}}.jar'
+          name: 'strm-${{env.VERSION}}.jar'
+          path: 'target/strm-${{env.VERSION}}.jar'
 
       - name: 'Create Release'
         if: contains(github.ref, 'v')
@@ -111,7 +111,7 @@ jobs:
       - name: 'Get JAR Artifact'
         uses: actions/download-artifact@v2
         with:
-          name: 'strm.jar'
+          name: 'strm-${{env.VERSION}}.jar'
 
       - name: 'Get Release URL'
         if: contains(github.ref, 'v')
@@ -126,7 +126,7 @@ jobs:
 
       - name: 'Build Native Image'
         run: |
-          native-image -jar strm*.jar --no-server --no-fallback --allow-incomplete-classpath --enable-url-protocols=http --enable-url-protocols=https -H:ReflectionConfigurationResources=reflection.json -H:Class=io.streammachine.api.cli.StrmKt -H:Name=strm-${{env.VERSION}}-${{matrix.label}}
+          native-image -jar strm-${{env.VERSION}}.jar --no-server --no-fallback --allow-incomplete-classpath --enable-url-protocols=http --enable-url-protocols=https -H:ReflectionConfigurationResources=reflection.json -H:Class=io.streammachine.api.cli.StrmKt -H:Name=strm-${{env.VERSION}}-${{matrix.label}}
 
       - name: 'Publish Native Image'
         if: success()
@@ -180,7 +180,7 @@ jobs:
       - name: 'Get JAR Artifact'
         uses: actions/download-artifact@v2
         with:
-          name: 'strm.jar'
+          name: 'strm-${{env.VERSION}}.jar'
 
       - name: 'Build Native Image'
         shell: cmd
@@ -188,7 +188,7 @@ jobs:
           JAVA_HOME: ./graalvm-ce-java11-20.3.0
         run: |
           call "C:\Program Files (x86)\Microsoft Visual Studio\2017\BuildTools\VC\Auxiliary\Build\vcvars64.bat"
-                    ./graalvm-ce-java11-20.3.0/bin/native-image -jar strm*.jar --no-server --no-fallback --allow-incomplete-classpath --enable-url-protocols=http --enable-url-protocols=https -H:ReflectionConfigurationResources=reflection.json -H:Class=io.streammachine.api.cli.StrmKt -H:Name=strm-${{env.VERSION}}-windows
+                    ./graalvm-ce-java11-20.3.0/bin/native-image -jar strm-${{env.VERSION}}.jar --no-server --no-fallback --allow-incomplete-classpath --enable-url-protocols=http --enable-url-protocols=https -H:ReflectionConfigurationResources=reflection.json -H:Class=io.streammachine.api.cli.StrmKt -H:Name=strm-${{env.VERSION}}-windows
 
       - name: 'Get Release URL'
         if: contains(github.ref, 'v')
