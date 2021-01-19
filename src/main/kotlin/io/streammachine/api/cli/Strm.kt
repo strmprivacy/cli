@@ -11,6 +11,7 @@ import io.streammachine.api.cli.Strm.Companion.COMMAND
 import io.streammachine.api.cli.commands.*
 import io.streammachine.api.cli.common.ColorHelpFormatter
 import io.streammachine.api.cli.common.Common
+import io.streammachine.api.cli.common.UpdateCheck.printUpdateMessageIfAvailable
 import io.streammachine.api.cli.common.initializeFuel
 
 fun main(args: Array<String>) = Strm()
@@ -18,6 +19,8 @@ fun main(args: Array<String>) = Strm()
     .completionOption(help = "Generate the completion script for the Stream Machine CLI. Usage = $COMMAND --generate-completion [bash zsh fish] > /completion/script/location/strm-completions.sh")
     .versionOption(Common.VERSION, names = setOf("-v", "--version"), message = { "Stream Machine CLI version: $it" })
     .main(args)
+
+//fun main(args: Array<String>) = printUpdateMessageIfAvailable()
 
 class Strm : CliktCommand(
     name = COMMAND,
@@ -43,6 +46,7 @@ class Strm : CliktCommand(
 
     override fun run() {
         Common.VERBOSE_LOGGING = verbose
+        printUpdateMessageIfAvailable()
         initializeFuel()
     }
 }
