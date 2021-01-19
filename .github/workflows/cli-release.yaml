@@ -60,7 +60,7 @@ jobs:
         with:
           upload_url: ${{steps.create_release.outputs.upload_url}}
           asset_path: 'target/strm-${{env.VERSION}}.jar'
-          asset_name: strm.jar
+          asset_name: strm-${{env.VERSION}}.jar
           asset_content_type: application/java-archive
 
 
@@ -128,14 +128,14 @@ jobs:
 
       - name: 'Build Native Image'
         run: |
-          native-image -jar strm-${{env.VERSION}}.jar --no-server --no-fallback --allow-incomplete-classpath --enable-url-protocols=http --enable-url-protocols=https -H:ReflectionConfigurationResources=reflection.json -H:Class=io.streammachine.api.cli.StrmKt -H:Name=strm
+          native-image -jar strm-${{env.VERSION}}.jar --no-server --no-fallback --allow-incomplete-classpath --enable-url-protocols=http --enable-url-protocols=https -H:ReflectionConfigurationResources=reflection.json -H:Class=io.streammachine.api.cli.StrmKt -H:Name=strm-${{env.VERSION}}-${{matrix.label}}
 
       - name: 'Publish Native Image'
         if: success()
         uses: actions/upload-artifact@v2
         with:
           name: 'strm-${{env.VERSION}}-${{matrix.label}}'
-          path: 'strm'
+          path: 'strm-${{env.VERSION}}-${{matrix.label}}'
 
       - name: 'Release Native Image Asset'
         if: success() && contains(github.ref, 'v')
@@ -146,7 +146,7 @@ jobs:
         with:
           upload_url: ${{env.UPLOAD_URL}}
           asset_name: 'strm-${{env.VERSION}}-${{matrix.label}}'
-          asset_path: 'strm'
+          asset_path: 'strm-${{env.VERSION}}-${{matrix.label}}'
           asset_content_type: application/octet-stream
 
   build-windows-image:
@@ -190,7 +190,7 @@ jobs:
           JAVA_HOME: ./graalvm-ce-java11-20.3.0
         run: |
           call "C:\Program Files (x86)\Microsoft Visual Studio\2017\BuildTools\VC\Auxiliary\Build\vcvars64.bat"
-                    ./graalvm-ce-java11-20.3.0/bin/native-image -jar strm-${{env.VERSION}}.jar --no-server --no-fallback --allow-incomplete-classpath --enable-url-protocols=http --enable-url-protocols=https -H:ReflectionConfigurationResources=reflection.json -H:Class=io.streammachine.api.cli.StrmKt -H:Name=strm
+                    ./graalvm-ce-java11-20.3.0/bin/native-image -jar strm-${{env.VERSION}}.jar --no-server --no-fallback --allow-incomplete-classpath --enable-url-protocols=http --enable-url-protocols=https -H:ReflectionConfigurationResources=reflection.json -H:Class=io.streammachine.api.cli.StrmKt -H:Name=strm-${{env.VERSION}}-windows
 
       - name: 'Get Release URL'
         if: contains(github.ref, 'v')
@@ -209,7 +209,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: 'strm-${{env.VERSION}}-windows.exe'
-          path: 'strm.exe'
+          path: 'strm-${{env.VERSION}}-windows.exe'
 
       - name: 'Release Windows Image Asset'
         if: success() && contains(github.ref, 'v')
@@ -219,6 +219,6 @@ jobs:
           GITHUB_TOKEN: ${{secrets.GH_TOKEN}}
         with:
           upload_url: ${{env.UPLOAD_URL}}
-          asset_name: 'strm-${{env.VERSION}}-windows'
-          asset_path: 'strm.exe'
+          asset_name: 'strm-${{env.VERSION}}-windows.exe'
+          asset_path: 'strm-${{env.VERSION}}-windows.exe'
           asset_content_type: application/octet-stream
