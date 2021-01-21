@@ -36,12 +36,11 @@ object Common {
 
     private var CREDENTIALS: AuthResponse? = null
 
-    internal fun getApiUrl() = System.getenv("STRM_API_HOST")?.let { "https://$it" } ?: "https://api.streammachine.io"
+    private fun getApiHost() = System.getenv("STRM_API_HOST") ?: "api.streammachine.io"
+    internal fun getApiUrl() = "https://${getApiHost()}"
 
     internal fun getCredentialsPath() = File("${System.getProperty("user.home")}/.config/stream-machine")
-    internal fun getCredentialsFile() =
-        getCredentialsPath().resolve(System.getenv("STRM_API_HOST")?.let { "${it}-credentials.json" }
-            ?: "credentials.json")
+    internal fun getCredentialsFile() = getCredentialsPath().resolve("${getApiHost()}-credentials.json")
 
     internal fun writer(block: (FileWriter) -> Unit) {
         val fileWriter = FileWriter(getCredentialsFile(), StandardCharsets.UTF_8, false)
