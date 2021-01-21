@@ -45,7 +45,8 @@ object UpdateCheck {
         if (it.third is Result.Success) it.third.get() else null
     }.getOrNull()
 
-    private data class GitHubRelease(
-        val tagName: String
-    )
 }
+
+internal data class GitHubRelease(
+    val tagName: String
+)

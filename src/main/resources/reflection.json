@@ -1,5 +1,18 @@
 [
   {
+    "name": "io.streammachine.api.cli.common.GitHubRelease",
+    "allDeclaredConstructors": true,
+    "allPublicConstructors": true,
+    "allDeclaredMethods": true,
+    "allPublicMethods": true,
+    "fields": [
+      {
+        "name": "tagName",
+        "allowWrite": true
+      }
+    ]
+  },
+  {
     "name": "io.streammachine.api.cli.commands.AuthRequest",
     "allDeclaredConstructors": true,
     "allPublicConstructors": true,
@@ -7,10 +20,12 @@
     "allPublicMethods": true,
     "fields": [
       {
-        "name": "email"
+        "name": "email",
+        "allowWrite": true
       },
       {
-        "name": "password"
+        "name": "password",
+        "allowWrite": true
       }
     ]
   },
