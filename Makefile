@@ -2,7 +2,7 @@ sources := $(shell find src -type f)
 
 target/strm: ${sources} pom.xml
 	java -version 2>&1 | grep -q GraalVM && \
-	./mvnw clean package -DskipTests
+	mvn clean verify -DskipTests
 
 install: target/strm
 	cp $< ~/bin

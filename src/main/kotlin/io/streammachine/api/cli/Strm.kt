@@ -20,8 +20,6 @@ fun main(args: Array<String>) = Strm()
     .versionOption(Common.VERSION, names = setOf("-v", "--version"), message = { "Stream Machine CLI version: $it" })
     .main(args)
 
-//fun main(args: Array<String>) = printUpdateMessageIfAvailable()
-
 class Strm : CliktCommand(
     name = COMMAND,
     help = "Command Line Interface for https://streammachine.io",
