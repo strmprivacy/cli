@@ -39,7 +39,9 @@ object Common {
     internal fun getApiUrl() = System.getenv("STRM_API_HOST")?.let { "https://$it" } ?: "https://api.streammachine.io"
 
     internal fun getCredentialsPath() = File("${System.getProperty("user.home")}/.config/stream-machine")
-    internal fun getCredentialsFile() = getCredentialsPath().resolve("credentials.json")
+    internal fun getCredentialsFile() =
+        getCredentialsPath().resolve(System.getenv("STRM_API_HOST")?.let { "${it}-credentials.json" }
+            ?: "credentials.json")
 
     internal fun writer(block: (FileWriter) -> Unit) {
         val fileWriter = FileWriter(getCredentialsFile(), StandardCharsets.UTF_8, false)
