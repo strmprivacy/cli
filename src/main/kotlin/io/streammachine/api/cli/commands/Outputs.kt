@@ -119,7 +119,6 @@ class OutputStreamExporters : CliktCommand(
     init {
         subcommands(
             OutputStreamExportersGet(),
-//            OutputStreamExportersCreate(),
             OutputStreamExportersDelete()
         )
     }
