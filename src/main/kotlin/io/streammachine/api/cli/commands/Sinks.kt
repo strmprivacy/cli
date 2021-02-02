@@ -43,7 +43,7 @@ class SinksList : CliktCommand(
     class NameAndType : OptionGroup() {
         val name by option("-n", "--name", help = "Name of the sink to list.").required()
         val sinkType by option("-st", "--sink-type")
-                // TODO verify sink type uppercase
+            // TODO verify sink type uppercase
             .choice(*SinkType.getTypes())
             .enum<SinkType>(ignoreCase = true)
             .required()

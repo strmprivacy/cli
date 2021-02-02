@@ -4,7 +4,6 @@ import com.github.ajalt.clikt.output.CliktHelpFormatter
 import com.github.ajalt.clikt.output.HelpFormatter
 import com.github.ajalt.mordant.TermColors
 import com.github.kittinunf.fuel.core.Request
-import com.github.kittinunf.fuel.core.Response
 import com.github.kittinunf.result.Result
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
@@ -24,7 +23,6 @@ object Common {
         internal val TERM_COLORS = TermColors()
 
         internal val ORANGE = TERM_COLORS.rgb("f25c03")
-        internal val BLUE = TERM_COLORS.rgb("0004bf")
     }
 
     internal val GSON = GsonBuilder()
@@ -78,33 +76,40 @@ object Common {
             }
 }
 
-fun Request.printResponse(noContentMessage: String? = null): Response = response { _, response, result ->
-    when (result) {
-        is Result.Failure -> {
-            if (result.getException().exception !is UnauthorizedRequestAbortedException && response.statusCode != 401) {
-                println(response.body().asString("application/json").asPrettyJson())
-            } else {
-                with(TERM_COLORS) {
-                    println(
-                        "Unauthorized request, access token might be outdated or invalid. Please re-login using: ${
-                            (bold)(
-                                Login.FULL_COMMAND
+fun Request.printResponse(noContentMessage: String? = null) {
+    runCatching {
+        authenticated()
+    }.onSuccess {
+        response { _, response, result ->
+            when (result) {
+                is Result.Failure -> {
+                    if (result.getException().exception !is UnauthorizedRequestAbortedException && response.statusCode != 401) {
+                        println(response.body().asString("application/json").asPrettyJson())
+                    } else {
+                        with(TERM_COLORS) {
+                            println(
+                                "Unauthorized request, access token might be outdated or invalid. Please re-login using: ${
+                                    (bold)(
+                                        Login.FULL_COMMAND
+                                    )
+                                }"
                             )
-                        }"
-                    )
+                        }
+                    }
+                    printVerbose(result.getException().exception.message)
+                }
+                is Result.Success -> {
+                    if (response.statusCode != 204) {
+                        println(response.body().asString("application/json").asPrettyJson())
+                    } else {
+                        println(noContentMessage ?: "Request has been succesfully processed.")
+                    }
                 }
             }
-            printVerbose(result.getException().exception.message)
-        }
-        is Result.Success -> {
-            if (response.statusCode != 204) {
-                println(response.body().asString("application/json").asPrettyJson())
-            } else {
-                noContentMessage?.let { println(it) } ?: println("Request has been succesfully processed.")
-            }
-        }
+        }.get()
     }
-}.get()
+}
+
 
 fun String.asPrettyJson(): String = GSON.toJson(JsonParser.parseString(this))
 

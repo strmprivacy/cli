@@ -32,8 +32,6 @@ class Streams : CliktCommand(
     override fun run() = Unit
 }
 
-open class A
-
 class StreamsList : CliktCommand(
     name = "list",
     help = "List your streams (optionally filter on a stream by name)"
@@ -93,7 +91,6 @@ class StreamExporters : CliktCommand(
     init {
         subcommands(
             StreamExportersGet(),
-//            StreamExportersCreate(),
             StreamExportersDelete()
         )
     }

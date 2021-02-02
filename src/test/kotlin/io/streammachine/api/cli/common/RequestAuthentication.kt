@@ -9,8 +9,7 @@ import org.junit.jupiter.api.*
 import java.net.HttpURLConnection
 import java.net.URL
 
-internal class AuthenticationRequiredHookTest {
-    private val underTest = AuthenticationRequiredHook()
+internal class RequestAuthentication {
     private val connection = mockk<HttpURLConnection>()
 
     @BeforeEach
@@ -51,12 +50,11 @@ internal class AuthenticationRequiredHookTest {
             )
         }
 
-        // When the preConnect hook runs
-        underTest.preConnect(connection, request)
+        // When the request is authenticated
+        request.authenticated()
 
-        // Then the credentials should be refreshed and the request header should be set
-        verify { Login.refreshCredentials(any(), any()) }
-        verify { request.authentication().bearer("a-new-id-token") }
+        // Then the credentials should be refreshed
+        verify { Login.refreshCredentials("an-arbitrary-refresh-token", any()) }
     }
 
     @Test
@@ -67,13 +65,12 @@ internal class AuthenticationRequiredHookTest {
         }
         every { Common.getCredentials() } returns null
 
-        // When the preConnect hook runs
+        // When the request is authenticated
         // Then an aborted exception should be thrown
         assertThrows<UnauthorizedRequestAbortedException> {
-            underTest.preConnect(connection, request)
-            verify { Login.refreshCredentials(any(), any()) }
+            request.authenticated()
+            verify(exactly = 0) { Login.refreshCredentials(any(), any()) }
         }
-
     }
 
     @Test
@@ -91,10 +88,10 @@ internal class AuthenticationRequiredHookTest {
         )
         every { Login.refreshCredentials(any(), any()) } throws CredentialsExpiredException()
 
-        // When the preConnect hook runs
+        // When the request is authenticated
         // Then an aborted exception should be thrown
         assertThrows<UnauthorizedRequestAbortedException> {
-            underTest.preConnect(connection, request)
+            request.authenticated()
             verify { Login.refreshCredentials(any(), any()) }
         }
     }
@@ -113,9 +110,9 @@ internal class AuthenticationRequiredHookTest {
             "an-arbitrary-refresh-token"
         )
 
-        // When the preConnect hook runs
+        // When the request is authenticated
         assertDoesNotThrow {
-            underTest.preConnect(connection, request)
+            request.authenticated()
 
             // And no calls are done to refresh any existing credentials
             verify(exactly = 0) { Login.refreshCredentials(any(), any()) }
