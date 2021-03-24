@@ -37,6 +37,8 @@ class Strm : CliktCommand(
             Streams(),
             Outputs(),
             Exporters(),
+            KafkaExporters(),
+            KafkaExportersUsers(),
             ConsentLevels(),
             Sinks()
         )
