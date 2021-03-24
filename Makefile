@@ -1,3 +1,4 @@
+SHELL := bash
 sources := $(shell find src -type f)
 
 target/strm: ${sources} pom.xml
