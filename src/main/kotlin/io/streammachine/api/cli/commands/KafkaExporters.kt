@@ -20,7 +20,7 @@ import io.streammachine.api.cli.common.printResponse
 
 class KafkaExporters : CliktCommand(
     name = "kafka-exporters",
-    help = "View exporters and their details."
+    help = "Kafka exporters and details."
 ) {
     init {
         subcommands(
@@ -40,32 +40,26 @@ open class KafkaExportersGet : CliktCommand(
     internal val streamName by argument("stream-name", help = "Name of the stream that is being exporter")
 
     override fun run() {
-        "/v1/kafka-exporters/$streamName"
-            .httpGet()
-            .printResponse()
+        "/v1/kafka-exporters/$streamName".httpGet().printResponse()
     }
 }
 
 open class KafkaExportersDelete : CliktCommand(
     name = "delete",
-    help = "Delete a specific exporter by name for a stream"
+    help = "Delete a Kafka exporter by stream name"
 ) {
     internal val streamName by argument("stream-name", help = "Name of the stream that is being exported")
     override fun run() {
-        "/v1/kafka-exporters/$streamName"
-            .httpDelete()
-            .printResponse()
+        "/v1/kafka-exporters/$streamName".httpDelete().printResponse()
     }
 }
 
 open class KafkaExportersCreate : CliktCommand(
     name = "create",
-    help = "Create a new exporter"
+    help = "Create a new Kafka exporter"
 ) {
     internal val streamName by argument("stream-name", help = "Name of the stream that is being exported")
     override fun run() {
-        "/v1/kafka-exporters/$streamName"
-            .httpPut()
-            .printResponse()
+        "/v1/kafka-exporters/$streamName".httpPut().printResponse()
     }
 }

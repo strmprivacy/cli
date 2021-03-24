@@ -26,27 +26,23 @@ class KafkaExportersUsers : CliktCommand(
 
 open class kafkaExportersUsersList : CliktCommand(
     name = "list",
-    help = "get all users on a certain stream"
+    help = "get all users on a certain Kafka exporter"
 ) {
     internal val streamName by argument("stream-name", help = "Name of the stream that is being exporter")
 
     override fun run() {
-        "/v1/kafka-exporters-users/$streamName"
-            .httpGet()
-            .printResponse()
+        "/v1/kafka-exporters-users/$streamName".httpGet().printResponse()
     }
 }
 open class KafkaExportersUsersGetOne : CliktCommand(
-    name = "get1",
-    help = "Get a specific exporter by name for a stream"
+    name = "get",
+    help = "Get a specific user on a Kafka exporter by stream name"
 ) {
-    internal val streamName by argument("stream-name", help = "Name of the stream that is being exporter")
-    internal val clientId by argument("client-id", help = "client Id")
+    internal val streamName by argument("stream-name", help = "Name of the stream that is being exported")
+    internal val clientId by argument("client-id", help = "The client/consumer id that identifies the user")
 
     override fun run() {
-        "/v1/kafka-exporters-users/$streamName/$clientId"
-            .httpGet()
-            .printResponse()
+        "/v1/kafka-exporters-users/$streamName/$clientId".httpGet().printResponse()
     }
 }
 
@@ -55,22 +51,18 @@ open class KafkaExportersUsersDelete : CliktCommand(
     help = "Delete a specific exporter by name for a stream"
 ) {
     internal val streamName by argument("stream-name", help = "Name of the stream that is being exported")
-    internal val clientId by argument("client-id", help = "client Id")
+    internal val clientId by argument("client-id", help = "The client/consumer id that identifies the user")
     override fun run() {
-        "/v1/kafka-exporters-users/$streamName/$clientId"
-            .httpDelete()
-            .printResponse()
+        "/v1/kafka-exporters-users/$streamName/$clientId".httpDelete().printResponse()
     }
 }
 
 open class KafkaExportersUsersCreate : CliktCommand(
     name = "create",
-    help = "Create a new user on a kafka exporter"
+    help = "Create a new user on an existing Kafka exporter"
 ) {
     internal val streamName by argument("stream-name", help = "Name of the stream that is being exported")
     override fun run() {
-        "/v1/kafka-exporters-users/$streamName"
-            .httpPost()
-            .printResponse()
+        "/v1/kafka-exporters-users/$streamName".httpPost().printResponse()
     }
 }
