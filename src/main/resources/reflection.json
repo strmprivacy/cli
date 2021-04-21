@@ -184,6 +184,10 @@
       {
         "name": "extraConfig",
         "allowWrite":  true
+      },
+      {
+        "name": "exportKeys",
+        "allowWrite":  true
       }
     ]
   },
