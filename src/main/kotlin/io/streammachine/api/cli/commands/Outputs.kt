@@ -158,7 +158,8 @@ class OutputStreamExportersCreate : StreamExportersCreate() {
                     intervalSecs,
                     ExporterType.BATCH,
                     pathPrefix,
-                    null
+                    null,
+                    false
                 )
             )
             .printResponse()
