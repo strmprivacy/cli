@@ -58,7 +58,8 @@ open class ExportersGet : CliktCommand(
     ).required()
     internal val exportKeys by option(
         "-k",
-        "--export-keys"
+        "--export-keys",
+        help = "Export the encryption keys"
     ).flag()
 
     override fun run() {
@@ -80,7 +81,8 @@ open class ExportersDelete : CliktCommand(
     ).required()
     internal val exportKeys by option(
         "-k",
-        "--export-keys"
+        "--export-keys",
+        help = "Export the encryption keys"
     ).flag()
 
     override fun run() {
@@ -133,7 +135,8 @@ open class ExportersCreate : CliktCommand(
 
     internal val exportKeys by option(
         "-k",
-        "--export-keys"
+        "--export-keys",
+        help = "Export the encryption keys"
     ).flag()
 
 
