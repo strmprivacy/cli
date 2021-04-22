@@ -3,6 +3,7 @@ package io.streammachine.api.cli.commands
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.subcommands
 import com.github.ajalt.clikt.parameters.arguments.argument
+import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.multiple
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
@@ -156,6 +157,10 @@ open class StreamExportersCreate : CliktCommand(
         "--path-prefix",
         help = "Optional path prefix. Every object that is exported to the configured sink will have this path prepended to the resource destination."
     )
+    internal val exportKeys by option(
+        "-k",
+        "--export-keys"
+    ).flag()
 
     override fun run() {
         "/v1/streams/$streamName/exporters"
@@ -168,7 +173,8 @@ open class StreamExportersCreate : CliktCommand(
                     intervalSecs,
                     ExporterType.BATCH,
                     pathPrefix,
-                    null
+                    null,
+                    exportKeys
                 )
             )
             .printResponse()
@@ -186,8 +192,13 @@ open class StreamExportersDelete : CliktCommand(
         help = "Name of the stream that is linked to this exporter."
     ).required()
 
+    internal val exportKeys by option(
+        "-k",
+        "--export-keys"
+    ).flag()
+
     override fun run() {
-        "/v1/streams/$streamName/exporters/$name"
+        "/v1/streams/$streamName/exporters/$name?exportKeys=$exportKeys"
             .httpDelete()
             .printResponse()
     }

@@ -3,6 +3,7 @@ package io.streammachine.api.cli.commands
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.subcommands
 import com.github.ajalt.clikt.parameters.arguments.argument
+import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.choice
@@ -55,9 +56,14 @@ open class ExportersGet : CliktCommand(
         "--exporter-name",
         help = "Name of the exporter that is linked to this stream."
     ).required()
+    internal val exportKeys by option(
+        "-k",
+        "--export-keys",
+        help = "Export the encryption keys"
+    ).flag()
 
     override fun run() {
-        "/v1/exporters/$streamName/$exporterName"
+        "/v1/exporters/$streamName/$exporterName?exportKeys=$exportKeys"
             .httpGet()
             .printResponse()
     }
@@ -73,9 +79,14 @@ open class ExportersDelete : CliktCommand(
         "--exporter-name",
         help = "Name of the exporter that is linked to this stream."
     ).required()
+    internal val exportKeys by option(
+        "-k",
+        "--export-keys",
+        help = "Export the encryption keys"
+    ).flag()
 
     override fun run() {
-        "/v1/exporters/$streamName/$exporterName"
+        "/v1/exporters/$streamName/$exporterName?exportKeys=$exportKeys"
             .httpDelete()
             .printResponse()
     }
@@ -122,6 +133,13 @@ open class ExportersCreate : CliktCommand(
         help = "Optional path prefix. Every object that is exported to the configured sink will have this path prepended to the resource destination."
     )
 
+    internal val exportKeys by option(
+        "-k",
+        "--export-keys",
+        help = "Export the encryption keys"
+    ).flag()
+
+
     override fun run() {
         "/v1/exporters/$streamName"
             .httpPut()
@@ -133,7 +151,8 @@ open class ExportersCreate : CliktCommand(
                     intervalSecs,
                     ExporterType.BATCH,
                     pathPrefix,
-                    null
+                    null,
+                    exportKeys
                 )
             )
             .printResponse()

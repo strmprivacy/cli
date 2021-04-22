@@ -38,7 +38,8 @@ data class ExporterCreateRequest(
     val intervalSecs: Int,
     val type: ExporterType = ExporterType.BATCH,
     val pathPrefix: String?,
-    val extraConfig: String?
+    val extraConfig: String?,
+    val exportKeys: Boolean
 )
 
 enum class ExporterType {
@@ -58,4 +59,3 @@ data class ConsentLevelMappingCreateRequest(
     val id: Int,
     val name: String
 )
-
