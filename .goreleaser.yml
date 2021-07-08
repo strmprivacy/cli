@@ -34,9 +34,6 @@ brews:
       owner: streammachineio
       name: homebrew-cli
     url_template: "https://github.com/streammachineio/cli/releases/download/{{ .Tag }}/{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}.tar.gz"
-    commit_author:
-      name: streammachineio-org
-      email: apis@streammachine.io
     homepage: "https://streammachine.io"
     description: "Command Line Interface for https://streammachine.io"
     install: |
