@@ -2,40 +2,7 @@
 [![GitHub Actions](https://github.com/streammachineio/cli/workflows/Build/badge.svg)](https://github.com/streammachineio/cli/actions)
 [![Latest Release](https://img.shields.io/github/v/release/streammachineio/cli)](https://github.com/streammachineio/cli/releases/latest)
 
-CLI for interacting with Stream Machine.
-
-```
-$ strm --help
-
-Stream Machine CLI
-
-Usage:
-  strm [command]
-
-Available Commands:
-  auth        Authentication command
-  completion  Generate completion script
-  create      Create an entity
-  delete      Delete an entity
-  egress      Read from egress
-  get         Get an entity
-  help        Help about any command
-  list        List entities
-  sim         Simulate events
-  version     Print CLI version
-
-Flags:
-      --api-auth-url string      Auth URL for user logins (default "https://api.streammachine.io/v1")
-      --api-host string          API host name (default "apis.streammachine.io:443")
-      --config-path string       config path (default is $HOME/.config/stream-machine/)
-      --event-auth-host string   Security Token Service for events (default "auth.strm.services")
-  -h, --help                     help for strm
-      --token-file string        config file (default is $HOME/.config/stream-machine/strm-creds-<api-auth-host>.json)
-
-Use "strm [command] --help" for more information about a command.
-```
-
---- 
+This package contains a command line interface (CLI) for interacting with https://www.streammachine.io [Stream Machine].
 
 ## Installation
 
@@ -45,7 +12,7 @@ Put the binary somewhere on your path.
 
 #### Shell Completion
 
-In order to set up auto completion, please follow the instructions below:
+In order to set up command completion, please follow the instructions below:
 - for `bash` users \
   add the following line to your `.bash_profile` or `.bashrc`:
   `source <(strm completion bash)`
@@ -60,12 +27,14 @@ In order to set up auto completion, please follow the instructions below:
 
 ### Homebrew
 
-The CLI is available through Homebrew. Install the formula as follows:
+The CLI is also available through Homebrew. Install the formula as follows:
 ```
 brew install streammachineio/cli/strm
 ```
 
-Ensure to read the caveats section for setting up auto complete. Upgrades to the CLI can be done through `brew upgrade strm`.
+Ensure to read the caveats section for setting up command completion.
+
+Upgrades to the CLI can be done through `brew upgrade strm`.
 
 ### Other package managers
 
@@ -73,11 +42,13 @@ More package managers will be added in the future, so stay tuned.
 
 ## Configuration
 
-The `strm` CLI can be configured using either flags as specified by the help, or with environment variables, but also with a configuration file. The configuration file is located at `$HOME/.config/stream-machine/strm-creds-<api-auth-host>.json`. If it doesn't exist, you can create it and override properties there.
+The `strm` CLI can be configured using either the flags as specified by the help (as command line arguments), with environment variables, or with a configuration file, named strm.yaml, located in the Stream Machine [Configuration directory]. If a flag is not present, the default value is used.
 
-### Reference
+Note: The ordering is the same as specified above, so arguments take precedence over environment variables, which take precedence over the configuration file, which takes precedence over the default values.
 
-Below is a reference of the configuration file for `strm`:
+### Default configuration values
+
+Below are the default values for all `strm' flags, in the YAML format used by the configuration file:
 
 ```yaml
 save: true
@@ -87,6 +58,39 @@ api-auth-url: https://api.streammachine.io/v1
 api-host: apis.streammachine.io:443
 ```
 
-## Need help?
+In normal circumstances, these defaults should work and there is no need to create this configuration file and override any Flags. It can be useful in special cases, for example if you'd like to use a mock endpoint for testing.
+
+#### Save
+The option `save` indicates whether the output of create commands is saved to files in your Stream Machine [Configuration directory]. This can be very useful, especially when managing many resources which have secrets. Be wary however that this information is stored in plain-text on your file system.
+
+#### event-auth-host etc TODO
+
+
+### Configuration directory
+The Stream Machine CLI stores it's information in a configuration directory, by default located in:
+`$HOME/.config/stream-machine/`. In this directory, the CLI looks for a file named: `strm.yaml`, which is used for setting global flags.
+
+By default, this directory also contains the login information used by the `strm auth` commands, in a file named: `strm-creds-<api-auth-url>.json`. This file is generated and updated by the CLI, so there is no need for any manual editing.
+
+In this directory you can also find all entities that have been `save`d (see the [Save] option).
+These entities are saved in the following files: `<config-dir>/<Entity>/<name>.json`, where `Entity` is the Entity name, i.e. "Stream" or "Sink" and the `name` is the unique name of the created entity, i.e. "MyImportantStream" or "s3-sink".
+
+## Getting help
+If you encounter an error, or you'd like a new feature, please create an issue here[https://github.com/streammachineio/cli-wip/issues/new]. Please be thorough in your description, as it helps us to help you more quickly. At least include the version of the CLI, your OS. terminal and any custom Stream Machine flags that are present in your config or environment.
+
+---
+**IMPORTANT**
+
+Don't provide the login configuration JSON file, as it includes sensitive information!
+
+---
+
+We’re also frequently checking our https://gitter.im/stream-machine/community[Gitter] channel, and others in the Stream Machine community may be able to help you as well.
+
+Or email developer-support@streammachine.io[Developer Support], with the details of the issue you’re experiencing. A minimum working example (MWE) would help us in reproducing the issue, and could help in solving it sooner for you. If you have to option to include an MWE, please do so.
+
+
+
+## More resources
 
 See our [documentation](https://docs.streammachine.io) or [reach out to us](https://docs.streammachine.io/docs/0.3.4/contact/index.html).
