@@ -23,9 +23,11 @@ A clear and concise description of what you expected to happen.
 **Screenshots**
 If applicable, add screenshots to help explain your problem.
 
- - OS: [e.g. iOS]
- - Version [e.g. 22]
- - Terminal type (i.e. Bash, or Zsh)
+**Hardware/software**
+ - OS: [e.g. MacOS 11.2.3]
+ - Terminal type [i.e. Bash, or Zsh]
+ - Stream Machine CLI version [e.g. 1.0.0]
+ - Stream Machine flags (either from the config file, or environment variables).
 
 **Additional context**
 Add any other context about the problem here.
