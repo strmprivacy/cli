@@ -25,8 +25,8 @@ type Auth struct {
 }
 
 type ErrorResponse struct {
-	Code    int		`json:"code"`
-	Message string  `json:"message"`
+	Code    int    `json:"code"`
+	Message string `json:"message"`
 }
 
 // token defines sts json response. Dont' change.
@@ -74,7 +74,7 @@ func (authorizer *Auth) AuthenticateLogin(email, password *string) {
 	cobra.CheckErr(err)
 	if resp.StatusCode != 200 {
 		errorBody, _ := io.ReadAll(resp.Body)
-		var errorJson = ErrorResponse{ Code: 0, Message: ""}
+		var errorJson = ErrorResponse{Code: 0, Message: ""}
 		err2 := json.Unmarshal(errorBody, &errorJson)
 		cobra.CheckErr(err2)
 		cobra.CheckErr("Error authenticating: " + errorJson.Message)

@@ -15,5 +15,4 @@ var BillingId string
 
 func SetBillingId(billingId string) {
 	BillingId = billingId
-
 }

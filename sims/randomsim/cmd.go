@@ -2,8 +2,8 @@ package randomsim
 
 import (
 	"github.com/spf13/cobra"
-	"streammachine.io/strm/sims"
 	"streammachine.io/strm/entity/stream"
+	"streammachine.io/strm/sims"
 )
 
 func RunCmd() (cmd *cobra.Command) {

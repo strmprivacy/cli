@@ -11,8 +11,8 @@ import (
 	"net/http"
 	"streammachine.io/strm/auth"
 	"streammachine.io/strm/clickstream"
-	"streammachine.io/strm/sims"
 	"streammachine.io/strm/entity/stream"
+	"streammachine.io/strm/sims"
 	"streammachine.io/strm/utils"
 	"strings"
 	"time"
@@ -28,8 +28,7 @@ func run(cmd *cobra.Command, streamName *string) {
 		clientId := utils.GetStringAndErr(flags, sims.ClientIdFlag)
 		clientSecret := utils.GetStringAndErr(flags, sims.ClientSecretFlag)
 		if len(clientId) == 0 || len(clientSecret) == 0 {
-			log.Fatalf("There's no saved stream and clientId %s clientSecret %s are missing",
-				clientId, clientSecret)
+			log.Fatalf("There are no credentials stored for stream '%s'", *streamName)
 		}
 		s.Credentials = append(s.Credentials, &entities.Credentials{
 			ClientSecret: clientSecret, ClientId: clientId,
@@ -37,7 +36,7 @@ func run(cmd *cobra.Command, streamName *string) {
 	}
 	streamInfo := stream.Get1(streamName, false)
 	if len(streamInfo.StreamTree.Stream.LinkedStream) != 0 {
-		log.Fatalf("You can't run a sim on a derived stream")
+		log.Fatalf("You can't run a simulator on a derived stream")
 	}
 	interval := time.Duration(utils.GetIntAndErr(flags, sims.IntervalFlag))
 	sts := utils.GetStringAndErr(flags, auth.EventAuthHostFlag)
@@ -53,7 +52,8 @@ func run(cmd *cobra.Command, streamName *string) {
 	authClient := &auth.Auth{Uri: sts}
 	authClient.AuthenticateEvent(s.Ref.BillingId, s.Credentials[0].ClientId, s.Credentials[0].ClientSecret)
 	if !quiet {
-		println("Starting sim to stream ", *streamName, "sending 1 event every", interval, "ms")
+
+		println("Starting sim to stream '" + *streamName + "'. Sending 1 event every", interval, "ms")
 	}
 
 	client := http.Client{}
@@ -72,7 +72,7 @@ func run(cmd *cobra.Command, streamName *string) {
 		ct += 1
 		time.Sleep(interval * time.Millisecond)
 		if !quiet && time.Now().Sub(now) > 5*time.Second {
-			println("Have sent", ct, "events")
+			println("Sent", ct, "events")
 			now = time.Now()
 		}
 	}

@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"github.com/gorilla/websocket"
 	"github.com/spf13/cobra"
+	"github.com/streammachineio/api-definitions-go/api/entities/v1"
 	"log"
 	"net/http"
-	"github.com/streammachineio/api-definitions-go/api/entities/v1"
 	"streammachine.io/strm/auth"
 	"streammachine.io/strm/sims"
 	"streammachine.io/strm/utils"
@@ -16,7 +16,6 @@ const UrlFlag = "egress"
 
 var BillingId string
 
-// start an egress consumer
 func Run(cmd *cobra.Command, streamName *string) {
 	s := &entities.Stream{Ref: &entities.StreamRef{BillingId: sims.BillingId, Name: *streamName}}
 	flags := cmd.Flags()
@@ -38,14 +37,14 @@ func Run(cmd *cobra.Command, streamName *string) {
 	authClient := &auth.Auth{Uri: sts}
 	authClient.AuthenticateEvent(s.Ref.BillingId, s.Credentials[0].ClientId, s.Credentials[0].ClientSecret)
 
-	token, _ :=  authClient.GetToken(false)
-	header  := http.Header{"authorization": []string{"Bearer "+token}}
-	c, _, err := websocket.DefaultDialer.Dial(u, header )
+	token, _ := authClient.GetToken(false)
+	header := http.Header{"authorization": []string{"Bearer " + token}}
+	c, _, err := websocket.DefaultDialer.Dial(u, header)
 	cobra.CheckErr(err)
 
 	for {
 		_, message, err := c.ReadMessage()
 		cobra.CheckErr(err)
-		fmt.Println("%v", string(message))
+		fmt.Println(string(message))
 	}
 }
