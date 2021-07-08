@@ -52,14 +52,14 @@ Note: The ordering is the same as specified above, so arguments take precedence 
 | Flag  | Description |
 | ------------- | ------------- |
 | save  | indicates whether the output of create commands is saved to files in your Stream Machine (#configuration-directory). Useful in some situations, but be aware that this is sensitive information  |
-| event-auth-host  | used for retrieving/refreshing (JWT) authentication tokens for sending events (with the "sim" command) |
-| events-gateway | where to send events to (with the "sim" command in the CLI) |
-| api-auth-url  | used for logging in and retrieving/refreshing (JWT) authentication tokens  |
+| event-auth-host  | used for retrieving/refreshing (JWT) authentication tokens for sending events (with the `sim` command) |
+| events-gateway | where to send events to (with the `sim` command in the CLI) |
+| api-auth-url  | used for logging in and retrieving/refreshing ([JWT](https://jwt.io/)) authentication tokens  |
 | api-host | used for interacting with the API (e.g. managing streams, sinks, etc) |
 
 ### Default configuration values
 
-Below are the default values for all `strm' flags, in the YAML format used by the configuration file:
+Below are the default values for all `strm` flags, in the YAML format used by the configuration file:
 
 ```yaml
 save: true
