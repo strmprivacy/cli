@@ -1,0 +1,50 @@
+name: Build
+
+on:
+  release:
+    types:
+      - created
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.16
+      - name: Run GoReleaser
+        uses: goreleaser/goreleaser-action@v2
+        with:
+          distribution: goreleaser
+          version: latest
+          args: --skip-publish --rm-dist
+      - name: Upload
+        env:
+          GITHUB_TOKEN: ${{secrets.GH_TOKEN}}
+        run: |
+          tag_name="${GITHUB_REF##*/}"
+          hub release edit $(find dist -type f -name "*.tar.gz" -printf "-a %p ") -a "dist/checksums.txt" -m "" "$tag_name"
+      - name: Upload Homebrew formula
+        env:
+          GITHUB_TOKEN: ${{secrets.GH_TOKEN}}
+        run: |
+          git config --global user.email "apis@streammachine.io"
+          git config --global user.name "streammachineio-org"
+          tag_name="${GITHUB_REF##*/}"
+          cd dist
+          git clone "https://git:${GITHUB_TOKEN}@github.com/streammachineio/homebrew-cli.git"
+          cp -f strm.rb homebrew-cli
+          cd homebrew-cli
+          git add .
+          git commit -m "Release brew formula for Stream Machine CLI ${tag_name}"
+          git push
+          git tag -a "${tag_name}" -m "Release brew formula for Stream Machine CLI ${tag_name}"
+          git push --tags

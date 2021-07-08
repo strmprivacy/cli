@@ -1,4 +1,10 @@
 .idea
-target
-dependency-reduced-pom.xml
-*.log
+node_modules
+strm
+strm2
+protos
+.env
+.env-dev
+.env-prod
+.default-login-token.json
+dist
