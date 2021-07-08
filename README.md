@@ -83,7 +83,7 @@ These entities are saved in the following files: `<config-dir>/<Entity>/<name>.j
 ## Getting help
 If you encounter an error, or you'd like a new feature, please create an issue [here](https://github.com/streammachineio/cli-wip/issues/new). Please be thorough in your description, as it helps us to help you more quickly. At least include the version of the CLI, your OS. terminal and any custom Stream Machine flags that are present in your config or environment.
 
-*** IMPORTANT: Don't provide the login configuration JSON file, as it includes sensitive information!***
+***IMPORTANT: Don't provide the login configuration JSON file, as it includes sensitive information!***
 
 We’re also frequently checking our [Gitter](https://gitter.im/stream-machine/community) channel, and others in the Stream Machine community may be able to help you as well.
 
