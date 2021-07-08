@@ -35,9 +35,11 @@ jobs:
       - name: Upload Homebrew formula
         env:
           GITHUB_TOKEN: ${{secrets.GH_TOKEN}}
+          APIS_USERNAME: ${{secrets.APIS_USERNAME}}
+          APIS_EMAIL: ${{secrets.APIS_EMAIL}}
         run: |
-          git config --global user.email "apis@streammachine.io"
-          git config --global user.name "streammachineio-org"
+          git config --global user.email "${APIS_EMAIL}"
+          git config --global user.name "${APIS_USERNAME}"
           tag_name="${GITHUB_REF##*/}"
           cd dist
           git clone "https://git:${GITHUB_TOKEN}@github.com/streammachineio/homebrew-cli.git"
