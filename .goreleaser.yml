@@ -33,7 +33,7 @@ brews:
   - tap:
       owner: streammachineio
       name: homebrew-cli
-    url_template: "https://github.com/streammachineio/cli-wip/releases/download/{{ .Tag }}/{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}.tar.gz"
+    url_template: "https://github.com/streammachineio/cli/releases/download/{{ .Tag }}/{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}.tar.gz"
     commit_author:
       name: streammachineio-org
       email: apis@streammachine.io
