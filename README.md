@@ -51,7 +51,7 @@ Note: The ordering is the same as specified above, so arguments take precedence 
 
 | Flag  | Description |
 | ------------- | ------------- |
-| save  | indicates whether the output of create commands is saved to files in your Stream Machine (#configuration-directory). Useful in some situations, but be aware that this is sensitive information  |
+| save  | indicates whether the output of create commands is saved to files in your [Stream Machine](#configuration-directory). Useful in some situations, but be aware that this is sensitive information  |
 | event-auth-host  | used for retrieving/refreshing (JWT) authentication tokens for sending events (with the `sim` command) |
 | events-gateway | where to send events to (with the `sim` command in the CLI) |
 | api-auth-url  | used for logging in and retrieving/refreshing ([JWT](https://jwt.io/)) authentication tokens  |
@@ -77,7 +77,7 @@ The Stream Machine CLI stores it's information in a configuration directory, by 
 
 By default, this directory also contains the login information used by the `strm auth` commands, in a file named: `strm-creds-<api-auth-url>.json`. This file is generated and updated by the CLI, so there is no need for any manual editing.
 
-In this directory you can also find all entities that have been `save`d (see the "[Save](#configuration)" option).
+In this directory you can also find all entities that have been `save`d (see the [Save](#configuration) option).
 These entities are saved in the following files: `<config-dir>/<Entity>/<name>.json`, where `Entity` is the Entity name, i.e. "Stream" or "Sink" and the `name` is the unique name of the created entity, i.e. "MyImportantStream" or "s3-sink".
 
 ## Getting help
