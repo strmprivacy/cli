@@ -8,3 +8,4 @@ protos
 .env-prod
 .default-login-token.json
 dist
+dstrm

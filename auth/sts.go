@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
 	"io"
 	"io/ioutil"
@@ -15,6 +14,8 @@ import (
 	"path/filepath"
 	"time"
 )
+
+var ConfigPath string
 
 // Auth is the entity that interacts with authorization endpoints.
 // Used both for user logins and events
@@ -126,12 +127,10 @@ func (authorizer *Auth) StoreLogin() string {
 
 func (authorizer *Auth) getSaveFilename() string {
 	if TokenFile == "" {
-		home, err := homedir.Dir()
-		cobra.CheckErr(err)
 		u, err := url.Parse(authorizer.Uri)
 		cobra.CheckErr(err)
 		filename := fmt.Sprintf("strm-creds-%s.json", u.Hostname())
-		return path.Join(home, ".config", "stream-machine", filename)
+		return path.Join(ConfigPath, filename)
 	} else {
 		return TokenFile
 	}

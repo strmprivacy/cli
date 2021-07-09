@@ -18,7 +18,7 @@ var EgressCmd = &cobra.Command{
 
 func init() {
 	flags := EgressCmd.Flags()
-	flags.String(egress.UrlFlag, "wss://out.dev.strm.services/ws",
+	flags.String(egress.UrlFlag, "wss://out.strm.services/ws",
 		"where to retrieve the events")
 	flags.String(sims.ClientIdFlag, "", "client id to be used for sending data")
 	flags.String(sims.ClientSecretFlag, "", "client secret to be used for sending data")

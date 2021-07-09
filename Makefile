@@ -10,7 +10,10 @@ zsh-completion:
 
 # for a speedier build than with goreleaser
 source_files := $(shell find . -name "*.go")
-strm: ${source_files} Makefile
-	go build -o $@
+targetVar := streammachine.io/strm/cmd.CommandName
+target := dstrm
+ldflags := -X '${targetVar}=${target}'
+${target}: ${source_files} Makefile
+	go build -ldflags="${ldflags}" -o $@
 clean:
-	rm -f strm
+	rm -f ${target}
