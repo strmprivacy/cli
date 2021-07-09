@@ -1,6 +1,7 @@
 # Stream Machine Command Line Interface
 [![GitHub Actions](https://github.com/streammachineio/cli/workflows/Build/badge.svg)](https://github.com/streammachineio/cli/actions)
 [![Latest Release](https://img.shields.io/github/v/release/streammachineio/cli)](https://github.com/streammachineio/cli/releases/latest)
+[![Gitter chat](https://badges.gitter.im/gitterHQ/gitter.png)](https://gitter.im/stream-machine/community)
 
 This package contains a command line interface (CLI) for interacting with [Stream Machine](https://www.streammachine.io).
 
