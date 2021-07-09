@@ -12,7 +12,9 @@ import (
 	"streammachine.io/strm/utils"
 )
 
-const UrlFlag = "egress"
+const (
+	UrlFlag = "egress"
+)
 
 var BillingId string
 

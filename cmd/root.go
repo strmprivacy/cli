@@ -137,6 +137,7 @@ func init() {
 	RootCmd.PersistentFlags().String(auth.ApiAuthUrlFlag, "https://api.streammachine.io/v1", "Auth URL for user logins")
 	RootCmd.PersistentFlags().StringVar(&auth.TokenFile, "token-file", "",
 		"config file (default is $HOME/.config/stream-machine/strm-creds-<api-auth-host>.json)")
+	RootCmd.PersistentFlags().String(egress.UrlFlag, "wss://out.strm.services/ws", "where to retrieve the events")
 	setupVerbs()
 }
 
