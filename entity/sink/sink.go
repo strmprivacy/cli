@@ -45,15 +45,15 @@ func ExistingNames() []string {
 	return sinkNames
 }
 
-func list() {
-	req := &sinks.ListSinksRequest{BillingId: BillingId}
+func list(recursive bool) {
+	req := &sinks.ListSinksRequest{Recursive: recursive, BillingId: BillingId}
 	sinksList, err := client.ListSinks(apiContext, req)
 	cobra.CheckErr(err)
 	utils.Print(sinksList)
 }
 
-func get(name *string) {
-	req := &sinks.GetSinkRequest{Ref: ref(name)}
+func get(name *string, recursive bool) {
+	req := &sinks.GetSinkRequest{Recursive: recursive, Ref: ref(name)}
 	stream, err := client.GetSink(apiContext, req)
 	cobra.CheckErr(err)
 	utils.Print(stream)

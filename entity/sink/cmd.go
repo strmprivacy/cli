@@ -12,7 +12,8 @@ func GetCmd() *cobra.Command {
 		Use:   "sink [name]",
 		Short: "get sink by name",
 		Run: func(cmd *cobra.Command, args []string) {
-			get(&args[0])
+			recursive, _ := cmd.Flags().GetBool("recursive")
+			get(&args[0], recursive)
 		},
 		Args:              cobra.ExactArgs(1), // the stream name
 		ValidArgsFunction: ExistingNamesCompletion,
@@ -23,7 +24,8 @@ func ListCmd() *cobra.Command {
 		Use:   "sinks",
 		Short: "List sinks",
 		Run: func(cmd *cobra.Command, args []string) {
-			list()
+			recursive, _ := cmd.Flags().GetBool("recursive")
+			list(recursive)
 		},
 	}
 }
