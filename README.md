@@ -51,7 +51,7 @@ The `strm` CLI can be configured using either the flags as specified by the help
 
 | Flag  | Description |
 | ------------- | ------------- |
-| save  | indicates whether the output of create commands is saved to files in your [Stream Machine](#configuration-directory). Useful in some situations, but be aware that this is sensitive information  |
+| save  | indicates whether the output of create commands is saved to files in your Stream Machine [Configuration directory](#configuration-directory). Useful in some situations, but be aware that this is sensitive information  |
 | event-auth-host  | used for retrieving/refreshing (JWT) authentication tokens for sending events (with the `sim` command) |
 | events-gateway | where to send events to (with the `sim` command in the CLI) |
 | api-auth-url  | used for logging in and retrieving/refreshing ([JWT](https://jwt.io/)) authentication tokens  |
