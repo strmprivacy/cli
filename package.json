@@ -1,0 +1,53 @@
+{
+  "devDependencies": {
+    "@commitlint/config-conventional": "^12.1.1",
+    "@google/semantic-release-replace-plugin": "^1.0.2",
+    "@semantic-release/changelog": "5.0.1",
+    "@semantic-release/exec": "^5.0.0",
+    "@semantic-release/git": "9.0.0",
+    "@semantic-release/github": "^7.2.3",
+    "commitlint": "12.1.1",
+    "conventional-changelog-conventionalcommits": "4.5.0",
+    "cz-conventional-changelog": "^3.3.0",
+    "gradle-semantic-release-plugin": "1.4.17",
+    "husky": "^6.0.0",
+    "semantic-release": "17.4.2"
+  },
+  "scripts": {
+    "postinstall": "husky install",
+    "semantic-release": "semantic-release"
+  },
+  "release": {
+    "branches": [
+      "master"
+    ],
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
+      "@semantic-release/changelog",
+      [
+        "@semantic-release/git",
+        {
+          "message": "chore(release): ${nextRelease.version}\n\n${nextRelease.notes}",
+          "assets": [
+            "CHANGELOG.md"
+          ]
+        }
+      ],
+      "@semantic-release/github"
+    ]
+  },
+  "engines": {
+    "node": "^12.12.0"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  }
+}

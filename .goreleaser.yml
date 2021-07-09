@@ -1,0 +1,60 @@
+project_name: strm
+
+before:
+  hooks:
+    - go mod download
+    - go generate ./...
+
+builds:
+  - id: strm
+    binary: strm
+    env:
+      - CGO_ENABLED=0
+    ldflags:
+      - -s -w -X streammachine.io/strm/cmd.Version={{.Version}} -X streammachine.io/strm/cmd.GitSha={{.Commit}} -X streammachine.io/strm/cmd.BuiltOn={{.Date}}
+    goos:
+      - linux
+      - windows
+      - darwin
+
+archives:
+  - name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}"
+    files:
+      # Only include the binary to ensure auto update works correctly
+      - none*
+
+checksum:
+  name_template: 'checksums.txt'
+
+snapshot:
+  name_template: "{{ .Tag }}-dev"
+
+brews:
+  - tap:
+      owner: streammachineio
+      name: homebrew-cli
+    url_template: "https://github.com/streammachineio/cli/releases/download/{{ .Tag }}/{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}.tar.gz"
+    homepage: "https://streammachine.io"
+    description: "Command Line Interface for https://streammachine.io"
+    install: |
+      bin.install "strm"
+    folder: Formula
+    test: |
+      system "#{bin}/{{ .ProjectName }} --version"
+    caveats: |
+      In order to set up auto completion, please follow the instructions below. When you've set up auto completion in the past, you can skip these instructions.
+
+       for bash users
+         add the following line to your .bash_profile or .bashrc:
+           source <({{ .ProjectName }} completion bash)
+
+         to load completions for each session, execute once:
+           - Linux users: {{ .ProjectName }} completion bash > /etc/bash_completion.d/{{ .ProjectName }}
+           - macOS users: {{ .ProjectName }} completion bash > /usr/local/etc/bash_completion.d/{{ .ProjectName }}
+
+       for zsh users
+         ensure that shell completion is enabled, then run (only needs to be done once):
+           /bin/zsh -c '{{ .ProjectName }} completion zsh > "${fpath[1]}/_{{ .ProjectName }}"'
+
+       for fish users
+         source "{{ .ProjectName }}/path.fish.inc"

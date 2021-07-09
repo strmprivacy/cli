@@ -1,23 +1,10 @@
-SHELL := bash
-sources := $(shell find src -type f)
+.PHONY: build
 
-target/strm: ${sources} pom.xml
-	java -version 2>&1 | grep -q GraalVM && \
-	mvn clean verify -DskipTests
+SHELL := /bin/bash
 
-install: target/strm
-	cp $< ~/bin
+build:
+	goreleaser --snapshot --skip-publish --rm-dist
 
-branch:=$(shell git rev-parse --abbrev-ref HEAD)
-
-release:
-	if [[ "$(branch)" == "master" ]]; then \
-		echo "Creating new release..."; \
-		./mvnw clean build-helper:parse-version release:clean release:prepare release:perform \
-		  -P release --batch-mode \
-		  -DdevelopmentVersion='$${parsedVersion.majorVersion}.$${parsedVersion.nextMinorVersion}.0-SNAPSHOT' \
-		  -Darguments="-Dmaven.deploy.skip=true -Dmaven.javadoc.skip=true -DskipTests"; \
-	else \
-		echo "Ensure that you're working on master when doing a release."; \
-	fi
+zsh-completion:
+	/bin/zsh -c 'strm completion zsh > "$${fpath[1]}/_strm"'
 
