@@ -62,6 +62,7 @@ var RootCmd = &cobra.Command{
 			apiHost := utils.GetStringAndErr(cmd.Flags(), apiHostFlag)
 
 			clientConnection, ctx := entity.SetupGrpc(apiHost, token)
+			utils.ConfigPath = cfgPath
 			sims.SetBillingId(billingId)
 			egress.BillingId = billingId
 			setupServiceClients(clientConnection, ctx)
@@ -129,7 +130,7 @@ func init() {
 
 	RootCmd.PersistentFlags().StringVar(&cfgPath, "config-path", "",
 		"config path (default is $HOME/.config/stream-machine/)")
-	RootCmd.PersistentFlags().String(apiHostFlag, "apis.streammachine.io:443", "API host name")
+	RootCmd.PersistentFlags().String(apiHostFlag, "apis.dev.streammachine.io:443", "api host and port")
 	RootCmd.PersistentFlags().String(auth.EventAuthHostFlag, "auth.strm.services", "Security Token Service for events")
 	RootCmd.PersistentFlags().String(auth.ApiAuthUrlFlag, "https://api.streammachine.io/v1", "Auth URL for user logins")
 	RootCmd.PersistentFlags().StringVar(&auth.TokenFile, "token-file", "",
