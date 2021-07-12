@@ -5,7 +5,7 @@ import "github.com/spf13/cobra"
 func GetCmd() *cobra.Command {
 	return &cobra.Command{
 		Use:   "key-stream [name]",
-		Short: "get key-stream by name",
+		Short: "Get key stream by name",
 		Run: func(cmd *cobra.Command, args []string) {
 			get(&args[0])
 		},

@@ -5,7 +5,7 @@ import "github.com/spf13/cobra"
 func GetCmd() *cobra.Command {
 	return &cobra.Command{
 		Use:   "schema [name]",
-		Short: "get schema by name",
+		Short: "Get schema by name",
 		Run: func(cmd *cobra.Command, args []string) {
 			get(&args[0])
 		},

@@ -51,7 +51,7 @@ var RootCmd = &cobra.Command{
 		auth.ConfigPath = cfgPath
 		utils.ConfigPath = cfgPath
 
-		auth.CommandName = CommandName
+		auth.RootCommandName = CommandName
 
 		if cmd.Parent() != AuthCmd && cmd != CompletionCmd && cmd != VersionCmd && cmd.Name() != "help" {
 			apiAuthUrl := utils.GetStringAndErr(cmd.Flags(), auth.ApiAuthUrlFlag)
@@ -132,12 +132,12 @@ func init() {
 	cfgPath, err = utils.ExpandTilde("~/.config/stream-machine")
 	cobra.CheckErr(err)
 
-	RootCmd.PersistentFlags().String(apiHostFlag, "apis.streammachine.io:443", "api host and port")
+	RootCmd.PersistentFlags().String(apiHostFlag, "apis.streammachine.io:443", "API host and port")
 	RootCmd.PersistentFlags().String(auth.EventAuthHostFlag, "https://auth.strm.services", "Security Token Service for events")
 	RootCmd.PersistentFlags().String(auth.ApiAuthUrlFlag, "https://api.streammachine.io/v1", "Auth URL for user logins")
 	RootCmd.PersistentFlags().StringVar(&auth.TokenFile, "token-file", "",
-		"config file (default is $HOME/.config/stream-machine/strm-creds-<api-auth-host>.json)")
-	RootCmd.PersistentFlags().String(egress.UrlFlag, "wss://out.strm.services/ws", "where to retrieve the events")
+		"Token file that contains an access token (default is $HOME/.config/stream-machine/strm-creds-<api-auth-host>.json)")
+	RootCmd.PersistentFlags().String(egress.UrlFlag, "wss://out.strm.services/ws", "Websocket to receive events from")
 	setupVerbs()
 }
 

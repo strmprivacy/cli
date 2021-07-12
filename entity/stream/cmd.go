@@ -8,7 +8,7 @@ func CreateCmd() *cobra.Command {
 
 	stream := &cobra.Command{
 		Use:   "stream [name]",
-		Short: "create a stream",
+		Short: "Create a stream",
 		Run: func(cmd *cobra.Command, args []string) {
 			create(args, cmd)
 
@@ -53,7 +53,7 @@ func DeleteCmd() *cobra.Command {
 func GetCmd() *cobra.Command {
 	return &cobra.Command{
 		Use:   "stream [name]",
-		Short: "A brief description of your command",
+		Short: "Get stream by name",
 		Run: func(cmd *cobra.Command, args []string) {
 			recursive, _ := cmd.Flags().GetBool("recursive")
 			get(&args[0], recursive)

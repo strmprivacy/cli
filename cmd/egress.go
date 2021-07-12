@@ -20,7 +20,7 @@ var EgressCmd = &cobra.Command{
 
 func init() {
 	flags := EgressCmd.Flags()
-	flags.String(sims.ClientIdFlag, "", "client id to be used for sending data")
-	flags.String(sims.ClientSecretFlag, "", "client secret to be used for sending data")
+	flags.String(sims.ClientIdFlag, "", "Client id to be used for receiving data")
+	flags.String(sims.ClientSecretFlag, "", "Client secret to be used for receiving data")
 
 }

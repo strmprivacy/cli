@@ -10,7 +10,7 @@ const (
 func GetCmd() *cobra.Command {
 	return &cobra.Command{
 		Use:   "sink [name]",
-		Short: "get sink by name",
+		Short: "Get sink by name",
 		Run: func(cmd *cobra.Command, args []string) {
 			recursive, _ := cmd.Flags().GetBool("recursive")
 			get(&args[0], recursive)

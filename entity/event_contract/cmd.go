@@ -5,7 +5,7 @@ import "github.com/spf13/cobra"
 func GetCmd() *cobra.Command {
 	return &cobra.Command{
 		Use:   "event-contract [name]",
-		Short: "get event-contract by name",
+		Short: "Get Event Contract by name",
 		Run: func(cmd *cobra.Command, args []string) {
 			get(&args[0])
 		},
@@ -16,7 +16,7 @@ func GetCmd() *cobra.Command {
 func ListCmd() *cobra.Command {
 	return &cobra.Command{
 		Use:   "event-contracts",
-		Short: "List event-contracts",
+		Short: "List Event Contracts",
 		Run: func(cmd *cobra.Command, args []string) {
 			list()
 		},
