@@ -51,6 +51,7 @@ func newConfigDir() string {
 	}
 	defaultTokenFileName = ""
 
+	_ = os.Setenv("TZ", "UTC")
 	_ = os.Setenv("STRM_CONFIG_PATH", configDir)
 
 	_ = os.Setenv("STRM_EVENT_AUTH_HOST", "https://auth.dev.strm.services")
