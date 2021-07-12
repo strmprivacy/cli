@@ -1,10 +1,13 @@
-.PHONY: build clean all
+.PHONY: build test clean all
 .DEFAULT_GOAL := all
 
 SHELL := /bin/bash
 
 build:
 	goreleaser --snapshot --skip-publish --rm-dist
+
+test:
+	go test ./test
 
 zsh-completion:
 	/bin/zsh -c 'strm completion zsh > "$${fpath[1]}/_strm"'
