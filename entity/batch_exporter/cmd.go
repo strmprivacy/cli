@@ -17,7 +17,7 @@ const (
 func DeleteCmd() *cobra.Command {
 	batchExporter := &cobra.Command{
 		Use:   "batch-exporter [name]",
-		Short: "delete batch-exporter by name",
+		Short: "Delete a Batch exporter by name",
 		Run: func(cmd *cobra.Command, args []string) {
 			del(&args[0])
 		},
@@ -31,7 +31,7 @@ func DeleteCmd() *cobra.Command {
 func GetCmd() *cobra.Command {
 	return &cobra.Command{
 		Use:   "batch-exporter [name]",
-		Short: "get batch-exporter by name",
+		Short: "Get Batch exporter by name",
 		Run: func(cmd *cobra.Command, args []string) {
 			get(&args[0], cmd)
 		},
@@ -42,7 +42,7 @@ func GetCmd() *cobra.Command {
 func ListCmd() *cobra.Command {
 	return &cobra.Command{
 		Use:   "batch-exporters",
-		Short: "List batch-exporters",
+		Short: "List Batch exporters",
 		Run: func(cmd *cobra.Command, args []string) {
 			list()
 		},

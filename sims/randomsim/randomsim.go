@@ -53,7 +53,7 @@ func run(cmd *cobra.Command, streamName *string) {
 	authClient.AuthenticateEvent(s.Ref.BillingId, s.Credentials[0].ClientId, s.Credentials[0].ClientSecret)
 	if !quiet {
 
-		println("Starting sim to stream '" + *streamName + "'. Sending 1 event every", interval, "ms")
+		println("Starting sim to stream '"+*streamName+"'. Sending 1 event every", interval, "ms")
 	}
 
 	client := http.Client{}

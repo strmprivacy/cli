@@ -5,7 +5,7 @@ import "github.com/spf13/cobra"
 func GetCmd() *cobra.Command {
 	return &cobra.Command{
 		Use:   "kafka-cluster [name]",
-		Short: "get kafka-cluster by name",
+		Short: "Get Kafka cluster by name",
 		Run: func(cmd *cobra.Command, args []string) {
 			get(&args[0])
 		},
@@ -16,7 +16,7 @@ func GetCmd() *cobra.Command {
 func ListCmd() *cobra.Command {
 	return &cobra.Command{
 		Use:   "kafka-clusters",
-		Short: "List kafka-clusters",
+		Short: "List Kafka clusters",
 		Run: func(cmd *cobra.Command, args []string) {
 			list()
 		},

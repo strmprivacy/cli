@@ -22,8 +22,9 @@ func LoginCmd() *cobra.Command {
 func PrintTokenCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "access-token",
-		Short: "print an access-token to stdout",
+		Short: "Print your current access-token to stdout",
 		Long: `Prints an access token that can be used in an http header.
+Note that this token might be expired, so a refresh may be required.
 Use token as follows:
 'Authorization: Bearer <token>'
 `,
@@ -38,7 +39,7 @@ func Refresh() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "refresh",
 		Short: "Refresh an existing access-token",
-		Long: `Not really necessary, the cli will auto-refresh.
+		Long: `Not really necessary, the CLI will auto-refresh.
 `,
 		Run: func(cmd *cobra.Command, args []string) {
 			DoRefresh(apiHost(cmd))

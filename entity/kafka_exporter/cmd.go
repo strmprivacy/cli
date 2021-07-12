@@ -14,9 +14,9 @@ const (
 func DeleteCmd() *cobra.Command {
 	return &cobra.Command{
 		Use:   "kafka-exporter [name]",
-		Short: "Delete a kafka-exporter",
-		Long: `Delete a kafka-exporter.
-	If a kafka-exporter has dependents (like kafka-users), you can use
+		Short: "Delete a Kafka exporter",
+		Long: `Delete a Kafka exporter.
+	If a kafka-exporter has dependents (like Kafka users), you can use
 	the 'recursive' option to get rid of those also.
 	Returns everything that was deleted. `,
 		Run: func(cmd *cobra.Command, args []string) {
@@ -31,7 +31,7 @@ func DeleteCmd() *cobra.Command {
 func GetCmd() *cobra.Command {
 	return &cobra.Command{
 		Use:   "kafka-exporter [name]",
-		Short: "get kafka-exporter by name",
+		Short: "Get Kafka exporter by name",
 		Run: func(cmd *cobra.Command, args []string) {
 			recursive, _ := cmd.Flags().GetBool("recursive")
 			get(&args[0], recursive)
@@ -44,7 +44,7 @@ func GetCmd() *cobra.Command {
 func ListCmd() *cobra.Command {
 	return &cobra.Command{
 		Use:   "kafka-exporters",
-		Short: "List kafka-exporters",
+		Short: "List Kafka exporters",
 		Run: func(cmd *cobra.Command, args []string) {
 			flag, _ := cmd.Root().PersistentFlags().GetBool("recursive")
 			list(flag)
@@ -56,7 +56,7 @@ func CreateCmd() *cobra.Command {
 
 	kafkaExporter := &cobra.Command{
 		Use:   "kafka-exporter [stream-name]",
-		Short: "create a kafka-exporter",
+		Short: "Create a Kafka exporter",
 		Run: func(cmd *cobra.Command, args []string) {
 			streamName := &args[0]
 			create(streamName, cmd)

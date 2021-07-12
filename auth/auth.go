@@ -16,7 +16,7 @@ import (
 	"os"
 )
 
-var CommandName string
+var RootCommandName string
 var TokenFile string
 
 const (
@@ -36,9 +36,9 @@ func login(apiHost string, s *string, cmd *cobra.Command) {
 	authClient := &Auth{Uri: apiHost}
 	authClient.AuthenticateLogin(s, &password)
 	_, billingId := authClient.GetToken(false)
-	fmt.Println("billingId", billingId)
+	fmt.Println("Billing id:", billingId)
 	filename := authClient.StoreLogin()
-	fmt.Println("saved login to", filename)
+	fmt.Println("Saved login to:", filename)
 }
 
 func askPassword() string {

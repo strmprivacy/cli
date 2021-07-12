@@ -3,10 +3,10 @@ package cmd
 import (
 	"context"
 	"fmt"
-	"github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 	"google.golang.org/grpc"
+	"os"
 	"streammachine.io/strm/auth"
 	"streammachine.io/strm/egress"
 	"streammachine.io/strm/entity"
@@ -48,8 +48,10 @@ var RootCmd = &cobra.Command{
 		// You can bind cobra and viper in a few locations,
 		// but PersistencePreRunE on the root command works well
 		r := initializeConfig(cmd)
+		auth.ConfigPath = cfgPath
+		utils.ConfigPath = cfgPath
 
-		auth.CommandName = CommandName
+		auth.RootCommandName = CommandName
 
 		if cmd.Parent() != AuthCmd && cmd != CompletionCmd && cmd != VersionCmd && cmd.Name() != "help" {
 			apiAuthUrl := utils.GetStringAndErr(cmd.Flags(), auth.ApiAuthUrlFlag)
@@ -125,26 +127,17 @@ func init() {
 	// Here you will define your flags and configuration settings.
 	// Cobra supports persistent flags, which, if defined here,
 	// will be global for your application.
+	// set the default configuration path
 	var err error
+	cfgPath, err = utils.ExpandTilde("~/.config/stream-machine")
+	cobra.CheckErr(err)
 
-	RootCmd.PersistentFlags().StringVar(&cfgPath, "config-path", "",
-		"config path (default is $HOME/.config/stream-machine/)")
-	RootCmd.PersistentFlags().String(apiHostFlag, "apis.streammachine.io:443", "API host name")
-	RootCmd.PersistentFlags().String(auth.EventAuthHostFlag, "auth.strm.services", "Security Token Service for events")
+	RootCmd.PersistentFlags().String(apiHostFlag, "apis.streammachine.io:443", "API host and port")
+	RootCmd.PersistentFlags().String(auth.EventAuthHostFlag, "https://auth.strm.services", "Security Token Service for events")
 	RootCmd.PersistentFlags().String(auth.ApiAuthUrlFlag, "https://api.streammachine.io/v1", "Auth URL for user logins")
 	RootCmd.PersistentFlags().StringVar(&auth.TokenFile, "token-file", "",
-		"config file (default is $HOME/.config/stream-machine/strm-creds-<api-auth-host>.json)")
-	bind := func(f string) {
-		err := viper.BindPFlag(f, RootCmd.PersistentFlags().Lookup(f))
-		if err != nil {
-			return
-		}
-	}
-	bind(apiHostFlag)
-	bind(auth.EventAuthHostFlag)
-	bind(auth.ApiAuthUrlFlag)
-	bind(auth.TokenFile)
-	cobra.CheckErr(err)
+		"Token file that contains an access token (default is $HOME/.config/stream-machine/strm-creds-<api-auth-host>.json)")
+	RootCmd.PersistentFlags().String(egress.UrlFlag, "wss://out.strm.services/ws", "Websocket to receive events from")
 	setupVerbs()
 }
 
@@ -155,14 +148,18 @@ func initializeConfig(cmd *cobra.Command) error {
 	v.SetConfigName(defaultConfigFilename)
 
 	// Set as many paths as you like where viper should look for the
-	// config file. We are only looking in the current working directory.
-	home, err := homedir.Dir()
-	cobra.CheckErr(err)
-	if cfgPath != "" {
+	// config file.
+
+	// if we set this environment variable, we work in a completely different configuration directory
+	e := os.Getenv(envPrefix + "_CONFIG_PATH")
+	if len(e) != 0 {
+		p, err := utils.ExpandTilde(e)
+		cobra.CheckErr(err)
+		v.AddConfigPath(p)
+		cfgPath = p
+	} else {
 		v.AddConfigPath(cfgPath)
 	}
-	v.AddConfigPath(".")
-	v.AddConfigPath(fmt.Sprintf("%s/.config/stream-machine", home))
 
 	// Attempt to read the config file, gracefully ignoring errors
 	// caused by a config file not being found. Return an error

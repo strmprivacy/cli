@@ -13,7 +13,7 @@ const (
 func DeleteCmd() *cobra.Command {
 	return &cobra.Command{
 		Use:   "kafka-user [name]",
-		Short: "Delete a kafka-user",
+		Short: "Delete a Kafka user",
 		Run: func(cmd *cobra.Command, args []string) {
 			del(&args[0])
 		},
@@ -25,7 +25,7 @@ func DeleteCmd() *cobra.Command {
 func GetCmd() *cobra.Command {
 	return &cobra.Command{
 		Use:   "kafka-user [name]",
-		Short: "get a kafka-user",
+		Short: "Get Kafka user",
 		Run: func(cmd *cobra.Command, args []string) {
 			get(&args[0])
 		},
@@ -37,7 +37,7 @@ func GetCmd() *cobra.Command {
 func ListCmd() *cobra.Command {
 	return &cobra.Command{
 		Use:   "kafka-users [kafka-exporter-name]",
-		Short: "List kafka-users",
+		Short: "List Kafka users",
 		Run: func(cmd *cobra.Command, args []string) {
 			list(&args[0])
 		},
@@ -49,7 +49,7 @@ func ListCmd() *cobra.Command {
 func CreateCmd() *cobra.Command {
 	kafkaUser := &cobra.Command{
 		Use:   "kafka-user [exporter-name]",
-		Short: "create a kafka-user on a named kafka-exporter",
+		Short: "Create a Kafka user on a Kafka exporter",
 		Run: func(cmd *cobra.Command, args []string) {
 			streamName := &args[0]
 			create(streamName, cmd)

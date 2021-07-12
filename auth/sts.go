@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
 	"io"
 	"io/ioutil"
@@ -15,6 +14,8 @@ import (
 	"path/filepath"
 	"time"
 )
+
+var ConfigPath string
 
 // Auth is the entity that interacts with authorization endpoints.
 // Used both for user logins and events
@@ -42,7 +43,7 @@ type token struct {
 func (authorizer *Auth) GetToken(quiet bool) (string, string) {
 	if int64(authorizer.token.ExpiresAt)-30 < time.Now().Unix() {
 		if !quiet {
-			println("Refreshing sts token")
+			println("Refreshing STS token")
 		}
 		authorizer.refresh()
 	}
@@ -126,12 +127,10 @@ func (authorizer *Auth) StoreLogin() string {
 
 func (authorizer *Auth) getSaveFilename() string {
 	if TokenFile == "" {
-		home, err := homedir.Dir()
-		cobra.CheckErr(err)
 		u, err := url.Parse(authorizer.Uri)
 		cobra.CheckErr(err)
 		filename := fmt.Sprintf("strm-creds-%s.json", u.Hostname())
-		return path.Join(home, ".config", "stream-machine", filename)
+		return path.Join(ConfigPath, filename)
 	} else {
 		return TokenFile
 	}
@@ -141,7 +140,7 @@ func (authorizer *Auth) LoadLogin() {
 	filename := authorizer.getSaveFilename()
 	b, err := ioutil.ReadFile(filename)
 	if err != nil {
-		cobra.CheckErr(fmt.Sprintf("No login information found. Use: `%v auth login` first.", CommandName))
+		cobra.CheckErr(fmt.Sprintf("No login information found. Use: `%v auth login` first.", RootCommandName))
 	}
 	err = json.Unmarshal(b, &authorizer.token)
 	cobra.CheckErr(err)
@@ -150,6 +149,6 @@ func (authorizer *Auth) LoadLogin() {
 func (authorizer *Auth) printToken() {
 	fmt.Println(authorizer.token.IdToken)
 	// these go to stderr, so the token is easy to capture in a script
-	println("Expires at", time.Unix(int64(authorizer.token.ExpiresAt), 0).String())
-	println("Billing-id", authorizer.token.BillingId)
+	println("Expires at:", time.Unix(int64(authorizer.token.ExpiresAt), 0).String())
+	println("Billing id:", authorizer.token.BillingId)
 }

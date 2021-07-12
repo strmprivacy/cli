@@ -2,7 +2,6 @@ package utils
 
 import (
 	"fmt"
-	"github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
 	flag "github.com/spf13/pflag"
 	"google.golang.org/protobuf/encoding/protojson"
@@ -13,6 +12,8 @@ import (
 	"path/filepath"
 	"strconv"
 )
+
+var ConfigPath string
 
 func Print(m proto.Message) {
 	marshal, _ := protojson.Marshal(m)
@@ -116,7 +117,5 @@ func DeleteSaved(m proto.Message, name *string) {
 
 func getSaveFilename(m proto.Message, name *string) string {
 	cat := fmt.Sprint(m.ProtoReflect().Descriptor().Name())
-	home, err := homedir.Dir()
-	cobra.CheckErr(err)
-	return path.Join(home, ".config", "stream-machine", cat, *name+".json")
+	return path.Join(ConfigPath, cat, *name+".json")
 }
