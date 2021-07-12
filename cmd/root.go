@@ -133,7 +133,7 @@ func init() {
 	cobra.CheckErr(err)
 
 	RootCmd.PersistentFlags().String(apiHostFlag, "apis.streammachine.io:443", "api host and port")
-	RootCmd.PersistentFlags().String(auth.EventAuthHostFlag, "auth.strm.services", "Security Token Service for events")
+	RootCmd.PersistentFlags().String(auth.EventAuthHostFlag, "https://auth.strm.services", "Security Token Service for events")
 	RootCmd.PersistentFlags().String(auth.ApiAuthUrlFlag, "https://api.streammachine.io/v1", "Auth URL for user logins")
 	RootCmd.PersistentFlags().StringVar(&auth.TokenFile, "token-file", "",
 		"config file (default is $HOME/.config/stream-machine/strm-creds-<api-auth-host>.json)")
