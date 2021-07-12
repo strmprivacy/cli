@@ -9,7 +9,7 @@ permissions:
   contents: write
 
 jobs:
-  build:
+  pr-build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
