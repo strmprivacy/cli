@@ -25,10 +25,7 @@ var _testConfig TestConfig
 
 func testConfig() *TestConfig {
 	if (TestConfig{}) == _testConfig {
-		err := godotenv.Load()
-		if err != nil {
-			println(fmt.Printf("Error: %v", err))
-		}
+		_ = godotenv.Load()
 
 		_testConfig = TestConfig{
 			billingId:         os.Getenv("STRM_TEST_USER_BILLING_ID"),
@@ -37,6 +34,10 @@ func testConfig() *TestConfig {
 			s3UserName:        os.Getenv("STRM_TEST_S3_USER_NAME"),
 			s3AccessKeyId:     os.Getenv("STRM_TEST_S3_ACCESS_KEY_ID"),
 			s3SecretAccessKey: os.Getenv("STRM_TEST_S3_SECRET_ACCESS_KEY"),
+		}
+
+		if _testConfig == (TestConfig{}) {
+			println("Error: Configuration parameters not present!")
 		}
 	}
 
