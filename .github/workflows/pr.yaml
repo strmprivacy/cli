@@ -1,9 +1,9 @@
 name: Build
 
 on:
-  release:
-    types:
-      - created
+  push:
+    branches-ignore:
+      - "master"
 
 permissions:
   contents: write
