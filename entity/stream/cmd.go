@@ -7,7 +7,7 @@ import (
 func CreateCmd() *cobra.Command {
 
 	stream := &cobra.Command{
-		Use:   "stream",
+		Use:   "stream [name]",
 		Short: "create a stream",
 		Run: func(cmd *cobra.Command, args []string) {
 			create(args, cmd)
