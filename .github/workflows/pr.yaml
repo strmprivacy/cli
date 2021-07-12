@@ -26,10 +26,11 @@ jobs:
           distribution: goreleaser
           version: latest
           args: --skip-publish --rm-dist
-      - name: Run CLI tests
+      - name: Setup Go
         uses: actions/setup-go@v2
         with:
           go-version: '^1.16'
+      - name: Run CLI tests
         run: |
           ln -sf dist/strm_linux_amd64/strm dstrm
           go test ./test -v
