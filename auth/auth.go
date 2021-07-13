@@ -16,7 +16,6 @@ import (
 	"os"
 )
 
-var RootCommandName string
 var TokenFile string
 
 const (

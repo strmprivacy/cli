@@ -7,6 +7,7 @@ import (
 	"github.com/streammachineio/api-definitions-go/api/entities/v1"
 	"github.com/streammachineio/api-definitions-go/api/schemas/v1"
 	"google.golang.org/grpc"
+	"streammachine.io/strm/common"
 	"streammachine.io/strm/utils"
 	"strings"
 )
@@ -14,7 +15,6 @@ import (
 // strings used in the cli
 const ()
 
-var BillingId string
 var client schemas.SchemasServiceClient
 var apiContext context.Context
 
@@ -36,15 +36,8 @@ func SetupClient(clientConnection *grpc.ClientConn, ctx context.Context) {
 	client = schemas.NewSchemasServiceClient(clientConnection)
 }
 
-func ExistingNamesCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
-	if len(args) > 0 {
-		return nil, cobra.ShellCompDirectiveNoFileComp
-	}
-	return ExistingNames(), cobra.ShellCompDirectiveNoFileComp
-}
-
 func list() {
-	req := &schemas.ListSchemasRequest{BillingId: BillingId}
+	req := &schemas.ListSchemasRequest{BillingId: common.BillingId}
 	sinksList, err := client.ListSchemas(apiContext, req)
 	cobra.CheckErr(err)
 	utils.Print(sinksList)
@@ -54,22 +47,31 @@ func get(name *string) {
 	schema := GetSchema(name)
 	utils.Print(schema)
 }
+
 func GetSchema(name *string) *entities.Schema {
 	req := &schemas.GetSchemaRequest{
-		BillingId: BillingId,
+		BillingId: common.BillingId,
 		Ref:       ref(name)}
 	schema, err := client.GetSchema(apiContext, req)
 	cobra.CheckErr(err)
 	return schema.Schema
 }
+func existingNamesCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
+	if len(args) > 0 || common.BillingIdIsMissing() {
+		return common.MissingBillingIdCompletionError(cmd.CommandPath())
+	}
 
-func ExistingNames() []string {
-	req := &schemas.ListSchemasRequest{BillingId: BillingId}
+	req := &schemas.ListSchemasRequest{BillingId: common.BillingId}
 	response, err := client.ListSchemas(apiContext, req)
-	cobra.CheckErr(err)
+
+	if err != nil {
+		return common.GrpcRequestCompletionError(err)
+	}
+
 	names := make([]string, 0)
 	for _, s := range response.Schemas {
 		names = append(names, refToString(s.Ref))
 	}
-	return names
+
+	return names, cobra.ShellCompDirectiveNoFileComp
 }

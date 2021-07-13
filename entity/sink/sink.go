@@ -2,66 +2,44 @@ package sink
 
 import (
 	"context"
+	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 	"github.com/streammachineio/api-definitions-go/api/entities/v1"
 	"github.com/streammachineio/api-definitions-go/api/sinks/v1"
 	"google.golang.org/grpc"
 	"io/ioutil"
-	"log"
+	"streammachine.io/strm/common"
 	"streammachine.io/strm/utils"
 )
 
-// strings used in the cli
-const ()
-
-var BillingId string
-var client sinks.SinksServiceClient
+var Client sinks.SinksServiceClient
 var apiContext context.Context
 
-func ref(n *string) *entities.SinkRef { return &entities.SinkRef{BillingId: BillingId, Name: *n} }
+func ref(n *string) *entities.SinkRef { return &entities.SinkRef{BillingId: common.BillingId, Name: *n} }
 
 func SetupClient(clientConnection *grpc.ClientConn, ctx context.Context) {
 	apiContext = ctx
-	client = sinks.NewSinksServiceClient(clientConnection)
-}
-
-func ExistingNamesCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
-	if len(args) > 0 {
-		return nil, cobra.ShellCompDirectiveNoFileComp
-	}
-	return ExistingNames(), cobra.ShellCompDirectiveNoFileComp
-}
-
-func ExistingNames() []string {
-
-	req := &sinks.ListSinksRequest{BillingId: BillingId}
-	response, err := client.ListSinks(apiContext, req)
-	cobra.CheckErr(err)
-	sinkNames := make([]string, 0, len(response.Sinks))
-	for _, s := range response.Sinks {
-		sinkNames = append(sinkNames, s.Sink.Ref.Name)
-	}
-	return sinkNames
+	Client = sinks.NewSinksServiceClient(clientConnection)
 }
 
 func list(recursive bool) {
-	req := &sinks.ListSinksRequest{Recursive: recursive, BillingId: BillingId}
-	sinksList, err := client.ListSinks(apiContext, req)
+	req := &sinks.ListSinksRequest{Recursive: recursive, BillingId: common.BillingId}
+	sinksList, err := Client.ListSinks(apiContext, req)
 	cobra.CheckErr(err)
 	utils.Print(sinksList)
 }
 
 func get(name *string, recursive bool) {
 	req := &sinks.GetSinkRequest{Recursive: recursive, Ref: ref(name)}
-	stream, err := client.GetSink(apiContext, req)
+	stream, err := Client.GetSink(apiContext, req)
 	cobra.CheckErr(err)
 	utils.Print(stream)
 }
 
 func del(name *string, recursive bool) {
 	req := &sinks.DeleteSinkRequest{Recursive: recursive, Ref: ref(name)}
-	sink, err := client.DeleteSink(apiContext, req)
+	sink, err := Client.DeleteSink(apiContext, req)
 	cobra.CheckErr(err)
 	utils.Print(sink)
 }
@@ -76,7 +54,7 @@ func create(sinkName *string, bucketName *string, cmd *cobra.Command) {
 		},
 		SinkType: parseSyncType(flags),
 	}
-	response, err := client.CreateSink(apiContext, &sinks.CreateSinkRequest{Sink: sink})
+	response, err := Client.CreateSink(apiContext, &sinks.CreateSinkRequest{Sink: sink})
 	cobra.CheckErr(err)
 	utils.Print(response.Sink)
 
@@ -100,4 +78,24 @@ func parseSyncType(flags *pflag.FlagSet) entities.SinkType {
 			typeString, entities.SinkType_value)
 	}
 	return entities.SinkType(sinkType)
+}
+
+func ExistingNamesCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
+	if len(args) > 0 || common.BillingIdIsMissing() {
+		return common.MissingBillingIdCompletionError(cmd.CommandPath())
+	}
+
+	req := &sinks.ListSinksRequest{BillingId: common.BillingId}
+	response, err := Client.ListSinks(apiContext, req)
+
+	if err != nil {
+		return common.GrpcRequestCompletionError(err)
+	}
+
+	names := make([]string, 0, len(response.Sinks))
+	for _, s := range response.Sinks {
+		names = append(names, s.Sink.Ref.Name)
+	}
+
+	return names, cobra.ShellCompDirectiveNoFileComp
 }

@@ -2,6 +2,7 @@ package stream
 
 import (
 	"github.com/spf13/cobra"
+	"streammachine.io/strm/common"
 )
 
 func CreateCmd() *cobra.Command {
@@ -28,7 +29,7 @@ func CreateCmd() *cobra.Command {
 	flags.StringSlice(tagsFlag, []string{}, "tags")
 	flags.Bool(saveFlag, false, "save the result in the config directory")
 
-	err := stream.RegisterFlagCompletionFunc(linkedStreamFlag, ExistingSourceStreamNames)
+	err := stream.RegisterFlagCompletionFunc(linkedStreamFlag, SourceStreamNamesCompletion)
 	cobra.CheckErr(err)
 	return stream
 }
@@ -47,7 +48,7 @@ func DeleteCmd() *cobra.Command {
 			del(&args[0], recursive)
 		},
 		Args:              cobra.ExactArgs(1), // the stream name
-		ValidArgsFunction: ExistingNamesCompletion,
+		ValidArgsFunction: StreamNamesCompletion,
 	}
 }
 func GetCmd() *cobra.Command {
@@ -59,7 +60,7 @@ func GetCmd() *cobra.Command {
 			get(&args[0], recursive)
 		},
 		Args:              cobra.ExactArgs(1), // the stream name
-		ValidArgsFunction: ExistingNamesCompletion,
+		ValidArgsFunction: StreamNamesCompletion,
 	}
 }
 func ListCmd() *cobra.Command {
@@ -70,5 +71,6 @@ func ListCmd() *cobra.Command {
 			recursive, _ := cmd.Flags().GetBool("recursive")
 			list(recursive)
 		},
+		ValidArgsFunction: common.NoFilesEmptyCompletion,
 	}
 }

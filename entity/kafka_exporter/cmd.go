@@ -24,7 +24,7 @@ func DeleteCmd() *cobra.Command {
 			del(&args[0], recursive)
 		},
 		Args:              cobra.ExactArgs(1), // the stream name
-		ValidArgsFunction: ExistingNamesCompletion,
+		ValidArgsFunction: KafkaExporterNamesCompletion,
 	}
 
 }
@@ -37,7 +37,7 @@ func GetCmd() *cobra.Command {
 			get(&args[0], recursive)
 		},
 		Args:              cobra.ExactArgs(1), // the stream name
-		ValidArgsFunction: ExistingNamesCompletion,
+		ValidArgsFunction: KafkaExporterNamesCompletion,
 	}
 }
 
@@ -63,14 +63,14 @@ func CreateCmd() *cobra.Command {
 
 		},
 		Args:              cobra.ExactArgs(1), // the stream name
-		ValidArgsFunction: stream.ExistingNamesCompletion,
+		ValidArgsFunction: stream.StreamNamesCompletion,
 	}
 	flags := kafkaExporter.Flags()
 	flags.String(clusterFlag, "", "name of the kafka cluster")
 	flags.Bool(saveFlag, false, "save the result in the config directory")
 	// not yet handling the external cluster flags
 
-	err := kafkaExporter.RegisterFlagCompletionFunc(clusterFlag, kafka_cluster.ExistingNamesCompletion)
+	err := kafkaExporter.RegisterFlagCompletionFunc(clusterFlag, kafka_cluster.KafkaClusterNamesCompletion)
 	cobra.CheckErr(err)
 	return kafkaExporter
 }

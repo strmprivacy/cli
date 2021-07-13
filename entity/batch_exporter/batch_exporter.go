@@ -6,13 +6,14 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/streammachineio/api-definitions-go/api/batch_exporters/v1"
 	"github.com/streammachineio/api-definitions-go/api/entities/v1"
+	"github.com/streammachineio/api-definitions-go/api/sinks/v1"
 	"google.golang.org/grpc"
 	"log"
+	"streammachine.io/strm/common"
 	"streammachine.io/strm/entity/sink"
 	"streammachine.io/strm/utils"
 )
 
-var BillingId string
 var client batch_exporters.BatchExportersServiceClient
 var apiContext context.Context
 
@@ -22,7 +23,7 @@ func SetupClient(clientConnection *grpc.ClientConn, ctx context.Context) {
 }
 
 func list() {
-	req := &batch_exporters.ListBatchExportersRequest{BillingId: BillingId}
+	req := &batch_exporters.ListBatchExportersRequest{BillingId: common.BillingId}
 	exporters, err := client.ListBatchExporters(apiContext, req)
 	cobra.CheckErr(err)
 	utils.Print(exporters)
@@ -30,7 +31,7 @@ func list() {
 
 func get(name *string, _ *cobra.Command) {
 	ref := &entities.BatchExporterRef{
-		Name: *name, BillingId: BillingId,
+		Name: *name, BillingId: common.BillingId,
 	}
 	req := &batch_exporters.GetBatchExporterRequest{Ref: ref}
 	exporter, err := client.GetBatchExporter(apiContext, req)
@@ -40,7 +41,7 @@ func get(name *string, _ *cobra.Command) {
 
 func del(name *string) {
 	req := &batch_exporters.DeleteBatchExporterRequest{Ref: &entities.BatchExporterRef{
-		BillingId: BillingId, Name: *name}}
+		BillingId: common.BillingId, Name: *name}}
 	exporter, err := client.DeleteBatchExporter(apiContext, req)
 	cobra.CheckErr(err)
 	utils.Print(exporter)
@@ -50,7 +51,7 @@ func create(streamName *string, cmd *cobra.Command) {
 	flags := cmd.Flags()
 	keyStream := utils.GetBoolAndErr(flags, exportKeys)
 	sinkName := utils.GetStringAndErr(flags, sinkFlag)
-	sinkNames := sink.ExistingNames()
+	sinkNames := getSinkNames()
 	if len(sinkName) == 0 && len(sinkNames) == 1 {
 		sinkName = sinkNames[0]
 	}
@@ -69,7 +70,7 @@ func create(streamName *string, cmd *cobra.Command) {
 		SinkName: sinkName,
 		Ref: &entities.BatchExporterRef{
 			Name:      exporterName,
-			BillingId: BillingId,
+			BillingId: common.BillingId,
 		},
 		Interval:   &interval,
 		PathPrefix: pathPrefix,
@@ -77,11 +78,11 @@ func create(streamName *string, cmd *cobra.Command) {
 	if keyStream {
 		exporter.StreamOrKeyStreamRef = &entities.BatchExporter_KeyStreamRef{
 			KeyStreamRef: &entities.KeyStreamRef{
-				Name: *streamName, BillingId: BillingId}}
+				Name: *streamName, BillingId: common.BillingId}}
 	} else {
 		exporter.StreamOrKeyStreamRef = &entities.BatchExporter_StreamRef{
 			StreamRef: &entities.StreamRef{
-				Name: *streamName, BillingId: BillingId}}
+				Name: *streamName, BillingId: common.BillingId}}
 	}
 
 	response, err := client.CreateBatchExporter(apiContext,
@@ -90,13 +91,31 @@ func create(streamName *string, cmd *cobra.Command) {
 	utils.Print(response.BatchExporter)
 }
 
-func existingNamesCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
-	if len(args) != 0 {
-		return nil, cobra.ShellCompDirectiveNoFileComp
-	}
-	req := &batch_exporters.ListBatchExportersRequest{BillingId: BillingId}
-	response, err := client.ListBatchExporters(apiContext, req)
+func getSinkNames() []string {
+	req := &sinks.ListSinksRequest{BillingId: common.BillingId}
+	response, err := sink.Client.ListSinks(apiContext, req)
+
 	cobra.CheckErr(err)
+
+	names := make([]string, 0, len(response.Sinks))
+	for _, s := range response.Sinks {
+		names = append(names, s.Sink.Ref.Name)
+	}
+
+	return names
+}
+
+func batchExporterNamesCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
+	if len(args) != 0 || common.BillingIdIsMissing() {
+		return common.MissingBillingIdCompletionError(cmd.CommandPath())
+	}
+	req := &batch_exporters.ListBatchExportersRequest{BillingId: common.BillingId}
+	response, err := client.ListBatchExporters(apiContext, req)
+
+	if err != nil {
+		return common.GrpcRequestCompletionError(err)
+	}
+
 	streamNames := make([]string, 0, len(response.BatchExporters))
 	for _, s := range response.BatchExporters {
 		streamNames = append(streamNames, s.Ref.Name)
