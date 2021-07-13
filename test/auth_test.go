@@ -36,6 +36,7 @@ func TestAuthLoginWithAPasswordSpecifiedLogsTheUserIn(t *testing.T) {
 func TestAuthRefreshRefreshesTheToken(t *testing.T) {
 	_ = newConfigDir()
 	tokenFileName := CreateNonExistingTokenFileName()
+
 	out := ExecuteCliAndGetOutput(t, tokenFileName, "auth", "login", testConfig().email, "--password="+testConfig().password)
 
 	assert.Matches(t, out, "Billing id: testBillingId\nSaved login to: "+tokenFileName+"\n")
