@@ -77,7 +77,7 @@ func ExecuteCliAndGetOutput(t *testing.T, tokenFile string, cmd ...string) strin
 	out, _ := command.CombinedOutput()
 	s := string(out)
 
-	s = replaceSecretsWithPropertyNamees(s)
+	s = replaceSecretsWithPropertyNames(s)
 	return s
 }
 
@@ -129,7 +129,7 @@ func initializeStrmEntities(t *testing.T, tokenFileName string) {
 	}
 }
 
-func replaceSecretsWithPropertyNamees(out string) string {
+func replaceSecretsWithPropertyNames(out string) string {
 	clientIdReplacer := regexp.MustCompile(`clientId":"([^"]+)"`)
 	out = clientIdReplacer.ReplaceAllString(out, `clientId":"clientId"`)
 
