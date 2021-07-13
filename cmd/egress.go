@@ -15,7 +15,7 @@ var EgressCmd = &cobra.Command{
 		egress.Run(cmd, &args[0])
 	},
 	Args:              cobra.ExactArgs(1), // the stream name
-	ValidArgsFunction: stream.ExistingNamesCompletion,
+	ValidArgsFunction: stream.StreamNamesCompletion,
 }
 
 func init() {

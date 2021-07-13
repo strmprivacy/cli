@@ -15,7 +15,7 @@ zsh-completion:
 # for a speedier build than with goreleaser
 source_files := $(shell find . -name "*.go")
 
-targetVar := streammachine.io/strm/cmd.CommandName
+targetVar := streammachine.io/strm/common.RootCommandName
 
 target := dstrm
 

@@ -8,6 +8,7 @@ import (
 	"log"
 	"net/http"
 	"streammachine.io/strm/auth"
+	"streammachine.io/strm/common"
 	"streammachine.io/strm/sims"
 	"streammachine.io/strm/utils"
 )
@@ -16,10 +17,10 @@ const (
 	UrlFlag = "egress"
 )
 
-var BillingId string
-
 func Run(cmd *cobra.Command, streamName *string) {
-	s := &entities.Stream{Ref: &entities.StreamRef{BillingId: sims.BillingId, Name: *streamName}}
+	s := &entities.Stream{
+		Ref: &entities.StreamRef{BillingId: common.BillingId, Name: *streamName},
+	}
 	flags := cmd.Flags()
 	u := utils.GetStringAndErr(flags, UrlFlag)
 	// loads Stream definition from save version

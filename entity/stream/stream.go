@@ -2,13 +2,16 @@ package stream
 
 import (
 	"context"
+	"fmt"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 	"github.com/streammachineio/api-definitions-go/api/entities/v1"
 	"github.com/streammachineio/api-definitions-go/api/streams/v1"
 	"google.golang.org/grpc"
 	"log"
+	"streammachine.io/strm/common"
 	"streammachine.io/strm/utils"
+	"strings"
 )
 
 // strings used in the cli
@@ -21,7 +24,6 @@ const (
 	saveFlag             = "save"
 )
 
-var BillingId string
 var client streams.StreamsServiceClient
 var apiContext context.Context
 
@@ -30,28 +32,37 @@ func SetupClient(clientConnection *grpc.ClientConn, ctx context.Context) {
 	client = streams.NewStreamsServiceClient(clientConnection)
 }
 
-func Get1(streamName *string, recursive bool) *streams.GetStreamResponse {
-	req := &streams.GetStreamRequest{Recursive: recursive, Ref: Ref(streamName)}
+func Get(streamName *string, recursive bool) *streams.GetStreamResponse {
+	if len(strings.TrimSpace(common.BillingId)) == 0 {
+		cobra.CheckErr(fmt.Sprintf("No login information found. Use: `%v auth login` first.", common.RootCommandName))
+	}
+
+	req := &streams.GetStreamRequest{
+		Recursive: recursive,
+		Ref:       &entities.StreamRef{BillingId: common.BillingId, Name: *streamName},
+	}
 	stream, err := client.GetStream(apiContext, req)
 	cobra.CheckErr(err)
 	return stream
 }
 
 func list(recursive bool) {
-	req := &streams.ListStreamsRequest{BillingId: BillingId, Recursive: recursive}
+	req := &streams.ListStreamsRequest{BillingId: common.BillingId, Recursive: recursive}
 	streamsList, err := client.ListStreams(apiContext, req)
 	cobra.CheckErr(err)
 	utils.Print(streamsList)
 }
 
 func get(streamName *string, recursive bool) {
-	stream := Get1(streamName, recursive)
+	stream := Get(streamName, recursive)
 	utils.Print(stream)
 }
 
 func del(streamName *string, recursive bool) {
-	stream := Get1(streamName, recursive)
-	req := &streams.DeleteStreamRequest{Recursive: recursive, Ref: Ref(streamName)}
+	stream := Get(streamName, recursive)
+	req := &streams.DeleteStreamRequest{
+		Recursive: recursive, Ref: &entities.StreamRef{BillingId: common.BillingId, Name: *streamName},
+	}
 	_, err := client.DeleteStream(apiContext, req)
 	cobra.CheckErr(err)
 	utils.Print(stream)
@@ -61,7 +72,7 @@ func create(args []string, cmd *cobra.Command) {
 	var err error
 	flags := cmd.Flags()
 	linkedStream := utils.GetStringAndErr(flags, linkedStreamFlag)
-	stream := &entities.Stream{Ref: &entities.StreamRef{BillingId: BillingId}}
+	stream := &entities.Stream{Ref: &entities.StreamRef{BillingId: common.BillingId}}
 	if len(args) > 0 {
 		stream.Ref.Name = args[0]
 	}
@@ -107,33 +118,44 @@ func parseConsentLevelType(flags *pflag.FlagSet) (entities.ConsentLevelType, err
 	return entities.ConsentLevelType(consentLevelType), err
 }
 
-func ExistingNamesCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
-	if len(args) != 0 {
-		return nil, cobra.ShellCompDirectiveNoFileComp
+func StreamNamesCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
+	if len(args) != 0 || common.BillingIdIsMissing() {
+		return common.MissingBillingIdCompletionError(cmd.CommandPath())
 	}
-	req := &streams.ListStreamsRequest{BillingId: BillingId}
+
+	req := &streams.ListStreamsRequest{BillingId: common.BillingId}
 	response, err := client.ListStreams(apiContext, req)
-	cobra.CheckErr(err)
-	streamResponse := response.Streams
-	names := make([]string, 0, len(streamResponse))
-	for _, s := range streamResponse {
+
+	if err != nil {
+		return common.GrpcRequestCompletionError(err)
+	}
+
+	names := make([]string, 0, len(response.Streams))
+	for _, s := range response.Streams {
 		names = append(names, s.Stream.Ref.Name)
 	}
+
 	return names, cobra.ShellCompDirectiveNoFileComp
 }
 
-func ExistingSourceStreamNames(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
-	req := &streams.ListStreamsRequest{BillingId: BillingId}
+func SourceStreamNamesCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
+	if common.BillingIdIsMissing() {
+		return common.MissingBillingIdCompletionError(cmd.CommandPath())
+	}
+
+	req := &streams.ListStreamsRequest{BillingId: common.BillingId}
 	response, err := client.ListStreams(apiContext, req)
-	cobra.CheckErr(err)
-	streamResponse := response.Streams
-	names := make([]string, 0, len(streamResponse))
-	for _, s := range streamResponse {
+
+	if err != nil {
+		return common.GrpcRequestCompletionError(err)
+	}
+
+	names := make([]string, 0, len(response.Streams))
+	for _, s := range response.Streams {
 		if len(s.Stream.LinkedStream) == 0 {
 			names = append(names, s.Stream.Ref.Name)
 		}
 	}
+
 	return names, cobra.ShellCompDirectiveNoFileComp
 }
-
-func Ref(n *string) *entities.StreamRef { return &entities.StreamRef{BillingId: BillingId, Name: *n} }

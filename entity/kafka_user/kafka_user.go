@@ -6,16 +6,16 @@ import (
 	"github.com/streammachineio/api-definitions-go/api/entities/v1"
 	"github.com/streammachineio/api-definitions-go/api/kafka_users/v1"
 	"google.golang.org/grpc"
+	"streammachine.io/strm/common"
 	"streammachine.io/strm/entity/kafka_exporter"
 	"streammachine.io/strm/utils"
 )
 
 var client kafka_users.KafkaUsersServiceClient
 var apiContext context.Context
-var BillingId string
 
 func ref(n *string) *entities.KafkaUserRef {
-	return &entities.KafkaUserRef{BillingId: BillingId, Name: *n}
+	return &entities.KafkaUserRef{BillingId: common.BillingId, Name: *n}
 }
 
 func SetupClient(clientConnection *grpc.ClientConn, ctx context.Context) {
@@ -26,7 +26,7 @@ func SetupClient(clientConnection *grpc.ClientConn, ctx context.Context) {
 func list(exporterName *string) {
 	req := &kafka_users.ListKafkaUsersRequest{
 		Ref: &entities.KafkaExporterRef{
-			BillingId: BillingId,
+			BillingId: common.BillingId,
 			Name:      *exporterName,
 		},
 	}
@@ -58,7 +58,7 @@ func create(kafkaExporterName *string, cmd *cobra.Command) {
 	exporter := kafka_exporter.Get(kafkaExporterName).KafkaExporter
 	kafkaUser := &entities.KafkaUser{
 		Ref: &entities.KafkaUserRef{
-			BillingId: BillingId,
+			BillingId: common.BillingId,
 		},
 		KafkaExporterName: exporter.Ref.Name,
 	}
@@ -74,20 +74,23 @@ func create(kafkaExporterName *string, cmd *cobra.Command) {
 
 }
 
-func existingNames(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
-	if len(args) > 0 {
-		return nil, cobra.ShellCompDirectiveNoFileComp
-
+func kafkaUserNamesCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
+	if len(args) > 0 || common.BillingIdIsMissing() {
+		return common.MissingBillingIdCompletionError(cmd.CommandPath())
 	}
 
 	req := &kafka_users.ListKafkaUsersRequest{
-		Ref: &entities.KafkaExporterRef{BillingId: BillingId},
+		Ref: &entities.KafkaExporterRef{BillingId: common.BillingId},
 	}
 	response, err := client.ListKafkaUsers(apiContext, req)
-	cobra.CheckErr(err)
-	kafkaUserNames := make([]string, 0, len(response.KafkaUsers))
-	for _, s := range response.KafkaUsers {
-		kafkaUserNames = append(kafkaUserNames, s.Ref.Name)
+
+	if err != nil {
+		return common.GrpcRequestCompletionError(err)
 	}
-	return kafkaUserNames, cobra.ShellCompDirectiveNoFileComp
+
+	names := make([]string, 0, len(response.KafkaUsers))
+	for _, s := range response.KafkaUsers {
+		names = append(names, s.Ref.Name)
+	}
+	return names, cobra.ShellCompDirectiveNoFileComp
 }

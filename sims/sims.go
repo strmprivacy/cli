@@ -10,9 +10,3 @@ const (
 	ConsentLevelsFlag = "consent-levels"
 	QuietFlag         = "quiet"
 )
-
-var BillingId string
-
-func SetBillingId(billingId string) {
-	BillingId = billingId
-}

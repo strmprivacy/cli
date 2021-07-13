@@ -6,18 +6,18 @@ import (
 	"github.com/streammachineio/api-definitions-go/api/entities/v1"
 	"github.com/streammachineio/api-definitions-go/api/kafka_clusters/v1"
 	"google.golang.org/grpc"
+	"streammachine.io/strm/common"
 	"streammachine.io/strm/utils"
 )
 
 // strings used in the cli
 const ()
 
-var BillingId string
 var client kafka_clusters.KafkaClustersServiceClient
 var apiContext context.Context
 
 func ref(n *string) *entities.KafkaClusterRef {
-	return &entities.KafkaClusterRef{BillingId: BillingId, Name: *n}
+	return &entities.KafkaClusterRef{BillingId: common.BillingId, Name: *n}
 }
 
 func SetupClient(clientConnection *grpc.ClientConn, ctx context.Context) {
@@ -25,15 +25,8 @@ func SetupClient(clientConnection *grpc.ClientConn, ctx context.Context) {
 	client = kafka_clusters.NewKafkaClustersServiceClient(clientConnection)
 }
 
-func ExistingNamesCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
-	if len(args) > 0 {
-		return nil, cobra.ShellCompDirectiveNoFileComp
-	}
-	return ExistingNames(), cobra.ShellCompDirectiveNoFileComp
-}
-
 func list() {
-	req := &kafka_clusters.ListKafkaClustersRequest{BillingId: BillingId}
+	req := &kafka_clusters.ListKafkaClustersRequest{BillingId: common.BillingId}
 	sinksList, err := client.ListKafkaClusters(apiContext, req)
 	cobra.CheckErr(err)
 	utils.Print(sinksList)
@@ -43,21 +36,30 @@ func get(name *string) {
 	cluster := GetCluster(name)
 	utils.Print(cluster)
 }
+
 func GetCluster(name *string) *entities.KafkaCluster {
 	req := &kafka_clusters.GetKafkaClusterRequest{Ref: ref(name)}
 	cluster, err := client.GetKafkaCluster(apiContext, req)
 	cobra.CheckErr(err)
 	return cluster.KafkaCluster
 }
+func KafkaClusterNamesCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
+	if len(args) > 0 || common.BillingIdIsMissing() {
+		return common.MissingBillingIdCompletionError(cmd.CommandPath())
+	}
 
-func ExistingNames() []string {
-	req := &kafka_clusters.ListKafkaClustersRequest{BillingId: BillingId}
+	req := &kafka_clusters.ListKafkaClustersRequest{BillingId: common.BillingId}
 	response, err := client.ListKafkaClusters(apiContext, req)
-	cobra.CheckErr(err)
-	clusters := response.KafkaClusters
-	names := make([]string, 0, len(clusters))
-	for _, s := range clusters {
+
+	if err != nil {
+		return common.GrpcRequestCompletionError(err)
+	}
+
+	names := make([]string, 0, len(response.KafkaClusters))
+	for _, s := range response.KafkaClusters {
 		names = append(names, s.Ref.Name)
 	}
-	return names
+
+	return names, cobra.ShellCompDirectiveNoFileComp
 }
+

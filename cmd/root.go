@@ -3,11 +3,13 @@ package cmd
 import (
 	"context"
 	"fmt"
+	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 	"google.golang.org/grpc"
 	"os"
 	"streammachine.io/strm/auth"
+	"streammachine.io/strm/common"
 	"streammachine.io/strm/egress"
 	"streammachine.io/strm/entity"
 	"streammachine.io/strm/entity/batch_exporter"
@@ -19,17 +21,13 @@ import (
 	schema "streammachine.io/strm/entity/schema"
 	"streammachine.io/strm/entity/sink"
 	"streammachine.io/strm/entity/stream"
-	"streammachine.io/strm/sims"
 	"streammachine.io/strm/utils"
 	"strings"
 
 	"github.com/spf13/viper"
 )
 
-// note that this can be overridden via the go build flags
-var CommandName = "strm"
-
-var cfgPath string
+var configPath string
 
 const (
 	apiHostFlag           = "api-host"
@@ -42,33 +40,31 @@ const (
 
 // RootCmd represents the base command when called without any subcommands
 var RootCmd = &cobra.Command{
-	Use:   CommandName,
+	Use:   common.RootCommandName,
 	Short: fmt.Sprintf("Stream Machine CLI %s", Version),
 	PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
 		// You can bind cobra and viper in a few locations,
 		// but PersistencePreRunE on the root command works well
 		r := initializeConfig(cmd)
-		auth.ConfigPath = cfgPath
-		utils.ConfigPath = cfgPath
+		auth.ConfigPath = configPath
+		utils.ConfigPath = configPath
 
-		auth.RootCommandName = CommandName
+		apiAuthUrl := utils.GetStringAndErr(cmd.Flags(), auth.ApiAuthUrlFlag)
+		authClient := &auth.Auth{Uri: apiAuthUrl}
+		loginError := authClient.LoadLogin()
 
-		if cmd.Parent() != AuthCmd && cmd != CompletionCmd && cmd != VersionCmd && cmd.Name() != "help" {
-			apiAuthUrl := utils.GetStringAndErr(cmd.Flags(), auth.ApiAuthUrlFlag)
+		var token = ""
+		var billingId = ""
 
-			authClient := &auth.Auth{Uri: apiAuthUrl}
-			authClient.LoadLogin()
-			token, billingId := authClient.GetToken(true)
+		if loginError == nil {
+			token, billingId = authClient.GetToken(true)
 			authClient.StoreLogin()
-
-			apiHost := utils.GetStringAndErr(cmd.Flags(), apiHostFlag)
-
-			clientConnection, ctx := entity.SetupGrpc(apiHost, token)
-			sims.SetBillingId(billingId)
-			egress.BillingId = billingId
-			setupServiceClients(clientConnection, ctx)
-			setBillingIdInHandlers(billingId)
 		}
+
+		apiHost := utils.GetStringAndErr(cmd.Flags(), apiHostFlag)
+		clientConnection, ctx := entity.SetupGrpc(apiHost, token)
+		setupServiceClients(clientConnection, ctx)
+		common.BillingId = billingId
 
 		return r
 	},
@@ -84,18 +80,6 @@ func setupServiceClients(clientConnection *grpc.ClientConn, ctx context.Context)
 	key_stream.SetupClient(clientConnection, ctx)
 	schema.SetupClient(clientConnection, ctx)
 	event_contract.SetupClient(clientConnection, ctx)
-}
-
-func setBillingIdInHandlers(billingId string) {
-	batch_exporter.BillingId = billingId
-	kafka_cluster.BillingId = billingId
-	kafka_exporter.BillingId = billingId
-	kafka_user.BillingId = billingId
-	key_stream.BillingId = billingId
-	sink.BillingId = billingId
-	stream.BillingId = billingId
-	schema.BillingId = billingId
-	event_contract.BillingId = billingId
 }
 
 /**
@@ -123,15 +107,6 @@ func Execute() {
 }
 
 func init() {
-
-	// Here you will define your flags and configuration settings.
-	// Cobra supports persistent flags, which, if defined here,
-	// will be global for your application.
-	// set the default configuration path
-	var err error
-	cfgPath, err = utils.ExpandTilde("~/.config/stream-machine")
-	cobra.CheckErr(err)
-
 	RootCmd.PersistentFlags().String(apiHostFlag, "apis.streammachine.io:443", "API host and port")
 	RootCmd.PersistentFlags().String(auth.EventAuthHostFlag, "https://auth.strm.services", "Security Token Service for events")
 	RootCmd.PersistentFlags().String(auth.ApiAuthUrlFlag, "https://api.streammachine.io/v1", "Auth URL for user logins")
@@ -139,32 +114,49 @@ func init() {
 		"Token file that contains an access token (default is $HOME/.config/stream-machine/strm-creds-<api-auth-host>.json)")
 	RootCmd.PersistentFlags().String(egress.UrlFlag, "wss://out.strm.services/ws", "Websocket to receive events from")
 	setupVerbs()
+	setConfigPath()
+	common.InitLogging(configPath)
+}
+
+func setConfigPath() {
+	// if we set this environment variable, we work in a completely different configuration directory
+	// Here you will define your flags and configuration settings.
+	// Cobra supports persistent flags, which, if defined here,
+	// will be global for your application.
+	// set the default configuration path
+	configPathEnvVar := envPrefix + "_CONFIG_PATH"
+	configPathEnv := os.Getenv(configPathEnvVar)
+	defaultConfigPath := "~/.config/stream-machine"
+
+	var err error
+
+	if len(configPathEnv) != 0 {
+		log.Debugln("Value for " + configPathEnvVar + " found in environment: " + configPathEnv)
+		configPath, err = utils.ExpandTilde(configPathEnv)
+	} else {
+		log.Debugln("No value for " + configPathEnvVar + " found. Falling back to default: " + defaultConfigPath)
+		configPath, err = utils.ExpandTilde(defaultConfigPath)
+	}
+
+	log.Info("Config path is set to: ")
+
+	cobra.CheckErr(err)
 }
 
 func initializeConfig(cmd *cobra.Command) error {
-	v := viper.New()
+	viperConfig := viper.New()
 
 	// Set the base name of the config file, without the file extension.
-	v.SetConfigName(defaultConfigFilename)
+	viperConfig.SetConfigName(defaultConfigFilename)
 
 	// Set as many paths as you like where viper should look for the
 	// config file.
-
-	// if we set this environment variable, we work in a completely different configuration directory
-	e := os.Getenv(envPrefix + "_CONFIG_PATH")
-	if len(e) != 0 {
-		p, err := utils.ExpandTilde(e)
-		cobra.CheckErr(err)
-		v.AddConfigPath(p)
-		cfgPath = p
-	} else {
-		v.AddConfigPath(cfgPath)
-	}
+	viperConfig.AddConfigPath(configPath)
 
 	// Attempt to read the config file, gracefully ignoring errors
 	// caused by a config file not being found. Return an error
 	// if we cannot parse the config file.
-	if err := v.ReadInConfig(); err != nil {
+	if err := viperConfig.ReadInConfig(); err != nil {
 		// It's okay if there isn't a config file
 		if _, ok := err.(viper.ConfigFileNotFoundError); !ok {
 			return err
@@ -176,15 +168,15 @@ func initializeConfig(cmd *cobra.Command) error {
 	// binds to an environment variable STING_NUMBER. This helps
 	// avoid conflicts.
 	// you could set STRM_BILLINGID for instance
-	v.SetEnvPrefix(envPrefix)
+	viperConfig.SetEnvPrefix(envPrefix)
 
 	// Bind to environment variables
 	// Works great for simple config names, but needs help for names
 	// like --favorite-color which we fix in the bindFlags function
-	v.AutomaticEnv()
+	viperConfig.AutomaticEnv()
 
 	// Bind the current command's flags to viper
-	bindFlags(cmd, v)
+	bindFlags(cmd, viperConfig)
 
 	return nil
 }

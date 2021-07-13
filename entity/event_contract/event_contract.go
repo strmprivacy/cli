@@ -7,6 +7,7 @@ import (
 	"github.com/streammachineio/api-definitions-go/api/entities/v1"
 	"github.com/streammachineio/api-definitions-go/api/event_contracts/v1"
 	"google.golang.org/grpc"
+	"streammachine.io/strm/common"
 	"streammachine.io/strm/utils"
 	"strings"
 )
@@ -14,7 +15,6 @@ import (
 // strings used in the cli
 const ()
 
-var BillingId string
 var client event_contracts.EventContractsServiceClient
 var apiContext context.Context
 
@@ -36,40 +36,42 @@ func SetupClient(clientConnection *grpc.ClientConn, ctx context.Context) {
 	client = event_contracts.NewEventContractsServiceClient(clientConnection)
 }
 
-func ExistingNamesCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
-	if len(args) > 0 {
-		return nil, cobra.ShellCompDirectiveNoFileComp
-	}
-	return ExistingNames(), cobra.ShellCompDirectiveNoFileComp
-}
-
 func list() {
-	req := &event_contracts.ListEventContractsRequest{BillingId: BillingId}
+	req := &event_contracts.ListEventContractsRequest{BillingId: common.BillingId}
 	sinksList, err := client.ListEventContracts(apiContext, req)
 	cobra.CheckErr(err)
 	utils.Print(sinksList)
 }
 
 func get(name *string) {
-	event_contract := GetEventContract(name)
-	utils.Print(event_contract)
+	eventContract := GetEventContract(name)
+	utils.Print(eventContract)
 }
+
 func GetEventContract(name *string) *entities.EventContract {
 	req := &event_contracts.GetEventContractRequest{
-		BillingId: BillingId,
+		BillingId: common.BillingId,
 		Ref:       ref(name)}
 	eventContract, err := client.GetEventContract(apiContext, req)
 	cobra.CheckErr(err)
 	return eventContract.EventContract
 }
+func eventContractRefsCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
+	if len(args) > 0 || common.BillingIdIsMissing() {
+		return common.MissingBillingIdCompletionError(cmd.CommandPath())
+	}
 
-func ExistingNames() []string {
-	req := &event_contracts.ListEventContractsRequest{BillingId: BillingId}
+	req := &event_contracts.ListEventContractsRequest{BillingId: common.BillingId}
 	response, err := client.ListEventContracts(apiContext, req)
-	cobra.CheckErr(err)
-	names := make([]string, 0)
+
+	if err != nil {
+		return common.GrpcRequestCompletionError(err)
+	}
+
+	names := make([]string, 0, len(response.EventContracts))
 	for _, s := range response.EventContracts {
 		names = append(names, refToString(s.Ref))
 	}
-	return names
+
+	return names, cobra.ShellCompDirectiveNoFileComp
 }

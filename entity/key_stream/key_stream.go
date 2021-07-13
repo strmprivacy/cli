@@ -6,10 +6,10 @@ import (
 	"github.com/streammachineio/api-definitions-go/api/entities/v1"
 	"github.com/streammachineio/api-definitions-go/api/key_streams/v1"
 	"google.golang.org/grpc"
+	"streammachine.io/strm/common"
 	"streammachine.io/strm/utils"
 )
 
-var BillingId string
 var client key_streams.KeyStreamsServiceClient
 var apiContext context.Context
 
@@ -18,24 +18,8 @@ func SetupClient(clientConnection *grpc.ClientConn, ctx context.Context) {
 	client = key_streams.NewKeyStreamsServiceClient(clientConnection)
 }
 
-func ExistingNamesCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
-	return ExistingNames(), cobra.ShellCompDirectiveNoFileComp
-}
-
-func ExistingNames() []string {
-
-	req := &key_streams.ListKeyStreamsRequest{BillingId: BillingId}
-	response, err := client.ListKeyStreams(apiContext, req)
-	cobra.CheckErr(err)
-	names := make([]string, 0, len(response.KeyStreams))
-	for _, s := range response.KeyStreams {
-		names = append(names, s.Ref.Name)
-	}
-	return names
-}
-
 func list() {
-	req := &key_streams.ListKeyStreamsRequest{BillingId: BillingId}
+	req := &key_streams.ListKeyStreamsRequest{BillingId: common.BillingId}
 	sinksList, err := client.ListKeyStreams(apiContext, req)
 	cobra.CheckErr(err)
 	utils.Print(sinksList)
@@ -49,5 +33,25 @@ func get(name *string) {
 }
 
 func ref(n *string) *entities.KeyStreamRef {
-	return &entities.KeyStreamRef{BillingId: BillingId, Name: *n}
+	return &entities.KeyStreamRef{BillingId: common.BillingId, Name: *n}
+}
+
+func ExistingNamesCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
+	if common.BillingIdIsMissing() {
+		return common.MissingBillingIdCompletionError(cmd.CommandPath())
+	}
+
+	req := &key_streams.ListKeyStreamsRequest{BillingId: common.BillingId}
+	response, err := client.ListKeyStreams(apiContext, req)
+
+	if err != nil {
+		return common.GrpcRequestCompletionError(err)
+	}
+
+	names := make([]string, 0, len(response.KeyStreams))
+	for _, s := range response.KeyStreams {
+		names = append(names, s.Ref.Name)
+	}
+
+	return names, cobra.ShellCompDirectiveNoFileComp
 }

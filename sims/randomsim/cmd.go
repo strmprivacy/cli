@@ -15,7 +15,7 @@ func RunCmd() (cmd *cobra.Command) {
 Uses a saved stream definition if available, otherwise, client id and secret are required`,
 		Run:               func(cmd *cobra.Command, args []string) { run(cmd, &args[0]) },
 		Args:              cobra.ExactArgs(1), // the stream name
-		ValidArgsFunction: stream.ExistingSourceStreamNames,
+		ValidArgsFunction: stream.SourceStreamNamesCompletion,
 	}
 	flags := simCmd.Flags()
 	flags.String(sims.EventGatewayFlag, "https://in.strm.services/event", "Endpoint to send events to")

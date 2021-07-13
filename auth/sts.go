@@ -136,14 +136,16 @@ func (authorizer *Auth) getSaveFilename() string {
 	}
 }
 
-func (authorizer *Auth) LoadLogin() {
+func (authorizer *Auth) LoadLogin() error {
 	filename := authorizer.getSaveFilename()
 	b, err := ioutil.ReadFile(filename)
 	if err != nil {
-		cobra.CheckErr(fmt.Sprintf("No login information found. Use: `%v auth login` first.", RootCommandName))
+		return err
 	}
 	err = json.Unmarshal(b, &authorizer.token)
 	cobra.CheckErr(err)
+
+	return nil
 }
 
 func (authorizer *Auth) printToken() {

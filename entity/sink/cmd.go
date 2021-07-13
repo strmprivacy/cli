@@ -56,6 +56,11 @@ func CreateCmd() *cobra.Command {
 	flags.String(credentialsFileFlag, "", "file with credentials")
 	_ = sink.MarkFlagRequired(credentialsFileFlag)
 	_ = sink.MarkFlagFilename(credentialsFileFlag, "json")
+	err := sink.RegisterFlagCompletionFunc(sinkTypeFlag, sinkTypesCompletion)
+	cobra.CheckErr(err)
 	return sink
+}
 
+func sinkTypesCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
+	return []string{"S3", "GCLOUD"}, cobra.ShellCompDirectiveNoFileComp
 }

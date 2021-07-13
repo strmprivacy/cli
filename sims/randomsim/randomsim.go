@@ -11,6 +11,7 @@ import (
 	"net/http"
 	"streammachine.io/strm/auth"
 	"streammachine.io/strm/clickstream"
+	"streammachine.io/strm/common"
 	"streammachine.io/strm/entity/stream"
 	"streammachine.io/strm/sims"
 	"streammachine.io/strm/utils"
@@ -20,7 +21,7 @@ import (
 
 // start a random simulator
 func run(cmd *cobra.Command, streamName *string) {
-	s := &entities.Stream{Ref: &entities.StreamRef{BillingId: sims.BillingId, Name: *streamName}}
+	s := &entities.Stream{Ref: &entities.StreamRef{BillingId: common.BillingId, Name: *streamName}}
 	flags := cmd.Flags()
 	// loads Stream definition from save version
 	if err := utils.TryLoad(s, streamName); err != nil {
@@ -34,7 +35,7 @@ func run(cmd *cobra.Command, streamName *string) {
 			ClientSecret: clientSecret, ClientId: clientId,
 		})
 	}
-	streamInfo := stream.Get1(streamName, false)
+	streamInfo := stream.Get(streamName, false)
 	if len(streamInfo.StreamTree.Stream.LinkedStream) != 0 {
 		log.Fatalf("You can't run a simulator on a derived stream")
 	}
