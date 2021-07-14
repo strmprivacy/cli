@@ -7,7 +7,7 @@ import (
 	"github.com/streammachineio/api-definitions-go/api/kafka_exporters/v1"
 	"google.golang.org/grpc"
 	"streammachine.io/strm/pkg/common"
-	"streammachine.io/strm/pkg/utils"
+	"streammachine.io/strm/pkg/util"
 )
 
 var client kafka_exporters.KafkaExportersServiceClient
@@ -32,12 +32,12 @@ func list(recursive bool) {
 	req := &kafka_exporters.ListKafkaExportersRequest{BillingId: common.BillingId}
 	exporters, err := client.ListKafkaExporters(apiContext, req)
 	common.CliExit(err)
-	utils.Print(exporters)
+	util.Print(exporters)
 }
 
 func get(name *string, recursive bool) {
 	exporter := Get(name)
-	utils.Print(exporter)
+	util.Print(exporter)
 }
 
 func del(name *string, recursive bool) {
@@ -48,7 +48,7 @@ func del(name *string, recursive bool) {
 	_, err := client.DeleteKafkaExporter(apiContext, req)
 	common.CliExit(err)
 	for _, user := range exporter.KafkaExporter.Users {
-		utils.DeleteSaved(user, &user.Ref.Name)
+		util.DeleteSaved(user, &user.Ref.Name)
 	}
 }
 
@@ -68,12 +68,12 @@ func create(name *string, cmd *cobra.Command) {
 	)
 
 	common.CliExit(err)
-	utils.Print(response.KafkaExporter)
+	util.Print(response.KafkaExporter)
 
 	save, err := flags.GetBool(saveFlag)
 	if save {
 		user := response.KafkaExporter.Users[0]
-		utils.Save(user, &user.Ref.Name)
+		util.Save(user, &user.Ref.Name)
 	}
 
 }

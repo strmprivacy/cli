@@ -8,7 +8,7 @@ import (
 	"github.com/streammachineio/api-definitions-go/api/schemas/v1"
 	"google.golang.org/grpc"
 	"streammachine.io/strm/pkg/common"
-	"streammachine.io/strm/pkg/utils"
+	"streammachine.io/strm/pkg/util"
 	"strings"
 )
 
@@ -40,12 +40,12 @@ func list() {
 	req := &schemas.ListSchemasRequest{BillingId: common.BillingId}
 	sinksList, err := client.ListSchemas(apiContext, req)
 	common.CliExit(err)
-	utils.Print(sinksList)
+	util.Print(sinksList)
 }
 
 func get(name *string) {
 	schema := GetSchema(name)
-	utils.Print(schema)
+	util.Print(schema)
 }
 
 func GetSchema(name *string) *entities.Schema {

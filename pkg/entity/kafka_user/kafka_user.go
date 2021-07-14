@@ -8,7 +8,7 @@ import (
 	"google.golang.org/grpc"
 	"streammachine.io/strm/pkg/common"
 	"streammachine.io/strm/pkg/entity/kafka_exporter"
-	"streammachine.io/strm/pkg/utils"
+	"streammachine.io/strm/pkg/util"
 )
 
 var client kafka_users.KafkaUsersServiceClient
@@ -32,7 +32,7 @@ func list(exporterName *string) {
 	}
 	users, err := client.ListKafkaUsers(apiContext, req)
 	common.CliExit(err)
-	utils.Print(users)
+	util.Print(users)
 }
 
 func get(name *string) {
@@ -40,7 +40,7 @@ func get(name *string) {
 	req := &kafka_users.GetKafkaUserRequest{Ref: ref(name)}
 	user, err := client.GetKafkaUser(apiContext, req)
 	common.CliExit(err)
-	utils.Print(user)
+	util.Print(user)
 }
 
 func del(name *string) {
@@ -48,8 +48,8 @@ func del(name *string) {
 	req := &kafka_users.DeleteKafkaUserRequest{Ref: user}
 	_, err := client.DeleteKafkaUser(apiContext, req)
 	common.CliExit(err)
-	utils.Print(user)
-	utils.DeleteSaved(user, &user.Name)
+	util.Print(user)
+	util.DeleteSaved(user, &user.Name)
 }
 
 func create(kafkaExporterName *string, cmd *cobra.Command) {
@@ -66,10 +66,10 @@ func create(kafkaExporterName *string, cmd *cobra.Command) {
 	response, err := client.CreateKafkaUser(apiContext,
 		&kafka_users.CreateKafkaUserRequest{KafkaUser: kafkaUser})
 	common.CliExit(err)
-	utils.Print(response.KafkaUser)
+	util.Print(response.KafkaUser)
 	save, err := flags.GetBool(saveFlag)
 	if save {
-		utils.Save(response.KafkaUser, &response.KafkaUser.Ref.Name)
+		util.Save(response.KafkaUser, &response.KafkaUser.Ref.Name)
 	}
 
 }

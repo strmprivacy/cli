@@ -6,9 +6,6 @@ SHELL := /bin/bash
 build:
 	goreleaser --snapshot --skip-publish --rm-dist
 
-test:
-	go test ./test -v
-
 zsh-completion:
 	/bin/zsh -c 'strm completion zsh > "$${fpath[1]}/_strm"'
 
@@ -21,11 +18,15 @@ target := dstrm
 
 ldflags := -X '${targetVar}=${target}'
 
-${target}: ${source_files} Makefile
-	go build -ldflags="${ldflags}" -o $@
+dist/${target}: ${source_files} Makefile
+	go build -ldflags="${ldflags}" -o $@ ./cmd/strm
 
 clean:
 	rm -f ${target}
 	rm -rf dist
 
-all: ${target}
+test: dist/${target}
+	go clean -testcache
+	go test ./test -v
+
+all: dist/${target}

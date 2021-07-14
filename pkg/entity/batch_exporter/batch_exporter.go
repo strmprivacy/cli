@@ -11,7 +11,7 @@ import (
 	"google.golang.org/grpc"
 	"streammachine.io/strm/pkg/common"
 	"streammachine.io/strm/pkg/entity/sink"
-	"streammachine.io/strm/pkg/utils"
+	"streammachine.io/strm/pkg/util"
 )
 
 var client batch_exporters.BatchExportersServiceClient
@@ -26,7 +26,7 @@ func list() {
 	req := &batch_exporters.ListBatchExportersRequest{BillingId: common.BillingId}
 	exporters, err := client.ListBatchExporters(apiContext, req)
 	common.CliExit(err)
-	utils.Print(exporters)
+	util.Print(exporters)
 }
 
 func get(name *string, _ *cobra.Command) {
@@ -36,7 +36,7 @@ func get(name *string, _ *cobra.Command) {
 	req := &batch_exporters.GetBatchExporterRequest{Ref: ref}
 	exporter, err := client.GetBatchExporter(apiContext, req)
 	common.CliExit(err)
-	utils.Print(exporter)
+	util.Print(exporter)
 }
 
 func del(name *string) {
@@ -44,13 +44,13 @@ func del(name *string) {
 		BillingId: common.BillingId, Name: *name}}
 	exporter, err := client.DeleteBatchExporter(apiContext, req)
 	common.CliExit(err)
-	utils.Print(exporter)
+	util.Print(exporter)
 }
 
 func create(streamName *string, cmd *cobra.Command) {
 	flags := cmd.Flags()
-	keyStream := utils.GetBoolAndErr(flags, exportKeys)
-	sinkName := utils.GetStringAndErr(flags, sinkFlag)
+	keyStream := util.GetBoolAndErr(flags, exportKeys)
+	sinkName := util.GetStringAndErr(flags, sinkFlag)
 	sinkNames := getSinkNames()
 	if len(sinkName) == 0 && len(sinkNames) == 1 {
 		sinkName = sinkNames[0]
@@ -60,11 +60,11 @@ func create(streamName *string, cmd *cobra.Command) {
 	}
 	// this exporterName might be empty, in which case the API will set it to
 	// the appropriate default
-	exporterName := utils.GetStringAndErr(flags, nameFlag)
-	i := utils.GetInt64AndErr(flags, intervalFlag)
+	exporterName := util.GetStringAndErr(flags, nameFlag)
+	i := util.GetInt64AndErr(flags, intervalFlag)
 	interval := duration.Duration{Seconds: i}
 
-	pathPrefix := utils.GetStringAndErr(flags, pathPrefix)
+	pathPrefix := util.GetStringAndErr(flags, pathPrefix)
 
 	exporter := &entities.BatchExporter{
 		SinkName: sinkName,
@@ -88,7 +88,7 @@ func create(streamName *string, cmd *cobra.Command) {
 	response, err := client.CreateBatchExporter(apiContext,
 		&batch_exporters.CreateBatchExporterRequest{BatchExporter: exporter})
 	common.CliExit(err)
-	utils.Print(response.BatchExporter)
+	util.Print(response.BatchExporter)
 }
 
 func getSinkNames() []string {

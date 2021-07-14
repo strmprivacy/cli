@@ -8,7 +8,7 @@ import (
 	"github.com/streammachineio/api-definitions-go/api/event_contracts/v1"
 	"google.golang.org/grpc"
 	"streammachine.io/strm/pkg/common"
-	"streammachine.io/strm/pkg/utils"
+	"streammachine.io/strm/pkg/util"
 	"strings"
 )
 
@@ -40,12 +40,12 @@ func list() {
 	req := &event_contracts.ListEventContractsRequest{BillingId: common.BillingId}
 	sinksList, err := client.ListEventContracts(apiContext, req)
 	common.CliExit(err)
-	utils.Print(sinksList)
+	util.Print(sinksList)
 }
 
 func get(name *string) {
 	eventContract := GetEventContract(name)
-	utils.Print(eventContract)
+	util.Print(eventContract)
 }
 
 func GetEventContract(name *string) *entities.EventContract {

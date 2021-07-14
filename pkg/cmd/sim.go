@@ -2,7 +2,7 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
-	"streammachine.io/strm/pkg/sims/randomsim"
+	"streammachine.io/strm/pkg/sim/randomsim"
 )
 
 // SimCmd represents the create command

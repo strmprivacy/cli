@@ -64,12 +64,16 @@ func (authorizer *Auth) GetToken(quiet bool) (string, string) {
 }
 
 func (authorizer *Auth) refresh() {
-	b, err := json.Marshal(authorizer.token)
-	common.CliExit(err)
-	resp, err := http.Post(authorizer.Uri+"/refresh", "application/json; charset=UTF-8", bytes.NewReader(b))
-	common.CliExit(err)
-	defer resp.Body.Close()
-	authorizer.handleAuthResponse(resp)
+	if authorizer.token != nil {
+		b, err := json.Marshal(authorizer.token)
+		common.CliExit(err)
+		resp, err := http.Post(authorizer.Uri+"/refresh", "application/json; charset=UTF-8", bytes.NewReader(b))
+		common.CliExit(err)
+		defer resp.Body.Close()
+		authorizer.handleAuthResponse(resp)
+	} else {
+		common.MissingIdTokenError()
+	}
 }
 
 func (authorizer *Auth) AuthenticateLogin(email, password *string) {

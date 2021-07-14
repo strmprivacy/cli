@@ -10,7 +10,7 @@ import (
 	"google.golang.org/grpc"
 	"io/ioutil"
 	"streammachine.io/strm/pkg/common"
-	"streammachine.io/strm/pkg/utils"
+	"streammachine.io/strm/pkg/util"
 )
 
 var Client sinks.SinksServiceClient
@@ -27,21 +27,21 @@ func list(recursive bool) {
 	req := &sinks.ListSinksRequest{Recursive: recursive, BillingId: common.BillingId}
 	sinksList, err := Client.ListSinks(apiContext, req)
 	common.CliExit(err)
-	utils.Print(sinksList)
+	util.Print(sinksList)
 }
 
 func get(name *string, recursive bool) {
 	req := &sinks.GetSinkRequest{Recursive: recursive, Ref: ref(name)}
 	stream, err := Client.GetSink(apiContext, req)
 	common.CliExit(err)
-	utils.Print(stream)
+	util.Print(stream)
 }
 
 func del(name *string, recursive bool) {
 	req := &sinks.DeleteSinkRequest{Recursive: recursive, Ref: ref(name)}
 	sink, err := Client.DeleteSink(apiContext, req)
 	common.CliExit(err)
-	utils.Print(sink)
+	util.Print(sink)
 }
 
 func create(sinkName *string, bucketName *string, cmd *cobra.Command) {
@@ -56,19 +56,19 @@ func create(sinkName *string, bucketName *string, cmd *cobra.Command) {
 	}
 	response, err := Client.CreateSink(apiContext, &sinks.CreateSinkRequest{Sink: sink})
 	common.CliExit(err)
-	utils.Print(response.Sink)
+	util.Print(response.Sink)
 
 }
 
 func readCredentialsFile(flags *pflag.FlagSet) string {
-	fn := utils.GetStringAndErr(flags, credentialsFileFlag)
+	fn := util.GetStringAndErr(flags, credentialsFileFlag)
 	buf, err := ioutil.ReadFile(fn)
 	common.CliExit(err)
 	return string(buf)
 }
 
 func parseSyncType(flags *pflag.FlagSet) entities.SinkType {
-	typeString := utils.GetStringAndErr(flags, sinkTypeFlag)
+	typeString := util.GetStringAndErr(flags, sinkTypeFlag)
 	if len(typeString) == 0 {
 		return entities.SinkType_SINK_TYPE_UNSPECIFIED
 	}

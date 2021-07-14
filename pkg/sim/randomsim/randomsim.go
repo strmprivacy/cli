@@ -13,8 +13,8 @@ import (
 	"streammachine.io/strm/pkg/clickstream"
 	"streammachine.io/strm/pkg/common"
 	"streammachine.io/strm/pkg/entity/stream"
-	"streammachine.io/strm/pkg/sims"
-	"streammachine.io/strm/pkg/utils"
+	"streammachine.io/strm/pkg/sim"
+	"streammachine.io/strm/pkg/util"
 	"strings"
 	"time"
 )
@@ -24,10 +24,10 @@ func run(cmd *cobra.Command, streamName *string) {
 	s := &entities.Stream{Ref: &entities.StreamRef{BillingId: common.BillingId, Name: *streamName}}
 	flags := cmd.Flags()
 	// loads Stream definition from save version
-	if err := utils.TryLoad(s, streamName); err != nil {
+	if err := util.TryLoad(s, streamName); err != nil {
 		// there was no saved version, try to get credentials from the command options
-		clientId := utils.GetStringAndErr(flags, sims.ClientIdFlag)
-		clientSecret := utils.GetStringAndErr(flags, sims.ClientSecretFlag)
+		clientId := util.GetStringAndErr(flags, sim.ClientIdFlag)
+		clientSecret := util.GetStringAndErr(flags, sim.ClientSecretFlag)
 		if len(clientId) == 0 || len(clientSecret) == 0 {
 			log.Fatalf("There are no credentials stored for stream '%s'", *streamName)
 		}
@@ -39,13 +39,13 @@ func run(cmd *cobra.Command, streamName *string) {
 	if len(streamInfo.StreamTree.Stream.LinkedStream) != 0 {
 		log.Fatalf("You can't run a simulator on a derived stream")
 	}
-	interval := time.Duration(utils.GetIntAndErr(flags, sims.IntervalFlag))
-	sts := utils.GetStringAndErr(flags, auth.EventAuthHostFlag)
-	sessionRange := utils.GetIntAndErr(flags, sims.SessionRangeFlag)
-	sessionPrefix := utils.GetStringAndErr(flags, sims.SessionPrefixFlag)
-	gateway := utils.GetStringAndErr(flags, sims.EventGatewayFlag)
-	quiet := utils.GetBoolAndErr(flags, sims.QuietFlag)
-	consentLevels, err := flags.GetStringSlice(sims.ConsentLevelsFlag)
+	interval := time.Duration(util.GetIntAndErr(flags, sim.IntervalFlag))
+	sts := util.GetStringAndErr(flags, auth.EventAuthHostFlag)
+	sessionRange := util.GetIntAndErr(flags, sim.SessionRangeFlag)
+	sessionPrefix := util.GetStringAndErr(flags, sim.SessionPrefixFlag)
+	gateway := util.GetStringAndErr(flags, sim.EventGatewayFlag)
+	quiet := util.GetBoolAndErr(flags, sim.QuietFlag)
+	consentLevels, err := flags.GetStringSlice(sim.ConsentLevelsFlag)
 	common.CliExit(err)
 	if len(consentLevels) == 0 {
 		log.Fatalf("%v is not a valid set of consent levels", consentLevels)
@@ -83,7 +83,7 @@ func run(cmd *cobra.Command, streamName *string) {
 // what we want to send. This method picks a random one.
 func randomConsentLevels(levels []string) []int32 {
 	l := strings.Split(levels[rand.Intn(len(levels))], "/")
-	return utils.StringsArrayToInt32(l)
+	return util.StringsArrayToInt32(l)
 }
 
 func sendEvent(client http.Client, event *clickstream.ClickstreamEvent,
