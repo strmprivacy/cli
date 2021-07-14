@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/streammachineio/cli/compare/v1.1.0...v1.1.1) (2021-07-14)
+
+
+### Bug Fixes
+
+* fix autocomplete; add logging and logrotate ([ec4a0f7](https://github.com/streammachineio/cli/commit/ec4a0f7872a52985ee5025fb47b745c87458f37d))
+
 # [1.1.0](https://github.com/streammachineio/cli/compare/v1.0.0...v1.1.0) (2021-07-12)
 
 
