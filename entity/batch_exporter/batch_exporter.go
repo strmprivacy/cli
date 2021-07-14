@@ -3,12 +3,12 @@ package batch_exporter
 import (
 	"context"
 	"github.com/golang/protobuf/ptypes/duration"
+	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/streammachineio/api-definitions-go/api/batch_exporters/v1"
 	"github.com/streammachineio/api-definitions-go/api/entities/v1"
 	"github.com/streammachineio/api-definitions-go/api/sinks/v1"
 	"google.golang.org/grpc"
-	"log"
 	"streammachine.io/strm/common"
 	"streammachine.io/strm/entity/sink"
 	"streammachine.io/strm/utils"
@@ -25,7 +25,7 @@ func SetupClient(clientConnection *grpc.ClientConn, ctx context.Context) {
 func list() {
 	req := &batch_exporters.ListBatchExportersRequest{BillingId: common.BillingId}
 	exporters, err := client.ListBatchExporters(apiContext, req)
-	cobra.CheckErr(err)
+	common.CliExit(err)
 	utils.Print(exporters)
 }
 
@@ -35,7 +35,7 @@ func get(name *string, _ *cobra.Command) {
 	}
 	req := &batch_exporters.GetBatchExporterRequest{Ref: ref}
 	exporter, err := client.GetBatchExporter(apiContext, req)
-	cobra.CheckErr(err)
+	common.CliExit(err)
 	utils.Print(exporter)
 }
 
@@ -43,7 +43,7 @@ func del(name *string) {
 	req := &batch_exporters.DeleteBatchExporterRequest{Ref: &entities.BatchExporterRef{
 		BillingId: common.BillingId, Name: *name}}
 	exporter, err := client.DeleteBatchExporter(apiContext, req)
-	cobra.CheckErr(err)
+	common.CliExit(err)
 	utils.Print(exporter)
 }
 
@@ -87,7 +87,7 @@ func create(streamName *string, cmd *cobra.Command) {
 
 	response, err := client.CreateBatchExporter(apiContext,
 		&batch_exporters.CreateBatchExporterRequest{BatchExporter: exporter})
-	cobra.CheckErr(err)
+	common.CliExit(err)
 	utils.Print(response.BatchExporter)
 }
 
@@ -95,7 +95,7 @@ func getSinkNames() []string {
 	req := &sinks.ListSinksRequest{BillingId: common.BillingId}
 	response, err := sink.Client.ListSinks(apiContext, req)
 
-	cobra.CheckErr(err)
+	common.CliExit(err)
 
 	names := make([]string, 0, len(response.Sinks))
 	for _, s := range response.Sinks {
@@ -105,7 +105,7 @@ func getSinkNames() []string {
 	return names
 }
 
-func batchExporterNamesCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
+func namesCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
 	if len(args) != 0 || common.BillingIdIsMissing() {
 		return common.MissingBillingIdCompletionError(cmd.CommandPath())
 	}

@@ -29,7 +29,7 @@ Use token as follows:
 'Authorization: Bearer <token>'
 `,
 		Run: func(cmd *cobra.Command, args []string) {
-			printAccessToken(apiHost(cmd))
+			printAccessToken()
 		},
 	}
 	return cmd

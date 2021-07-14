@@ -28,7 +28,7 @@ func SetupClient(clientConnection *grpc.ClientConn, ctx context.Context) {
 func list() {
 	req := &kafka_clusters.ListKafkaClustersRequest{BillingId: common.BillingId}
 	sinksList, err := client.ListKafkaClusters(apiContext, req)
-	cobra.CheckErr(err)
+	common.CliExit(err)
 	utils.Print(sinksList)
 }
 
@@ -40,10 +40,10 @@ func get(name *string) {
 func GetCluster(name *string) *entities.KafkaCluster {
 	req := &kafka_clusters.GetKafkaClusterRequest{Ref: ref(name)}
 	cluster, err := client.GetKafkaCluster(apiContext, req)
-	cobra.CheckErr(err)
+	common.CliExit(err)
 	return cluster.KafkaCluster
 }
-func KafkaClusterNamesCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
+func NamesCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
 	if len(args) > 0 || common.BillingIdIsMissing() {
 		return common.MissingBillingIdCompletionError(cmd.CommandPath())
 	}

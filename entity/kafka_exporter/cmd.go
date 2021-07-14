@@ -2,6 +2,7 @@ package kafka_exporter
 
 import (
 	"github.com/spf13/cobra"
+	"streammachine.io/strm/common"
 	"streammachine.io/strm/entity/kafka_cluster"
 	"streammachine.io/strm/entity/stream"
 )
@@ -24,7 +25,7 @@ func DeleteCmd() *cobra.Command {
 			del(&args[0], recursive)
 		},
 		Args:              cobra.ExactArgs(1), // the stream name
-		ValidArgsFunction: KafkaExporterNamesCompletion,
+		ValidArgsFunction: NamesCompletion,
 	}
 
 }
@@ -37,7 +38,7 @@ func GetCmd() *cobra.Command {
 			get(&args[0], recursive)
 		},
 		Args:              cobra.ExactArgs(1), // the stream name
-		ValidArgsFunction: KafkaExporterNamesCompletion,
+		ValidArgsFunction: NamesCompletion,
 	}
 }
 
@@ -63,14 +64,14 @@ func CreateCmd() *cobra.Command {
 
 		},
 		Args:              cobra.ExactArgs(1), // the stream name
-		ValidArgsFunction: stream.StreamNamesCompletion,
+		ValidArgsFunction: stream.NamesCompletion,
 	}
 	flags := kafkaExporter.Flags()
 	flags.String(clusterFlag, "", "name of the kafka cluster")
 	flags.Bool(saveFlag, false, "save the result in the config directory")
 	// not yet handling the external cluster flags
 
-	err := kafkaExporter.RegisterFlagCompletionFunc(clusterFlag, kafka_cluster.KafkaClusterNamesCompletion)
-	cobra.CheckErr(err)
+	err := kafkaExporter.RegisterFlagCompletionFunc(clusterFlag, kafka_cluster.NamesCompletion)
+	common.CliExit(err)
 	return kafkaExporter
 }

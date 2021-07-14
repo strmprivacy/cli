@@ -7,7 +7,7 @@ build:
 	goreleaser --snapshot --skip-publish --rm-dist
 
 test:
-	go test ./test
+	go test ./test -v
 
 zsh-completion:
 	/bin/zsh -c 'strm completion zsh > "$${fpath[1]}/_strm"'

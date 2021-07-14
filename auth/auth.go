@@ -49,15 +49,12 @@ func askPassword() string {
 	return string(pwBytes)
 }
 
-func printAccessToken(apiHost string) {
-	authClient := &Auth{Uri: apiHost}
-	authClient.LoadLogin()
-	authClient.printToken()
+func printAccessToken() {
+	Client.printToken()
 }
 
 func DoRefresh(apiHost string) {
-	authClient := &Auth{Uri: apiHost}
-	authClient.LoadLogin()
-	authClient.refresh()
-	authClient.StoreLogin()
+	Client.LoadLogin()
+	Client.refresh()
+	Client.StoreLogin()
 }

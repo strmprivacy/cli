@@ -18,7 +18,7 @@ func DeleteCmd() *cobra.Command {
 			del(&args[0])
 		},
 		Args:              cobra.ExactArgs(1), // the stream name
-		ValidArgsFunction: kafkaUserNamesCompletion,
+		ValidArgsFunction: namesCompletion,
 	}
 }
 
@@ -30,7 +30,7 @@ func GetCmd() *cobra.Command {
 			get(&args[0])
 		},
 		Args:              cobra.ExactArgs(1), // the stream name
-		ValidArgsFunction: kafkaUserNamesCompletion,
+		ValidArgsFunction: namesCompletion,
 	}
 }
 
@@ -42,7 +42,7 @@ func ListCmd() *cobra.Command {
 			list(&args[0])
 		},
 		Args:              cobra.ExactArgs(1), // the kafka exporter name
-		ValidArgsFunction: kafka_exporter.KafkaExporterNamesCompletion,
+		ValidArgsFunction: kafka_exporter.NamesCompletion,
 	}
 }
 
@@ -56,7 +56,7 @@ func CreateCmd() *cobra.Command {
 
 		},
 		Args:              cobra.ExactArgs(1), // the kafka-exporter name
-		ValidArgsFunction: kafka_exporter.KafkaExporterNamesCompletion,
+		ValidArgsFunction: kafka_exporter.NamesCompletion,
 	}
 	flags := kafkaUser.Flags()
 	flags.Bool(saveFlag, false, "save the result in the config directory")

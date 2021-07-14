@@ -23,7 +23,7 @@ func Get(name *string) *kafka_exporters.GetKafkaExporterResponse {
 		Ref: &entities.KafkaExporterRef{BillingId: common.BillingId, Name: *name},
 	}
 	exporter, err := client.GetKafkaExporter(apiContext, req)
-	cobra.CheckErr(err)
+	common.CliExit(err)
 	return exporter
 }
 
@@ -31,7 +31,7 @@ func list(recursive bool) {
 	// TODO need api recursive addition
 	req := &kafka_exporters.ListKafkaExportersRequest{BillingId: common.BillingId}
 	exporters, err := client.ListKafkaExporters(apiContext, req)
-	cobra.CheckErr(err)
+	common.CliExit(err)
 	utils.Print(exporters)
 }
 
@@ -46,7 +46,7 @@ func del(name *string, recursive bool) {
 
 	req := &kafka_exporters.DeleteKafkaExporterRequest{Ref: exporterRef, Recursive: recursive}
 	_, err := client.DeleteKafkaExporter(apiContext, req)
-	cobra.CheckErr(err)
+	common.CliExit(err)
 	for _, user := range exporter.KafkaExporter.Users {
 		utils.DeleteSaved(user, &user.Ref.Name)
 	}
@@ -55,7 +55,7 @@ func del(name *string, recursive bool) {
 func create(name *string, cmd *cobra.Command) {
 	flags := cmd.Flags()
 	_, err := flags.GetString(clusterFlag) // TODO at the moment, the cluster flag is ignored
-	cobra.CheckErr(err)
+	common.CliExit(err)
 
 	// key streams not yet supported in data model!
 	exporter := &entities.KafkaExporter{
@@ -67,7 +67,7 @@ func create(name *string, cmd *cobra.Command) {
 		&kafka_exporters.CreateKafkaExporterRequest{KafkaExporter: exporter},
 	)
 
-	cobra.CheckErr(err)
+	common.CliExit(err)
 	utils.Print(response.KafkaExporter)
 
 	save, err := flags.GetBool(saveFlag)
@@ -78,7 +78,7 @@ func create(name *string, cmd *cobra.Command) {
 
 }
 
-func KafkaExporterNamesCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
+func NamesCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
 	if len(args) > 0 || common.BillingIdIsMissing() {
 		return common.MissingBillingIdCompletionError(cmd.CommandPath())
 	}

@@ -29,8 +29,8 @@ func CreateCmd() *cobra.Command {
 	flags.StringSlice(tagsFlag, []string{}, "tags")
 	flags.Bool(saveFlag, false, "save the result in the config directory")
 
-	err := stream.RegisterFlagCompletionFunc(linkedStreamFlag, SourceStreamNamesCompletion)
-	cobra.CheckErr(err)
+	err := stream.RegisterFlagCompletionFunc(linkedStreamFlag, SourceNamesCompletion)
+	common.CliExit(err)
 	return stream
 }
 
@@ -48,7 +48,7 @@ func DeleteCmd() *cobra.Command {
 			del(&args[0], recursive)
 		},
 		Args:              cobra.ExactArgs(1), // the stream name
-		ValidArgsFunction: StreamNamesCompletion,
+		ValidArgsFunction: NamesCompletion,
 	}
 }
 func GetCmd() *cobra.Command {
@@ -60,7 +60,7 @@ func GetCmd() *cobra.Command {
 			get(&args[0], recursive)
 		},
 		Args:              cobra.ExactArgs(1), // the stream name
-		ValidArgsFunction: StreamNamesCompletion,
+		ValidArgsFunction: NamesCompletion,
 	}
 }
 func ListCmd() *cobra.Command {

@@ -26,21 +26,21 @@ func SetupClient(clientConnection *grpc.ClientConn, ctx context.Context) {
 func list(recursive bool) {
 	req := &sinks.ListSinksRequest{Recursive: recursive, BillingId: common.BillingId}
 	sinksList, err := Client.ListSinks(apiContext, req)
-	cobra.CheckErr(err)
+	common.CliExit(err)
 	utils.Print(sinksList)
 }
 
 func get(name *string, recursive bool) {
 	req := &sinks.GetSinkRequest{Recursive: recursive, Ref: ref(name)}
 	stream, err := Client.GetSink(apiContext, req)
-	cobra.CheckErr(err)
+	common.CliExit(err)
 	utils.Print(stream)
 }
 
 func del(name *string, recursive bool) {
 	req := &sinks.DeleteSinkRequest{Recursive: recursive, Ref: ref(name)}
 	sink, err := Client.DeleteSink(apiContext, req)
-	cobra.CheckErr(err)
+	common.CliExit(err)
 	utils.Print(sink)
 }
 
@@ -55,7 +55,7 @@ func create(sinkName *string, bucketName *string, cmd *cobra.Command) {
 		SinkType: parseSyncType(flags),
 	}
 	response, err := Client.CreateSink(apiContext, &sinks.CreateSinkRequest{Sink: sink})
-	cobra.CheckErr(err)
+	common.CliExit(err)
 	utils.Print(response.Sink)
 
 }
@@ -63,7 +63,7 @@ func create(sinkName *string, bucketName *string, cmd *cobra.Command) {
 func readCredentialsFile(flags *pflag.FlagSet) string {
 	fn := utils.GetStringAndErr(flags, credentialsFileFlag)
 	buf, err := ioutil.ReadFile(fn)
-	cobra.CheckErr(err)
+	common.CliExit(err)
 	return string(buf)
 }
 
@@ -80,7 +80,7 @@ func parseSyncType(flags *pflag.FlagSet) entities.SinkType {
 	return entities.SinkType(sinkType)
 }
 
-func ExistingNamesCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
+func NamesCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
 	if len(args) > 0 || common.BillingIdIsMissing() {
 		return common.MissingBillingIdCompletionError(cmd.CommandPath())
 	}

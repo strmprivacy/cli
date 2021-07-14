@@ -9,3 +9,5 @@ protos
 .default-login-token.json
 dist
 dstrm
+*.log
+*.json
