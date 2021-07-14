@@ -1,3 +1,10 @@
+## [1.1.2](https://github.com/streammachineio/cli/compare/v1.1.1...v1.1.2) (2021-07-14)
+
+
+### Bug Fixes
+
+* set ldflags correctly in order to set values for the version command ([7071aaf](https://github.com/streammachineio/cli/commit/7071aaf686f2ea14fb152938c284a138504c0cc6))
+
 ## [1.1.1](https://github.com/streammachineio/cli/compare/v1.1.0...v1.1.1) (2021-07-14)
 
 
