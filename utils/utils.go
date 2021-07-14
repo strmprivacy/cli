@@ -19,6 +19,7 @@ var ConfigPath string
 
 func Print(m proto.Message) {
 	// As protojson.Marshal adds random spaces, we use json.Compact to omit the random spaces in the output.
+	// Linked issue in google/protobuf: https://github.com/golang/protobuf/issues/1082
 	marshal, _ := protojson.Marshal(m)
 	buffer := bytes.Buffer{}
 	err := json.Compact(&buffer, marshal)
