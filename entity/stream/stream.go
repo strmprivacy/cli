@@ -3,12 +3,12 @@ package stream
 import (
 	"context"
 	"fmt"
+	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 	"github.com/streammachineio/api-definitions-go/api/entities/v1"
 	"github.com/streammachineio/api-definitions-go/api/streams/v1"
 	"google.golang.org/grpc"
-	"log"
 	"streammachine.io/strm/common"
 	"streammachine.io/strm/utils"
 	"strings"
@@ -34,7 +34,7 @@ func SetupClient(clientConnection *grpc.ClientConn, ctx context.Context) {
 
 func Get(streamName *string, recursive bool) *streams.GetStreamResponse {
 	if len(strings.TrimSpace(common.BillingId)) == 0 {
-		cobra.CheckErr(fmt.Sprintf("No login information found. Use: `%v auth login` first.", common.RootCommandName))
+		common.CliExit(fmt.Sprintf("No login information found. Use: `%v auth login` first.", common.RootCommandName))
 	}
 
 	req := &streams.GetStreamRequest{
@@ -42,14 +42,14 @@ func Get(streamName *string, recursive bool) *streams.GetStreamResponse {
 		Ref:       &entities.StreamRef{BillingId: common.BillingId, Name: *streamName},
 	}
 	stream, err := client.GetStream(apiContext, req)
-	cobra.CheckErr(err)
+	common.CliExit(err)
 	return stream
 }
 
 func list(recursive bool) {
 	req := &streams.ListStreamsRequest{BillingId: common.BillingId, Recursive: recursive}
 	streamsList, err := client.ListStreams(apiContext, req)
-	cobra.CheckErr(err)
+	common.CliExit(err)
 	utils.Print(streamsList)
 }
 
@@ -64,7 +64,7 @@ func del(streamName *string, recursive bool) {
 		Recursive: recursive, Ref: &entities.StreamRef{BillingId: common.BillingId, Name: *streamName},
 	}
 	_, err := client.DeleteStream(apiContext, req)
-	cobra.CheckErr(err)
+	common.CliExit(err)
 	utils.Print(stream)
 }
 
@@ -92,10 +92,10 @@ func create(args []string, cmd *cobra.Command) {
 
 	stream.Description = utils.GetStringAndErr(flags, descriptionFlag)
 	stream.Tags, err = flags.GetStringSlice(tagsFlag)
-	cobra.CheckErr(err)
+	common.CliExit(err)
 	req := &streams.CreateStreamRequest{Stream: stream}
 	response, err := client.CreateStream(apiContext, req)
-	cobra.CheckErr(err)
+	common.CliExit(err)
 	utils.Print(response.Stream)
 	save, err := flags.GetBool(saveFlag)
 	if save {
@@ -118,7 +118,7 @@ func parseConsentLevelType(flags *pflag.FlagSet) (entities.ConsentLevelType, err
 	return entities.ConsentLevelType(consentLevelType), err
 }
 
-func StreamNamesCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
+func NamesCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
 	if len(args) != 0 || common.BillingIdIsMissing() {
 		return common.MissingBillingIdCompletionError(cmd.CommandPath())
 	}
@@ -138,7 +138,7 @@ func StreamNamesCompletion(cmd *cobra.Command, args []string, complete string) (
 	return names, cobra.ShellCompDirectiveNoFileComp
 }
 
-func SourceStreamNamesCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
+func SourceNamesCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
 	if common.BillingIdIsMissing() {
 		return common.MissingBillingIdCompletionError(cmd.CommandPath())
 	}

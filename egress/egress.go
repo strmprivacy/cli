@@ -3,9 +3,9 @@ package egress
 import (
 	"fmt"
 	"github.com/gorilla/websocket"
+	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/streammachineio/api-definitions-go/api/entities/v1"
-	"log"
 	"net/http"
 	"streammachine.io/strm/auth"
 	"streammachine.io/strm/common"
@@ -43,11 +43,11 @@ func Run(cmd *cobra.Command, streamName *string) {
 	token, _ := authClient.GetToken(false)
 	header := http.Header{"authorization": []string{"Bearer " + token}}
 	c, _, err := websocket.DefaultDialer.Dial(u, header)
-	cobra.CheckErr(err)
+	common.CliExit(err)
 
 	for {
 		_, message, err := c.ReadMessage()
-		cobra.CheckErr(err)
+		common.CliExit(err)
 		fmt.Println(string(message))
 	}
 }

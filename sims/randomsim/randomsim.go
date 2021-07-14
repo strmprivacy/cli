@@ -3,10 +3,10 @@ package randomsim
 import (
 	"bytes"
 	"fmt"
+	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/streammachineio/api-definitions-go/api/entities/v1"
 	"io"
-	"log"
 	"math/rand"
 	"net/http"
 	"streammachine.io/strm/auth"
@@ -46,14 +46,13 @@ func run(cmd *cobra.Command, streamName *string) {
 	gateway := utils.GetStringAndErr(flags, sims.EventGatewayFlag)
 	quiet := utils.GetBoolAndErr(flags, sims.QuietFlag)
 	consentLevels, err := flags.GetStringSlice(sims.ConsentLevelsFlag)
-	cobra.CheckErr(err)
+	common.CliExit(err)
 	if len(consentLevels) == 0 {
 		log.Fatalf("%v is not a valid set of consent levels", consentLevels)
 	}
 	authClient := &auth.Auth{Uri: sts}
 	authClient.AuthenticateEvent(s.Ref.BillingId, s.Credentials[0].ClientId, s.Credentials[0].ClientSecret)
 	if !quiet {
-
 		println("Starting sim to stream '"+*streamName+"'. Sending 1 event every", interval, "ms")
 	}
 
@@ -91,9 +90,9 @@ func sendEvent(client http.Client, event *clickstream.ClickstreamEvent,
 	gateway string, token string) {
 	b := &bytes.Buffer{}
 	err := event.Serialize(b)
-	cobra.CheckErr(err)
+	common.CliExit(err)
 	req, err := http.NewRequest("POST", gateway, b)
-	cobra.CheckErr(err)
+	common.CliExit(err)
 	req.Header.Set("Strm-Schema-Id", "clickstream")
 	req.Header.Set("Authorization", "Bearer "+token)
 	resp, err := client.Do(req)

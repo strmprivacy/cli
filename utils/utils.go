@@ -1,8 +1,9 @@
 package utils
 
 import (
+	"bytes"
+	"encoding/json"
 	"fmt"
-	"github.com/spf13/cobra"
 	flag "github.com/spf13/pflag"
 	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/proto"
@@ -11,13 +12,22 @@ import (
 	"path"
 	"path/filepath"
 	"strconv"
+	"streammachine.io/strm/common"
 )
 
 var ConfigPath string
 
 func Print(m proto.Message) {
+	// As protojson.Marshal adds random spaces, we use json.Compact to omit the random spaces in the output.
 	marshal, _ := protojson.Marshal(m)
-	fmt.Println(string(marshal))
+	buffer := bytes.Buffer{}
+	err := json.Compact(&buffer, marshal)
+
+	if err != nil {
+		common.CliExit(err)
+	}
+
+	fmt.Println(string(buffer.Bytes()))
 }
 
 func MapInt32ToString(vs []int32, f func(a ...interface{}) string) []string {
@@ -30,7 +40,7 @@ func MapInt32ToString(vs []int32, f func(a ...interface{}) string) []string {
 
 func atoi(s string) int {
 	v, err := strconv.Atoi(s)
-	cobra.CheckErr(err)
+	common.CliExit(err)
 	return v
 }
 func atoi32(s string) int32 {
@@ -61,27 +71,27 @@ func StringsArrayToInt32(vs []string) []int32 {
 
 func GetStringAndErr(f *flag.FlagSet, k string) string {
 	v, err := f.GetString(k)
-	cobra.CheckErr(err)
+	common.CliExit(err)
 	return v
 }
 func GetBoolAndErr(f *flag.FlagSet, k string) bool {
 	v, err := f.GetBool(k)
-	cobra.CheckErr(err)
+	common.CliExit(err)
 	return v
 }
 func GetInt32AndErr(f *flag.FlagSet, k string) int32 {
 	v, err := f.GetInt32(k)
-	cobra.CheckErr(err)
+	common.CliExit(err)
 	return v
 }
 func GetInt64AndErr(f *flag.FlagSet, k string) int64 {
 	v, err := f.GetInt64(k)
-	cobra.CheckErr(err)
+	common.CliExit(err)
 	return v
 }
 func GetIntAndErr(f *flag.FlagSet, k string) int {
 	v, err := f.GetInt(k)
-	cobra.CheckErr(err)
+	common.CliExit(err)
 	return v
 }
 
@@ -97,17 +107,17 @@ func TryLoad(m proto.Message, name *string) error {
 
 func Load(m proto.Message, name *string) {
 	err := TryLoad(m, name)
-	cobra.CheckErr(err)
+	common.CliExit(err)
 }
 
 func Save(m proto.Message, name *string) {
 	filename := getSaveFilename(m, name)
 	err := os.MkdirAll(filepath.Dir(filename), 0700)
-	cobra.CheckErr(err)
+	common.CliExit(err)
 	jsonData, err := protojson.Marshal(m)
-	cobra.CheckErr(err)
+	common.CliExit(err)
 	err = ioutil.WriteFile(filename, jsonData, 0644)
-	cobra.CheckErr(err)
+	common.CliExit(err)
 }
 
 func DeleteSaved(m proto.Message, name *string) {

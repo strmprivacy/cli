@@ -38,7 +38,6 @@ const (
 	envPrefix = "STRM"
 )
 
-// RootCmd represents the base command when called without any subcommands
 var RootCmd = &cobra.Command{
 	Use:   common.RootCommandName,
 	Short: fmt.Sprintf("Stream Machine CLI %s", Version),
@@ -46,19 +45,28 @@ var RootCmd = &cobra.Command{
 		// You can bind cobra and viper in a few locations,
 		// but PersistencePreRunE on the root command works well
 		r := initializeConfig(cmd)
+
+		log.Infoln(fmt.Sprintf("Executing command: %v", cmd.CommandPath()))
+		cmd.Flags().Visit(func(flag *pflag.Flag) {
+			if flag.Name != auth.PasswordFlag {
+				log.Infoln(fmt.Sprintf("flag %v=%v", flag.Name, flag.Value))
+			} else {
+				log.Infoln(fmt.Sprintf("Flag '%v' set, but omitted in logs", flag.Name))
+			}
+		})
+
 		auth.ConfigPath = configPath
 		utils.ConfigPath = configPath
 
-		apiAuthUrl := utils.GetStringAndErr(cmd.Flags(), auth.ApiAuthUrlFlag)
-		authClient := &auth.Auth{Uri: apiAuthUrl}
-		loginError := authClient.LoadLogin()
+		auth.SetupClient(utils.GetStringAndErr(cmd.Flags(), auth.ApiAuthUrlFlag))
 
-		var token = ""
 		var billingId = ""
+		var token = ""
+		existingLoginError := auth.Client.LoadLogin()
 
-		if loginError == nil {
-			token, billingId = authClient.GetToken(true)
-			authClient.StoreLogin()
+		if existingLoginError == nil {
+			token, billingId = auth.Client.GetToken(true)
+			auth.Client.StoreLogin()
 		}
 
 		apiHost := utils.GetStringAndErr(cmd.Flags(), apiHostFlag)
@@ -103,10 +111,13 @@ func setupVerbs() {
 // Execute adds all child commands to the root command and sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() {
-	cobra.CheckErr(RootCmd.Execute())
+	common.CliExit(RootCmd.Execute())
 }
 
 func init() {
+	setConfigPath()
+	common.InitLogging(configPath)
+
 	RootCmd.PersistentFlags().String(apiHostFlag, "apis.streammachine.io:443", "API host and port")
 	RootCmd.PersistentFlags().String(auth.EventAuthHostFlag, "https://auth.strm.services", "Security Token Service for events")
 	RootCmd.PersistentFlags().String(auth.ApiAuthUrlFlag, "https://api.streammachine.io/v1", "Auth URL for user logins")
@@ -114,8 +125,6 @@ func init() {
 		"Token file that contains an access token (default is $HOME/.config/stream-machine/strm-creds-<api-auth-host>.json)")
 	RootCmd.PersistentFlags().String(egress.UrlFlag, "wss://out.strm.services/ws", "Websocket to receive events from")
 	setupVerbs()
-	setConfigPath()
-	common.InitLogging(configPath)
 }
 
 func setConfigPath() {
@@ -138,9 +147,7 @@ func setConfigPath() {
 		configPath, err = utils.ExpandTilde(defaultConfigPath)
 	}
 
-	log.Info("Config path is set to: ")
-
-	cobra.CheckErr(err)
+	common.CliExit(err)
 }
 
 func initializeConfig(cmd *cobra.Command) error {
@@ -178,6 +185,8 @@ func initializeConfig(cmd *cobra.Command) error {
 	// Bind the current command's flags to viper
 	bindFlags(cmd, viperConfig)
 
+	log.Infoln(fmt.Sprintf("Viper configuration: %v", viperConfig.AllSettings()))
+
 	return nil
 }
 
@@ -189,14 +198,14 @@ func bindFlags(cmd *cobra.Command, v *viper.Viper) {
 		if strings.Contains(f.Name, "-") {
 			envVarSuffix := strings.ToUpper(strings.ReplaceAll(f.Name, "-", "_"))
 			err := v.BindEnv(f.Name, fmt.Sprintf("%s_%s", envPrefix, envVarSuffix))
-			cobra.CheckErr(err)
+			common.CliExit(err)
 		}
 
 		// Apply the viper config value to the flag when the flag is not set and viper has a value
 		if !f.Changed && v.IsSet(f.Name) {
 			val := v.Get(f.Name)
 			err := cmd.Flags().Set(f.Name, fmt.Sprintf("%v", val))
-			cobra.CheckErr(err)
+			common.CliExit(err)
 		}
 	})
 }

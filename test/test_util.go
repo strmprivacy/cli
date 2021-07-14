@@ -45,7 +45,8 @@ func testConfig() *TestConfig {
 }
 
 func newConfigDir() string {
-	configDir, err := ioutil.TempDir("", "test")
+	var err error
+	configDir, err = ioutil.TempDir("", "test")
 	if err != nil {
 		println(fmt.Sprintf("error: %v", err))
 	}
@@ -70,6 +71,7 @@ type TokenFile struct {
 	Email        string `json:"email"`
 }
 
+var configDir string
 var defaultTokenFileName string
 
 func ExecuteCliAndGetOutput(t *testing.T, tokenFile string, cmd ...string) string {
@@ -84,7 +86,7 @@ func ExecuteCliAndGetOutput(t *testing.T, tokenFile string, cmd ...string) strin
 func executeCli(t *testing.T, tokenFile string, cmd ...string) *exec.Cmd {
 	if len(tokenFile) == 0 {
 		if len(defaultTokenFileName) == 0 {
-			defaultTokenFile, _ := ioutil.TempFile("", "strm_*.json")
+			defaultTokenFile, _ := ioutil.TempFile(configDir, "strm_*.json")
 			defaultTokenFileName = defaultTokenFile.Name()
 
 			initializeStrmEntities(t, defaultTokenFileName)

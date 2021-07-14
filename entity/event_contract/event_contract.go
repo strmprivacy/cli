@@ -39,7 +39,7 @@ func SetupClient(clientConnection *grpc.ClientConn, ctx context.Context) {
 func list() {
 	req := &event_contracts.ListEventContractsRequest{BillingId: common.BillingId}
 	sinksList, err := client.ListEventContracts(apiContext, req)
-	cobra.CheckErr(err)
+	common.CliExit(err)
 	utils.Print(sinksList)
 }
 
@@ -53,10 +53,10 @@ func GetEventContract(name *string) *entities.EventContract {
 		BillingId: common.BillingId,
 		Ref:       ref(name)}
 	eventContract, err := client.GetEventContract(apiContext, req)
-	cobra.CheckErr(err)
+	common.CliExit(err)
 	return eventContract.EventContract
 }
-func eventContractRefsCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
+func refsCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
 	if len(args) > 0 || common.BillingIdIsMissing() {
 		return common.MissingBillingIdCompletionError(cmd.CommandPath())
 	}

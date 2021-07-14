@@ -21,14 +21,14 @@ func SetupClient(clientConnection *grpc.ClientConn, ctx context.Context) {
 func list() {
 	req := &key_streams.ListKeyStreamsRequest{BillingId: common.BillingId}
 	sinksList, err := client.ListKeyStreams(apiContext, req)
-	cobra.CheckErr(err)
+	common.CliExit(err)
 	utils.Print(sinksList)
 }
 
 func get(name *string) {
 	req := &key_streams.GetKeyStreamRequest{Ref: ref(name)}
 	stream, err := client.GetKeyStream(apiContext, req)
-	cobra.CheckErr(err)
+	common.CliExit(err)
 	utils.Print(stream)
 }
 
@@ -36,7 +36,7 @@ func ref(n *string) *entities.KeyStreamRef {
 	return &entities.KeyStreamRef{BillingId: common.BillingId, Name: *n}
 }
 
-func ExistingNamesCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
+func NamesCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
 	if common.BillingIdIsMissing() {
 		return common.MissingBillingIdCompletionError(cmd.CommandPath())
 	}

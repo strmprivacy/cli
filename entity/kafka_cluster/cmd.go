@@ -10,7 +10,7 @@ func GetCmd() *cobra.Command {
 			get(&args[0])
 		},
 		Args:              cobra.ExactArgs(1), // the stream name
-		ValidArgsFunction: KafkaClusterNamesCompletion,
+		ValidArgsFunction: NamesCompletion,
 	}
 }
 func ListCmd() *cobra.Command {

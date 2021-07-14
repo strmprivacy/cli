@@ -1,6 +1,9 @@
 package sink
 
-import "github.com/spf13/cobra"
+import (
+	"github.com/spf13/cobra"
+	"streammachine.io/strm/common"
+)
 
 const (
 	sinkTypeFlag        = "sink-type"
@@ -16,7 +19,7 @@ func GetCmd() *cobra.Command {
 			get(&args[0], recursive)
 		},
 		Args:              cobra.ExactArgs(1), // the stream name
-		ValidArgsFunction: ExistingNamesCompletion,
+		ValidArgsFunction: NamesCompletion,
 	}
 }
 func ListCmd() *cobra.Command {
@@ -38,7 +41,7 @@ func DeleteCmd() *cobra.Command {
 			del(&args[0], recursive)
 		},
 		Args:              cobra.ExactArgs(1),
-		ValidArgsFunction: ExistingNamesCompletion,
+		ValidArgsFunction: NamesCompletion,
 	}
 }
 func CreateCmd() *cobra.Command {
@@ -57,7 +60,7 @@ func CreateCmd() *cobra.Command {
 	_ = sink.MarkFlagRequired(credentialsFileFlag)
 	_ = sink.MarkFlagFilename(credentialsFileFlag, "json")
 	err := sink.RegisterFlagCompletionFunc(sinkTypeFlag, sinkTypesCompletion)
-	cobra.CheckErr(err)
+	common.CliExit(err)
 	return sink
 }
 

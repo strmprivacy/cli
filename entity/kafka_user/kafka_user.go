@@ -31,7 +31,7 @@ func list(exporterName *string) {
 		},
 	}
 	users, err := client.ListKafkaUsers(apiContext, req)
-	cobra.CheckErr(err)
+	common.CliExit(err)
 	utils.Print(users)
 }
 
@@ -39,7 +39,7 @@ func get(name *string) {
 	// TODO need api recursive addition
 	req := &kafka_users.GetKafkaUserRequest{Ref: ref(name)}
 	user, err := client.GetKafkaUser(apiContext, req)
-	cobra.CheckErr(err)
+	common.CliExit(err)
 	utils.Print(user)
 }
 
@@ -47,7 +47,7 @@ func del(name *string) {
 	user := ref(name)
 	req := &kafka_users.DeleteKafkaUserRequest{Ref: user}
 	_, err := client.DeleteKafkaUser(apiContext, req)
-	cobra.CheckErr(err)
+	common.CliExit(err)
 	utils.Print(user)
 	utils.DeleteSaved(user, &user.Name)
 }
@@ -65,7 +65,7 @@ func create(kafkaExporterName *string, cmd *cobra.Command) {
 
 	response, err := client.CreateKafkaUser(apiContext,
 		&kafka_users.CreateKafkaUserRequest{KafkaUser: kafkaUser})
-	cobra.CheckErr(err)
+	common.CliExit(err)
 	utils.Print(response.KafkaUser)
 	save, err := flags.GetBool(saveFlag)
 	if save {
@@ -74,7 +74,7 @@ func create(kafkaExporterName *string, cmd *cobra.Command) {
 
 }
 
-func kafkaUserNamesCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
+func namesCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
 	if len(args) > 0 || common.BillingIdIsMissing() {
 		return common.MissingBillingIdCompletionError(cmd.CommandPath())
 	}

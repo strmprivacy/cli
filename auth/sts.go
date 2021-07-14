@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/spf13/cobra"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -12,10 +11,16 @@ import (
 	"os"
 	"path"
 	"path/filepath"
+	"streammachine.io/strm/common"
 	"time"
 )
 
+var Client Auth
 var ConfigPath string
+
+func SetupClient(apiAuthUrl string) {
+	Client = Auth{Uri: apiAuthUrl}
+}
 
 // Auth is the entity that interacts with authorization endpoints.
 // Used both for user logins and events
@@ -40,6 +45,14 @@ type token struct {
 	Email        string `json:"email"`
 }
 
+type EmptyTokenError struct {
+	tokenFilePath string
+}
+
+func (e *EmptyTokenError) Error() string {
+	return fmt.Sprintf("Token from file %v is empty", e.tokenFilePath)
+}
+
 func (authorizer *Auth) GetToken(quiet bool) (string, string) {
 	if int64(authorizer.token.ExpiresAt)-30 < time.Now().Unix() {
 		if !quiet {
@@ -52,9 +65,9 @@ func (authorizer *Auth) GetToken(quiet bool) (string, string) {
 
 func (authorizer *Auth) refresh() {
 	b, err := json.Marshal(authorizer.token)
-	cobra.CheckErr(err)
+	common.CliExit(err)
 	resp, err := http.Post(authorizer.Uri+"/refresh", "application/json; charset=UTF-8", bytes.NewReader(b))
-	cobra.CheckErr(err)
+	common.CliExit(err)
 	defer resp.Body.Close()
 	authorizer.handleAuthResponse(resp)
 }
@@ -69,16 +82,16 @@ func (authorizer *Auth) AuthenticateLogin(email, password *string) {
 		Email:    *email,
 		Password: *password,
 	})
-	cobra.CheckErr(err)
+	common.CliExit(err)
 
 	resp, err := http.Post(authorizer.Uri+"/auth", "application/json; charset=UTF-8", bytes.NewReader(postBody))
-	cobra.CheckErr(err)
+	common.CliExit(err)
 	if resp.StatusCode != 200 {
 		errorBody, _ := io.ReadAll(resp.Body)
 		var errorJson = ErrorResponse{Code: 0, Message: ""}
 		err2 := json.Unmarshal(errorBody, &errorJson)
-		cobra.CheckErr(err2)
-		cobra.CheckErr("Error authenticating: " + errorJson.Message)
+		common.CliExit(err2)
+		common.CliExit("Error authenticating: " + errorJson.Message)
 	}
 	defer resp.Body.Close()
 	authorizer.handleAuthResponse(resp)
@@ -95,32 +108,32 @@ func (authorizer *Auth) AuthenticateEvent(billingId, clientId, secret string) {
 	postBody, err := json.Marshal(authJson{
 		BillingId: billingId, ClientId: clientId, ClientSecret: secret,
 	})
-	cobra.CheckErr(err)
+	common.CliExit(err)
 
 	resp, err := http.Post(authorizer.Uri+"/auth", "application/json; charset=UTF-8", bytes.NewReader(postBody))
-	cobra.CheckErr(err)
+	common.CliExit(err)
 	defer resp.Body.Close()
 	authorizer.handleAuthResponse(resp)
 }
 
 func (authorizer *Auth) handleAuthResponse(resp *http.Response) {
 	body, err := io.ReadAll(resp.Body)
-	cobra.CheckErr(err)
+	common.CliExit(err)
 	err = json.Unmarshal(body, &authorizer.token)
 	if &authorizer.token.IdToken == nil {
-		cobra.CheckErr("Cannot get ID token from auth response")
+		common.CliExit("Cannot get ID token from auth response")
 	}
-	cobra.CheckErr(err)
+	common.CliExit(err)
 }
 
 func (authorizer *Auth) StoreLogin() string {
 	filename := authorizer.getSaveFilename()
 	err := os.MkdirAll(filepath.Dir(filename), 0700)
-	cobra.CheckErr(err)
+	common.CliExit(err)
 	b, err := json.Marshal(authorizer.token)
-	cobra.CheckErr(err)
+	common.CliExit(err)
 	err = ioutil.WriteFile(filename, b, 0644)
-	cobra.CheckErr(err)
+	common.CliExit(err)
 	return filename
 
 }
@@ -128,7 +141,7 @@ func (authorizer *Auth) StoreLogin() string {
 func (authorizer *Auth) getSaveFilename() string {
 	if TokenFile == "" {
 		u, err := url.Parse(authorizer.Uri)
-		cobra.CheckErr(err)
+		common.CliExit(err)
 		filename := fmt.Sprintf("strm-creds-%s.json", u.Hostname())
 		return path.Join(ConfigPath, filename)
 	} else {
@@ -139,18 +152,27 @@ func (authorizer *Auth) getSaveFilename() string {
 func (authorizer *Auth) LoadLogin() error {
 	filename := authorizer.getSaveFilename()
 	b, err := ioutil.ReadFile(filename)
+
 	if err != nil {
 		return err
-	}
-	err = json.Unmarshal(b, &authorizer.token)
-	cobra.CheckErr(err)
+	} else if len(b) == 0 {
+		return &EmptyTokenError{}
+	} else {
+		err = json.Unmarshal(b, &authorizer.token)
+		common.CliExit(err)
 
-	return nil
+		return nil
+	}
 }
 
 func (authorizer *Auth) printToken() {
-	fmt.Println(authorizer.token.IdToken)
-	// these go to stderr, so the token is easy to capture in a script
-	println("Expires at:", time.Unix(int64(authorizer.token.ExpiresAt), 0).String())
-	println("Billing id:", authorizer.token.BillingId)
+	if authorizer.token != nil {
+		fmt.Println(authorizer.token.IdToken)
+		// these go to stderr, so the token is easy to capture in a script
+		println("Expires at:", time.Unix(int64(authorizer.token.ExpiresAt), 0).String())
+		println("Billing id:", authorizer.token.BillingId)
+	} else {
+		common.MissingIdTokenError()
+	}
+
 }

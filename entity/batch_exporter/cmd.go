@@ -2,6 +2,7 @@ package batch_exporter
 
 import (
 	"github.com/spf13/cobra"
+	"streammachine.io/strm/common"
 	"streammachine.io/strm/entity/sink"
 	"streammachine.io/strm/entity/stream"
 )
@@ -22,7 +23,7 @@ func DeleteCmd() *cobra.Command {
 			del(&args[0])
 		},
 		Args:              cobra.ExactArgs(1), // the stream name
-		ValidArgsFunction: batchExporterNamesCompletion,
+		ValidArgsFunction: namesCompletion,
 	}
 	return batchExporter
 
@@ -36,7 +37,7 @@ func GetCmd() *cobra.Command {
 			get(&args[0], cmd)
 		},
 		Args:              cobra.ExactArgs(1), // the stream name
-		ValidArgsFunction: batchExporterNamesCompletion,
+		ValidArgsFunction: namesCompletion,
 	}
 }
 func ListCmd() *cobra.Command {
@@ -57,7 +58,7 @@ func CreateCmd() *cobra.Command {
 			create(&args[0], cmd)
 		},
 		Args:              cobra.ExactArgs(1), // the stream name
-		ValidArgsFunction: stream.StreamNamesCompletion,
+		ValidArgsFunction: stream.NamesCompletion,
 	}
 
 	flags := batchExporter.Flags()
@@ -66,8 +67,8 @@ func CreateCmd() *cobra.Command {
 	flags.String(pathPrefix, "", "path prefix on bucket")
 	flags.Int64(intervalFlag, 60, "Interval in seconds between batches")
 	flags.Bool(exportKeys, false, "Do we want to export the keys stream")
-	err := batchExporter.RegisterFlagCompletionFunc(sinkFlag, sink.ExistingNamesCompletion)
-	cobra.CheckErr(err)
+	err := batchExporter.RegisterFlagCompletionFunc(sinkFlag, sink.NamesCompletion)
+	common.CliExit(err)
 
 	return batchExporter
 }

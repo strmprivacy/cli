@@ -39,7 +39,7 @@ func SetupClient(clientConnection *grpc.ClientConn, ctx context.Context) {
 func list() {
 	req := &schemas.ListSchemasRequest{BillingId: common.BillingId}
 	sinksList, err := client.ListSchemas(apiContext, req)
-	cobra.CheckErr(err)
+	common.CliExit(err)
 	utils.Print(sinksList)
 }
 
@@ -53,10 +53,10 @@ func GetSchema(name *string) *entities.Schema {
 		BillingId: common.BillingId,
 		Ref:       ref(name)}
 	schema, err := client.GetSchema(apiContext, req)
-	cobra.CheckErr(err)
+	common.CliExit(err)
 	return schema.Schema
 }
-func existingNamesCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
+func namesCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
 	if len(args) > 0 || common.BillingIdIsMissing() {
 		return common.MissingBillingIdCompletionError(cmd.CommandPath())
 	}
