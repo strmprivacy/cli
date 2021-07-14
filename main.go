@@ -3,8 +3,10 @@ Copyright © 2021 StreamMachine.io
 */
 package main
 
-import "streammachine.io/strm/cmd"
+import (
+	"streammachine.io/strm/cmd/strm"
+)
 
 func main() {
-	cmd.Execute()
+	strm.Execute()
 }

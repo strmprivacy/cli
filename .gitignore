@@ -1,7 +1,5 @@
 .idea
 node_modules
-strm
-strm2
 protos
 .env
 .env-dev

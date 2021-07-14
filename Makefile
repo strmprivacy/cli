@@ -15,7 +15,7 @@ zsh-completion:
 # for a speedier build than with goreleaser
 source_files := $(shell find . -name "*.go")
 
-targetVar := streammachine.io/strm/common.RootCommandName
+targetVar := streammachine.io/strm/pkg/common.RootCommandName
 
 target := dstrm
 
@@ -26,5 +26,6 @@ ${target}: ${source_files} Makefile
 
 clean:
 	rm -f ${target}
+	rm -rf dist
 
 all: ${target}

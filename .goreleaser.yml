@@ -8,6 +8,7 @@ before:
 builds:
   - id: strm
     binary: strm
+    main: ./cmd/strm
     env:
       - CGO_ENABLED=0
     ldflags:
