@@ -10,7 +10,7 @@ import (
 	"github.com/streammachineio/api-definitions-go/api/streams/v1"
 	"google.golang.org/grpc"
 	"streammachine.io/strm/pkg/common"
-	"streammachine.io/strm/pkg/utils"
+	"streammachine.io/strm/pkg/util"
 	"strings"
 )
 
@@ -50,12 +50,12 @@ func list(recursive bool) {
 	req := &streams.ListStreamsRequest{BillingId: common.BillingId, Recursive: recursive}
 	streamsList, err := client.ListStreams(apiContext, req)
 	common.CliExit(err)
-	utils.Print(streamsList)
+	util.Print(streamsList)
 }
 
 func get(streamName *string, recursive bool) {
 	stream := Get(streamName, recursive)
-	utils.Print(stream)
+	util.Print(stream)
 }
 
 func del(streamName *string, recursive bool) {
@@ -65,13 +65,13 @@ func del(streamName *string, recursive bool) {
 	}
 	_, err := client.DeleteStream(apiContext, req)
 	common.CliExit(err)
-	utils.Print(stream)
+	util.Print(stream)
 }
 
 func create(args []string, cmd *cobra.Command) {
 	var err error
 	flags := cmd.Flags()
-	linkedStream := utils.GetStringAndErr(flags, linkedStreamFlag)
+	linkedStream := util.GetStringAndErr(flags, linkedStreamFlag)
 	stream := &entities.Stream{Ref: &entities.StreamRef{BillingId: common.BillingId}}
 	if len(args) > 0 {
 		stream.Ref.Name = args[0]
@@ -90,23 +90,23 @@ func create(args []string, cmd *cobra.Command) {
 		}
 	}
 
-	stream.Description = utils.GetStringAndErr(flags, descriptionFlag)
+	stream.Description = util.GetStringAndErr(flags, descriptionFlag)
 	stream.Tags, err = flags.GetStringSlice(tagsFlag)
 	common.CliExit(err)
 	req := &streams.CreateStreamRequest{Stream: stream}
 	response, err := client.CreateStream(apiContext, req)
 	common.CliExit(err)
-	utils.Print(response.Stream)
+	util.Print(response.Stream)
 	save, err := flags.GetBool(saveFlag)
 	if save {
-		utils.Save(response.Stream, &response.Stream.Ref.Name)
+		util.Save(response.Stream, &response.Stream.Ref.Name)
 	}
 }
 
 func parseConsentLevelType(flags *pflag.FlagSet) (entities.ConsentLevelType, error) {
 	var err error
 	var consentLevelTypeString string
-	consentLevelTypeString = utils.GetStringAndErr(flags, consentLevelTypeFlag)
+	consentLevelTypeString = util.GetStringAndErr(flags, consentLevelTypeFlag)
 	consentLevelType, ok := entities.ConsentLevelType_value[consentLevelTypeString]
 	if !ok {
 		log.Fatalf("Can't convert %s to a known consent level type, types are %v",

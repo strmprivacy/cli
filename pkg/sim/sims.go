@@ -1,4 +1,4 @@
-package sims
+package sim
 
 const (
 	IntervalFlag      = "interval"

@@ -1,4 +1,4 @@
-package strm
+package main
 
 import (
 	"context"
@@ -6,6 +6,7 @@ import (
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
+	"github.com/spf13/viper"
 	"google.golang.org/grpc"
 	"os"
 	"streammachine.io/strm/pkg/auth"
@@ -22,10 +23,8 @@ import (
 	"streammachine.io/strm/pkg/entity/schema"
 	"streammachine.io/strm/pkg/entity/sink"
 	"streammachine.io/strm/pkg/entity/stream"
-	"streammachine.io/strm/pkg/utils"
+	"streammachine.io/strm/pkg/util"
 	"strings"
-
-	"github.com/spf13/viper"
 )
 
 var configPath string
@@ -39,7 +38,7 @@ const (
 	envPrefix = "STRM"
 )
 
-func Execute() {
+func main() {
 	common.CliExit(RootCmd.Execute())
 }
 
@@ -61,9 +60,9 @@ var RootCmd = &cobra.Command{
 		})
 
 		auth.ConfigPath = configPath
-		utils.ConfigPath = configPath
+		util.ConfigPath = configPath
 
-		auth.SetupClient(utils.GetStringAndErr(cmd.Flags(), auth.ApiAuthUrlFlag))
+		auth.SetupClient(util.GetStringAndErr(cmd.Flags(), auth.ApiAuthUrlFlag))
 
 		var billingId = ""
 		var token = ""
@@ -74,7 +73,7 @@ var RootCmd = &cobra.Command{
 			auth.Client.StoreLogin()
 		}
 
-		apiHost := utils.GetStringAndErr(cmd.Flags(), apiHostFlag)
+		apiHost := util.GetStringAndErr(cmd.Flags(), apiHostFlag)
 		clientConnection, ctx := entity.SetupGrpc(apiHost, token)
 		setupServiceClients(clientConnection, ctx)
 		common.BillingId = billingId
@@ -142,10 +141,10 @@ func setConfigPath() {
 
 	if len(configPathEnv) != 0 {
 		log.Debugln("Value for " + configPathEnvVar + " found in environment: " + configPathEnv)
-		configPath, err = utils.ExpandTilde(configPathEnv)
+		configPath, err = util.ExpandTilde(configPathEnv)
 	} else {
 		log.Debugln("No value for " + configPathEnvVar + " found. Falling back to default: " + defaultConfigPath)
-		configPath, err = utils.ExpandTilde(defaultConfigPath)
+		configPath, err = util.ExpandTilde(defaultConfigPath)
 	}
 
 	common.CliExit(err)

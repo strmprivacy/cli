@@ -4,7 +4,7 @@ import (
 	"github.com/spf13/cobra"
 	"streammachine.io/strm/pkg/egress"
 	"streammachine.io/strm/pkg/entity/stream"
-	"streammachine.io/strm/pkg/sims"
+	"streammachine.io/strm/pkg/sim"
 )
 
 // SimCmd represents the create command
@@ -20,7 +20,7 @@ var EgressCmd = &cobra.Command{
 
 func init() {
 	flags := EgressCmd.Flags()
-	flags.String(sims.ClientIdFlag, "", "Client id to be used for receiving data")
-	flags.String(sims.ClientSecretFlag, "", "Client secret to be used for receiving data")
+	flags.String(sim.ClientIdFlag, "", "Client id to be used for receiving data")
+	flags.String(sim.ClientSecretFlag, "", "Client secret to be used for receiving data")
 
 }

@@ -99,7 +99,7 @@ func executeCli(t *testing.T, tokenFile string, cmd ...string) *exec.Cmd {
 
 	cmd = append(cmd, "--token-file="+tokenFile)
 
-	command := exec.Command(rootPath+"dstrm", cmd...)
+	command := exec.Command(rootPath+"dist/dstrm", cmd...)
 	command.Dir = rootPath
 	return command
 }

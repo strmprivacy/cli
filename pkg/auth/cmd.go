@@ -2,7 +2,7 @@ package auth
 
 import (
 	"github.com/spf13/cobra"
-	"streammachine.io/strm/pkg/utils"
+	"streammachine.io/strm/pkg/util"
 )
 
 func LoginCmd() *cobra.Command {
@@ -10,7 +10,7 @@ func LoginCmd() *cobra.Command {
 		Use:   "login [email]",
 		Short: "Login",
 		Run: func(cmd *cobra.Command, args []string) {
-			login(apiHost(cmd), &args[0], cmd)
+			login(&args[0], cmd)
 		},
 		Args: cobra.ExactArgs(1), // the stream name
 	}
@@ -42,12 +42,12 @@ func RefreshCmd() *cobra.Command {
 		Long: `Not really necessary, the CLI will auto-refresh.
 `,
 		Run: func(cmd *cobra.Command, args []string) {
-			DoRefresh(apiHost(cmd))
+			Refresh()
 		},
 	}
 	return cmd
 }
 
 func apiHost(cmd *cobra.Command) string {
-	return utils.GetStringAndErr(cmd.Flags(), ApiAuthUrlFlag)
+	return util.GetStringAndErr(cmd.Flags(), ApiAuthUrlFlag)
 }

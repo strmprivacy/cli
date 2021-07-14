@@ -24,7 +24,7 @@ const (
 	PasswordFlag      = "password"
 )
 
-func login(apiHost string, s *string, cmd *cobra.Command) {
+func login(s *string, cmd *cobra.Command) {
 	flags := cmd.Flags()
 	password, _ := flags.GetString(PasswordFlag)
 	if password == "" {
@@ -32,11 +32,10 @@ func login(apiHost string, s *string, cmd *cobra.Command) {
 		fmt.Println()
 	}
 
-	authClient := &Auth{Uri: apiHost}
-	authClient.AuthenticateLogin(s, &password)
-	_, billingId := authClient.GetToken(false)
+	Client.AuthenticateLogin(s, &password)
+	_, billingId := Client.GetToken(false)
 	fmt.Println("Billing id:", billingId)
-	filename := authClient.StoreLogin()
+	filename := Client.StoreLogin()
 	fmt.Println("Saved login to:", filename)
 }
 
@@ -53,7 +52,7 @@ func printAccessToken() {
 	Client.printToken()
 }
 
-func DoRefresh(apiHost string) {
+func Refresh() {
 	Client.LoadLogin()
 	Client.refresh()
 	Client.StoreLogin()
