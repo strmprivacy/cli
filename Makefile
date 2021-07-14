@@ -16,7 +16,7 @@ targetVar := streammachine.io/strm/pkg/common.RootCommandName
 
 target := dstrm
 
-ldflags := -X '${targetVar}=${target}'
+ldflags := -X '${targetVar}=${target}' -X streammachine.io/strm/pkg/cmd.Version=local -X streammachine.io/strm/pkg/cmd.GitSha=local -X streammachine.io/strm/pkg/cmd.BuiltOn=local
 
 dist/${target}: ${source_files} Makefile
 	go build -ldflags="${ldflags}" -o $@ ./cmd/strm
