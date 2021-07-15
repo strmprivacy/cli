@@ -1,3 +1,10 @@
+## [1.1.3](https://github.com/streammachineio/cli/compare/v1.1.2...v1.1.3) (2021-07-15)
+
+
+### Bug Fixes
+
+* **egress:** fixed egress usage info ([#24](https://github.com/streammachineio/cli/issues/24)) ([7dbe339](https://github.com/streammachineio/cli/commit/7dbe33968eec094e648c61753ef3d348452b5c7f))
+
 ## [1.1.2](https://github.com/streammachineio/cli/compare/v1.1.1...v1.1.2) (2021-07-14)
 
 
