@@ -9,7 +9,7 @@ import (
 
 // SimCmd represents the create command
 var EgressCmd = &cobra.Command{
-	Use:               "egress",
+	Use:               "egress [stream-name]",
 	Short:             "Read from egress",
 	Run:               func(cmd *cobra.Command, args []string) {
 		egress.Run(cmd, &args[0])
