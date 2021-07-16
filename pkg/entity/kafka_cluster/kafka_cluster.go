@@ -43,6 +43,7 @@ func GetCluster(name *string) *entities.KafkaCluster {
 	common.CliExit(err)
 	return cluster.KafkaCluster
 }
+
 func NamesCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
 	if len(args) > 0 || common.BillingIdIsMissing() {
 		return common.MissingBillingIdCompletionError(cmd.CommandPath())
@@ -62,4 +63,3 @@ func NamesCompletion(cmd *cobra.Command, args []string, complete string) ([]stri
 
 	return names, cobra.ShellCompDirectiveNoFileComp
 }
-
