@@ -56,6 +56,7 @@ func GetEventContract(name *string) *entities.EventContract {
 	common.CliExit(err)
 	return eventContract.EventContract
 }
+
 func refsCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
 	if len(args) > 0 || common.BillingIdIsMissing() {
 		return common.MissingBillingIdCompletionError(cmd.CommandPath())

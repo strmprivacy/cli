@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/spf13/cobra"
+	"github.com/spf13/pflag"
 	"github.com/streammachineio/api-definitions-go/api/entities/v1"
 	"github.com/streammachineio/api-definitions-go/api/schemas/v1"
 	"google.golang.org/grpc"
@@ -13,7 +14,9 @@ import (
 )
 
 // strings used in the cli
-const ()
+const (
+	kafkaClusterFlag = "kafka-cluster"
+)
 
 var client schemas.SchemasServiceClient
 var apiContext context.Context
@@ -43,19 +46,43 @@ func list() {
 	util.Print(sinksList)
 }
 
-func get(name *string) {
-	schema := GetSchema(name)
+func get(name *string, cmd *cobra.Command) {
+	flags := cmd.Flags()
+	clusterRef, err := getClusterRef(flags)
+	common.CliExit(err)
+
+	schema := GetSchema(name, clusterRef)
 	util.Print(schema)
 }
 
-func GetSchema(name *string) *entities.Schema {
-	req := &schemas.GetSchemaRequest{
-		BillingId: common.BillingId,
-		Ref:       ref(name)}
-	schema, err := client.GetSchema(apiContext, req)
-	common.CliExit(err)
-	return schema.Schema
+func getClusterRef(flags *pflag.FlagSet) (*entities.KafkaClusterRef, error) {
+	flag := util.GetStringAndErr(flags, kafkaClusterFlag)
+	if len(flag) > 0 {
+		parts := strings.Split(flag, "/")
+		if len(parts) == 2 {
+			return &entities.KafkaClusterRef{
+				BillingId: parts[0],
+				Name:      parts[1],
+			}, nil
+		} else {
+			return nil, fmt.Errorf("invalid %v. Should be formatted as 'billing_id/cluster_name'", kafkaClusterFlag)
+		}
+	} else {
+		return &entities.KafkaClusterRef{}, nil
+	}
 }
+
+func GetSchema(name *string, clusterRef *entities.KafkaClusterRef) *schemas.GetSchemaResponse {
+	req := &schemas.GetSchemaRequest{
+		BillingId:  common.BillingId,
+		Ref:        ref(name),
+		ClusterRef: clusterRef,
+	}
+	response, err := client.GetSchema(apiContext, req)
+	common.CliExit(err)
+	return response
+}
+
 func namesCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
 	if len(args) > 0 || common.BillingIdIsMissing() {
 		return common.MissingBillingIdCompletionError(cmd.CommandPath())
