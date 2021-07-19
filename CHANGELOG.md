@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/streammachineio/cli/compare/v1.1.3...v1.2.0) (2021-07-19)
+
+
+### Features
+
+* **schema:** add --kafka-cluster to get schema ([b48c019](https://github.com/streammachineio/cli/commit/b48c01935802b872b3aa6ceb4048d6c719f29740))
+
 ## [1.1.3](https://github.com/streammachineio/cli/compare/v1.1.2...v1.1.3) (2021-07-15)
 
 
