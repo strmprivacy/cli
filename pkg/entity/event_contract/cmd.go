@@ -22,3 +22,16 @@ func ListCmd() *cobra.Command {
 		},
 	}
 }
+func CreateCmd() *cobra.Command {
+	createCmd := &cobra.Command{
+		Use:   "event-contract [name] [version]",
+		Short: "create a event-contract",
+		Run: func(cmd *cobra.Command, args []string) {
+			create(cmd, args)
+		},
+	}
+	flags := createCmd.Flags()
+	flags.String(definitionFlag, "", "filename of the definition")
+	return createCmd
+
+}

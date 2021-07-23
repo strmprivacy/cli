@@ -3,6 +3,7 @@ package cmd
 import (
 	"github.com/spf13/cobra"
 	"streammachine.io/strm/pkg/entity/batch_exporter"
+	"streammachine.io/strm/pkg/entity/event_contract"
 	"streammachine.io/strm/pkg/entity/kafka_exporter"
 	"streammachine.io/strm/pkg/entity/kafka_user"
 	"streammachine.io/strm/pkg/entity/schema"
@@ -23,4 +24,5 @@ func init() {
 	CreateCmd.AddCommand(kafka_exporter.CreateCmd())
 	CreateCmd.AddCommand(kafka_user.CreateCmd())
 	CreateCmd.AddCommand(schema.CreateCmd())
+	CreateCmd.AddCommand(event_contract.CreateCmd())
 }

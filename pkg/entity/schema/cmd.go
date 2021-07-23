@@ -11,7 +11,7 @@ func GetCmd() *cobra.Command {
 		Run: func(cmd *cobra.Command, args []string) {
 			get(&args[0], cmd)
 		},
-		Args:              cobra.ExactArgs(1), // the stream name
+		Args:              cobra.ExactArgs(1), // the schema name
 		ValidArgsFunction: namesCompletion,
 	}
 	flags := getSchema.Flags()
@@ -28,13 +28,15 @@ func ListCmd() *cobra.Command {
 		},
 	}
 }
+
 func CreateCmd() *cobra.Command {
 	createCmd := &cobra.Command{
-		Use:   "schema [name] [version]",
+		Use:   "schema [handle/name/version]",
 		Short: "create a schema",
 		Run: func(cmd *cobra.Command, args []string) {
-			create(cmd, args)
+			create(cmd, &args[0])
 		},
+		Args:  cobra.ExactArgs(1),
 	}
 	flags := createCmd.Flags()
 	flags.String(definitionFlag, "", "filename of the definition")

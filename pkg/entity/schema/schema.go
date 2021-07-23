@@ -85,21 +85,20 @@ func GetSchema(name *string, clusterRef *entities.KafkaClusterRef) *schemas.GetS
 	return response
 }
 
-func create(cmd *cobra.Command, args []string) {
+func create(cmd *cobra.Command, args *string) {
 	flags := cmd.Flags()
 
 	definitionFilename := util.GetStringAndErr(flags, definitionFlag)
 	definition, err := ioutil.ReadFile(definitionFilename)
 
-	ref := &entities.SchemaRef{
-		Name:    args[0],
-		Version: args[1],
-	}
+	ref := ref(args)
+	ref.SchemaType = entities.SchemaType_AVRO
 	req := &schemas.CreateSchemaRequest{
 		BillingId: common.BillingId,
 		Schema: &entities.Schema{
 			Ref:        ref,
 			Definition: string(definition),
+
 		},
 	}
 	response, err := client.CreateSchema(apiContext, req)
