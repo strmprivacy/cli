@@ -8,6 +8,7 @@ import (
 	"github.com/streammachineio/api-definitions-go/api/entities/v1"
 	"github.com/streammachineio/api-definitions-go/api/schemas/v1"
 	"google.golang.org/grpc"
+	"io/ioutil"
 	"streammachine.io/strm/pkg/common"
 	"streammachine.io/strm/pkg/util"
 	"strings"
@@ -16,6 +17,7 @@ import (
 // strings used in the cli
 const (
 	kafkaClusterFlag = "kafka-cluster"
+	definitionFlag   = "definition"
 )
 
 var client schemas.SchemasServiceClient
@@ -81,6 +83,28 @@ func GetSchema(name *string, clusterRef *entities.KafkaClusterRef) *schemas.GetS
 	response, err := client.GetSchema(apiContext, req)
 	common.CliExit(err)
 	return response
+}
+
+func create(cmd *cobra.Command, args []string) {
+	flags := cmd.Flags()
+
+	definitionFilename := util.GetStringAndErr(flags, definitionFlag)
+	definition, err := ioutil.ReadFile(definitionFilename)
+
+	ref := &entities.SchemaRef{
+		Name:    args[0],
+		Version: args[1],
+	}
+	req := &schemas.CreateSchemaRequest{
+		BillingId: common.BillingId,
+		Schema: &entities.Schema{
+			Ref:        ref,
+			Definition: string(definition),
+		},
+	}
+	response, err := client.CreateSchema(apiContext, req)
+	common.CliExit(err)
+	util.Print(response)
 }
 
 func namesCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {

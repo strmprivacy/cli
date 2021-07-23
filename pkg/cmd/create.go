@@ -5,6 +5,7 @@ import (
 	"streammachine.io/strm/pkg/entity/batch_exporter"
 	"streammachine.io/strm/pkg/entity/kafka_exporter"
 	"streammachine.io/strm/pkg/entity/kafka_user"
+	"streammachine.io/strm/pkg/entity/schema"
 	"streammachine.io/strm/pkg/entity/sink"
 	"streammachine.io/strm/pkg/entity/stream"
 )
@@ -21,4 +22,5 @@ func init() {
 	CreateCmd.AddCommand(batch_exporter.CreateCmd())
 	CreateCmd.AddCommand(kafka_exporter.CreateCmd())
 	CreateCmd.AddCommand(kafka_user.CreateCmd())
+	CreateCmd.AddCommand(schema.CreateCmd())
 }

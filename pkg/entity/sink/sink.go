@@ -16,7 +16,9 @@ import (
 var Client sinks.SinksServiceClient
 var apiContext context.Context
 
-func ref(n *string) *entities.SinkRef { return &entities.SinkRef{BillingId: common.BillingId, Name: *n} }
+func ref(n *string) *entities.SinkRef {
+	return &entities.SinkRef{BillingId: common.BillingId, Name: *n}
+}
 
 func SetupClient(clientConnection *grpc.ClientConn, ctx context.Context) {
 	apiContext = ctx

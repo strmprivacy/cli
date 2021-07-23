@@ -2,6 +2,8 @@ package schema
 
 import "github.com/spf13/cobra"
 
+const ()
+
 func GetCmd() *cobra.Command {
 	getSchema := &cobra.Command{
 		Use:   "schema [name]",
@@ -25,4 +27,17 @@ func ListCmd() *cobra.Command {
 			list()
 		},
 	}
+}
+func CreateCmd() *cobra.Command {
+	createCmd := &cobra.Command{
+		Use:   "schema [name] [version]",
+		Short: "create a schema",
+		Run: func(cmd *cobra.Command, args []string) {
+			create(cmd, args)
+		},
+	}
+	flags := createCmd.Flags()
+	flags.String(definitionFlag, "", "filename of the definition")
+	return createCmd
+
 }
