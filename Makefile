@@ -23,7 +23,6 @@ dist/${target}: ${source_files} Makefile
 
 clean:
 	rm -f ${target}
-	rm -rf dist
 
 test: dist/${target}
 	go clean -testcache

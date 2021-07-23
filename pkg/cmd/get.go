@@ -11,6 +11,7 @@ import (
 	"streammachine.io/strm/pkg/entity/schema"
 	"streammachine.io/strm/pkg/entity/sink"
 	"streammachine.io/strm/pkg/entity/stream"
+	"streammachine.io/strm/pkg/entity/usage"
 )
 
 var GetCmd = &cobra.Command{
@@ -28,5 +29,6 @@ func init() {
 	GetCmd.AddCommand(key_stream.GetCmd())
 	GetCmd.AddCommand(schema.GetCmd())
 	GetCmd.AddCommand(event_contract.GetCmd())
+	GetCmd.AddCommand(usage.GetCmd())
 	GetCmd.PersistentFlags().BoolP("recursive", "r", false, "recursive")
 }
