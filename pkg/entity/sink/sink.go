@@ -16,7 +16,9 @@ import (
 var Client sinks.SinksServiceClient
 var apiContext context.Context
 
-func ref(n *string) *entities.SinkRef { return &entities.SinkRef{BillingId: common.BillingId, Name: *n} }
+func ref(n *string) *entities.SinkRef {
+	return &entities.SinkRef{BillingId: common.BillingId, Name: *n}
+}
 
 func SetupClient(clientConnection *grpc.ClientConn, ctx context.Context) {
 	apiContext = ctx
@@ -81,8 +83,12 @@ func parseSyncType(flags *pflag.FlagSet) entities.SinkType {
 }
 
 func NamesCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
-	if len(args) > 0 || common.BillingIdIsMissing() {
+	if common.BillingIdIsMissing() {
 		return common.MissingBillingIdCompletionError(cmd.CommandPath())
+	}
+	if len(args) != 0 {
+		// this one means you don't get two completion suggestions for one stream
+		return nil, cobra.ShellCompDirectiveNoFileComp
 	}
 
 	req := &sinks.ListSinksRequest{BillingId: common.BillingId}

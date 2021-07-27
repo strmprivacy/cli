@@ -4,6 +4,7 @@ go 1.16
 
 require (
 	github.com/actgardner/gogen-avro/v7 v7.3.1
+	github.com/bykof/gostradamus v1.0.4 // indirect
 	github.com/fsnotify/fsnotify v1.4.9 // indirect
 	github.com/golang/protobuf v1.5.2
 	github.com/gorilla/websocket v1.4.2
