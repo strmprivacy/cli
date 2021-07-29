@@ -18,6 +18,7 @@ import (
 const (
 	kafkaClusterFlag = "kafka-cluster"
 	definitionFlag   = "definition"
+	publicFlag       = "public"
 )
 
 var client schemas.SchemasServiceClient
@@ -91,14 +92,15 @@ func create(cmd *cobra.Command, args *string) {
 	definitionFilename := util.GetStringAndErr(flags, definitionFlag)
 	definition, err := ioutil.ReadFile(definitionFilename)
 
+	isPublic := util.GetBoolAndErr(flags, publicFlag)
+
 	ref := ref(args)
-	ref.SchemaType = entities.SchemaType_AVRO
 	req := &schemas.CreateSchemaRequest{
 		BillingId: common.BillingId,
 		Schema: &entities.Schema{
 			Ref:        ref,
 			Definition: string(definition),
-
+			IsPublic:   isPublic,
 		},
 	}
 	response, err := client.CreateSchema(apiContext, req)

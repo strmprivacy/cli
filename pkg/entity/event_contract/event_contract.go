@@ -16,8 +16,7 @@ import (
 
 // strings used in the cli
 const (
-	definitionFlag   = "definition"
-
+	definitionFlag = "definition"
 )
 
 var client event_contracts.EventContractsServiceClient
@@ -62,16 +61,14 @@ func GetEventContract(name *string) *entities.EventContract {
 	return eventContract.EventContract
 }
 
-func create(cmd *cobra.Command, args []string) {
-	flags := cmd.Flags()
+func create(cmd *cobra.Command, filename *string) {
 
-	definitionFilename := util.GetStringAndErr(flags, definitionFlag)
-	definition, err := ioutil.ReadFile(definitionFilename)
+	definition, err := ioutil.ReadFile(*filename)
 	eventContract := entities.EventContract{}
 	err = protojson.Unmarshal(definition, &eventContract)
 	common.CliExit(err)
 	req := &event_contracts.CreateEventContractRequest{
-		BillingId: common.BillingId,
+		BillingId:     common.BillingId,
 		EventContract: &eventContract,
 	}
 	response, err := client.CreateEventContract(apiContext, req)
