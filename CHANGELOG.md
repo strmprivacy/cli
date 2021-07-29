@@ -1,3 +1,10 @@
+## [1.2.1](https://github.com/streammachineio/cli/compare/v1.2.0...v1.2.1) (2021-07-29)
+
+
+### Bug Fixes
+
+* **kafka-exporter:** fixed can't create bug ([85310b8](https://github.com/streammachineio/cli/commit/85310b8b564cb599697d49091fcb68a0d3c0b2c1))
+
 # [1.2.0](https://github.com/streammachineio/cli/compare/v1.1.3...v1.2.0) (2021-07-19)
 
 
