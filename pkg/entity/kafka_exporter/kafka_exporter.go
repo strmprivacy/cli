@@ -60,6 +60,7 @@ func create(name *string, cmd *cobra.Command) {
 	// key streams not yet supported in data model!
 	exporter := &entities.KafkaExporter{
 		StreamRef: &entities.StreamRef{BillingId: common.BillingId, Name: *name},
+		Ref: &entities.KafkaExporterRef{BillingId: common.BillingId},
 	}
 
 	response, err := client.CreateKafkaExporter(
