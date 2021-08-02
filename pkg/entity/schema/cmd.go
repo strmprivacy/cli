@@ -2,6 +2,8 @@ package schema
 
 import "github.com/spf13/cobra"
 
+const ()
+
 func GetCmd() *cobra.Command {
 	getSchema := &cobra.Command{
 		Use:   "schema [name]",
@@ -25,4 +27,21 @@ func ListCmd() *cobra.Command {
 			list()
 		},
 	}
+}
+
+func CreateCmd() *cobra.Command {
+	createCmd := &cobra.Command{
+		Use:   "schema (handle/name/version)",
+		Short: "create a schema",
+		Run: func(cmd *cobra.Command, args []string) {
+			create(cmd, &args[0])
+		},
+		Args: cobra.ExactArgs(1),
+	}
+	flags := createCmd.Flags()
+	flags.String(definitionFlag, "", "filename of the definition")
+	_ = createCmd.MarkFlagRequired(definitionFlag)
+	flags.Bool(publicFlag, false, "should the schema become public")
+	return createCmd
+
 }

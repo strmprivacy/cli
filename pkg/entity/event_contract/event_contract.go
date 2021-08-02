@@ -7,13 +7,17 @@ import (
 	"github.com/streammachineio/api-definitions-go/api/entities/v1"
 	"github.com/streammachineio/api-definitions-go/api/event_contracts/v1"
 	"google.golang.org/grpc"
+	"google.golang.org/protobuf/encoding/protojson"
+	"io/ioutil"
 	"streammachine.io/strm/pkg/common"
 	"streammachine.io/strm/pkg/util"
 	"strings"
 )
 
 // strings used in the cli
-const ()
+const (
+	definitionFlag = "definition"
+)
 
 var client event_contracts.EventContractsServiceClient
 var apiContext context.Context
@@ -55,6 +59,21 @@ func GetEventContract(name *string) *entities.EventContract {
 	eventContract, err := client.GetEventContract(apiContext, req)
 	common.CliExit(err)
 	return eventContract.EventContract
+}
+
+func create(cmd *cobra.Command, filename *string) {
+
+	definition, err := ioutil.ReadFile(*filename)
+	eventContract := entities.EventContract{}
+	err = protojson.Unmarshal(definition, &eventContract)
+	common.CliExit(err)
+	req := &event_contracts.CreateEventContractRequest{
+		BillingId:     common.BillingId,
+		EventContract: &eventContract,
+	}
+	response, err := client.CreateEventContract(apiContext, req)
+	common.CliExit(err)
+	util.Print(response)
 }
 
 func refsCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {

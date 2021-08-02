@@ -114,8 +114,6 @@ func setupVerbs() {
 	RootCmd.AddCommand(cmd.VersionCmd)
 }
 
-
-
 func init() {
 	setConfigPath()
 	common.InitLogging(configPath)
