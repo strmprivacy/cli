@@ -40,6 +40,10 @@ func NamesCompletion(cmd *cobra.Command, args []string, complete string) ([]stri
 	if common.BillingIdIsMissing() {
 		return common.MissingBillingIdCompletionError(cmd.CommandPath())
 	}
+	if len(args) != 0 {
+		// this one means you don't get two completion suggestions for one stream
+		return nil, cobra.ShellCompDirectiveNoFileComp
+	}
 
 	req := &key_streams.ListKeyStreamsRequest{BillingId: common.BillingId}
 	response, err := client.ListKeyStreams(apiContext, req)

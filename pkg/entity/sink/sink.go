@@ -83,8 +83,12 @@ func parseSyncType(flags *pflag.FlagSet) entities.SinkType {
 }
 
 func NamesCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
-	if len(args) > 0 || common.BillingIdIsMissing() {
+	if common.BillingIdIsMissing() {
 		return common.MissingBillingIdCompletionError(cmd.CommandPath())
+	}
+	if len(args) != 0 {
+		// this one means you don't get two completion suggestions for one stream
+		return nil, cobra.ShellCompDirectiveNoFileComp
 	}
 
 	req := &sinks.ListSinksRequest{BillingId: common.BillingId}

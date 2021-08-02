@@ -24,6 +24,7 @@ import (
 	"streammachine.io/strm/pkg/entity/schema_code"
 	"streammachine.io/strm/pkg/entity/sink"
 	"streammachine.io/strm/pkg/entity/stream"
+	"streammachine.io/strm/pkg/entity/usage"
 	"streammachine.io/strm/pkg/util"
 	"strings"
 )
@@ -94,6 +95,7 @@ func setupServiceClients(clientConnection *grpc.ClientConn, ctx context.Context)
 	schema.SetupClient(clientConnection, ctx)
 	schema_code.SetupClient(clientConnection, ctx)
 	event_contract.SetupClient(clientConnection, ctx)
+	usage.SetupClient(clientConnection, ctx)
 }
 
 /**

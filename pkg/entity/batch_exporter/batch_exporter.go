@@ -106,7 +106,11 @@ func getSinkNames() []string {
 }
 
 func namesCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
-	if len(args) != 0 || common.BillingIdIsMissing() {
+	if len(args) != 0 {
+		// this one means you don't get two completion suggestions for one stream
+		return nil, cobra.ShellCompDirectiveNoFileComp
+	}
+	if common.BillingIdIsMissing() {
 		return common.MissingBillingIdCompletionError(cmd.CommandPath())
 	}
 	req := &batch_exporters.ListBatchExportersRequest{BillingId: common.BillingId}
