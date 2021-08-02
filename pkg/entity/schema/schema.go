@@ -21,7 +21,7 @@ const (
 var client schemas.SchemasServiceClient
 var apiContext context.Context
 
-func ref(n *string) *entities.SchemaRef {
+func Ref(n *string) *entities.SchemaRef {
 	parts := strings.Split(*n, "/")
 	return &entities.SchemaRef{
 		Handle:  parts[0],
@@ -75,7 +75,7 @@ func getClusterRef(flags *pflag.FlagSet) (*entities.KafkaClusterRef, error) {
 func GetSchema(name *string, clusterRef *entities.KafkaClusterRef) *schemas.GetSchemaResponse {
 	req := &schemas.GetSchemaRequest{
 		BillingId:  common.BillingId,
-		Ref:        ref(name),
+		Ref:        Ref(name),
 		ClusterRef: clusterRef,
 	}
 	response, err := client.GetSchema(apiContext, req)
@@ -83,7 +83,7 @@ func GetSchema(name *string, clusterRef *entities.KafkaClusterRef) *schemas.GetS
 	return response
 }
 
-func namesCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
+func NamesCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
 	if len(args) > 0 || common.BillingIdIsMissing() {
 		return common.MissingBillingIdCompletionError(cmd.CommandPath())
 	}

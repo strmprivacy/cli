@@ -10,7 +10,7 @@ func GetCmd() *cobra.Command {
 			get(&args[0], cmd)
 		},
 		Args:              cobra.ExactArgs(1), // the stream name
-		ValidArgsFunction: namesCompletion,
+		ValidArgsFunction: NamesCompletion,
 	}
 	flags := getSchema.Flags()
 	flags.String(kafkaClusterFlag, "", "if present, find the corresponding Confluent ID for the given Kafka cluster")

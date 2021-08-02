@@ -9,6 +9,7 @@ import (
 	"streammachine.io/strm/pkg/entity/kafka_user"
 	"streammachine.io/strm/pkg/entity/key_stream"
 	"streammachine.io/strm/pkg/entity/schema"
+	"streammachine.io/strm/pkg/entity/schema_code"
 	"streammachine.io/strm/pkg/entity/sink"
 	"streammachine.io/strm/pkg/entity/stream"
 )
@@ -27,6 +28,7 @@ func init() {
 	GetCmd.AddCommand(kafka_user.GetCmd())
 	GetCmd.AddCommand(key_stream.GetCmd())
 	GetCmd.AddCommand(schema.GetCmd())
+	GetCmd.AddCommand(schema_code.GetCmd())
 	GetCmd.AddCommand(event_contract.GetCmd())
 	GetCmd.PersistentFlags().BoolP("recursive", "r", false, "recursive")
 }

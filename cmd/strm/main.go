@@ -21,6 +21,7 @@ import (
 	"streammachine.io/strm/pkg/entity/kafka_user"
 	"streammachine.io/strm/pkg/entity/key_stream"
 	"streammachine.io/strm/pkg/entity/schema"
+	"streammachine.io/strm/pkg/entity/schema_code"
 	"streammachine.io/strm/pkg/entity/sink"
 	"streammachine.io/strm/pkg/entity/stream"
 	"streammachine.io/strm/pkg/util"
@@ -91,6 +92,7 @@ func setupServiceClients(clientConnection *grpc.ClientConn, ctx context.Context)
 	kafka_user.SetupClient(clientConnection, ctx)
 	key_stream.SetupClient(clientConnection, ctx)
 	schema.SetupClient(clientConnection, ctx)
+	schema_code.SetupClient(clientConnection, ctx)
 	event_contract.SetupClient(clientConnection, ctx)
 }
 
