@@ -22,7 +22,7 @@ dist/${target}: ${source_files} Makefile
 	go build -ldflags="${ldflags}" -o $@ ./cmd/strm
 
 clean:
-	rm -f ${target}
+	rm -f dist/${target}
 
 test: dist/${target}
 	go clean -testcache
