@@ -1,3 +1,19 @@
+# [1.3.0](https://github.com/streammachineio/cli/compare/v1.2.1...v1.3.0) (2021-08-03)
+
+
+### Features
+
+* comments jk ([230d12d](https://github.com/streammachineio/cli/commit/230d12d05b653ba0906ca4d1f4cd2c00a5624cc8))
+* **schema-code:** getting schema-code works ([d9cf7b7](https://github.com/streammachineio/cli/commit/d9cf7b7819759ae215b7e2f95c0a6f532510bd53))
+* handles creation of schemas and event-contracts ([8c3d267](https://github.com/streammachineio/cli/commit/8c3d26798430a98d79ec425f85af289730e5e119))
+* merged create-schemas ([10d2ccc](https://github.com/streammachineio/cli/commit/10d2ccc9a00eb3eff3afcfa20825e7fb7a521de5))
+* merged usage branch ([bdb28f3](https://github.com/streammachineio/cli/commit/bdb28f322dbaa1ca221a373e0ce72ca35c6ddc10))
+* **schema-code:** interacts ([7aaae9a](https://github.com/streammachineio/cli/commit/7aaae9a540f54c97cdb13b6568a3c86f93e57bc9))
+* **schemas:** create added ([3dd41c9](https://github.com/streammachineio/cli/commit/3dd41c907d59066df90e1bc0c392f65ad059d343))
+* **usage:** better cli argument parsing ([8773536](https://github.com/streammachineio/cli/commit/8773536d85f7e21e3fbf3cd76650e9b01cd1a5c5))
+* wIP creation of schemas  and event-contracts ([afdce5d](https://github.com/streammachineio/cli/commit/afdce5d7e63e0971ad2fa5bf40ebccc1d7532f48))
+* **usage:** get usage added ([9a3d6e5](https://github.com/streammachineio/cli/commit/9a3d6e507bf6ac5125936190a4bd8581421d43b9))
+
 ## [1.2.1](https://github.com/streammachineio/cli/compare/v1.2.0...v1.2.1) (2021-07-29)
 
 
