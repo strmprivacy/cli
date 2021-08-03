@@ -25,5 +25,5 @@ func GetCmd() *cobra.Command {
 }
 
 func languageCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
-	return []string{"java","typescript","python"}, cobra.ShellCompDirectiveDefault
+	return []string{"java", "typescript", "python"}, cobra.ShellCompDirectiveDefault
 }

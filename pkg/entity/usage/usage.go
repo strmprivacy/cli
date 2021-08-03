@@ -21,10 +21,10 @@ import (
 	"time"
 )
 
-const  (
-dateTimeParseFormat = "YYYY/M/D-HH:mm"
-defaultAggInterval = int64(300)
-defaultRangeDays = 1
+const (
+	dateTimeParseFormat = "YYYY/M/D-HH:mm"
+	defaultAggInterval  = int64(300)
+	defaultRangeDays    = 1
 )
 
 var client usage.UsageServiceClient

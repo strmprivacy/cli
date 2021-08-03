@@ -13,14 +13,13 @@ import (
 
 // strings used in the cli
 const (
-	languageFlag="language"
-	filenameFlag="output-file"
-	overwriteFlag="overwrite"
+	languageFlag  = "language"
+	filenameFlag  = "output-file"
+	overwriteFlag = "overwrite"
 )
 
 var client schemas.SchemasServiceClient
 var apiContext context.Context
-
 
 func SetupClient(clientConnection *grpc.ClientConn, ctx context.Context) {
 	apiContext = ctx
@@ -35,22 +34,22 @@ func get(cmd *cobra.Command, schemaRef *string) {
 
 func GetSchemaCode(cmd *cobra.Command, name *string) string {
 	flags := cmd.Flags()
-	language:= util.GetStringAndErr(flags, languageFlag)
+	language := util.GetStringAndErr(flags, languageFlag)
 	outputFile := util.GetStringAndErr(flags, filenameFlag)
 	overwrite := util.GetBoolAndErr(flags, overwriteFlag)
 	req := &schemas.GetSchemaCodeRequest{
 		BillingId: common.BillingId,
-		Language: language,
-		Ref: schema.Ref(name)}
+		Language:  language,
+		Ref:       schema.Ref(name)}
 	schemaCode, err := client.GetSchemaCode(apiContext, req)
 	common.CliExit(err)
-	if len(outputFile)==0 {
+	if len(outputFile) == 0 {
 		outputFile = schemaCode.Filename
 	}
 	if !overwrite {
 		_, err = os.Stat(outputFile)
 		if !os.IsNotExist(err) {
-			common.CliExit("Not overwriting "+ outputFile)
+			common.CliExit("Not overwriting " + outputFile)
 		}
 	}
 	saveFile(schemaCode, outputFile)
@@ -58,6 +57,6 @@ func GetSchemaCode(cmd *cobra.Command, name *string) string {
 }
 
 func saveFile(code *schemas.GetSchemaCodeResponse, file string) {
-	err := os.WriteFile(file, code.Data, 0666 )
+	err := os.WriteFile(file, code.Data, 0666)
 	common.CliExit(err)
 }

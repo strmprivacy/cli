@@ -15,8 +15,7 @@ import (
 )
 
 // strings used in the cli
-const (
-)
+const ()
 
 var client event_contracts.EventContractsServiceClient
 var apiContext context.Context
