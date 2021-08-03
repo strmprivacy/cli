@@ -16,7 +16,6 @@ import (
 
 // strings used in the cli
 const (
-	definitionFlag = "definition"
 )
 
 var client event_contracts.EventContractsServiceClient

@@ -26,7 +26,7 @@ The default range is over the last 24 hours, with a default interval of 15 minut
 
 Example:
 
-dstrm get usage bart --by 15m --from 2021/7/27-10:00  --until 2021/7/27-12:00
+strm get usage bart --by 15m --from 2021/7/27-10:00  --until 2021/7/27-12:00
 
 from,count,duration,change,rate
 2021-07-27T10:00:00.000000+0200,173478,900,NaN,NaN
