@@ -7,6 +7,8 @@ import (
 	"github.com/streammachineio/api-definitions-go/api/entities/v1"
 	"github.com/streammachineio/api-definitions-go/api/event_contracts/v1"
 	"google.golang.org/grpc"
+	"google.golang.org/protobuf/encoding/protojson"
+	"io/ioutil"
 	"streammachine.io/strm/pkg/common"
 	"streammachine.io/strm/pkg/util"
 	"strings"
@@ -57,9 +59,28 @@ func GetEventContract(name *string) *entities.EventContract {
 	return eventContract.EventContract
 }
 
+func create(cmd *cobra.Command, filename *string) {
+
+	definition, err := ioutil.ReadFile(*filename)
+	eventContract := entities.EventContract{}
+	err = protojson.Unmarshal(definition, &eventContract)
+	common.CliExit(err)
+	req := &event_contracts.CreateEventContractRequest{
+		BillingId:     common.BillingId,
+		EventContract: &eventContract,
+	}
+	response, err := client.CreateEventContract(apiContext, req)
+	common.CliExit(err)
+	util.Print(response)
+}
+
 func refsCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
-	if len(args) > 0 || common.BillingIdIsMissing() {
+	if common.BillingIdIsMissing() {
 		return common.MissingBillingIdCompletionError(cmd.CommandPath())
+	}
+	if len(args) != 0 {
+		// this one means you don't get two completion suggestions for one stream
+		return nil, cobra.ShellCompDirectiveNoFileComp
 	}
 
 	req := &event_contracts.ListEventContractsRequest{BillingId: common.BillingId}

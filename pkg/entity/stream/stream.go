@@ -119,8 +119,11 @@ func parseConsentLevelType(flags *pflag.FlagSet) (entities.ConsentLevelType, err
 }
 
 func NamesCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
-	if len(args) != 0 || common.BillingIdIsMissing() {
+	if common.BillingIdIsMissing() {
 		return common.MissingBillingIdCompletionError(cmd.CommandPath())
+	}
+	if len(args) != 0 {
+		return nil, cobra.ShellCompDirectiveNoFileComp
 	}
 
 	req := &streams.ListStreamsRequest{BillingId: common.BillingId}
@@ -141,6 +144,10 @@ func NamesCompletion(cmd *cobra.Command, args []string, complete string) ([]stri
 func SourceNamesCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
 	if common.BillingIdIsMissing() {
 		return common.MissingBillingIdCompletionError(cmd.CommandPath())
+	}
+	if len(args) != 0 {
+		// this one means you don't get two completion suggestions for one stream
+		return nil, cobra.ShellCompDirectiveNoFileComp
 	}
 
 	req := &streams.ListStreamsRequest{BillingId: common.BillingId}

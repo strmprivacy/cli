@@ -60,7 +60,7 @@ func create(name *string, cmd *cobra.Command) {
 	// key streams not yet supported in data model!
 	exporter := &entities.KafkaExporter{
 		StreamRef: &entities.StreamRef{BillingId: common.BillingId, Name: *name},
-		Ref: &entities.KafkaExporterRef{BillingId: common.BillingId},
+		Ref:       &entities.KafkaExporterRef{BillingId: common.BillingId},
 	}
 
 	response, err := client.CreateKafkaExporter(
@@ -80,8 +80,12 @@ func create(name *string, cmd *cobra.Command) {
 }
 
 func NamesCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
-	if len(args) > 0 || common.BillingIdIsMissing() {
+	if common.BillingIdIsMissing() {
 		return common.MissingBillingIdCompletionError(cmd.CommandPath())
+	}
+	if len(args) != 0 {
+		// this one means you don't get two completion suggestions for one stream
+		return nil, cobra.ShellCompDirectiveNoFileComp
 	}
 
 	req := &kafka_exporters.ListKafkaExportersRequest{BillingId: common.BillingId}

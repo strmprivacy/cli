@@ -9,3 +9,4 @@ dist
 dstrm
 *.log
 *.json
+*.tar.gz

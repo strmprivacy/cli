@@ -8,6 +8,7 @@ import (
 	"github.com/streammachineio/api-definitions-go/api/entities/v1"
 	"github.com/streammachineio/api-definitions-go/api/schemas/v1"
 	"google.golang.org/grpc"
+	"io/ioutil"
 	"streammachine.io/strm/pkg/common"
 	"streammachine.io/strm/pkg/util"
 	"strings"
@@ -16,12 +17,14 @@ import (
 // strings used in the cli
 const (
 	kafkaClusterFlag = "kafka-cluster"
+	definitionFlag   = "definition"
+	publicFlag       = "public"
 )
 
 var client schemas.SchemasServiceClient
 var apiContext context.Context
 
-func ref(n *string) *entities.SchemaRef {
+func Ref(n *string) *entities.SchemaRef {
 	parts := strings.Split(*n, "/")
 	return &entities.SchemaRef{
 		Handle:  parts[0],
@@ -75,7 +78,7 @@ func getClusterRef(flags *pflag.FlagSet) (*entities.KafkaClusterRef, error) {
 func GetSchema(name *string, clusterRef *entities.KafkaClusterRef) *schemas.GetSchemaResponse {
 	req := &schemas.GetSchemaRequest{
 		BillingId:  common.BillingId,
-		Ref:        ref(name),
+		Ref:        Ref(name),
 		ClusterRef: clusterRef,
 	}
 	response, err := client.GetSchema(apiContext, req)
@@ -83,9 +86,35 @@ func GetSchema(name *string, clusterRef *entities.KafkaClusterRef) *schemas.GetS
 	return response
 }
 
-func namesCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
-	if len(args) > 0 || common.BillingIdIsMissing() {
+func create(cmd *cobra.Command, args *string) {
+	flags := cmd.Flags()
+
+	definitionFilename := util.GetStringAndErr(flags, definitionFlag)
+	definition, err := ioutil.ReadFile(definitionFilename)
+
+	isPublic := util.GetBoolAndErr(flags, publicFlag)
+
+	ref := Ref(args)
+	req := &schemas.CreateSchemaRequest{
+		BillingId: common.BillingId,
+		Schema: &entities.Schema{
+			Ref:        ref,
+			Definition: string(definition),
+			IsPublic:   isPublic,
+		},
+	}
+	response, err := client.CreateSchema(apiContext, req)
+	common.CliExit(err)
+	util.Print(response)
+}
+
+func NamesCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
+	if common.BillingIdIsMissing() {
 		return common.MissingBillingIdCompletionError(cmd.CommandPath())
+	}
+	if len(args) != 0 {
+		// this one means you don't get two completion suggestions for one stream
+		return nil, cobra.ShellCompDirectiveNoFileComp
 	}
 
 	req := &schemas.ListSchemasRequest{BillingId: common.BillingId}
