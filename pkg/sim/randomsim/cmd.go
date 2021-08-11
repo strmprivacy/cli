@@ -25,6 +25,6 @@ Uses a saved stream definition if available, otherwise, client id and secret are
 	flags.String(sim.ClientIdFlag, "", "Client id to be used for sending data")
 	flags.String(sim.ClientSecretFlag, "", "Client secret to be used for sending data")
 	flags.Bool(sim.QuietFlag, false, "don't spam stderr")
-	flags.StringSlice(sim.ConsentLevelsFlag, []string{"0", "0/1", "0/1/2", "0/1/2/3"}, "consent levels to be simulated")
+	flags.StringSlice(sim.ConsentLevelsFlag, []string{"", "0", "0/1", "0/1/2", "0/1/2/3"}, "consent levels to be simulated")
 	return simCmd
 }

@@ -44,10 +44,15 @@ func SetupClient(clientConnection *grpc.ClientConn, ctx context.Context) {
 
 func list() {
 	req := &schemas.ListSchemasRequest{BillingId: common.BillingId}
-	sinksList, err := client.ListSchemas(apiContext, req)
-	common.CliExit(err)
-	util.Print(sinksList)
+	util.Print(List(req))
 }
+
+func List(req *schemas.ListSchemasRequest) *schemas.ListSchemasResponse {
+	schemasList, err := client.ListSchemas(apiContext, req)
+	common.CliExit(err)
+	return schemasList
+}
+
 
 func get(name *string, cmd *cobra.Command) {
 	flags := cmd.Flags()
