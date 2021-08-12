@@ -1,22 +1,20 @@
 package randomsim
 
 import (
-	"bytes"
 	"fmt"
+	"math/rand"
+	"net/http"
+	"strings"
+	"time"
+
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/streammachineio/api-definitions-go/api/entities/v1"
-	"io"
-	"math/rand"
-	"net/http"
 	"streammachine.io/strm/pkg/auth"
-	"streammachine.io/strm/pkg/clickstream"
 	"streammachine.io/strm/pkg/common"
 	"streammachine.io/strm/pkg/entity/stream"
 	"streammachine.io/strm/pkg/sim"
 	"streammachine.io/strm/pkg/util"
-	"strings"
-	"time"
 )
 
 // start a random simulator
@@ -47,28 +45,39 @@ func run(cmd *cobra.Command, streamName *string) {
 	quiet := util.GetBoolAndErr(flags, sim.QuietFlag)
 	consentLevels, err := flags.GetStringSlice(sim.ConsentLevelsFlag)
 	common.CliExit(err)
+
+	schema := util.GetStringAndErr(flags, sim.SchemaFlag)
+	f := EventGenerators[schema]
+	if f == nil {
+		common.CliExit(fmt.Sprintf("Can't simulate for schema %s", schema))
+	}
+
 	if len(consentLevels) == 0 {
 		log.Fatalf("%v is not a valid set of consent levels", consentLevels)
 	}
 	authClient := &auth.Auth{Uri: sts}
 	authClient.AuthenticateEvent(s.Ref.BillingId, s.Credentials[0].ClientId, s.Credentials[0].ClientSecret)
 	if !quiet {
-		println("Starting sim to stream '"+*streamName+"'. Sending 1 event every", interval, "ms")
+		fmt.Printf("Starting to simulate random %s events to stream %s. ",
+			schema, *streamName)
+		fmt.Printf("Sending one event every %d ms.\n", interval)
 	}
 
 	client := http.Client{}
+	var sender sim.Sender
+	if schema == "clickstream" {
+		sender = sim.LegacySender{Client: client, Gateway: gateway, Schema: schema}
+	} else {
+		sender = sim.ModernSender{Client: client, Gateway: gateway, Schema: schema}
+	}
+
 	var ct = 0
 	now := time.Now()
 	for {
-		event := clickstream.NewClickstreamEvent()
-		event.StrmMeta = &clickstream.StrmMeta{
-			ConsentLevels: randomConsentLevels(consentLevels),
-		}
-		event.ProducerSessionId = fmt.Sprintf("%s-%d", sessionPrefix, rand.Intn(sessionRange))
-		event.Customer = &clickstream.Customer{Id: "customer-" + event.ProducerSessionId}
-		event.Url = "https://www.streammachine.io/rules"
+		sessionId := fmt.Sprintf("%s-%d", sessionPrefix, rand.Intn(sessionRange))
+		event := f(randomConsentLevels(consentLevels), sessionId)
 		token, _ := authClient.GetToken(quiet)
-		go sendEvent(client, event, gateway, token)
+		go sender.Send(event, token)
 		ct += 1
 		time.Sleep(interval * time.Millisecond)
 		if !quiet && time.Now().Sub(now) > 5*time.Second {
@@ -79,28 +88,13 @@ func run(cmd *cobra.Command, streamName *string) {
 }
 
 // randomConsentLevels returns a slice of integers for the simulated event.
-// It starts with [ "0", "0/1", "3/8", "3/7/10", ...] so a slice of strings that define
+// It starts with [ "", "0", "0/1", "3/8", "3/7/10", ...] so a slice of strings that define
 // what we want to send. This method picks a random one.
 func randomConsentLevels(levels []string) []int32 {
 	l := strings.Split(levels[rand.Intn(len(levels))], "/")
-	return util.StringsArrayToInt32(l)
-}
-
-func sendEvent(client http.Client, event *clickstream.ClickstreamEvent,
-	gateway string, token string) {
-	b := &bytes.Buffer{}
-	err := event.Serialize(b)
-	common.CliExit(err)
-	req, err := http.NewRequest("POST", gateway, b)
-	common.CliExit(err)
-	req.Header.Set("Strm-Schema-Id", "clickstream")
-	req.Header.Set("Authorization", "Bearer "+token)
-	resp, err := client.Do(req)
-	if err != nil || resp.StatusCode != 204 {
-		if resp != nil {
-			defer resp.Body.Close()
-			body, err := io.ReadAll(resp.Body)
-			fmt.Printf("%v %s\n", err, string(body))
-		}
+	if len(l) == 1 && l[0] == "" {
+		// No consent at all
+		return []int32{}
 	}
+	return util.StringsArrayToInt32(l)
 }

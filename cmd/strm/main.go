@@ -110,7 +110,7 @@ func setupVerbs() {
 	RootCmd.AddCommand(cmd.DeleteCmd)
 	RootCmd.AddCommand(cmd.ListCmd)
 	RootCmd.AddCommand(cmd.CompletionCmd)
-	RootCmd.AddCommand(cmd.SimCmd)
+	RootCmd.AddCommand(cmd.SimCmd())
 	RootCmd.AddCommand(cmd.EgressCmd)
 	RootCmd.AddCommand(cmd.AuthCmd)
 	RootCmd.AddCommand(cmd.VersionCmd)

@@ -13,6 +13,7 @@ import (
 	"path/filepath"
 	"strconv"
 	"streammachine.io/strm/pkg/common"
+	"streammachine.io/strm/pkg/demoschema"
 )
 
 var ConfigPath string
@@ -56,6 +57,10 @@ func MapStringsToInt(vs []string, f func(string) int) []int {
 	return vsm
 }
 func MapStringsToInt32(vs []string, f func(string) int32) []int32 {
+	if len(vs) == 0 {
+		return []int32{}
+
+	}
 	vsm := make([]int32, len(vs))
 	for i, v := range vs {
 		vsm[i] = f(v)
@@ -129,4 +134,11 @@ func DeleteSaved(m proto.Message, name *string) {
 func getSaveFilename(m proto.Message, name *string) string {
 	cat := fmt.Sprint(m.ProtoReflect().Descriptor().Name())
 	return path.Join(ConfigPath, cat, *name+".json")
+}
+
+func CreateUnionString(s string) *demoschema.UnionNullString {
+	v := demoschema.NewUnionNullString()
+	v.UnionType = demoschema.UnionNullStringTypeEnumString
+	v.String = s
+	return v
 }
