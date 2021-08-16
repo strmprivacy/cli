@@ -32,7 +32,7 @@ func list(exporterName *string) {
 	}
 	users, err := client.ListKafkaUsers(apiContext, req)
 	common.CliExit(err)
-	util.Print(users)
+	printer.Print(users)
 }
 
 func get(name *string) {
@@ -40,7 +40,7 @@ func get(name *string) {
 	req := &kafka_users.GetKafkaUserRequest{Ref: ref(name)}
 	user, err := client.GetKafkaUser(apiContext, req)
 	common.CliExit(err)
-	util.Print(user)
+	printer.Print(user)
 }
 
 func del(name *string) {
@@ -48,7 +48,7 @@ func del(name *string) {
 	req := &kafka_users.DeleteKafkaUserRequest{Ref: user}
 	_, err := client.DeleteKafkaUser(apiContext, req)
 	common.CliExit(err)
-	util.Print(user)
+	printer.Print(user)
 	util.DeleteSaved(user, &user.Name)
 }
 
@@ -66,7 +66,7 @@ func create(kafkaExporterName *string, cmd *cobra.Command) {
 	response, err := client.CreateKafkaUser(apiContext,
 		&kafka_users.CreateKafkaUserRequest{KafkaUser: kafkaUser})
 	common.CliExit(err)
-	util.Print(response.KafkaUser)
+	printer.Print(response.KafkaUser)
 	save, err := flags.GetBool(saveFlag)
 	if save {
 		util.Save(response.KafkaUser, &response.KafkaUser.Ref.Name)

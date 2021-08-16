@@ -49,7 +49,7 @@ func SetupClient(clientConnection *grpc.ClientConn, ctx context.Context) {
 
 func list() {
 	req := &schemas.ListSchemasRequest{BillingId: common.BillingId}
-	util.Print(List(req))
+	printer.Print(List(req))
 }
 
 func List(req *schemas.ListSchemasRequest) *schemas.ListSchemasResponse {
@@ -64,7 +64,7 @@ func get(name *string, cmd *cobra.Command) {
 	common.CliExit(err)
 
 	schema := GetSchema(name, clusterRef)
-	util.Print(schema)
+	printer.Print(schema)
 }
 
 func getClusterRef(flags *pflag.FlagSet) (*entities.KafkaClusterRef, error) {
@@ -114,7 +114,7 @@ func create(cmd *cobra.Command, args *string) {
 	}
 	response, err := client.CreateSchema(apiContext, req)
 	common.CliExit(err)
-	util.Print(response)
+	printer.Print(response)
 }
 
 func NamesCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {

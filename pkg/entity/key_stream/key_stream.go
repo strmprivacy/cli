@@ -7,7 +7,6 @@ import (
 	"github.com/streammachineio/api-definitions-go/api/key_streams/v1"
 	"google.golang.org/grpc"
 	"streammachine.io/strm/pkg/common"
-	"streammachine.io/strm/pkg/util"
 )
 
 var client key_streams.KeyStreamsServiceClient
@@ -22,14 +21,14 @@ func list() {
 	req := &key_streams.ListKeyStreamsRequest{BillingId: common.BillingId}
 	sinksList, err := client.ListKeyStreams(apiContext, req)
 	common.CliExit(err)
-	util.Print(sinksList)
+	printer.Print(sinksList)
 }
 
 func get(name *string) {
 	req := &key_streams.GetKeyStreamRequest{Ref: ref(name)}
 	stream, err := client.GetKeyStream(apiContext, req)
 	common.CliExit(err)
-	util.Print(stream)
+	printer.Print(stream)
 }
 
 func ref(n *string) *entities.KeyStreamRef {

@@ -19,6 +19,9 @@ func DeleteCmd() *cobra.Command {
 	batchExporter := &cobra.Command{
 		Use:   "batch-exporter [name]",
 		Short: "Delete a Batch exporter by name",
+		PreRun: func(cmd *cobra.Command, args []string) {
+			printer = configurePrinter(cmd)
+		},
 		Run: func(cmd *cobra.Command, args []string) {
 			del(&args[0])
 		},
@@ -33,6 +36,9 @@ func GetCmd() *cobra.Command {
 	return &cobra.Command{
 		Use:   "batch-exporter [name]",
 		Short: "Get Batch exporter by name",
+		PreRun: func(cmd *cobra.Command, args []string) {
+			printer = configurePrinter(cmd)
+		},
 		Run: func(cmd *cobra.Command, args []string) {
 			get(&args[0], cmd)
 		},
@@ -44,6 +50,9 @@ func ListCmd() *cobra.Command {
 	return &cobra.Command{
 		Use:   "batch-exporters",
 		Short: "List Batch exporters",
+		PreRun: func(cmd *cobra.Command, args []string) {
+			printer = configurePrinter(cmd)
+		},
 		Run: func(cmd *cobra.Command, args []string) {
 			list()
 		},
@@ -54,6 +63,9 @@ func CreateCmd() *cobra.Command {
 	batchExporter := &cobra.Command{
 		Use:   "batch-exporter [stream-name]",
 		Short: "Create batch exporter",
+		PreRun: func(cmd *cobra.Command, args []string) {
+			printer = configurePrinter(cmd)
+		},
 		Run: func(cmd *cobra.Command, args []string) {
 			create(&args[0], cmd)
 		},

@@ -54,12 +54,12 @@ func list() {
 	req := &event_contracts.ListEventContractsRequest{BillingId: common.BillingId}
 	sinksList, err := client.ListEventContracts(apiContext, req)
 	common.CliExit(err)
-	util.Print(sinksList)
+	printer.Print(sinksList)
 }
 
 func get(name *string) {
 	eventContract := GetEventContract(name)
-	util.Print(eventContract)
+	printer.Print(eventContract)
 }
 
 func GetEventContract(name *string) *entities.EventContract {
@@ -93,7 +93,7 @@ func create(cmd *cobra.Command, contractReference *string) {
 
 	response, err := client.CreateEventContract(apiContext, req)
 	common.CliExit(err)
-	util.Print(response)
+	printer.Print(response)
 }
 
 func readContractDefinition(filename *string) EventContractDefinition {

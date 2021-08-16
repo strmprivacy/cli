@@ -39,6 +39,9 @@ from,count,duration,change,rate
 2021-07-27T11:45:00.000000+0200,236078,900,8944,9.94
 2021-07-27T12:00:00.000000+0200,245023,900,8945,9.94
 `,
+		PreRun: func(cmd *cobra.Command, args []string) {
+			printer = configurePrinter(cmd)
+		},
 		Run: func(cmd *cobra.Command, args []string) {
 			get(cmd, &args[0])
 		},

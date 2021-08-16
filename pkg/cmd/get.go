@@ -15,14 +15,16 @@ import (
 	"streammachine.io/strm/pkg/entity/usage"
 )
 
+const getCommandName = "get"
+
 var GetCmd = &cobra.Command{
-	Use:   "get",
+	Use:   getCommandName,
 	Short: "Get an entity",
 }
 
 func init() {
-	GetCmd.AddCommand(stream.GetCmd())
-	GetCmd.AddCommand(kafka_exporter.GetCmd())
+	GetCmd.AddCommand(stream.GetCmd)
+	GetCmd.AddCommand(kafka_exporter.GetCmd)
 	GetCmd.AddCommand(batch_exporter.GetCmd())
 	GetCmd.AddCommand(sink.GetCmd())
 	GetCmd.AddCommand(kafka_cluster.GetCmd())

@@ -16,6 +16,9 @@ func GetCmd() *cobra.Command {
 	return &cobra.Command{
 		Use:   "event-contract (reference)",
 		Short: "Get Event Contract by reference",
+		PreRun: func(cmd *cobra.Command, args []string) {
+			printer = configurePrinter(cmd)
+		},
 		Run: func(cmd *cobra.Command, args []string) {
 			get(&args[0])
 		},
@@ -27,6 +30,9 @@ func ListCmd() *cobra.Command {
 	return &cobra.Command{
 		Use:   "event-contracts",
 		Short: "List Event Contracts",
+		PreRun: func(cmd *cobra.Command, args []string) {
+			printer = configurePrinter(cmd)
+		},
 		Run: func(cmd *cobra.Command, args []string) {
 			list()
 		},
@@ -37,6 +43,9 @@ func CreateCmd() *cobra.Command {
 		Use:   "event-contract (reference)",
 		Short: "Create an event-contract",
 		Long:  `Create an event contract from a JSON definition file`,
+		PreRun: func(cmd *cobra.Command, args []string) {
+			printer = configurePrinter(cmd)
+		},
 		Run: func(cmd *cobra.Command, args []string) {
 			create(cmd, &args[0])
 		},

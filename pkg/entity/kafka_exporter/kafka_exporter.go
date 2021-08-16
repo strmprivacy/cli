@@ -32,12 +32,12 @@ func list(recursive bool) {
 	req := &kafka_exporters.ListKafkaExportersRequest{BillingId: common.BillingId}
 	exporters, err := client.ListKafkaExporters(apiContext, req)
 	common.CliExit(err)
-	util.Print(exporters)
+	printer.Print(exporters)
 }
 
 func get(name *string, recursive bool) {
 	exporter := Get(name)
-	util.Print(exporter)
+	printer.Print(exporter)
 }
 
 func del(name *string, recursive bool) {
@@ -69,7 +69,7 @@ func create(name *string, cmd *cobra.Command) {
 	)
 
 	common.CliExit(err)
-	util.Print(response.KafkaExporter)
+	printer.Print(response.KafkaExporter)
 
 	save, err := flags.GetBool(saveFlag)
 	if save {

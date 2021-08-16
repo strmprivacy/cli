@@ -120,12 +120,15 @@ func init() {
 	setConfigPath()
 	common.InitLogging(configPath)
 
-	RootCmd.PersistentFlags().String(apiHostFlag, "apis.streammachine.io:443", "API host and port")
-	RootCmd.PersistentFlags().String(auth.EventAuthHostFlag, "https://auth.strm.services", "Security Token Service for events")
-	RootCmd.PersistentFlags().String(auth.ApiAuthUrlFlag, "https://api.streammachine.io/v1", "Auth URL for user logins")
-	RootCmd.PersistentFlags().StringVar(&auth.TokenFile, "token-file", "",
+	persistentFlags := RootCmd.PersistentFlags()
+	persistentFlags.String(apiHostFlag, "apis.streammachine.io:443", "API host and port")
+	persistentFlags.String(auth.EventAuthHostFlag, "https://auth.strm.services", "Security Token Service for events")
+	persistentFlags.String(auth.ApiAuthUrlFlag, "https://api.streammachine.io/v1", "Auth URL for user logins")
+	persistentFlags.StringVar(&auth.TokenFile, "token-file", "",
 		"Token file that contains an access token (default is $HOME/.config/stream-machine/strm-creds-<api-auth-host>.json)")
-	RootCmd.PersistentFlags().String(egress.UrlFlag, "wss://out.strm.services/ws", "Websocket to receive events from")
+	persistentFlags.String(egress.UrlFlag, "wss://out.strm.services/ws", "Websocket to receive events from")
+	persistentFlags.StringP(util.OutputFormatFlag, "o", "json", "Output format [table, json]")
+
 	setupVerbs()
 }
 
@@ -211,3 +214,5 @@ func bindFlags(cmd *cobra.Command, v *viper.Viper) {
 		}
 	})
 }
+
+

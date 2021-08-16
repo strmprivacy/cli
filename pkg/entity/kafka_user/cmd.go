@@ -14,6 +14,9 @@ func DeleteCmd() *cobra.Command {
 	return &cobra.Command{
 		Use:   "kafka-user [name]",
 		Short: "Delete a Kafka user",
+		PreRun: func(cmd *cobra.Command, args []string) {
+			printer = configurePrinter(cmd)
+		},
 		Run: func(cmd *cobra.Command, args []string) {
 			del(&args[0])
 		},
@@ -26,6 +29,9 @@ func GetCmd() *cobra.Command {
 	return &cobra.Command{
 		Use:   "kafka-user [name]",
 		Short: "Get Kafka user",
+		PreRun: func(cmd *cobra.Command, args []string) {
+			printer = configurePrinter(cmd)
+		},
 		Run: func(cmd *cobra.Command, args []string) {
 			get(&args[0])
 		},
@@ -38,6 +44,9 @@ func ListCmd() *cobra.Command {
 	return &cobra.Command{
 		Use:   "kafka-users [kafka-exporter-name]",
 		Short: "List Kafka users",
+		PreRun: func(cmd *cobra.Command, args []string) {
+			printer = configurePrinter(cmd)
+		},
 		Run: func(cmd *cobra.Command, args []string) {
 			list(&args[0])
 		},
@@ -50,6 +59,9 @@ func CreateCmd() *cobra.Command {
 	kafkaUser := &cobra.Command{
 		Use:   "kafka-user [exporter-name]",
 		Short: "Create a Kafka user on a Kafka exporter",
+		PreRun: func(cmd *cobra.Command, args []string) {
+			printer = configurePrinter(cmd)
+		},
 		Run: func(cmd *cobra.Command, args []string) {
 			streamName := &args[0]
 			create(streamName, cmd)

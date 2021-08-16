@@ -50,12 +50,12 @@ func list(recursive bool) {
 	req := &streams.ListStreamsRequest{BillingId: common.BillingId, Recursive: recursive}
 	streamsList, err := client.ListStreams(apiContext, req)
 	common.CliExit(err)
-	util.Print(streamsList)
+	printer.Print(streamsList)
 }
 
 func get(streamName *string, recursive bool) {
 	stream := Get(streamName, recursive)
-	util.Print(stream)
+	printer.Print(stream)
 }
 
 func del(streamName *string, recursive bool) {
@@ -65,7 +65,7 @@ func del(streamName *string, recursive bool) {
 	}
 	_, err := client.DeleteStream(apiContext, req)
 	common.CliExit(err)
-	util.Print(stream)
+	printer.Print(stream)
 }
 
 func create(args []string, cmd *cobra.Command) {
@@ -96,7 +96,7 @@ func create(args []string, cmd *cobra.Command) {
 	req := &streams.CreateStreamRequest{Stream: stream}
 	response, err := client.CreateStream(apiContext, req)
 	common.CliExit(err)
-	util.Print(response.Stream)
+	printer.Print(response.Stream)
 	save, err := flags.GetBool(saveFlag)
 	if save {
 		util.Save(response.Stream, &response.Stream.Ref.Name)

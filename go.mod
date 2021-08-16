@@ -4,13 +4,14 @@ go 1.16
 
 require (
 	github.com/actgardner/gogen-avro/v7 v7.3.1
-	github.com/bykof/gostradamus v1.0.4 // indirect
+	github.com/bykof/gostradamus v1.0.4
 	github.com/fsnotify/fsnotify v1.4.9 // indirect
 	github.com/golang/protobuf v1.5.2
 	github.com/gorilla/websocket v1.4.2
 	github.com/joho/godotenv v1.3.0
 	github.com/magiconair/properties v1.8.5
 	github.com/mitchellh/mapstructure v1.4.1 // indirect
+	github.com/jedib0t/go-pretty/v6 v6.2.4 // indirect
 	github.com/pelletier/go-toml v1.9.1 // indirect
 	github.com/sirupsen/logrus v1.8.1
 	github.com/spf13/afero v1.6.0 // indirect

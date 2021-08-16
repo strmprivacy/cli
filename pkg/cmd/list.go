@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
+	"streammachine.io/strm/pkg/constants"
 	"streammachine.io/strm/pkg/entity/batch_exporter"
 	"streammachine.io/strm/pkg/entity/event_contract"
 	"streammachine.io/strm/pkg/entity/kafka_cluster"
@@ -13,13 +14,14 @@ import (
 	"streammachine.io/strm/pkg/entity/stream"
 )
 
+
 var ListCmd = &cobra.Command{
-	Use:   "list",
+	Use:   constants.ListCommandName,
 	Short: "List entities",
 }
 
 func init() {
-	ListCmd.AddCommand(stream.ListCmd())
+	ListCmd.AddCommand(stream.ListCmd)
 	ListCmd.AddCommand(kafka_exporter.ListCmd())
 	ListCmd.AddCommand(batch_exporter.ListCmd())
 	ListCmd.AddCommand(sink.ListCmd())

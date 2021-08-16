@@ -74,7 +74,7 @@ func get(cmd *cobra.Command, streamName *string) {
 	streamUsage, err := client.GetStreamEventUsage(apiContext, req)
 	common.CliExit(err)
 	if util.GetBoolAndErr(flags, jsonFlag) {
-		util.Print(streamUsage)
+		printer.Print(streamUsage)
 	} else {
 		printCsv(streamUsage)
 	}

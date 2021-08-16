@@ -7,7 +7,6 @@ import (
 	"github.com/streammachineio/api-definitions-go/api/kafka_clusters/v1"
 	"google.golang.org/grpc"
 	"streammachine.io/strm/pkg/common"
-	"streammachine.io/strm/pkg/util"
 )
 
 // strings used in the cli
@@ -29,12 +28,12 @@ func list() {
 	req := &kafka_clusters.ListKafkaClustersRequest{BillingId: common.BillingId}
 	sinksList, err := client.ListKafkaClusters(apiContext, req)
 	common.CliExit(err)
-	util.Print(sinksList)
+	printer.Print(sinksList)
 }
 
 func get(name *string) {
 	cluster := GetCluster(name)
-	util.Print(cluster)
+	printer.Print(cluster)
 }
 
 func GetCluster(name *string) *entities.KafkaCluster {

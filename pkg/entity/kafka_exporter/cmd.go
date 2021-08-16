@@ -20,6 +20,9 @@ func DeleteCmd() *cobra.Command {
 	If a kafka-exporter has dependents (like Kafka users), you can use
 	the 'recursive' option to get rid of those also.
 	Returns everything that was deleted. `,
+		PreRun: func(cmd *cobra.Command, args []string) {
+			printer = configurePrinter(cmd)
+		},
 		Run: func(cmd *cobra.Command, args []string) {
 			recursive, _ := cmd.Flags().GetBool("recursive")
 			del(&args[0], recursive)
@@ -29,23 +32,28 @@ func DeleteCmd() *cobra.Command {
 	}
 
 }
-func GetCmd() *cobra.Command {
-	return &cobra.Command{
-		Use:   "kafka-exporter [name]",
-		Short: "Get Kafka exporter by name",
-		Run: func(cmd *cobra.Command, args []string) {
-			recursive, _ := cmd.Flags().GetBool("recursive")
-			get(&args[0], recursive)
-		},
-		Args:              cobra.ExactArgs(1), // the stream name
-		ValidArgsFunction: NamesCompletion,
-	}
+
+var GetCmd = &cobra.Command{
+	Use:   "kafka-exporter [name]",
+	Short: "Get Kafka exporter by name",
+	PreRun: func(cmd *cobra.Command, args []string) {
+		printer = configurePrinter(cmd)
+	},
+	Run: func(cmd *cobra.Command, args []string) {
+		recursive, _ := cmd.Flags().GetBool("recursive")
+		get(&args[0], recursive)
+	},
+	Args:              cobra.ExactArgs(1), // the stream name
+	ValidArgsFunction: NamesCompletion,
 }
 
 func ListCmd() *cobra.Command {
 	return &cobra.Command{
 		Use:   "kafka-exporters",
 		Short: "List Kafka exporters",
+		PreRun: func(cmd *cobra.Command, args []string) {
+			printer = configurePrinter(cmd)
+		},
 		Run: func(cmd *cobra.Command, args []string) {
 			flag, _ := cmd.Root().PersistentFlags().GetBool("recursive")
 			list(flag)
@@ -54,10 +62,12 @@ func ListCmd() *cobra.Command {
 }
 
 func CreateCmd() *cobra.Command {
-
 	kafkaExporter := &cobra.Command{
 		Use:   "kafka-exporter [stream-name]",
 		Short: "Create a Kafka exporter",
+		PreRun: func(cmd *cobra.Command, args []string) {
+			printer = configurePrinter(cmd)
+		},
 		Run: func(cmd *cobra.Command, args []string) {
 			streamName := &args[0]
 			create(streamName, cmd)
@@ -66,6 +76,7 @@ func CreateCmd() *cobra.Command {
 		Args:              cobra.ExactArgs(1), // the stream name
 		ValidArgsFunction: stream.NamesCompletion,
 	}
+
 	flags := kafkaExporter.Flags()
 	flags.String(clusterFlag, "", "name of the kafka cluster")
 	flags.Bool(saveFlag, false, "save the result in the config directory")
