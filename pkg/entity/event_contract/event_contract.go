@@ -2,14 +2,15 @@ package event_contract
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"github.com/spf13/cobra"
 	"github.com/streammachineio/api-definitions-go/api/entities/v1"
 	"github.com/streammachineio/api-definitions-go/api/event_contracts/v1"
 	"google.golang.org/grpc"
-	"google.golang.org/protobuf/encoding/protojson"
 	"io/ioutil"
 	"streammachine.io/strm/pkg/common"
+	"streammachine.io/strm/pkg/entity/schema"
 	"streammachine.io/strm/pkg/util"
 	"strings"
 )
@@ -20,8 +21,19 @@ const ()
 var client event_contracts.EventContractsServiceClient
 var apiContext context.Context
 
-func ref(n *string) *entities.EventContractRef {
-	parts := strings.Split(*n, "/")
+type EventContractDefinition struct {
+	KeyField    string                 `json:"keyField"`
+	PiiFields   map[string]int32       `json:"piiFields"`
+	Validations []*entities.Validation `json:"validations"`
+}
+
+func ref(refString *string) *entities.EventContractRef {
+	parts := strings.Split(*refString, "/")
+
+	if len(parts) != 3 {
+		common.CliExit("Event Contract reference should consist of three parts: <handle>/<name>/<version>")
+	}
+
 	return &entities.EventContractRef{
 		Handle:  parts[0],
 		Name:    parts[1],
@@ -59,19 +71,40 @@ func GetEventContract(name *string) *entities.EventContract {
 	return eventContract.EventContract
 }
 
-func create(cmd *cobra.Command, filename *string) {
+func create(cmd *cobra.Command, contractReference *string) {
+	flags := cmd.Flags()
 
-	definition, err := ioutil.ReadFile(*filename)
-	eventContract := entities.EventContract{}
-	err = protojson.Unmarshal(definition, &eventContract)
-	common.CliExit(err)
+	isPublic := util.GetBoolAndErr(flags, isPublicFlag)
+	schemaRef := util.GetStringAndErr(flags, schemaRefFlag)
+	definitionFilename := util.GetStringAndErr(flags, definitionFile)
+	definition := readContractDefinition(&definitionFilename)
+
 	req := &event_contracts.CreateEventContractRequest{
-		BillingId:     common.BillingId,
-		EventContract: &eventContract,
+		BillingId: common.BillingId,
+		EventContract: &entities.EventContract{
+			Ref:         ref(contractReference),
+			SchemaRef:   schema.Ref(&schemaRef),
+			IsPublic:    isPublic,
+			KeyField:    definition.KeyField,
+			PiiFields:   definition.PiiFields,
+			Validations: definition.Validations,
+		},
 	}
+
 	response, err := client.CreateEventContract(apiContext, req)
 	common.CliExit(err)
 	util.Print(response)
+}
+
+func readContractDefinition(filename *string) EventContractDefinition {
+	file, _ := ioutil.ReadFile(*filename)
+
+	contractDefinition := EventContractDefinition{}
+	err := json.Unmarshal(file, &contractDefinition)
+
+	common.CliExit(err)
+
+	return contractDefinition
 }
 
 func refsCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
