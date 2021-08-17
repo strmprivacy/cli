@@ -127,7 +127,13 @@ func init() {
 	persistentFlags.StringVar(&auth.TokenFile, "token-file", "",
 		"Token file that contains an access token (default is $HOME/.config/stream-machine/strm-creds-<api-auth-host>.json)")
 	persistentFlags.String(egress.UrlFlag, "wss://out.strm.services/ws", "Websocket to receive events from")
-	persistentFlags.StringP(util.OutputFormatFlag, "o", "json", "Output format [table, json]")
+	persistentFlags.StringP(util.OutputFormatFlag, "o", "table", "Output format [json, json-raw, table, plain]")
+
+	err := RootCmd.RegisterFlagCompletionFunc(util.OutputFormatFlag, func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		return []string{"json", "json-raw", "table", "plain"}, cobra.ShellCompDirectiveNoFileComp
+	})
+
+	common.CliExit(err)
 
 	setupVerbs()
 }
@@ -214,5 +220,3 @@ func bindFlags(cmd *cobra.Command, v *viper.Viper) {
 		}
 	})
 }
-
-

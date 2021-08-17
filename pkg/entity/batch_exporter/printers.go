@@ -64,17 +64,17 @@ type DeleteBatchExporterPrinter struct{}
 
 func (p ListBatchExportersTablePrinter) Print(data proto.Message) {
 	listResponse, _ := (data).(*batch_exporters.ListBatchExportersResponse)
-	printBatchExportersTable(listResponse.BatchExporters)
+	printTable(listResponse.BatchExporters)
 }
 
 func (p GetBatchExporterTablePrinter) Print(data proto.Message) {
 	getResponse, _ := (data).(*batch_exporters.GetBatchExporterResponse)
-	printBatchExportersTable([]*v1.BatchExporter{getResponse.BatchExporter})
+	printTable([]*v1.BatchExporter{getResponse.BatchExporter})
 }
 
 func (p CreateBatchExporterTablePrinter) Print(data proto.Message) {
 	createResponse, _ := (data).(*batch_exporters.CreateBatchExporterResponse)
-	printBatchExportersTable([]*v1.BatchExporter{createResponse.BatchExporter})
+	printTable([]*v1.BatchExporter{createResponse.BatchExporter})
 }
 
 func (p ListBatchExportersPlainPrinter) Print(data proto.Message) {
@@ -96,7 +96,7 @@ func (p DeleteBatchExporterPrinter) Print(_ proto.Message) {
 	fmt.Println("Batch Exporter has been deleted")
 }
 
-func printBatchExportersTable(batchExporters []*v1.BatchExporter) {
+func printTable(batchExporters []*v1.BatchExporter) {
 	rows := make([]table.Row, 0, len(batchExporters))
 
 	for _, batchExporter := range batchExporters {

@@ -58,17 +58,13 @@ func list() {
 }
 
 func get(name *string) {
-	eventContract := GetEventContract(name)
-	printer.Print(eventContract)
-}
-
-func GetEventContract(name *string) *entities.EventContract {
 	req := &event_contracts.GetEventContractRequest{
 		BillingId: common.BillingId,
 		Ref:       ref(name)}
 	eventContract, err := client.GetEventContract(apiContext, req)
 	common.CliExit(err)
-	return eventContract.EventContract
+
+	printer.Print(eventContract)
 }
 
 func create(cmd *cobra.Command, contractReference *string) {

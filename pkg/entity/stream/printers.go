@@ -65,17 +65,17 @@ type DeleteStreamPrinter struct{}
 
 func (p ListStreamsTablePrinter) Print(data proto.Message) {
 	listResponse, _ := (data).(*streams.ListStreamsResponse)
-	printStreamsTable(listResponse.Streams)
+	printTable(listResponse.Streams)
 }
 
 func (p GetStreamTablePrinter) Print(data proto.Message) {
 	getResponse, _ := (data).(*streams.GetStreamResponse)
-	printStreamsTable([]*v1.StreamTree{getResponse.StreamTree})
+	printTable([]*v1.StreamTree{getResponse.StreamTree})
 }
 
 func (p CreateStreamTablePrinter) Print(data proto.Message) {
 	createResponse, _ := (data).(*streams.CreateStreamResponse)
-	printStreamsTable([]*v1.StreamTree{{Stream: createResponse.Stream}})
+	printTable([]*v1.StreamTree{{Stream: createResponse.Stream}})
 }
 
 func (p ListStreamsPlainPrinter) Print(data proto.Message) {
@@ -97,7 +97,7 @@ func (p DeleteStreamPrinter) Print(_ proto.Message) {
 	fmt.Println("Stream has been deleted")
 }
 
-func printStreamsTable(streamTreeArray []*v1.StreamTree) {
+func printTable(streamTreeArray []*v1.StreamTree) {
 	rows := make([]table.Row, 0, len(streamTreeArray))
 
 	for _, stream := range streamTreeArray {

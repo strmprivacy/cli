@@ -38,7 +38,7 @@ func Ref(refString *string) *entities.SchemaRef {
 	}
 }
 
-func refToString(ref *entities.SchemaRef) string {
+func RefToString(ref *entities.SchemaRef) string {
 	return fmt.Sprintf("%v/%v/%v", ref.Handle, ref.Name, ref.Version)
 }
 
@@ -132,7 +132,7 @@ func NamesCompletion(cmd *cobra.Command, args []string, complete string) ([]stri
 
 	names := make([]string, 0)
 	for _, s := range response.Schemas {
-		names = append(names, refToString(s.Ref))
+		names = append(names, RefToString(s.Ref))
 	}
 
 	return names, cobra.ShellCompDirectiveNoFileComp

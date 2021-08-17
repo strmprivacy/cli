@@ -127,9 +127,8 @@ func interpretInterval(by string) int64 {
 			common.CliExit("Don't understand unit " + r[0][2])
 		}
 		interval, err = strconv.ParseInt(r[0][1], 10, 64)
-		if err != nil {
-			common.CliExit(err)
-		}
+		common.CliExit(err)
+
 		interval *= v
 	}
 	return interval

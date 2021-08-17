@@ -36,10 +36,8 @@ func protoMessageToPrettyJson(proto proto.Message) bytes.Buffer {
 	prettyJson := bytes.Buffer{}
 
 	errIndent := json.Indent(&prettyJson, rawJson.Bytes(), "", "    ")
+	common.CliExit(errIndent)
 
-	if errIndent != nil {
-		common.CliExit(errIndent)
-	}
 	return prettyJson
 }
 
@@ -50,10 +48,8 @@ func protoMessageToRawJson(proto proto.Message) bytes.Buffer {
 	buffer := bytes.Buffer{}
 
 	errCompact := json.Compact(&buffer, marshal)
+	common.CliExit(errCompact)
 
-	if errCompact != nil {
-		common.CliExit(errCompact)
-	}
 	return buffer
 }
 
