@@ -14,7 +14,6 @@ import (
 	"streammachine.io/strm/pkg/entity/stream"
 )
 
-
 var ListCmd = &cobra.Command{
 	Use:   constants.ListCommandName,
 	Short: "List entities",
@@ -30,5 +29,6 @@ func init() {
 	ListCmd.AddCommand(key_stream.ListCmd())
 	ListCmd.AddCommand(schema.ListCmd())
 	ListCmd.AddCommand(event_contract.ListCmd())
-	ListCmd.PersistentFlags().BoolP("recursive", "r", false, "recursive")
+
+	ListCmd.PersistentFlags().BoolP(constants.RecursiveFlagName, constants.RecursiveFlagShorthand, false, constants.RecursiveFlagUsage)
 }

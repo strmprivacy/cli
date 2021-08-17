@@ -34,5 +34,6 @@ func init() {
 	GetCmd.AddCommand(schema_code.GetCmd())
 	GetCmd.AddCommand(event_contract.GetCmd())
 	GetCmd.AddCommand(usage.GetCmd())
-	GetCmd.PersistentFlags().BoolP("recursive", "r", false, "recursive")
+
+	GetCmd.PersistentFlags().BoolP(constants.RecursiveFlagName, constants.RecursiveFlagShorthand, false, constants.RecursiveFlagUsage)
 }

@@ -17,10 +17,11 @@ var DeleteCmd = &cobra.Command{
 }
 
 func init() {
-	DeleteCmd.PersistentFlags().BoolP("recursive", "r", false, "recursive")
 	DeleteCmd.AddCommand(stream.DeleteCmd())
 	DeleteCmd.AddCommand(kafka_exporter.DeleteCmd())
 	DeleteCmd.AddCommand(batch_exporter.DeleteCmd())
 	DeleteCmd.AddCommand(sink.DeleteCmd())
 	DeleteCmd.AddCommand(kafka_user.DeleteCmd())
+
+	DeleteCmd.PersistentFlags().BoolP(constants.RecursiveFlagName, constants.RecursiveFlagShorthand, false, constants.RecursiveFlagUsage)
 }

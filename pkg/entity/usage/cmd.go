@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/spf13/cobra"
 	"streammachine.io/strm/pkg/entity/stream"
+	"streammachine.io/strm/pkg/util"
 )
 
 const (
@@ -59,6 +60,9 @@ from,count,duration,change,rate
 	})
 	_ = usage.RegisterFlagCompletionFunc(fromFlag, dateCompletion)
 	_ = usage.RegisterFlagCompletionFunc(untilFlag, dateCompletion)
+
+	//usage.PersistentFlags().Lookup(util.OutputFormatFlag).Hidden = true
+	flags.StringP(util.OutputFormatFlag, "o", "table", "")
 
 	return usage
 }

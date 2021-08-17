@@ -34,9 +34,9 @@ func list(recursive bool) {
 
 func get(name *string, recursive bool) {
 	req := &sinks.GetSinkRequest{Recursive: recursive, Ref: ref(name)}
-	stream, err := Client.GetSink(apiContext, req)
+	sink, err := Client.GetSink(apiContext, req)
 	common.CliExit(err)
-	printer.Print(stream)
+	printer.Print(sink)
 }
 
 func del(name *string, recursive bool) {
@@ -58,8 +58,7 @@ func create(sinkName *string, bucketName *string, cmd *cobra.Command) {
 	}
 	response, err := Client.CreateSink(apiContext, &sinks.CreateSinkRequest{Sink: sink})
 	common.CliExit(err)
-	printer.Print(response.Sink)
-
+	printer.Print(response)
 }
 
 func readCredentialsFile(flags *pflag.FlagSet) string {
