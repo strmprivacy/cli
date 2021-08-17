@@ -27,23 +27,23 @@ func SetupClient(clientConnection *grpc.ClientConn, ctx context.Context) {
 
 func list(recursive bool) {
 	req := &sinks.ListSinksRequest{Recursive: recursive, BillingId: common.BillingId}
-	sinksList, err := Client.ListSinks(apiContext, req)
+	response, err := Client.ListSinks(apiContext, req)
 	common.CliExit(err)
-	printer.Print(sinksList)
+	printer.Print(response)
 }
 
 func get(name *string, recursive bool) {
 	req := &sinks.GetSinkRequest{Recursive: recursive, Ref: ref(name)}
-	sink, err := Client.GetSink(apiContext, req)
+	response, err := Client.GetSink(apiContext, req)
 	common.CliExit(err)
-	printer.Print(sink)
+	printer.Print(response)
 }
 
 func del(name *string, recursive bool) {
 	req := &sinks.DeleteSinkRequest{Recursive: recursive, Ref: ref(name)}
-	sink, err := Client.DeleteSink(apiContext, req)
+	response, err := Client.DeleteSink(apiContext, req)
 	common.CliExit(err)
-	printer.Print(sink)
+	printer.Print(response)
 }
 
 func create(sinkName *string, bucketName *string, cmd *cobra.Command) {

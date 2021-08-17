@@ -60,8 +60,8 @@ func get(name *string, cmd *cobra.Command) {
 	clusterRef, err := getClusterRef(flags)
 	common.CliExit(err)
 
-	schema := GetSchema(name, clusterRef)
-	printer.Print(schema)
+	response := GetSchema(name, clusterRef)
+	printer.Print(response)
 }
 
 func getClusterRef(flags *pflag.FlagSet) (*entities.KafkaClusterRef, error) {

@@ -30,14 +30,14 @@ func Get(name *string) *kafka_exporters.GetKafkaExporterResponse {
 func list(recursive bool) {
 	// TODO need api recursive addition
 	req := &kafka_exporters.ListKafkaExportersRequest{BillingId: common.BillingId}
-	exporters, err := client.ListKafkaExporters(apiContext, req)
+	response, err := client.ListKafkaExporters(apiContext, req)
 	common.CliExit(err)
-	printer.Print(exporters)
+	printer.Print(response)
 }
 
 func get(name *string, recursive bool) {
-	exporter := Get(name)
-	printer.Print(exporter)
+	response := Get(name)
+	printer.Print(response)
 }
 
 func del(name *string, recursive bool) {

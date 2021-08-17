@@ -30,26 +30,26 @@ func list(exporterName *string) {
 			Name:      *exporterName,
 		},
 	}
-	users, err := client.ListKafkaUsers(apiContext, req)
+	response, err := client.ListKafkaUsers(apiContext, req)
 	common.CliExit(err)
-	printer.Print(users)
+	printer.Print(response)
 }
 
 func get(name *string) {
 	// TODO need api recursive addition
 	req := &kafka_users.GetKafkaUserRequest{Ref: ref(name)}
-	user, err := client.GetKafkaUser(apiContext, req)
+	response, err := client.GetKafkaUser(apiContext, req)
 	common.CliExit(err)
-	printer.Print(user)
+	printer.Print(response)
 }
 
 func del(name *string) {
-	user := ref(name)
-	req := &kafka_users.DeleteKafkaUserRequest{Ref: user}
+	response := ref(name)
+	req := &kafka_users.DeleteKafkaUserRequest{Ref: response}
 	_, err := client.DeleteKafkaUser(apiContext, req)
 	common.CliExit(err)
-	printer.Print(user)
-	util.DeleteSaved(user, &user.Name)
+	util.DeleteSaved(response, &response.Name)
+	printer.Print(response)
 }
 
 func create(kafkaExporterName *string, cmd *cobra.Command) {

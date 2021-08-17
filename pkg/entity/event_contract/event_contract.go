@@ -52,19 +52,19 @@ func SetupClient(clientConnection *grpc.ClientConn, ctx context.Context) {
 
 func list() {
 	req := &event_contracts.ListEventContractsRequest{BillingId: common.BillingId}
-	sinksList, err := client.ListEventContracts(apiContext, req)
+	response, err := client.ListEventContracts(apiContext, req)
 	common.CliExit(err)
-	printer.Print(sinksList)
+	printer.Print(response)
 }
 
 func get(name *string) {
 	req := &event_contracts.GetEventContractRequest{
 		BillingId: common.BillingId,
 		Ref:       ref(name)}
-	eventContract, err := client.GetEventContract(apiContext, req)
+	response, err := client.GetEventContract(apiContext, req)
 	common.CliExit(err)
 
-	printer.Print(eventContract)
+	printer.Print(response)
 }
 
 func create(cmd *cobra.Command, contractReference *string) {

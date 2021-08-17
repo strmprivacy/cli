@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/spf13/cobra"
 	"streammachine.io/strm/pkg/common"
+	"streammachine.io/strm/pkg/constants"
 	"streammachine.io/strm/pkg/entity/stream"
 	"streammachine.io/strm/pkg/util"
 )
@@ -52,7 +53,6 @@ from,count,duration,change,rate
 	}
 	flags := usage.Flags()
 
-	flags.Bool(jsonFlag, false, "json output")
 	flags.String(fromFlag, "", fmt.Sprintf("from %s", dateTimeParseFormat))
 	flags.String(untilFlag, "", fmt.Sprintf("until %s", dateTimeParseFormat))
 	flags.String(aggregateByFlag, "", "aggregate by (seconds|..m|..h|..d)")
@@ -62,9 +62,9 @@ from,count,duration,change,rate
 	_ = usage.RegisterFlagCompletionFunc(fromFlag, dateCompletion)
 	_ = usage.RegisterFlagCompletionFunc(untilFlag, dateCompletion)
 
-	flags.StringP(util.OutputFormatFlag, "o", "csv", "Usage output format [csv, json, json-raw]")
+	flags.StringP(util.OutputFormatFlag, "o", "csv", fmt.Sprintf("Usage output format [%v]", constants.UsageOutputFormatFlagAllowedValuesText))
 	err := usage.RegisterFlagCompletionFunc(util.OutputFormatFlag, func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
-		return []string{"csv", "json", "json-raw"}, cobra.ShellCompDirectiveNoFileComp
+		return constants.UsageOutputFormatFlagAllowedValues, cobra.ShellCompDirectiveNoFileComp
 	})
 
 	common.CliExit(err)

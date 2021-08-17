@@ -1,11 +1,13 @@
 package key_stream
 
 import (
+	"fmt"
 	"github.com/jedib0t/go-pretty/v6/table"
 	"github.com/spf13/cobra"
 	"github.com/streammachineio/api-definitions-go/api/entities/v1"
 	"github.com/streammachineio/api-definitions-go/api/key_streams/v1"
 	"google.golang.org/protobuf/proto"
+	"streammachine.io/strm/pkg/common"
 	"streammachine.io/strm/pkg/constants"
 	"streammachine.io/strm/pkg/util"
 )
@@ -16,11 +18,11 @@ func configurePrinter(command *cobra.Command) util.Printer {
 	outputFormat := util.GetStringAndErr(command.Flags(), util.OutputFormatFlag)
 
 	switch outputFormat {
-	case "json":
+	case constants.OutputFormatJson:
 		return util.GenericPrettyJsonPrinter{}
-	case "json-raw":
+	case constants.OutputFormatJsonRaw:
 		return util.GenericRawJsonPrinter{}
-	case "table":
+	case constants.OutputFormatTable:
 		switch command.Parent().Name() {
 		case constants.ListCommandName:
 			return listTablePrinter{}
@@ -29,7 +31,7 @@ func configurePrinter(command *cobra.Command) util.Printer {
 		}
 
 		return util.GenericPrettyJsonPrinter{}
-	case "plain":
+	case constants.OutputFormatPlain:
 		switch command.Parent().Name() {
 		case constants.ListCommandName:
 			return listPlainPrinter{}
@@ -39,7 +41,8 @@ func configurePrinter(command *cobra.Command) util.Printer {
 
 		return util.GenericPrettyJsonPrinter{}
 	default:
-		return util.GenericPrettyJsonPrinter{}
+		common.CliExit(fmt.Sprintf("Output format '%v' is not supported. Allowed values: %v", outputFormat, constants.OutputFormatFlagAllowedValuesText))
+		return nil
 	}
 }
 

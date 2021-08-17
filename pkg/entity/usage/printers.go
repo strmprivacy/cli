@@ -8,6 +8,7 @@ import (
 	"google.golang.org/protobuf/proto"
 	"math"
 	"streammachine.io/strm/pkg/common"
+	"streammachine.io/strm/pkg/constants"
 	"streammachine.io/strm/pkg/util"
 )
 
@@ -17,17 +18,15 @@ func configurePrinter(cmd *cobra.Command) util.Printer {
 	outputFormat := util.GetStringAndErr(cmd.Flags(), util.OutputFormatFlag)
 
 	switch outputFormat {
-	case "json-raw":
+	case constants.OutputFormatJsonRaw:
 		return util.GenericRawJsonPrinter{}
-	case "json":
+	case constants.OutputFormatJson:
 		return util.GenericPrettyJsonPrinter{}
-	case "table":
-		common.CliExit("Output format 'table' is not supported for usage.")
-		return nil
-	case "csv":
+	case constants.OutputFormatCsv:
 		return getCsvPrinter{}
 	default:
-		return util.GenericPrettyJsonPrinter{}
+		common.CliExit(fmt.Sprintf("Output format '%v' is not supported for usage. Allowed values: %v", outputFormat, constants.UsageOutputFormatFlagAllowedValuesText))
+		return nil
 	}
 }
 

@@ -67,14 +67,13 @@ func get(cmd *cobra.Command, streamName *string) {
 		Interval:  &duration.Duration{Seconds: interval},
 	}
 
-	streamUsage, err := client.GetStreamEventUsage(apiContext, req)
+	response, err := client.GetStreamEventUsage(apiContext, req)
 	common.CliExit(err)
 
-	printer.Print(streamUsage)
+	printer.Print(response)
 }
 
 func interpretInterval(by string) int64 {
-
 	interval, err := strconv.ParseInt(by, 10, 64)
 	if err != nil {
 		// the interval is not an integer (seconds).

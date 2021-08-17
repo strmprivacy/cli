@@ -24,10 +24,10 @@ func SetupClient(clientConnection *grpc.ClientConn, ctx context.Context) {
 
 func list() {
 	req := &batch_exporters.ListBatchExportersRequest{BillingId: common.BillingId}
-	exporters, err := client.ListBatchExporters(apiContext, req)
+	response, err := client.ListBatchExporters(apiContext, req)
 	common.CliExit(err)
 
-	printer.Print(exporters)
+	printer.Print(response)
 }
 
 func get(name *string, _ *cobra.Command) {
@@ -35,17 +35,17 @@ func get(name *string, _ *cobra.Command) {
 		Name: *name, BillingId: common.BillingId,
 	}
 	req := &batch_exporters.GetBatchExporterRequest{Ref: ref}
-	exporter, err := client.GetBatchExporter(apiContext, req)
+	response, err := client.GetBatchExporter(apiContext, req)
 	common.CliExit(err)
-	printer.Print(exporter)
+	printer.Print(response)
 }
 
 func del(name *string) {
 	req := &batch_exporters.DeleteBatchExporterRequest{Ref: &entities.BatchExporterRef{
 		BillingId: common.BillingId, Name: *name}}
-	exporter, err := client.DeleteBatchExporter(apiContext, req)
+	response, err := client.DeleteBatchExporter(apiContext, req)
 	common.CliExit(err)
-	printer.Print(exporter)
+	printer.Print(response)
 }
 
 func create(streamName *string, cmd *cobra.Command) {
@@ -89,7 +89,7 @@ func create(streamName *string, cmd *cobra.Command) {
 	response, err := client.CreateBatchExporter(apiContext,
 		&batch_exporters.CreateBatchExporterRequest{BatchExporter: exporter})
 	common.CliExit(err)
-	printer.Print(response.BatchExporter)
+	printer.Print(response)
 }
 
 func getSinkNames() []string {

@@ -27,17 +27,17 @@ func SetupClient(clientConnection *grpc.ClientConn, ctx context.Context) {
 
 func list() {
 	req := &kafka_clusters.ListKafkaClustersRequest{BillingId: common.BillingId}
-	sinksList, err := client.ListKafkaClusters(apiContext, req)
+	response, err := client.ListKafkaClusters(apiContext, req)
 	common.CliExit(err)
-	printer.Print(sinksList)
+	printer.Print(response)
 }
 
 func get(name *string) {
 	req := &kafka_clusters.GetKafkaClusterRequest{Ref: ref(name)}
-	cluster, err := client.GetKafkaCluster(apiContext, req)
+	response, err := client.GetKafkaCluster(apiContext, req)
 	common.CliExit(err)
 
-	printer.Print(cluster)
+	printer.Print(response)
 }
 
 func NamesCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {

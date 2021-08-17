@@ -48,24 +48,24 @@ func Get(streamName *string, recursive bool) *streams.GetStreamResponse {
 
 func list(recursive bool) {
 	req := &streams.ListStreamsRequest{BillingId: common.BillingId, Recursive: recursive}
-	streamsList, err := client.ListStreams(apiContext, req)
+	response, err := client.ListStreams(apiContext, req)
 	common.CliExit(err)
-	printer.Print(streamsList)
+	printer.Print(response)
 }
 
 func get(streamName *string, recursive bool) {
-	stream := Get(streamName, recursive)
-	printer.Print(stream)
+	response := Get(streamName, recursive)
+	printer.Print(response)
 }
 
 func del(streamName *string, recursive bool) {
-	stream := Get(streamName, recursive)
+	response := Get(streamName, recursive)
 	req := &streams.DeleteStreamRequest{
 		Recursive: recursive, Ref: &entities.StreamRef{BillingId: common.BillingId, Name: *streamName},
 	}
 	_, err := client.DeleteStream(apiContext, req)
 	common.CliExit(err)
-	printer.Print(stream)
+	printer.Print(response)
 }
 
 func create(args []string, cmd *cobra.Command) {
@@ -96,11 +96,12 @@ func create(args []string, cmd *cobra.Command) {
 	req := &streams.CreateStreamRequest{Stream: stream}
 	response, err := client.CreateStream(apiContext, req)
 	common.CliExit(err)
-	printer.Print(response.Stream)
 	save, err := flags.GetBool(saveFlag)
 	if save {
 		util.Save(response.Stream, &response.Stream.Ref.Name)
 	}
+
+	printer.Print(response)
 }
 
 func parseConsentLevelType(flags *pflag.FlagSet) (entities.ConsentLevelType, error) {
