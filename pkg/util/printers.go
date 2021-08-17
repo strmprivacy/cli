@@ -75,6 +75,18 @@ func RenderTable(headers table.Row, rows []table.Row) {
 	}
 }
 
+func RenderCsv(headers table.Row, rows []table.Row) {
+	if len(rows) == 0 {
+		fmt.Println("No usage in the provided time period.")
+	} else {
+		t := table.NewWriter()
+		t.SetOutputMirror(os.Stdout)
+		t.AppendHeader(headers)
+		t.AppendRows(rows)
+		t.RenderCSV()
+	}
+}
+
 var noBordersStyle = table.Style{
 	Name:    "StyleNoBorders",
 	Options: table.OptionsNoBorders,
