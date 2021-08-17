@@ -32,15 +32,11 @@ func list() {
 }
 
 func get(name *string) {
-	cluster := GetCluster(name)
-	printer.Print(cluster)
-}
-
-func GetCluster(name *string) *entities.KafkaCluster {
 	req := &kafka_clusters.GetKafkaClusterRequest{Ref: ref(name)}
 	cluster, err := client.GetKafkaCluster(apiContext, req)
 	common.CliExit(err)
-	return cluster.KafkaCluster
+
+	printer.Print(cluster)
 }
 
 func NamesCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
