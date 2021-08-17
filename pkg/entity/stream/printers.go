@@ -64,13 +64,13 @@ type CreateStreamTablePrinter struct{}
 type DeleteStreamPrinter struct{}
 
 func (p ListStreamsTablePrinter) Print(data proto.Message) {
-	streamsResponse, _ := (data).(*streams.ListStreamsResponse)
-	printStreamsTable(streamsResponse.Streams)
+	listResponse, _ := (data).(*streams.ListStreamsResponse)
+	printStreamsTable(listResponse.Streams)
 }
 
 func (p GetStreamTablePrinter) Print(data proto.Message) {
-	streamResponse, _ := (data).(*streams.GetStreamResponse)
-	printStreamsTable([]*v1.StreamTree{streamResponse.StreamTree})
+	getResponse, _ := (data).(*streams.GetStreamResponse)
+	printStreamsTable([]*v1.StreamTree{getResponse.StreamTree})
 }
 
 func (p CreateStreamTablePrinter) Print(data proto.Message) {
@@ -79,13 +79,13 @@ func (p CreateStreamTablePrinter) Print(data proto.Message) {
 }
 
 func (p ListStreamsPlainPrinter) Print(data proto.Message) {
-	streamsResponse, _ := (data).(*streams.ListStreamsResponse)
-	printPlain(streamsResponse.Streams)
+	listResponse, _ := (data).(*streams.ListStreamsResponse)
+	printPlain(listResponse.Streams)
 }
 
 func (p GetStreamPlainPrinter) Print(data proto.Message) {
-	streamResponse, _ := (data).(*streams.GetStreamResponse)
-	printPlain([]*v1.StreamTree{streamResponse.StreamTree})
+	getResponse, _ := (data).(*streams.GetStreamResponse)
+	printPlain([]*v1.StreamTree{getResponse.StreamTree})
 }
 
 func (p CreateStreamPlainPrinter) Print(data proto.Message) {
@@ -133,11 +133,16 @@ func printStreamsTable(streamTreeArray []*v1.StreamTree) {
 }
 
 func printPlain(streamTreeArray []*v1.StreamTree) {
-	streamNames := make([]string, 0, len(streamTreeArray))
+	var names string
+	lastIndex := len(streamTreeArray) - 1
 
-	for _, stream := range streamTreeArray {
-		streamNames = append(streamNames, stream.Stream.Ref.Name, "\n")
+	for index, stream := range streamTreeArray {
+		names = names + stream.Stream.Ref.Name
+
+		if index != lastIndex {
+			names = names + "\n"
+		}
 	}
 
-	fmt.Println(streamNames)
+	fmt.Println(names)
 }

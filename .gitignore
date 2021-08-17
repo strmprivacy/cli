@@ -10,3 +10,4 @@ dstrm
 *.log
 *.json
 *.tar.gz
+s3.json
