@@ -1,7 +1,6 @@
 package util
 
 import (
-	"flag"
 	"fmt"
 	"github.com/spf13/pflag"
 	"google.golang.org/protobuf/encoding/protojson"
@@ -11,7 +10,6 @@ import (
 	"path"
 	"path/filepath"
 	"strconv"
-	"streammachine.io/strm/pkg/auth"
 	"streammachine.io/strm/pkg/common"
 	"streammachine.io/strm/pkg/demoschema"
 )
@@ -43,22 +41,22 @@ func StringsArrayToInt32(vs []string) []int32 {
 	return MapStringsToInt32(vs, atoi32)
 }
 
-func GetStringAndErr(f *flag.FlagSet, k string) string {
+func GetStringAndErr(f *pflag.FlagSet, k string) string {
 	v, err := f.GetString(k)
 	common.CliExit(err)
 	return v
 }
-func GetBoolAndErr(f *flag.FlagSet, k string) bool {
+func GetBoolAndErr(f *pflag.FlagSet, k string) bool {
 	v, err := f.GetBool(k)
 	common.CliExit(err)
 	return v
 }
-func GetInt64AndErr(f *flag.FlagSet, k string) int64 {
+func GetInt64AndErr(f *pflag.FlagSet, k string) int64 {
 	v, err := f.GetInt64(k)
 	common.CliExit(err)
 	return v
 }
-func GetIntAndErr(f *flag.FlagSet, k string) int {
+func GetIntAndErr(f *pflag.FlagSet, k string) int {
 	v, err := f.GetInt(k)
 	common.CliExit(err)
 	return v
@@ -99,14 +97,4 @@ func CreateUnionString(s string) *demoschema.UnionNullString {
 	v.UnionType = demoschema.UnionNullStringTypeEnumString
 	v.String = s
 	return v
-}
-
-func FlagsAndValues(flags *pflag.FlagSet)  {
-	flags.Visit(func(flag *pflag.Flag) {
-		if flag.Name != auth.PasswordFlag {
-			fmt.Sprintf("flag %v=%v", flag.Name, flag.Value)
-		} else {
-			log.Infoln(fmt.Sprintf("Flag '%v' set, but omitted in logs", flag.Name))
-		}
-	})
 }
