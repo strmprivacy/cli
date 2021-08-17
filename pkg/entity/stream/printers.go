@@ -144,5 +144,5 @@ func printPlain(streamTreeArray []*v1.StreamTree) {
 		}
 	}
 
-	fmt.Println(names)
+	util.RenderPlain(names)
 }

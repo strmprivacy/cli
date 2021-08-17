@@ -133,5 +133,5 @@ func printPlain(kafkaUsers []*entities.KafkaUser) {
 		}
 	}
 
-	fmt.Println(names)
+	util.RenderPlain(names)
 }

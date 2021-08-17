@@ -1,7 +1,6 @@
 package event_contract
 
 import (
-	"fmt"
 	"github.com/jedib0t/go-pretty/v6/table"
 	"github.com/spf13/cobra"
 	v1 "github.com/streammachineio/api-definitions-go/api/entities/v1"
@@ -128,5 +127,5 @@ func printPlain(contracts []*v1.EventContract) {
 		}
 	}
 
-	fmt.Println(names)
+	util.RenderPlain(names)
 }

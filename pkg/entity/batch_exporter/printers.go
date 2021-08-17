@@ -143,5 +143,5 @@ func printPlain(batchExporters []*v1.BatchExporter) {
 		}
 	}
 
-	fmt.Println(names)
+	util.RenderPlain(names)
 }

@@ -132,5 +132,5 @@ func printPlain(kafkaExporters []*entities.KafkaExporter) {
 		}
 	}
 
-	fmt.Println(names)
+	util.RenderPlain(names)
 }

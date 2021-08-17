@@ -53,14 +53,26 @@ func protoMessageToRawJson(proto proto.Message) bytes.Buffer {
 	return buffer
 }
 
+func RenderPlain(text string) {
+	if len(text) == 0 {
+		fmt.Println("No entities of this resource type exist.")
+	} else {
+		fmt.Println(text)
+	}
+}
+
 func RenderTable(headers table.Row, rows []table.Row) {
-	t := table.NewWriter()
-	t.SetOutputMirror(os.Stdout)
-	t.AppendHeader(headers)
-	t.AppendSeparator()
-	t.AppendRows(rows)
-	t.SetStyle(noBordersStyle)
-	t.Render()
+	if len(rows) == 0 {
+		fmt.Println("No entities of this resource type exist.")
+	} else {
+		t := table.NewWriter()
+		t.SetOutputMirror(os.Stdout)
+		t.AppendHeader(headers)
+		t.AppendSeparator()
+		t.AppendRows(rows)
+		t.SetStyle(noBordersStyle)
+		t.Render()
+	}
 }
 
 var noBordersStyle = table.Style{

@@ -19,9 +19,9 @@ func SetupClient(clientConnection *grpc.ClientConn, ctx context.Context) {
 
 func list() {
 	req := &key_streams.ListKeyStreamsRequest{BillingId: common.BillingId}
-	sinksList, err := client.ListKeyStreams(apiContext, req)
+	keyStreams, err := client.ListKeyStreams(apiContext, req)
 	common.CliExit(err)
-	printer.Print(sinksList)
+	printer.Print(keyStreams)
 }
 
 func get(name *string) {
