@@ -2,6 +2,7 @@ package kafka_cluster
 
 import (
 	"context"
+	"fmt"
 	"github.com/spf13/cobra"
 	"github.com/streammachineio/api-definitions-go/api/entities/v1"
 	"github.com/streammachineio/api-definitions-go/api/kafka_clusters/v1"
@@ -61,4 +62,8 @@ func NamesCompletion(cmd *cobra.Command, args []string, complete string) ([]stri
 	}
 
 	return names, cobra.ShellCompDirectiveNoFileComp
+}
+
+func RefToString(clusterRef *entities.KafkaClusterRef) string {
+	return fmt.Sprintf("%v/%v", clusterRef.BillingId, clusterRef.Name)
 }

@@ -76,7 +76,7 @@ func printTable(kafkaClusters []*entities.KafkaCluster) {
 	for _, cluster := range kafkaClusters {
 
 		rows = append(rows, table.Row{
-			refToString(cluster.Ref),
+			RefToString(cluster.Ref),
 			cluster.BootstrapServers,
 			cluster.AuthMechanism,
 			cluster.TokenUri,
@@ -99,7 +99,7 @@ func printPlain(kafkaClusters []*entities.KafkaCluster) {
 	lastIndex := len(kafkaClusters) - 1
 
 	for index, cluster := range kafkaClusters {
-		names = names + refToString(cluster.Ref)
+		names = names + RefToString(cluster.Ref)
 
 		if index != lastIndex {
 			names = names + "\n"
@@ -107,8 +107,4 @@ func printPlain(kafkaClusters []*entities.KafkaCluster) {
 	}
 
 	fmt.Println(names)
-}
-
-func refToString(clusterRef *entities.KafkaClusterRef) string {
-	return fmt.Sprintf("%v/%v", clusterRef.BillingId, clusterRef.Name)
 }
