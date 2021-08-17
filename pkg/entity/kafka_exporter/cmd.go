@@ -32,19 +32,20 @@ func DeleteCmd() *cobra.Command {
 	}
 
 }
-
-var GetCmd = &cobra.Command{
-	Use:   "kafka-exporter [name]",
-	Short: "Get Kafka exporter by name",
-	PreRun: func(cmd *cobra.Command, args []string) {
-		printer = configurePrinter(cmd)
-	},
-	Run: func(cmd *cobra.Command, args []string) {
-		recursive, _ := cmd.Flags().GetBool("recursive")
-		get(&args[0], recursive)
-	},
-	Args:              cobra.ExactArgs(1), // the stream name
-	ValidArgsFunction: NamesCompletion,
+func GetCmd() *cobra.Command {
+	return &cobra.Command{
+		Use:   "kafka-exporter [name]",
+		Short: "Get Kafka exporter by name",
+		PreRun: func(cmd *cobra.Command, args []string) {
+			printer = configurePrinter(cmd)
+		},
+		Run: func(cmd *cobra.Command, args []string) {
+			recursive, _ := cmd.Flags().GetBool("recursive")
+			get(&args[0], recursive)
+		},
+		Args:              cobra.ExactArgs(1), // the stream name
+		ValidArgsFunction: NamesCompletion,
+	}
 }
 
 func ListCmd() *cobra.Command {

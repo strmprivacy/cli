@@ -1,8 +1,11 @@
 package stream
 
 import (
+	"fmt"
 	"github.com/jedib0t/go-pretty/v6/table"
 	"github.com/spf13/cobra"
+	"github.com/streammachineio/api-definitions-go/api/entities/v1"
+	v1 "github.com/streammachineio/api-definitions-go/api/entities/v1"
 	"github.com/streammachineio/api-definitions-go/api/streams/v1"
 	"google.golang.org/protobuf/proto"
 	"streammachine.io/strm/pkg/constants"
@@ -16,31 +19,125 @@ func configurePrinter(command *cobra.Command) util.Printer {
 
 	switch outputFormat {
 	case "json":
-		return util.GenericJsonPrinter{}
+		return util.GenericPrettyJsonPrinter{}
+	case "json-raw":
+		return util.GenericRawJsonPrinter{}
 	case "table":
 		switch command.Parent().Name() {
 		case constants.ListCommandName:
 			return ListStreamsTablePrinter{}
+		case constants.GetCommandName:
+			return GetStreamTablePrinter{}
+		case constants.DeleteCommandName:
+			return DeleteStreamPrinter{}
+		case constants.CreateCommandName:
+			return CreateStreamTablePrinter{}
 		}
-		return util.GenericJsonPrinter{}
+
+		return util.GenericPrettyJsonPrinter{}
+	case "plain":
+		switch command.Parent().Name() {
+		case constants.ListCommandName:
+			return ListStreamsPlainPrinter{}
+		case constants.GetCommandName:
+			return GetStreamPlainPrinter{}
+		case constants.DeleteCommandName:
+			return DeleteStreamPrinter{}
+		case constants.CreateCommandName:
+			return CreateStreamPlainPrinter{}
+		}
+
+		return util.GenericPrettyJsonPrinter{}
 	default:
-		return util.GenericJsonPrinter{}
+		return util.GenericPrettyJsonPrinter{}
 	}
 }
 
+type ListStreamsPlainPrinter struct{}
+type GetStreamPlainPrinter struct{}
+type CreateStreamPlainPrinter struct{}
+
 type ListStreamsTablePrinter struct{}
+type GetStreamTablePrinter struct{}
+type CreateStreamTablePrinter struct{}
+
+type DeleteStreamPrinter struct{}
 
 func (p ListStreamsTablePrinter) Print(data proto.Message) {
 	streamsResponse, _ := (data).(*streams.ListStreamsResponse)
+	printStreamsTable(streamsResponse.Streams)
+}
 
-	rows := make([]table.Row, 0, len(streamsResponse.Streams))
+func (p GetStreamTablePrinter) Print(data proto.Message) {
+	streamResponse, _ := (data).(*streams.GetStreamResponse)
+	printStreamsTable([]*v1.StreamTree{streamResponse.StreamTree})
+}
 
-	for _, stream := range streamsResponse.Streams {
-		rows = append(rows, table.Row{stream.Stream.Ref.Name, stream.Stream.Enabled, stream.KeyStream != nil})
+func (p CreateStreamTablePrinter) Print(data proto.Message) {
+	createResponse, _ := (data).(*streams.CreateStreamResponse)
+	printStreamsTable([]*v1.StreamTree{{Stream: createResponse.Stream}})
+}
+
+func (p ListStreamsPlainPrinter) Print(data proto.Message) {
+	streamsResponse, _ := (data).(*streams.ListStreamsResponse)
+	printPlain(streamsResponse.Streams)
+}
+
+func (p GetStreamPlainPrinter) Print(data proto.Message) {
+	streamResponse, _ := (data).(*streams.GetStreamResponse)
+	printPlain([]*v1.StreamTree{streamResponse.StreamTree})
+}
+
+func (p CreateStreamPlainPrinter) Print(data proto.Message) {
+	createResponse, _ := (data).(*streams.CreateStreamResponse)
+	printPlain([]*v1.StreamTree{{Stream: createResponse.Stream}})
+}
+
+func (p DeleteStreamPrinter) Print(_ proto.Message) {
+	fmt.Println("Stream has been deleted")
+}
+
+func printStreamsTable(streamTreeArray []*v1.StreamTree) {
+	rows := make([]table.Row, 0, len(streamTreeArray))
+
+	for _, stream := range streamTreeArray {
+		var consentLevelType string
+
+		if stream.Stream.ConsentLevelType != entities.ConsentLevelType_CONSENT_LEVEL_TYPE_UNSPECIFIED {
+			consentLevelType = stream.Stream.ConsentLevelType.String()
+		} else {
+			consentLevelType = ""
+		}
+
+		rows = append(rows, table.Row{
+			stream.Stream.Ref.Name,
+			len(stream.Stream.LinkedStream) != 0,
+			consentLevelType,
+			stream.Stream.ConsentLevels,
+			stream.Stream.Enabled,
+			stream.KeyStream != nil,
+		})
 	}
 
 	util.RenderTable(
-		table.Row{"Name", "Enabled", "Has Key Stream"},
+		table.Row{
+			"Stream",
+			"Derived",
+			"Consent Level Type",
+			"Consent Levels",
+			"Enabled",
+			"Has Key Stream",
+		},
 		rows,
 	)
+}
+
+func printPlain(streamTreeArray []*v1.StreamTree) {
+	streamNames := make([]string, 0, len(streamTreeArray))
+
+	for _, stream := range streamTreeArray {
+		streamNames = append(streamNames, stream.Stream.Ref.Name, "\n")
+	}
+
+	fmt.Println(streamNames)
 }

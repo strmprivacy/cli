@@ -12,10 +12,10 @@ func configurePrinter(cmd *cobra.Command) util.Printer {
 
 	switch outputFormat {
 	case "json":
-		return util.GenericJsonPrinter{}
+		return util.GenericRawJsonPrinter{}
 	case "table":
-		return util.GenericJsonPrinter{}
+		return util.GenericRawJsonPrinter{}
 	default:
-		return util.GenericJsonPrinter{}
+		return util.GenericRawJsonPrinter{}
 	}
 }

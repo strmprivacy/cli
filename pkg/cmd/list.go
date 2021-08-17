@@ -21,7 +21,7 @@ var ListCmd = &cobra.Command{
 }
 
 func init() {
-	ListCmd.AddCommand(stream.ListCmd)
+	ListCmd.AddCommand(stream.ListCmd())
 	ListCmd.AddCommand(kafka_exporter.ListCmd())
 	ListCmd.AddCommand(batch_exporter.ListCmd())
 	ListCmd.AddCommand(sink.ListCmd())

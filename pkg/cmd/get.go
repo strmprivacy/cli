@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
+	"streammachine.io/strm/pkg/constants"
 	"streammachine.io/strm/pkg/entity/batch_exporter"
 	"streammachine.io/strm/pkg/entity/event_contract"
 	"streammachine.io/strm/pkg/entity/kafka_cluster"
@@ -15,16 +16,15 @@ import (
 	"streammachine.io/strm/pkg/entity/usage"
 )
 
-const getCommandName = "get"
 
 var GetCmd = &cobra.Command{
-	Use:   getCommandName,
+	Use:   constants.GetCommandName,
 	Short: "Get an entity",
 }
 
 func init() {
-	GetCmd.AddCommand(stream.GetCmd)
-	GetCmd.AddCommand(kafka_exporter.GetCmd)
+	GetCmd.AddCommand(stream.GetCmd())
+	GetCmd.AddCommand(kafka_exporter.GetCmd())
 	GetCmd.AddCommand(batch_exporter.GetCmd())
 	GetCmd.AddCommand(sink.GetCmd())
 	GetCmd.AddCommand(kafka_cluster.GetCmd())

@@ -1,4 +1,8 @@
 package constants
 
-// Verbs
+const GetCommandName = "get"
 const ListCommandName = "list"
+const CreateCommandName = "create"
+const DeleteCommandName = "delete"
+
+

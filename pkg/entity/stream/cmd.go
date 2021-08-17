@@ -55,30 +55,32 @@ func DeleteCmd() *cobra.Command {
 		ValidArgsFunction: NamesCompletion,
 	}
 }
-
-var GetCmd = &cobra.Command{
-	Use:   "stream [name]",
-	Short: "Get stream by name",
-	PreRun: func(cmd *cobra.Command, args []string) {
-		printer = configurePrinter(cmd)
-	},
-	Run: func(cmd *cobra.Command, args []string) {
-		recursive, _ := cmd.Flags().GetBool("recursive")
-		get(&args[0], recursive)
-	},
-	Args:              cobra.ExactArgs(1), // the stream name
-	ValidArgsFunction: NamesCompletion,
+func GetCmd() *cobra.Command {
+	return &cobra.Command{
+		Use:   "stream [name]",
+		Short: "Get stream by name",
+		PreRun: func(cmd *cobra.Command, args []string) {
+			printer = configurePrinter(cmd)
+		},
+		Run: func(cmd *cobra.Command, args []string) {
+			recursive, _ := cmd.Flags().GetBool("recursive")
+			get(&args[0], recursive)
+		},
+		Args:              cobra.ExactArgs(1), // the stream name
+		ValidArgsFunction: NamesCompletion,
+	}
 }
-
-var ListCmd = &cobra.Command{
-	Use:   "streams",
-	Short: "List streams",
-	PreRun: func(cmd *cobra.Command, args []string) {
-		printer = configurePrinter(cmd)
-	},
-	Run: func(cmd *cobra.Command, args []string) {
-		recursive, _ := cmd.Flags().GetBool("recursive")
-		list(recursive)
-	},
-	ValidArgsFunction: common.NoFilesEmptyCompletion,
+func ListCmd() *cobra.Command {
+	return &cobra.Command{
+		Use:   "streams",
+		Short: "List streams",
+		PreRun: func(cmd *cobra.Command, args []string) {
+			printer = configurePrinter(cmd)
+		},
+		Run: func(cmd *cobra.Command, args []string) {
+			recursive, _ := cmd.Flags().GetBool("recursive")
+			list(recursive)
+		},
+		ValidArgsFunction: common.NoFilesEmptyCompletion,
+	}
 }
