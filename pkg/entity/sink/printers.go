@@ -14,8 +14,13 @@ import (
 var printer util.Printer
 
 func configurePrinter(command *cobra.Command) util.Printer {
-	recursive := util.GetBoolAndErr(command.Flags(), constants.RecursiveFlagName)
 	outputFormat := util.GetStringAndErr(command.Flags(), util.OutputFormatFlag)
+
+	var recursive bool
+
+	if command.Parent().Name() != constants.CreateCommandName {
+		recursive = util.GetBoolAndErr(command.Flags(), constants.RecursiveFlagName)
+	}
 
 	switch outputFormat {
 	case "json":

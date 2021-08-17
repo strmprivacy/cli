@@ -29,7 +29,7 @@ func TestSinks(t *testing.T) {
 	assert.Equal(t, out, `{}
 `)
 	out = ExecuteCliAndGetOutput(t, "", "create", "sink", "s3sink", "strm-cli-tester", "--sink-type=S3", "--credentials-file="+awsCredentialsFileName)
-	assert.Equal(t, out, `{"ref":{"billingId":"testBillingId","name":"s3sink"},"sinkType":"S3","bucket":{"bucketName":"strm-cli-tester","credentials":"{\"AccessKey\":{\"UserName\":\"UserName\",\"AccessKeyId\":\"AccessKeyId\",\"SecretAccessKey\":\"SecretAccessKey\"}}"}}
+	assert.Equal(t, out, `{"sink":{"ref":{"billingId":"testBillingId","name":"s3sink"},"sinkType":"S3","bucket":{"bucketName":"strm-cli-tester","credentials":"{\"AccessKey\":{\"UserName\":\"UserName\",\"AccessKeyId\":\"AccessKeyId\",\"SecretAccessKey\":\"SecretAccessKey\"}}"}}}
 `)
 	out = ExecuteCliAndGetOutput(t, "", "list", "sinks")
 	assert.Equal(t, out, `{"sinks":[{"sink":{"ref":{"billingId":"testBillingId","name":"s3sink"},"sinkType":"S3","bucket":{"bucketName":"strm-cli-tester"}}}]}
@@ -38,7 +38,7 @@ func TestSinks(t *testing.T) {
 	assert.Equal(t, out, `{"ref":{"billingId":"testBillingId","name":"s3sink-teststream"},"streamRef":{"billingId":"testBillingId","name":"teststream"},"interval":"60s","sinkName":"s3sink"}
 `)
 	out = ExecuteCliAndGetOutput(t, "", "create", "sink", "another-sink", "strm-cli-tester", "--sink-type=S3", "--credentials-file="+awsCredentialsFileName)
-	assert.Equal(t, out, `{"ref":{"billingId":"testBillingId","name":"another-sink"},"sinkType":"S3","bucket":{"bucketName":"strm-cli-tester","credentials":"{\"AccessKey\":{\"UserName\":\"UserName\",\"AccessKeyId\":\"AccessKeyId\",\"SecretAccessKey\":\"SecretAccessKey\"}}"}}
+	assert.Equal(t, out, `{"sink":{"ref":{"billingId":"testBillingId","name":"another-sink"},"sinkType":"S3","bucket":{"bucketName":"strm-cli-tester","credentials":"{\"AccessKey\":{\"UserName\":\"UserName\",\"AccessKeyId\":\"AccessKeyId\",\"SecretAccessKey\":\"SecretAccessKey\"}}"}}}
 `)
 	out = ExecuteCliAndGetOutput(t, "", "create", "batch-exporter", "teststream", "--sink=another-sink", "--interval=300", "--name=another-batch-exporter", "--path-prefix=some-prefix")
 	assert.Equal(t, out, `{"ref":{"billingId":"testBillingId","name":"another-batch-exporter"},"streamRef":{"billingId":"testBillingId","name":"teststream"},"interval":"300s","sinkName":"another-sink","pathPrefix":"some-prefix"}
