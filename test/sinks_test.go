@@ -23,7 +23,7 @@ func TestSinks(t *testing.T) {
 	awsCredentialsFileName := createAwsCredentialsFile(t)
 
 	out := ExecuteCliAndGetOutput(t, "", "create", "stream", "teststream")
-	assert.Equal(t, out, `{"ref":{"billingId":"testBillingId","name":"teststream"},"enabled":true,"limits":{"eventRate":"999999","eventCount":"999999999"},"credentials":[{"clientId":"clientId","clientSecret":"clientSecret"}]}
+	assert.Equal(t, out, `{"stream":{"ref":{"billingId":"testBillingId","name":"teststream"},"enabled":true,"limits":{"eventRate":"999999","eventCount":"999999999"},"credentials":[{"clientId":"clientId","clientSecret":"clientSecret"}]}}
 `)
 	out = ExecuteCliAndGetOutput(t, "", "list", "sinks")
 	assert.Equal(t, out, `{}
@@ -35,13 +35,13 @@ func TestSinks(t *testing.T) {
 	assert.Equal(t, out, `{"sinks":[{"sink":{"ref":{"billingId":"testBillingId","name":"s3sink"},"sinkType":"S3","bucket":{"bucketName":"strm-cli-tester"}}}]}
 `)
 	out = ExecuteCliAndGetOutput(t, "", "create", "batch-exporter", "teststream")
-	assert.Equal(t, out, `{"ref":{"billingId":"testBillingId","name":"s3sink-teststream"},"streamRef":{"billingId":"testBillingId","name":"teststream"},"interval":"60s","sinkName":"s3sink"}
+	assert.Equal(t, out, `{"batchExporter":{"ref":{"billingId":"testBillingId","name":"s3sink-teststream"},"streamRef":{"billingId":"testBillingId","name":"teststream"},"interval":"60s","sinkName":"s3sink"}}
 `)
 	out = ExecuteCliAndGetOutput(t, "", "create", "sink", "another-sink", "strm-cli-tester", "--sink-type=S3", "--credentials-file="+awsCredentialsFileName)
 	assert.Equal(t, out, `{"sink":{"ref":{"billingId":"testBillingId","name":"another-sink"},"sinkType":"S3","bucket":{"bucketName":"strm-cli-tester","credentials":"{\"AccessKey\":{\"UserName\":\"UserName\",\"AccessKeyId\":\"AccessKeyId\",\"SecretAccessKey\":\"SecretAccessKey\"}}"}}}
 `)
 	out = ExecuteCliAndGetOutput(t, "", "create", "batch-exporter", "teststream", "--sink=another-sink", "--interval=300", "--name=another-batch-exporter", "--path-prefix=some-prefix")
-	assert.Equal(t, out, `{"ref":{"billingId":"testBillingId","name":"another-batch-exporter"},"streamRef":{"billingId":"testBillingId","name":"teststream"},"interval":"300s","sinkName":"another-sink","pathPrefix":"some-prefix"}
+	assert.Equal(t, out, `{"batchExporter":{"ref":{"billingId":"testBillingId","name":"another-batch-exporter"},"streamRef":{"billingId":"testBillingId","name":"teststream"},"interval":"300s","sinkName":"another-sink","pathPrefix":"some-prefix"}}
 `)
 	out = ExecuteCliAndGetOutput(t, "", "list", "batch-exporters")
 	assert.Equal(t, out, `{"batchExporters":[{"ref":{"billingId":"testBillingId","name":"s3sink-teststream"},"streamRef":{"billingId":"testBillingId","name":"teststream"},"interval":"60s","sinkName":"s3sink"},{"ref":{"billingId":"testBillingId","name":"another-batch-exporter"},"streamRef":{"billingId":"testBillingId","name":"teststream"},"interval":"300s","sinkName":"another-sink","pathPrefix":"some-prefix"}]}
