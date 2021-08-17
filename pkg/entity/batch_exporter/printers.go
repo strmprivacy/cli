@@ -24,26 +24,26 @@ func configurePrinter(command *cobra.Command) util.Printer {
 	case "table":
 		switch command.Parent().Name() {
 		case constants.ListCommandName:
-			return ListBatchExportersTablePrinter{}
+			return listTablePrinter{}
 		case constants.GetCommandName:
-			return GetBatchExporterTablePrinter{}
+			return getTablePrinter{}
 		case constants.DeleteCommandName:
-			return DeleteBatchExporterPrinter{}
+			return deletePrinter{}
 		case constants.CreateCommandName:
-			return CreateBatchExporterTablePrinter{}
+			return createTablePrinter{}
 		}
 
 		return util.GenericPrettyJsonPrinter{}
 	case "plain":
 		switch command.Parent().Name() {
 		case constants.ListCommandName:
-			return ListBatchExportersPlainPrinter{}
+			return listPlainPrinter{}
 		case constants.GetCommandName:
-			return GetBatchExporterPlainPrinter{}
+			return getPlainPrinter{}
 		case constants.DeleteCommandName:
-			return DeleteBatchExporterPrinter{}
+			return deletePrinter{}
 		case constants.CreateCommandName:
-			return CreateBatchExporterPlainPrinter{}
+			return createPlainPrinter{}
 		}
 
 		return util.GenericPrettyJsonPrinter{}
@@ -52,47 +52,47 @@ func configurePrinter(command *cobra.Command) util.Printer {
 	}
 }
 
-type ListBatchExportersPlainPrinter struct{}
-type GetBatchExporterPlainPrinter struct{}
-type CreateBatchExporterPlainPrinter struct{}
+type listPlainPrinter struct{}
+type getPlainPrinter struct{}
+type createPlainPrinter struct{}
 
-type ListBatchExportersTablePrinter struct{}
-type GetBatchExporterTablePrinter struct{}
-type CreateBatchExporterTablePrinter struct{}
+type listTablePrinter struct{}
+type getTablePrinter struct{}
+type createTablePrinter struct{}
 
-type DeleteBatchExporterPrinter struct{}
+type deletePrinter struct{}
 
-func (p ListBatchExportersTablePrinter) Print(data proto.Message) {
+func (p listTablePrinter) Print(data proto.Message) {
 	listResponse, _ := (data).(*batch_exporters.ListBatchExportersResponse)
 	printTable(listResponse.BatchExporters)
 }
 
-func (p GetBatchExporterTablePrinter) Print(data proto.Message) {
+func (p getTablePrinter) Print(data proto.Message) {
 	getResponse, _ := (data).(*batch_exporters.GetBatchExporterResponse)
 	printTable([]*v1.BatchExporter{getResponse.BatchExporter})
 }
 
-func (p CreateBatchExporterTablePrinter) Print(data proto.Message) {
+func (p createTablePrinter) Print(data proto.Message) {
 	createResponse, _ := (data).(*batch_exporters.CreateBatchExporterResponse)
 	printTable([]*v1.BatchExporter{createResponse.BatchExporter})
 }
 
-func (p ListBatchExportersPlainPrinter) Print(data proto.Message) {
+func (p listPlainPrinter) Print(data proto.Message) {
 	listResponse, _ := (data).(*batch_exporters.ListBatchExportersResponse)
 	printPlain(listResponse.BatchExporters)
 }
 
-func (p GetBatchExporterPlainPrinter) Print(data proto.Message) {
+func (p getPlainPrinter) Print(data proto.Message) {
 	getResponse, _ := (data).(*batch_exporters.GetBatchExporterResponse)
 	printPlain([]*v1.BatchExporter{getResponse.BatchExporter})
 }
 
-func (p CreateBatchExporterPlainPrinter) Print(data proto.Message) {
+func (p createPlainPrinter) Print(data proto.Message) {
 	createResponse, _ := (data).(*batch_exporters.CreateBatchExporterResponse)
 	printPlain([]*v1.BatchExporter{createResponse.BatchExporter})
 }
 
-func (p DeleteBatchExporterPrinter) Print(_ proto.Message) {
+func (p deletePrinter) Print(_ proto.Message) {
 	fmt.Println("Batch Exporter has been deleted")
 }
 

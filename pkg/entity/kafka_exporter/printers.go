@@ -25,26 +25,26 @@ func configurePrinter(command *cobra.Command) util.Printer {
 	case "table":
 		switch command.Parent().Name() {
 		case constants.ListCommandName:
-			return ListKafkaExportersTablePrinter{}
+			return listTablePrinter{}
 		case constants.GetCommandName:
-			return GetKafkaExportersTablePrinter{}
+			return getTablePrinter{}
 		case constants.DeleteCommandName:
-			return DeleteKafkaExportersPrinter{}
+			return deletePrinter{}
 		case constants.CreateCommandName:
-			return CreateKafkaExportersTablePrinter{}
+			return createTablePrinter{}
 		}
 
 		return util.GenericPrettyJsonPrinter{}
 	case "plain":
 		switch command.Parent().Name() {
 		case constants.ListCommandName:
-			return ListKafkaExportersPlainPrinter{}
+			return listPlainPrinter{}
 		case constants.GetCommandName:
-			return GetKafkaExportersPlainPrinter{}
+			return getPlainPrinter{}
 		case constants.DeleteCommandName:
-			return DeleteKafkaExportersPrinter{}
+			return deletePrinter{}
 		case constants.CreateCommandName:
-			return CreateKafkaExportersPlainPrinter{}
+			return createPlainPrinter{}
 		}
 
 		return util.GenericPrettyJsonPrinter{}
@@ -53,47 +53,47 @@ func configurePrinter(command *cobra.Command) util.Printer {
 	}
 }
 
-type ListKafkaExportersPlainPrinter struct{}
-type GetKafkaExportersPlainPrinter struct{}
-type CreateKafkaExportersPlainPrinter struct{}
+type listPlainPrinter struct{}
+type getPlainPrinter struct{}
+type createPlainPrinter struct{}
 
-type ListKafkaExportersTablePrinter struct{}
-type GetKafkaExportersTablePrinter struct{}
-type CreateKafkaExportersTablePrinter struct{}
+type listTablePrinter struct{}
+type getTablePrinter struct{}
+type createTablePrinter struct{}
 
-type DeleteKafkaExportersPrinter struct{}
+type deletePrinter struct{}
 
-func (p ListKafkaExportersTablePrinter) Print(data proto.Message) {
+func (p listTablePrinter) Print(data proto.Message) {
 	listResponse, _ := (data).(*kafka_exporters.ListKafkaExportersResponse)
 	printTable(listResponse.KafkaExporters)
 }
 
-func (p GetKafkaExportersTablePrinter) Print(data proto.Message) {
+func (p getTablePrinter) Print(data proto.Message) {
 	getResponse, _ := (data).(*kafka_exporters.GetKafkaExporterResponse)
 	printTable([]*entities.KafkaExporter{getResponse.KafkaExporter})
 }
 
-func (p CreateKafkaExportersTablePrinter) Print(data proto.Message) {
+func (p createTablePrinter) Print(data proto.Message) {
 	createResponse, _ := (data).(*kafka_exporters.CreateKafkaExporterResponse)
 	printTable([]*entities.KafkaExporter{createResponse.KafkaExporter})
 }
 
-func (p ListKafkaExportersPlainPrinter) Print(data proto.Message) {
+func (p listPlainPrinter) Print(data proto.Message) {
 	listResponse, _ := (data).(*kafka_exporters.ListKafkaExportersResponse)
 	printPlain(listResponse.KafkaExporters)
 }
 
-func (p GetKafkaExportersPlainPrinter) Print(data proto.Message) {
+func (p getPlainPrinter) Print(data proto.Message) {
 	getResponse, _ := (data).(*kafka_exporters.GetKafkaExporterResponse)
 	printPlain([]*entities.KafkaExporter{getResponse.KafkaExporter})
 }
 
-func (p CreateKafkaExportersPlainPrinter) Print(data proto.Message) {
+func (p createPlainPrinter) Print(data proto.Message) {
 	createResponse, _ := (data).(*kafka_exporters.CreateKafkaExporterResponse)
 	printPlain([]*entities.KafkaExporter{createResponse.KafkaExporter})
 }
 
-func (p DeleteKafkaExportersPrinter) Print(_ proto.Message) {
+func (p deletePrinter) Print(_ proto.Message) {
 	fmt.Println("Kafka Exporter has been deleted")
 }
 

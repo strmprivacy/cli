@@ -25,26 +25,26 @@ func configurePrinter(command *cobra.Command) util.Printer {
 	case "table":
 		switch command.Parent().Name() {
 		case constants.ListCommandName:
-			return ListStreamsTablePrinter{}
+			return listTablePrinter{}
 		case constants.GetCommandName:
-			return GetStreamTablePrinter{}
+			return getTablePrinter{}
 		case constants.DeleteCommandName:
-			return DeleteStreamPrinter{}
+			return deletePrinter{}
 		case constants.CreateCommandName:
-			return CreateStreamTablePrinter{}
+			return createTablePrinter{}
 		}
 
 		return util.GenericPrettyJsonPrinter{}
 	case "plain":
 		switch command.Parent().Name() {
 		case constants.ListCommandName:
-			return ListStreamsPlainPrinter{}
+			return listPlainPrinter{}
 		case constants.GetCommandName:
-			return GetStreamPlainPrinter{}
+			return getPlainPrinter{}
 		case constants.DeleteCommandName:
-			return DeleteStreamPrinter{}
+			return deletePrinter{}
 		case constants.CreateCommandName:
-			return CreateStreamPlainPrinter{}
+			return createPlainPrinter{}
 		}
 
 		return util.GenericPrettyJsonPrinter{}
@@ -53,47 +53,47 @@ func configurePrinter(command *cobra.Command) util.Printer {
 	}
 }
 
-type ListStreamsPlainPrinter struct{}
-type GetStreamPlainPrinter struct{}
-type CreateStreamPlainPrinter struct{}
+type listPlainPrinter struct{}
+type getPlainPrinter struct{}
+type createPlainPrinter struct{}
 
-type ListStreamsTablePrinter struct{}
-type GetStreamTablePrinter struct{}
-type CreateStreamTablePrinter struct{}
+type listTablePrinter struct{}
+type getTablePrinter struct{}
+type createTablePrinter struct{}
 
-type DeleteStreamPrinter struct{}
+type deletePrinter struct{}
 
-func (p ListStreamsTablePrinter) Print(data proto.Message) {
+func (p listTablePrinter) Print(data proto.Message) {
 	listResponse, _ := (data).(*streams.ListStreamsResponse)
 	printTable(listResponse.Streams)
 }
 
-func (p GetStreamTablePrinter) Print(data proto.Message) {
+func (p getTablePrinter) Print(data proto.Message) {
 	getResponse, _ := (data).(*streams.GetStreamResponse)
 	printTable([]*v1.StreamTree{getResponse.StreamTree})
 }
 
-func (p CreateStreamTablePrinter) Print(data proto.Message) {
+func (p createTablePrinter) Print(data proto.Message) {
 	createResponse, _ := (data).(*streams.CreateStreamResponse)
 	printTable([]*v1.StreamTree{{Stream: createResponse.Stream}})
 }
 
-func (p ListStreamsPlainPrinter) Print(data proto.Message) {
+func (p listPlainPrinter) Print(data proto.Message) {
 	listResponse, _ := (data).(*streams.ListStreamsResponse)
 	printPlain(listResponse.Streams)
 }
 
-func (p GetStreamPlainPrinter) Print(data proto.Message) {
+func (p getPlainPrinter) Print(data proto.Message) {
 	getResponse, _ := (data).(*streams.GetStreamResponse)
 	printPlain([]*v1.StreamTree{getResponse.StreamTree})
 }
 
-func (p CreateStreamPlainPrinter) Print(data proto.Message) {
+func (p createPlainPrinter) Print(data proto.Message) {
 	createResponse, _ := (data).(*streams.CreateStreamResponse)
 	printPlain([]*v1.StreamTree{{Stream: createResponse.Stream}})
 }
 
-func (p DeleteStreamPrinter) Print(_ proto.Message) {
+func (p deletePrinter) Print(_ proto.Message) {
 	fmt.Println("Stream has been deleted")
 }
 

@@ -24,18 +24,18 @@ func configurePrinter(command *cobra.Command) util.Printer {
 	case "table":
 		switch command.Parent().Name() {
 		case constants.ListCommandName:
-			return ListStreamsTablePrinter{}
+			return listTablePrinter{}
 		case constants.GetCommandName:
-			return GetStreamTablePrinter{}
+			return getTablePrinter{}
 		}
 
 		return util.GenericPrettyJsonPrinter{}
 	case "plain":
 		switch command.Parent().Name() {
 		case constants.ListCommandName:
-			return ListStreamsPlainPrinter{}
+			return listPlainPrinter{}
 		case constants.GetCommandName:
-			return GetStreamPlainPrinter{}
+			return getPlainPrinter{}
 		}
 
 		return util.GenericPrettyJsonPrinter{}
@@ -44,28 +44,28 @@ func configurePrinter(command *cobra.Command) util.Printer {
 	}
 }
 
-type ListStreamsPlainPrinter struct{}
-type GetStreamPlainPrinter struct{}
+type listPlainPrinter struct{}
+type getPlainPrinter struct{}
 
-type ListStreamsTablePrinter struct{}
-type GetStreamTablePrinter struct{}
+type listTablePrinter struct{}
+type getTablePrinter struct{}
 
-func (p ListStreamsTablePrinter) Print(data proto.Message) {
+func (p listTablePrinter) Print(data proto.Message) {
 	listResponse, _ := (data).(*kafka_clusters.ListKafkaClustersResponse)
 	printTable(listResponse.KafkaClusters)
 }
 
-func (p GetStreamTablePrinter) Print(data proto.Message) {
+func (p getTablePrinter) Print(data proto.Message) {
 	getResponse, _ := (data).(*kafka_clusters.GetKafkaClusterResponse)
 	printTable([]*entities.KafkaCluster{getResponse.KafkaCluster})
 }
 
-func (p ListStreamsPlainPrinter) Print(data proto.Message) {
+func (p listPlainPrinter) Print(data proto.Message) {
 	listResponse, _ := (data).(*kafka_clusters.ListKafkaClustersResponse)
 	printPlain(listResponse.KafkaClusters)
 }
 
-func (p GetStreamPlainPrinter) Print(data proto.Message) {
+func (p getPlainPrinter) Print(data proto.Message) {
 	getResponse, _ := (data).(*kafka_clusters.GetKafkaClusterResponse)
 	printPlain([]*entities.KafkaCluster{getResponse.KafkaCluster})
 }

@@ -66,12 +66,13 @@ func create(kafkaExporterName *string, cmd *cobra.Command) {
 	response, err := client.CreateKafkaUser(apiContext,
 		&kafka_users.CreateKafkaUserRequest{KafkaUser: kafkaUser})
 	common.CliExit(err)
-	printer.Print(response.KafkaUser)
+
 	save, err := flags.GetBool(saveFlag)
 	if save {
 		util.Save(response.KafkaUser, &response.KafkaUser.Ref.Name)
 	}
 
+	printer.Print(response)
 }
 
 func namesCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {

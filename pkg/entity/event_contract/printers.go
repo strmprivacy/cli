@@ -25,22 +25,22 @@ func configurePrinter(command *cobra.Command) util.Printer {
 	case "table":
 		switch command.Parent().Name() {
 		case constants.ListCommandName:
-			return ListEventContractsTablePrinter{}
+			return listTablePrinter{}
 		case constants.GetCommandName:
-			return GetEventContractTablePrinter{}
+			return getTablePrinter{}
 		case constants.CreateCommandName:
-			return CreateEventContractTablePrinter{}
+			return createTablePrinter{}
 		}
 
 		return util.GenericPrettyJsonPrinter{}
 	case "plain":
 		switch command.Parent().Name() {
 		case constants.ListCommandName:
-			return ListEventContractPlainPrinter{}
+			return listPlainPrinter{}
 		case constants.GetCommandName:
-			return GetEventContractPlainPrinter{}
+			return getPlainPrinter{}
 		case constants.CreateCommandName:
-			return CreateEventContractPlainPrinter{}
+			return createPlainPrinter{}
 		}
 
 		return util.GenericPrettyJsonPrinter{}
@@ -49,42 +49,42 @@ func configurePrinter(command *cobra.Command) util.Printer {
 	}
 }
 
-type ListEventContractPlainPrinter struct{}
-type GetEventContractPlainPrinter struct{}
-type CreateEventContractPlainPrinter struct{}
+type listPlainPrinter struct{}
+type getPlainPrinter struct{}
+type createPlainPrinter struct{}
 
-type ListEventContractsTablePrinter struct{}
-type GetEventContractTablePrinter struct{}
-type CreateEventContractTablePrinter struct{}
+type listTablePrinter struct{}
+type getTablePrinter struct{}
+type createTablePrinter struct{}
 
-type DeleteEventContractPrinter struct{}
+type deletePrinter struct{}
 
-func (p ListEventContractsTablePrinter) Print(data proto.Message) {
+func (p listTablePrinter) Print(data proto.Message) {
 	listResponse, _ := (data).(*event_contracts.ListEventContractsResponse)
 	printTable(listResponse.EventContracts)
 }
 
-func (p GetEventContractTablePrinter) Print(data proto.Message) {
+func (p getTablePrinter) Print(data proto.Message) {
 	getResponse, _ := (data).(*event_contracts.GetEventContractResponse)
 	printTable([]*v1.EventContract{getResponse.EventContract})
 }
 
-func (p CreateEventContractTablePrinter) Print(data proto.Message) {
+func (p createTablePrinter) Print(data proto.Message) {
 	createResponse, _ := (data).(*event_contracts.CreateEventContractResponse)
 	printTable([]*v1.EventContract{createResponse.EventContract})
 }
 
-func (p ListEventContractPlainPrinter) Print(data proto.Message) {
+func (p listPlainPrinter) Print(data proto.Message) {
 	listResponse, _ := (data).(*event_contracts.ListEventContractsResponse)
 	printPlain(listResponse.EventContracts)
 }
 
-func (p GetEventContractPlainPrinter) Print(data proto.Message) {
+func (p getPlainPrinter) Print(data proto.Message) {
 	getResponse, _ := (data).(*event_contracts.GetEventContractResponse)
 	printPlain([]*v1.EventContract{getResponse.EventContract})
 }
 
-func (p CreateEventContractPlainPrinter) Print(data proto.Message) {
+func (p createPlainPrinter) Print(data proto.Message) {
 	createResponse, _ := (data).(*event_contracts.CreateEventContractResponse)
 	printPlain([]*v1.EventContract{createResponse.EventContract})
 }
