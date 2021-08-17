@@ -49,13 +49,10 @@ func SetupClient(clientConnection *grpc.ClientConn, ctx context.Context) {
 
 func list() {
 	req := &schemas.ListSchemasRequest{BillingId: common.BillingId}
-	printer.Print(List(req))
-}
-
-func List(req *schemas.ListSchemasRequest) *schemas.ListSchemasResponse {
-	schemasList, err := client.ListSchemas(apiContext, req)
+	response, err := client.ListSchemas(apiContext, req)
 	common.CliExit(err)
-	return schemasList
+
+	printer.Print(response)
 }
 
 func get(name *string, cmd *cobra.Command) {

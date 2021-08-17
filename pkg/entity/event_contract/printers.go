@@ -56,8 +56,6 @@ type listTablePrinter struct{}
 type getTablePrinter struct{}
 type createTablePrinter struct{}
 
-type deletePrinter struct{}
-
 func (p listTablePrinter) Print(data proto.Message) {
 	listResponse, _ := (data).(*event_contracts.ListEventContractsResponse)
 	printTable(listResponse.EventContracts)
