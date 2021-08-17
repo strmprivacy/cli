@@ -115,6 +115,7 @@ func setupVerbs() {
 	RootCmd.AddCommand(cmd.EgressCmd)
 	RootCmd.AddCommand(cmd.AuthCmd)
 	RootCmd.AddCommand(cmd.VersionCmd)
+	RootCmd.AddCommand(cmd.ContextCommand)
 }
 
 func init() {
