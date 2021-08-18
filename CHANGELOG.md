@@ -1,3 +1,10 @@
+# [1.7.0](https://github.com/streammachineio/cli/compare/v1.6.0...v1.7.0) (2021-08-18)
+
+
+### Features
+
+* **context:** add context command to print CLI context and show details of saved entities ([a14b583](https://github.com/streammachineio/cli/commit/a14b583a90892e4a8f2c809e0ddba06d2582c465))
+
 # [1.6.0](https://github.com/streammachineio/cli/compare/v1.5.0...v1.6.0) (2021-08-18)
 
 
