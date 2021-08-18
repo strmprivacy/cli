@@ -98,6 +98,7 @@ func executeCli(t *testing.T, tokenFile string, cmd ...string) *exec.Cmd {
 	rootPath := path + "/../"
 
 	cmd = append(cmd, "--token-file="+tokenFile)
+	cmd = append(cmd, "--output=json-raw")
 
 	command := exec.Command(rootPath+"dist/dstrm", cmd...)
 	command.Dir = rootPath

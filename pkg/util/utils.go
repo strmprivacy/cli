@@ -1,8 +1,6 @@
 package util
 
 import (
-	"bytes"
-	"encoding/json"
 	"fmt"
 	flag "github.com/spf13/pflag"
 	"google.golang.org/protobuf/encoding/protojson"
@@ -17,20 +15,6 @@ import (
 )
 
 var ConfigPath string
-
-func Print(m proto.Message) {
-	// As protojson.Marshal adds random spaces, we use json.Compact to omit the random spaces in the output.
-	// Linked issue in google/protobuf: https://github.com/golang/protobuf/issues/1082
-	marshal, _ := protojson.Marshal(m)
-	buffer := bytes.Buffer{}
-	err := json.Compact(&buffer, marshal)
-
-	if err != nil {
-		common.CliExit(err)
-	}
-
-	fmt.Println(string(buffer.Bytes()))
-}
 
 func MapInt32ToString(vs []int32, f func(a ...interface{}) string) []string {
 	vsm := make([]string, len(vs))

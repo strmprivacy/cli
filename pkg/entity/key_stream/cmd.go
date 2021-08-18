@@ -6,6 +6,9 @@ func GetCmd() *cobra.Command {
 	return &cobra.Command{
 		Use:   "key-stream [name]",
 		Short: "Get key stream by name",
+		PreRun: func(cmd *cobra.Command, args []string) {
+			printer = configurePrinter(cmd)
+		},
 		Run: func(cmd *cobra.Command, args []string) {
 			get(&args[0])
 		},
@@ -17,6 +20,9 @@ func ListCmd() *cobra.Command {
 	return &cobra.Command{
 		Use:   "key-streams",
 		Short: "List key streams",
+		PreRun: func(cmd *cobra.Command, args []string) {
+			printer = configurePrinter(cmd)
+		},
 		Run: func(cmd *cobra.Command, args []string) {
 			list()
 		},

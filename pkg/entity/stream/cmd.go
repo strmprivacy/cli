@@ -3,16 +3,18 @@ package stream
 import (
 	"github.com/spf13/cobra"
 	"streammachine.io/strm/pkg/common"
+	"streammachine.io/strm/pkg/constants"
 )
 
 func CreateCmd() *cobra.Command {
-
 	stream := &cobra.Command{
 		Use:   "stream [name]",
 		Short: "Create a stream",
+		PreRun: func(cmd *cobra.Command, args []string) {
+			printer = configurePrinter(cmd)
+		},
 		Run: func(cmd *cobra.Command, args []string) {
 			create(args, cmd)
-
 		},
 		Args: cobra.MaximumNArgs(1), // the stream name
 	}
@@ -43,8 +45,11 @@ func DeleteCmd() *cobra.Command {
 	If a stream has dependents (like derived streams or exporters), you can use
 	the 'recursive' option to get rid of those also.
 	Returns everything that was deleted. `,
+		PreRun: func(cmd *cobra.Command, args []string) {
+			printer = configurePrinter(cmd)
+		},
 		Run: func(cmd *cobra.Command, args []string) {
-			recursive, _ := cmd.Flags().GetBool("recursive")
+			recursive, _ := cmd.Flags().GetBool(constants.RecursiveFlagName)
 			del(&args[0], recursive)
 		},
 		Args:              cobra.ExactArgs(1), // the stream name
@@ -55,8 +60,11 @@ func GetCmd() *cobra.Command {
 	return &cobra.Command{
 		Use:   "stream [name]",
 		Short: "Get stream by name",
+		PreRun: func(cmd *cobra.Command, args []string) {
+			printer = configurePrinter(cmd)
+		},
 		Run: func(cmd *cobra.Command, args []string) {
-			recursive, _ := cmd.Flags().GetBool("recursive")
+			recursive, _ := cmd.Flags().GetBool(constants.RecursiveFlagName)
 			get(&args[0], recursive)
 		},
 		Args:              cobra.ExactArgs(1), // the stream name
@@ -67,8 +75,11 @@ func ListCmd() *cobra.Command {
 	return &cobra.Command{
 		Use:   "streams",
 		Short: "List streams",
+		PreRun: func(cmd *cobra.Command, args []string) {
+			printer = configurePrinter(cmd)
+		},
 		Run: func(cmd *cobra.Command, args []string) {
-			recursive, _ := cmd.Flags().GetBool("recursive")
+			recursive, _ := cmd.Flags().GetBool(constants.RecursiveFlagName)
 			list(recursive)
 		},
 		ValidArgsFunction: common.NoFilesEmptyCompletion,

@@ -3,6 +3,7 @@ package sink
 import (
 	"github.com/spf13/cobra"
 	"streammachine.io/strm/pkg/common"
+	"streammachine.io/strm/pkg/constants"
 )
 
 const (
@@ -14,8 +15,11 @@ func GetCmd() *cobra.Command {
 	return &cobra.Command{
 		Use:   "sink [name]",
 		Short: "Get sink by name",
+		PreRun: func(cmd *cobra.Command, args []string) {
+			printer = configurePrinter(cmd)
+		},
 		Run: func(cmd *cobra.Command, args []string) {
-			recursive, _ := cmd.Flags().GetBool("recursive")
+			recursive, _ := cmd.Flags().GetBool(constants.RecursiveFlagName)
 			get(&args[0], recursive)
 		},
 		Args:              cobra.ExactArgs(1), // the stream name
@@ -26,8 +30,11 @@ func ListCmd() *cobra.Command {
 	return &cobra.Command{
 		Use:   "sinks",
 		Short: "List sinks",
+		PreRun: func(cmd *cobra.Command, args []string) {
+			printer = configurePrinter(cmd)
+		},
 		Run: func(cmd *cobra.Command, args []string) {
-			recursive, _ := cmd.Flags().GetBool("recursive")
+			recursive, _ := cmd.Flags().GetBool(constants.RecursiveFlagName)
 			list(recursive)
 		},
 	}
@@ -36,8 +43,11 @@ func DeleteCmd() *cobra.Command {
 	return &cobra.Command{
 		Use:   "sink [name]",
 		Short: "Delete sinks",
+		PreRun: func(cmd *cobra.Command, args []string) {
+			printer = configurePrinter(cmd)
+		},
 		Run: func(cmd *cobra.Command, args []string) {
-			recursive, _ := cmd.Flags().GetBool("recursive")
+			recursive, _ := cmd.Flags().GetBool(constants.RecursiveFlagName)
 			del(&args[0], recursive)
 		},
 		Args:              cobra.ExactArgs(1),
@@ -48,6 +58,9 @@ func CreateCmd() *cobra.Command {
 	sink := &cobra.Command{
 		Use:   "sink [sink-name] [bucket-name]",
 		Short: "Create sink",
+		PreRun: func(cmd *cobra.Command, args []string) {
+			printer = configurePrinter(cmd)
+		},
 		Run: func(cmd *cobra.Command, args []string) {
 			create(&args[0], &args[1], cmd)
 		},

@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
+	"streammachine.io/strm/pkg/constants"
 	"streammachine.io/strm/pkg/entity/batch_exporter"
 	"streammachine.io/strm/pkg/entity/event_contract"
 	"streammachine.io/strm/pkg/entity/kafka_exporter"
@@ -13,7 +14,7 @@ import (
 
 // CreateCmd represents the create command
 var CreateCmd = &cobra.Command{
-	Use:   "create",
+	Use:   constants.CreateCommandName,
 	Short: "Create an entity",
 }
 

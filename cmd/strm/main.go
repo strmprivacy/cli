@@ -12,6 +12,7 @@ import (
 	"streammachine.io/strm/pkg/auth"
 	"streammachine.io/strm/pkg/cmd"
 	"streammachine.io/strm/pkg/common"
+	"streammachine.io/strm/pkg/constants"
 	"streammachine.io/strm/pkg/egress"
 	"streammachine.io/strm/pkg/entity"
 	"streammachine.io/strm/pkg/entity/batch_exporter"
@@ -120,12 +121,21 @@ func init() {
 	setConfigPath()
 	common.InitLogging(configPath)
 
-	RootCmd.PersistentFlags().String(apiHostFlag, "apis.streammachine.io:443", "API host and port")
-	RootCmd.PersistentFlags().String(auth.EventAuthHostFlag, "https://auth.strm.services", "Security Token Service for events")
-	RootCmd.PersistentFlags().String(auth.ApiAuthUrlFlag, "https://api.streammachine.io/v1", "Auth URL for user logins")
-	RootCmd.PersistentFlags().StringVar(&auth.TokenFile, "token-file", "",
+	persistentFlags := RootCmd.PersistentFlags()
+	persistentFlags.String(apiHostFlag, "apis.streammachine.io:443", "API host and port")
+	persistentFlags.String(auth.EventAuthHostFlag, "https://auth.strm.services", "Security Token Service for events")
+	persistentFlags.String(auth.ApiAuthUrlFlag, "https://api.streammachine.io/v1", "Auth URL for user logins")
+	persistentFlags.StringVar(&auth.TokenFile, "token-file", "",
 		"Token file that contains an access token (default is $HOME/.config/stream-machine/strm-creds-<api-auth-host>.json)")
-	RootCmd.PersistentFlags().String(egress.UrlFlag, "wss://out.strm.services/ws", "Websocket to receive events from")
+	persistentFlags.String(egress.UrlFlag, "wss://out.strm.services/ws", "Websocket to receive events from")
+	persistentFlags.StringP(util.OutputFormatFlag, "o", "table", fmt.Sprintf("Output format [%v]", constants.OutputFormatFlagAllowedValuesText))
+
+	err := RootCmd.RegisterFlagCompletionFunc(util.OutputFormatFlag, func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		return constants.OutputFormatFlagAllowedValues, cobra.ShellCompDirectiveNoFileComp
+	})
+
+	common.CliExit(err)
+
 	setupVerbs()
 }
 

@@ -14,7 +14,6 @@ import (
 	"strings"
 )
 
-// strings used in the cli
 const (
 	kafkaClusterFlag = "kafka-cluster"
 	definitionFlag   = "definition"
@@ -38,7 +37,7 @@ func Ref(refString *string) *entities.SchemaRef {
 	}
 }
 
-func refToString(ref *entities.SchemaRef) string {
+func RefToString(ref *entities.SchemaRef) string {
 	return fmt.Sprintf("%v/%v/%v", ref.Handle, ref.Name, ref.Version)
 }
 
@@ -49,13 +48,10 @@ func SetupClient(clientConnection *grpc.ClientConn, ctx context.Context) {
 
 func list() {
 	req := &schemas.ListSchemasRequest{BillingId: common.BillingId}
-	util.Print(List(req))
-}
-
-func List(req *schemas.ListSchemasRequest) *schemas.ListSchemasResponse {
-	schemasList, err := client.ListSchemas(apiContext, req)
+	response, err := client.ListSchemas(apiContext, req)
 	common.CliExit(err)
-	return schemasList
+
+	printer.Print(response)
 }
 
 func get(name *string, cmd *cobra.Command) {
@@ -63,8 +59,8 @@ func get(name *string, cmd *cobra.Command) {
 	clusterRef, err := getClusterRef(flags)
 	common.CliExit(err)
 
-	schema := GetSchema(name, clusterRef)
-	util.Print(schema)
+	response := GetSchema(name, clusterRef)
+	printer.Print(response)
 }
 
 func getClusterRef(flags *pflag.FlagSet) (*entities.KafkaClusterRef, error) {
@@ -114,7 +110,7 @@ func create(cmd *cobra.Command, args *string) {
 	}
 	response, err := client.CreateSchema(apiContext, req)
 	common.CliExit(err)
-	util.Print(response)
+	printer.Print(response)
 }
 
 func NamesCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
@@ -132,7 +128,7 @@ func NamesCompletion(cmd *cobra.Command, args []string, complete string) ([]stri
 
 	names := make([]string, 0)
 	for _, s := range response.Schemas {
-		names = append(names, refToString(s.Ref))
+		names = append(names, RefToString(s.Ref))
 	}
 
 	return names, cobra.ShellCompDirectiveNoFileComp

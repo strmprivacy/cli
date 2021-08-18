@@ -30,14 +30,14 @@ func Get(name *string) *kafka_exporters.GetKafkaExporterResponse {
 func list(recursive bool) {
 	// TODO need api recursive addition
 	req := &kafka_exporters.ListKafkaExportersRequest{BillingId: common.BillingId}
-	exporters, err := client.ListKafkaExporters(apiContext, req)
+	response, err := client.ListKafkaExporters(apiContext, req)
 	common.CliExit(err)
-	util.Print(exporters)
+	printer.Print(response)
 }
 
 func get(name *string, recursive bool) {
-	exporter := Get(name)
-	util.Print(exporter)
+	response := Get(name)
+	printer.Print(response)
 }
 
 func del(name *string, recursive bool) {
@@ -45,11 +45,14 @@ func del(name *string, recursive bool) {
 	exporter := Get(name)
 
 	req := &kafka_exporters.DeleteKafkaExporterRequest{Ref: exporterRef, Recursive: recursive}
-	_, err := client.DeleteKafkaExporter(apiContext, req)
+	response, err := client.DeleteKafkaExporter(apiContext, req)
 	common.CliExit(err)
+
 	for _, user := range exporter.KafkaExporter.Users {
 		util.DeleteSaved(user, &user.Ref.Name)
 	}
+
+	printer.Print(response)
 }
 
 func create(name *string, cmd *cobra.Command) {
@@ -69,7 +72,6 @@ func create(name *string, cmd *cobra.Command) {
 	)
 
 	common.CliExit(err)
-	util.Print(response.KafkaExporter)
 
 	save, err := flags.GetBool(saveFlag)
 	if save {
@@ -77,6 +79,7 @@ func create(name *string, cmd *cobra.Command) {
 		util.Save(user, &user.Ref.Name)
 	}
 
+	printer.Print(response)
 }
 
 func NamesCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {

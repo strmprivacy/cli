@@ -2,12 +2,12 @@ package kafka_cluster
 
 import (
 	"context"
+	"fmt"
 	"github.com/spf13/cobra"
 	"github.com/streammachineio/api-definitions-go/api/entities/v1"
 	"github.com/streammachineio/api-definitions-go/api/kafka_clusters/v1"
 	"google.golang.org/grpc"
 	"streammachine.io/strm/pkg/common"
-	"streammachine.io/strm/pkg/util"
 )
 
 // strings used in the cli
@@ -27,21 +27,17 @@ func SetupClient(clientConnection *grpc.ClientConn, ctx context.Context) {
 
 func list() {
 	req := &kafka_clusters.ListKafkaClustersRequest{BillingId: common.BillingId}
-	sinksList, err := client.ListKafkaClusters(apiContext, req)
+	response, err := client.ListKafkaClusters(apiContext, req)
 	common.CliExit(err)
-	util.Print(sinksList)
+	printer.Print(response)
 }
 
 func get(name *string) {
-	cluster := GetCluster(name)
-	util.Print(cluster)
-}
-
-func GetCluster(name *string) *entities.KafkaCluster {
 	req := &kafka_clusters.GetKafkaClusterRequest{Ref: ref(name)}
-	cluster, err := client.GetKafkaCluster(apiContext, req)
+	response, err := client.GetKafkaCluster(apiContext, req)
 	common.CliExit(err)
-	return cluster.KafkaCluster
+
+	printer.Print(response)
 }
 
 func NamesCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
@@ -66,4 +62,8 @@ func NamesCompletion(cmd *cobra.Command, args []string, complete string) ([]stri
 	}
 
 	return names, cobra.ShellCompDirectiveNoFileComp
+}
+
+func RefToString(clusterRef *entities.KafkaClusterRef) string {
+	return fmt.Sprintf("%v/%v", clusterRef.BillingId, clusterRef.Name)
 }

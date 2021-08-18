@@ -6,6 +6,9 @@ func GetCmd() *cobra.Command {
 	getSchema := &cobra.Command{
 		Use:   "schema [name]",
 		Short: "Get schema by name",
+		PreRun: func(cmd *cobra.Command, args []string) {
+			printer = configurePrinter(cmd)
+		},
 		Run: func(cmd *cobra.Command, args []string) {
 			get(&args[0], cmd)
 		},
@@ -21,6 +24,9 @@ func ListCmd() *cobra.Command {
 	return &cobra.Command{
 		Use:   "schemas",
 		Short: "List schemas",
+		PreRun: func(cmd *cobra.Command, args []string) {
+			printer = configurePrinter(cmd)
+		},
 		Run: func(cmd *cobra.Command, args []string) {
 			list()
 		},
@@ -31,6 +37,9 @@ func CreateCmd() *cobra.Command {
 	createCmd := &cobra.Command{
 		Use:   "schema (handle/name/version)",
 		Short: "create a schema",
+		PreRun: func(cmd *cobra.Command, args []string) {
+			printer = configurePrinter(cmd)
+		},
 		Run: func(cmd *cobra.Command, args []string) {
 			create(cmd, &args[0])
 		},
@@ -41,5 +50,4 @@ func CreateCmd() *cobra.Command {
 	_ = createCmd.MarkFlagRequired(definitionFlag)
 	flags.Bool(publicFlag, false, "should the schema become public")
 	return createCmd
-
 }
