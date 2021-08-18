@@ -1,3 +1,10 @@
+# [1.5.0](https://github.com/streammachineio/cli/compare/v1.4.0...v1.5.0) (2021-08-18)
+
+
+### Features
+
+* **event-contract:** create event contract now partially asks for cli flags and a definition ([#40](https://github.com/streammachineio/cli/issues/40)) ([ee06c74](https://github.com/streammachineio/cli/commit/ee06c749be3b272e1796075c2453e1bca1723287)), closes [#33](https://github.com/streammachineio/cli/issues/33)
+
 # [1.4.0](https://github.com/streammachineio/cli/compare/v1.3.0...v1.4.0) (2021-08-12)
 
 
