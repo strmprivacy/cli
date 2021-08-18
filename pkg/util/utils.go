@@ -2,7 +2,7 @@ package util
 
 import (
 	"fmt"
-	flag "github.com/spf13/pflag"
+	"github.com/spf13/pflag"
 	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/proto"
 	"io/ioutil"
@@ -16,14 +16,6 @@ import (
 
 var ConfigPath string
 
-func MapInt32ToString(vs []int32, f func(a ...interface{}) string) []string {
-	vsm := make([]string, len(vs))
-	for i, v := range vs {
-		vsm[i] = f(v)
-	}
-	return vsm
-}
-
 func atoi(s string) int {
 	v, err := strconv.Atoi(s)
 	common.CliExit(err)
@@ -33,13 +25,6 @@ func atoi32(s string) int32 {
 	return int32(atoi(s))
 }
 
-func MapStringsToInt(vs []string, f func(string) int) []int {
-	vsm := make([]int, len(vs))
-	for i, v := range vs {
-		vsm[i] = f(v)
-	}
-	return vsm
-}
 func MapStringsToInt32(vs []string, f func(string) int32) []int32 {
 	if len(vs) == 0 {
 		return []int32{}
@@ -52,34 +37,26 @@ func MapStringsToInt32(vs []string, f func(string) int32) []int32 {
 	return vsm
 }
 
-func StringsArrayToInt(vs []string) []int {
-	return MapStringsToInt(vs, atoi)
-}
 func StringsArrayToInt32(vs []string) []int32 {
 	return MapStringsToInt32(vs, atoi32)
 }
 
-func GetStringAndErr(f *flag.FlagSet, k string) string {
+func GetStringAndErr(f *pflag.FlagSet, k string) string {
 	v, err := f.GetString(k)
 	common.CliExit(err)
 	return v
 }
-func GetBoolAndErr(f *flag.FlagSet, k string) bool {
+func GetBoolAndErr(f *pflag.FlagSet, k string) bool {
 	v, err := f.GetBool(k)
 	common.CliExit(err)
 	return v
 }
-func GetInt32AndErr(f *flag.FlagSet, k string) int32 {
-	v, err := f.GetInt32(k)
-	common.CliExit(err)
-	return v
-}
-func GetInt64AndErr(f *flag.FlagSet, k string) int64 {
+func GetInt64AndErr(f *pflag.FlagSet, k string) int64 {
 	v, err := f.GetInt64(k)
 	common.CliExit(err)
 	return v
 }
-func GetIntAndErr(f *flag.FlagSet, k string) int {
+func GetIntAndErr(f *pflag.FlagSet, k string) int {
 	v, err := f.GetInt(k)
 	common.CliExit(err)
 	return v
@@ -93,11 +70,6 @@ func TryLoad(m proto.Message, name *string) error {
 	}
 	err = protojson.Unmarshal(bytes, m)
 	return err
-}
-
-func Load(m proto.Message, name *string) {
-	err := TryLoad(m, name)
-	common.CliExit(err)
 }
 
 func Save(m proto.Message, name *string) {

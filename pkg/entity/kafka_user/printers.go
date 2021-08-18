@@ -6,7 +6,6 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/streammachineio/api-definitions-go/api/entities/v1"
 	"github.com/streammachineio/api-definitions-go/api/kafka_users/v1"
-	"google.golang.org/protobuf/proto"
 	"streammachine.io/strm/pkg/common"
 	"streammachine.io/strm/pkg/constants"
 	"streammachine.io/strm/pkg/util"
@@ -15,7 +14,7 @@ import (
 var printer util.Printer
 
 func configurePrinter(command *cobra.Command) util.Printer {
-	outputFormat := util.GetStringAndErr(command.Flags(), util.OutputFormatFlag)
+	outputFormat := util.GetStringAndErr(command.Flags(), constants.OutputFormatFlag)
 
 	p := availablePrinters()[outputFormat+command.Parent().Name()]
 
@@ -52,37 +51,37 @@ type createTablePrinter struct{}
 
 type deletePrinter struct{}
 
-func (p listTablePrinter) Print(data proto.Message) {
+func (p listTablePrinter) Print(data interface{}) {
 	listResponse, _ := (data).(*kafka_users.ListKafkaUsersResponse)
 	printTable(listResponse.KafkaUsers)
 }
 
-func (p getTablePrinter) Print(data proto.Message) {
+func (p getTablePrinter) Print(data interface{}) {
 	getResponse, _ := (data).(*kafka_users.GetKafkaUserResponse)
 	printTable([]*entities.KafkaUser{getResponse.KafkaUser})
 }
 
-func (p createTablePrinter) Print(data proto.Message) {
+func (p createTablePrinter) Print(data interface{}) {
 	createResponse, _ := (data).(*kafka_users.CreateKafkaUserResponse)
 	printTable([]*entities.KafkaUser{createResponse.KafkaUser})
 }
 
-func (p listPlainPrinter) Print(data proto.Message) {
+func (p listPlainPrinter) Print(data interface{}) {
 	listResponse, _ := (data).(*kafka_users.ListKafkaUsersResponse)
 	printPlain(listResponse.KafkaUsers)
 }
 
-func (p getPlainPrinter) Print(data proto.Message) {
+func (p getPlainPrinter) Print(data interface{}) {
 	getResponse, _ := (data).(*kafka_users.GetKafkaUserResponse)
 	printPlain([]*entities.KafkaUser{getResponse.KafkaUser})
 }
 
-func (p createPlainPrinter) Print(data proto.Message) {
+func (p createPlainPrinter) Print(data interface{}) {
 	createResponse, _ := (data).(*kafka_users.CreateKafkaUserResponse)
 	printPlain([]*entities.KafkaUser{createResponse.KafkaUser})
 }
 
-func (p deletePrinter) Print(_ proto.Message) {
+func (p deletePrinter) Print(data interface{}) {
 	fmt.Println("Kafka Exporter has been deleted")
 }
 

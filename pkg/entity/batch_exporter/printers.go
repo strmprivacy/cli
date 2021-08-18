@@ -6,7 +6,6 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/streammachineio/api-definitions-go/api/batch_exporters/v1"
 	v1 "github.com/streammachineio/api-definitions-go/api/entities/v1"
-	"google.golang.org/protobuf/proto"
 	"streammachine.io/strm/pkg/common"
 	"streammachine.io/strm/pkg/constants"
 	"streammachine.io/strm/pkg/util"
@@ -15,7 +14,7 @@ import (
 var printer util.Printer
 
 func configurePrinter(command *cobra.Command) util.Printer {
-	outputFormat := util.GetStringAndErr(command.Flags(), util.OutputFormatFlag)
+	outputFormat := util.GetStringAndErr(command.Flags(), constants.OutputFormatFlag)
 
 	p := availablePrinters()[outputFormat+command.Parent().Name()]
 
@@ -52,37 +51,37 @@ type createTablePrinter struct{}
 
 type deletePrinter struct{}
 
-func (p listTablePrinter) Print(data proto.Message) {
+func (p listTablePrinter) Print(data interface{}) {
 	listResponse, _ := (data).(*batch_exporters.ListBatchExportersResponse)
 	printTable(listResponse.BatchExporters)
 }
 
-func (p getTablePrinter) Print(data proto.Message) {
+func (p getTablePrinter) Print(data interface{}) {
 	getResponse, _ := (data).(*batch_exporters.GetBatchExporterResponse)
 	printTable([]*v1.BatchExporter{getResponse.BatchExporter})
 }
 
-func (p createTablePrinter) Print(data proto.Message) {
+func (p createTablePrinter) Print(data interface{}) {
 	createResponse, _ := (data).(*batch_exporters.CreateBatchExporterResponse)
 	printTable([]*v1.BatchExporter{createResponse.BatchExporter})
 }
 
-func (p listPlainPrinter) Print(data proto.Message) {
+func (p listPlainPrinter) Print(data interface{}) {
 	listResponse, _ := (data).(*batch_exporters.ListBatchExportersResponse)
 	printPlain(listResponse.BatchExporters)
 }
 
-func (p getPlainPrinter) Print(data proto.Message) {
+func (p getPlainPrinter) Print(data interface{}) {
 	getResponse, _ := (data).(*batch_exporters.GetBatchExporterResponse)
 	printPlain([]*v1.BatchExporter{getResponse.BatchExporter})
 }
 
-func (p createPlainPrinter) Print(data proto.Message) {
+func (p createPlainPrinter) Print(data interface{}) {
 	createResponse, _ := (data).(*batch_exporters.CreateBatchExporterResponse)
 	printPlain([]*v1.BatchExporter{createResponse.BatchExporter})
 }
 
-func (p deletePrinter) Print(_ proto.Message) {
+func (p deletePrinter) Print(data interface{}) {
 	fmt.Println("Batch Exporter has been deleted")
 }
 

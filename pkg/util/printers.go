@@ -13,56 +13,62 @@ import (
 	"streammachine.io/strm/pkg/constants"
 )
 
-const OutputFormatFlag = "output"
-
 type Printer interface {
-	Print(proto proto.Message)
+	Print(data interface{})
 }
 
 var DefaultPrinters = map[string]Printer{
-	constants.OutputFormatJson + constants.ListCommandName:      GenericPrettyJsonPrinter{},
-	constants.OutputFormatJson + constants.GetCommandName:       GenericPrettyJsonPrinter{},
-	constants.OutputFormatJson + constants.DeleteCommandName:    GenericPrettyJsonPrinter{},
-	constants.OutputFormatJson + constants.CreateCommandName:    GenericPrettyJsonPrinter{},
-	constants.OutputFormatJsonRaw + constants.ListCommandName:   GenericRawJsonPrinter{},
-	constants.OutputFormatJsonRaw + constants.GetCommandName:    GenericRawJsonPrinter{},
-	constants.OutputFormatJsonRaw + constants.DeleteCommandName: GenericRawJsonPrinter{},
-	constants.OutputFormatJsonRaw + constants.CreateCommandName: GenericRawJsonPrinter{},
+	constants.OutputFormatJson + constants.ListCommandName:      ProtoMessageJsonPrettyPrinter{},
+	constants.OutputFormatJson + constants.GetCommandName:       ProtoMessageJsonPrettyPrinter{},
+	constants.OutputFormatJson + constants.DeleteCommandName:    ProtoMessageJsonPrettyPrinter{},
+	constants.OutputFormatJson + constants.CreateCommandName:    ProtoMessageJsonPrettyPrinter{},
+	constants.OutputFormatJsonRaw + constants.ListCommandName:   ProtoMessageJsonRawPrinter{},
+	constants.OutputFormatJsonRaw + constants.GetCommandName:    ProtoMessageJsonRawPrinter{},
+	constants.OutputFormatJsonRaw + constants.DeleteCommandName: ProtoMessageJsonRawPrinter{},
+	constants.OutputFormatJsonRaw + constants.CreateCommandName: ProtoMessageJsonRawPrinter{},
 }
 
-type GenericRawJsonPrinter struct{}
-type GenericPrettyJsonPrinter struct{}
+type ProtoMessageJsonRawPrinter struct{}
+type ProtoMessageJsonPrettyPrinter struct{}
 
-func (p GenericRawJsonPrinter) Print(proto proto.Message) {
-	rawJson := protoMessageToRawJson(proto)
+func (p ProtoMessageJsonRawPrinter) Print(content interface{}) {
+	protoContent, _ := (content).(proto.Message)
+	rawJson := protoMessageToRawJson(protoContent)
 	fmt.Println(string(rawJson.Bytes()))
 }
 
-func (p GenericPrettyJsonPrinter) Print(proto proto.Message) {
-	prettyJson := protoMessageToPrettyJson(proto)
+func (p ProtoMessageJsonPrettyPrinter) Print(content interface{}) {
+	protoContent, _ := (content).(proto.Message)
+	prettyJson := protoMessageToPrettyJson(protoContent)
 	fmt.Println(string(prettyJson.Bytes()))
 }
 
 func protoMessageToPrettyJson(proto proto.Message) bytes.Buffer {
-	rawJson := protoMessageToRawJson(proto)
-	prettyJson := bytes.Buffer{}
-
-	errIndent := json.Indent(&prettyJson, rawJson.Bytes(), "", "    ")
-	common.CliExit(errIndent)
-
-	return prettyJson
+	return PrettifyJson(protoMessageToRawJson(proto))
 }
 
 func protoMessageToRawJson(proto proto.Message) bytes.Buffer {
 	// As protojson.Marshal adds random spaces, we use json.Compact to omit the random spaces in the output.
 	// Linked issue in google/protobuf: https://github.com/golang/protobuf/issues/1082
 	marshal, _ := protojson.Marshal(proto)
+	return CompactJson(marshal)
+}
+
+func CompactJson(rawJson []byte) bytes.Buffer {
 	buffer := bytes.Buffer{}
 
-	errCompact := json.Compact(&buffer, marshal)
+	errCompact := json.Compact(&buffer, rawJson)
 	common.CliExit(errCompact)
-
 	return buffer
+}
+
+func PrettifyJson(rawJson bytes.Buffer) bytes.Buffer {
+	prettyJson := bytes.Buffer{}
+
+	errIndent := json.Indent(&prettyJson, rawJson.Bytes(), "", "    ")
+	common.CliExit(errIndent)
+
+	return prettyJson
 }
 
 func MergePrinterMaps(maps ...map[string]Printer) (result map[string]Printer) {
