@@ -14,7 +14,7 @@ import (
 )
 
 type Printer interface {
-	Print(proto interface{})
+	Print(data interface{})
 }
 
 var DefaultPrinters = map[string]Printer{
