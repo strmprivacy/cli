@@ -7,7 +7,6 @@ import (
 	"streammachine.io/strm/pkg/auth"
 	"streammachine.io/strm/pkg/common"
 	"streammachine.io/strm/pkg/constants"
-	"streammachine.io/strm/pkg/util"
 	"strings"
 )
 
@@ -24,10 +23,10 @@ func showConfiguration() {
 	common.CliExit(err)
 
 	configuration := configuration{
-		ConfigPath:     util.ConfigPath,
+		ConfigPath:     constants.ConfigPath,
 		ConfigFilepath: configFilepath,
 		Contents:       contents,
-		SavedEntities:  listSavedEntities(util.ConfigPath),
+		SavedEntities:  listSavedEntities(path.Join(constants.ConfigPath, constants.SavedEntitiesDirectory)),
 	}
 
 	printer.Print(configuration)
@@ -39,7 +38,7 @@ type savedEntity struct {
 }
 
 func entityInfo(args []string) {
-	filepath := path.Join(util.ConfigPath, args[0]+".json")
+	filepath := path.Join(constants.ConfigPath, constants.SavedEntitiesDirectory, args[0]+".json")
 	contents, err := ioutil.ReadFile(filepath)
 	common.CliExit(err)
 
@@ -49,7 +48,10 @@ func entityInfo(args []string) {
 
 func listSavedEntities(p string) []string {
 	files, err := ioutil.ReadDir(p)
-	common.CliExit(err)
+
+	if err != nil {
+		return []string{}
+	}
 
 	entityTypeTemplate := path.Base(p) + "/%v"
 	var entities = make([]string, 0)
@@ -66,14 +68,14 @@ func listSavedEntities(p string) []string {
 }
 
 func findConfigFile() string {
-	files, err := ioutil.ReadDir(util.ConfigPath)
+	files, err := ioutil.ReadDir(constants.ConfigPath)
 	common.CliExit(err)
 
 	var configFilepath string
 
 	for _, f := range files {
-		if (strings.HasSuffix(f.Name(), "json") || strings.HasSuffix(f.Name(), "yaml")) && strings.HasPrefix(f.Name(), constants.DefaultConfigFilename) && len(f.Name()) == constants.DefaultConfigFilenameLength {
-			configFilepath = path.Join(util.ConfigPath, f.Name())
+		if f.Name() == constants.DefaultConfigFilename+constants.DefaultConfigFileSuffix || f.Name() == constants.DefaultConfigFilename+constants.DefaultConfigFileSuffix {
+			configFilepath = path.Join(constants.ConfigPath, f.Name())
 		}
 	}
 

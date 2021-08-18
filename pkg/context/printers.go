@@ -69,17 +69,19 @@ func (p jsonPrettyPrinter) Print(data interface{}) {
 func (p plainPrinter) Print(data interface{}) {
 	config, _ := (data).(configuration)
 
-	l := list.NewWriter()
-	l.SetOutputMirror(os.Stdout)
-
 	fmt.Println(fmt.Sprintf("Configuration directory: %v", config.ConfigPath))
 	fmt.Println(fmt.Sprintf("Configuration file: %v", config.ConfigFilepath))
 	fmt.Println(fmt.Sprintf("Configuration file contents: \n\n    %v", strings.ReplaceAll(string(config.Contents), "\n", "\n    ")))
 
-	for _, entity := range config.SavedEntities {
-		l.AppendItem(entity)
-	}
+	if len(config.SavedEntities) > 0 {
+		l := list.NewWriter()
+		l.SetOutputMirror(os.Stdout)
 
-	fmt.Println("Saved entities:")
-	l.Render()
+		for _, entity := range config.SavedEntities {
+			l.AppendItem(entity)
+		}
+
+		fmt.Println("Saved entities:")
+		l.Render()
+	}
 }

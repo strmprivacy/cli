@@ -11,3 +11,4 @@ dstrm
 *.json
 *.tar.gz
 s3.json
+strm.yaml

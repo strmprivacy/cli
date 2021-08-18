@@ -48,9 +48,8 @@ var RootCmd = &cobra.Command{
 	Use:   common.RootCommandName,
 	Short: fmt.Sprintf("Stream Machine CLI %s", cmd.Version),
 	PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
-		// You can bind cobra and viper in a few locations,
-		// but PersistencePreRunE on the root command works well
-		r := initializeConfig(cmd)
+		util.CreateConfigDirAndFileIfNotExists()
+		err := initializeConfig(cmd)
 
 		log.Infoln(fmt.Sprintf("Executing command: %v", cmd.CommandPath()))
 		cmd.Flags().Visit(func(flag *pflag.Flag) {
@@ -61,9 +60,7 @@ var RootCmd = &cobra.Command{
 			}
 		})
 
-		auth.ConfigPath = configPath
-		util.ConfigPath = configPath
-
+		constants.ConfigPath = configPath
 		auth.SetupClient(util.GetStringAndErr(cmd.Flags(), auth.ApiAuthUrlFlag))
 
 		var billingId = ""
@@ -80,7 +77,7 @@ var RootCmd = &cobra.Command{
 		setupServiceClients(clientConnection, ctx)
 		common.BillingId = billingId
 
-		return r
+		return err
 	},
 }
 
