@@ -17,7 +17,7 @@ func GetCmd() *cobra.Command {
 	}
 	flags := getCommand.Flags()
 	flags.String(languageFlag, "", "which programming language")
-	flags.String(filenameFlag, "", "tar file name")
+	flags.String(filenameFlag, "", "Destination zip file location")
 	flags.Bool(overwriteFlag, false, "do we allow overwriting an existing file")
 	_ = getCommand.MarkFlagRequired(languageFlag)
 	_ = getCommand.RegisterFlagCompletionFunc(languageFlag, languageCompletion)

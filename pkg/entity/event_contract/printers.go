@@ -18,37 +18,27 @@ var printer util.Printer
 func configurePrinter(command *cobra.Command) util.Printer {
 	outputFormat := util.GetStringAndErr(command.Flags(), util.OutputFormatFlag)
 
-	switch outputFormat {
-	case constants.OutputFormatJson:
-		return util.GenericPrettyJsonPrinter{}
-	case constants.OutputFormatJsonRaw:
-		return util.GenericRawJsonPrinter{}
-	case constants.OutputFormatTable:
-		switch command.Parent().Name() {
-		case constants.ListCommandName:
-			return listTablePrinter{}
-		case constants.GetCommandName:
-			return getTablePrinter{}
-		case constants.CreateCommandName:
-			return createTablePrinter{}
-		}
+	p := availablePrinters()[outputFormat+command.Parent().Name()]
 
-		return util.GenericPrettyJsonPrinter{}
-	case constants.OutputFormatPlain:
-		switch command.Parent().Name() {
-		case constants.ListCommandName:
-			return listPlainPrinter{}
-		case constants.GetCommandName:
-			return getPlainPrinter{}
-		case constants.CreateCommandName:
-			return createPlainPrinter{}
-		}
-
-		return util.GenericPrettyJsonPrinter{}
-	default:
+	if p == nil {
 		common.CliExit(fmt.Sprintf("Output format '%v' is not supported. Allowed values: %v", outputFormat, constants.OutputFormatFlagAllowedValuesText))
-		return nil
 	}
+
+	return p
+}
+
+func availablePrinters() map[string]util.Printer {
+	return util.MergePrinterMaps(
+		util.DefaultPrinters,
+		map[string]util.Printer{
+			constants.OutputFormatTable + constants.ListCommandName:   listTablePrinter{},
+			constants.OutputFormatTable + constants.GetCommandName:    getTablePrinter{},
+			constants.OutputFormatTable + constants.CreateCommandName: createTablePrinter{},
+			constants.OutputFormatPlain + constants.ListCommandName:   listPlainPrinter{},
+			constants.OutputFormatPlain + constants.GetCommandName:    getPlainPrinter{},
+			constants.OutputFormatPlain + constants.CreateCommandName: createPlainPrinter{},
+		},
+	)
 }
 
 type listPlainPrinter struct{}

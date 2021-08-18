@@ -16,19 +16,23 @@ import (
 
 var printer util.Printer
 
-func configurePrinter(cmd *cobra.Command) util.Printer {
-	outputFormat := util.GetStringAndErr(cmd.Flags(), util.OutputFormatFlag)
+func configurePrinter(command *cobra.Command) util.Printer {
+	outputFormat := util.GetStringAndErr(command.Flags(), util.OutputFormatFlag)
 
-	switch outputFormat {
-	case constants.OutputFormatJsonRaw:
-		return util.GenericRawJsonPrinter{}
-	case constants.OutputFormatJson:
-		return util.GenericPrettyJsonPrinter{}
-	case constants.OutputFormatCsv:
-		return getCsvPrinter{}
-	default:
+	p := availablePrinters()[outputFormat]
+
+	if p == nil {
 		common.CliExit(fmt.Sprintf("Output format '%v' is not supported for usage. Allowed values: %v", outputFormat, constants.UsageOutputFormatFlagAllowedValuesText))
-		return nil
+	}
+
+	return p
+}
+
+func availablePrinters() map[string]util.Printer {
+	return map[string]util.Printer{
+		constants.OutputFormatJsonRaw: util.GenericRawJsonPrinter{},
+		constants.OutputFormatJson:    util.GenericPrettyJsonPrinter{},
+		constants.OutputFormatCsv:     getCsvPrinter{},
 	}
 }
 
