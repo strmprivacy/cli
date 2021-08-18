@@ -3,9 +3,9 @@ package context
 import (
 	"fmt"
 	"github.com/spf13/cobra"
+	"path"
 	"streammachine.io/strm/pkg/common"
 	"streammachine.io/strm/pkg/constants"
-	"streammachine.io/strm/pkg/util"
 )
 
 const (
@@ -72,5 +72,5 @@ func EntityInfo() *cobra.Command {
 }
 
 func savedEntitiesCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
-	return listSavedEntities(util.ConfigPath), cobra.ShellCompDirectiveNoFileComp
+	return listSavedEntities(path.Join(constants.ConfigPath, constants.SavedEntitiesDirectory)), cobra.ShellCompDirectiveNoFileComp
 }

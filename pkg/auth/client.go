@@ -12,13 +12,13 @@ import (
 	"path"
 	"path/filepath"
 	"streammachine.io/strm/pkg/common"
+	"streammachine.io/strm/pkg/constants"
 	"time"
 )
 
 const StrmCredsFilePrefix = "strm-creds"
 
 var Client Auth
-var ConfigPath string
 
 func SetupClient(apiAuthUrl string) {
 	Client = Auth{Uri: apiAuthUrl}
@@ -149,7 +149,7 @@ func (authorizer *Auth) getSaveFilename() string {
 		u, err := url.Parse(authorizer.Uri)
 		common.CliExit(err)
 		filename := fmt.Sprintf("%v-%s.json", StrmCredsFilePrefix, u.Hostname())
-		return path.Join(ConfigPath, filename)
+		return path.Join(constants.ConfigPath, filename)
 	} else {
 		return TokenFile
 	}

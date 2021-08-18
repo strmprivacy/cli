@@ -2,8 +2,20 @@ package constants
 
 import "strings"
 
+var ConfigPath string
+
 const DefaultConfigFilename = "strm"
-const DefaultConfigFilenameLength = len(DefaultConfigFilename) + 5 // suffix .json or .yaml
+const DefaultConfigFileSuffix = ".yaml"
+
+var DefaultConfigFileContents = []byte(`# The following configuration options are reflected in the CLI's flags
+# save: true
+# event-auth-host: https://auth.strm.services
+# events-gateway: https://in.strm.services/event
+# api-auth-url: https://api.streammachine.io/v1
+# api-host: apis.streammachine.io:443
+`)
+
+const SavedEntitiesDirectory = "saved-entities"
 
 const GetCommandName = "get"
 const ListCommandName = "list"
