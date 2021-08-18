@@ -29,7 +29,6 @@ func SetupClient(clientConnection *grpc.ClientConn, ctx context.Context) {
 func get(cmd *cobra.Command, schemaRef *string) {
 	outputFile := GetSchemaCode(cmd, schemaRef)
 	println("Saved to", outputFile)
-
 }
 
 func GetSchemaCode(cmd *cobra.Command, name *string) string {
@@ -40,7 +39,8 @@ func GetSchemaCode(cmd *cobra.Command, name *string) string {
 	req := &schemas.GetSchemaCodeRequest{
 		BillingId: common.BillingId,
 		Language:  language,
-		Ref:       schema.Ref(name)}
+		Ref:       schema.Ref(name),
+	}
 	schemaCode, err := client.GetSchemaCode(apiContext, req)
 	common.CliExit(err)
 	if len(outputFile) == 0 {

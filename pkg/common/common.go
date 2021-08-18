@@ -59,3 +59,10 @@ func BillingIdIsMissing() bool {
 func NoFilesEmptyCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
 	return nil, cobra.ShellCompDirectiveNoFileComp
 }
+
+func MarkRequiredFlags(cmd *cobra.Command, flagNames ...string) {
+	for _, flag := range flagNames {
+		err := cmd.MarkFlagRequired(flag)
+		CliExit(err)
+	}
+}

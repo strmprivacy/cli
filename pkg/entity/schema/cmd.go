@@ -2,8 +2,6 @@ package schema
 
 import "github.com/spf13/cobra"
 
-const ()
-
 func GetCmd() *cobra.Command {
 	getSchema := &cobra.Command{
 		Use:   "schema [name]",

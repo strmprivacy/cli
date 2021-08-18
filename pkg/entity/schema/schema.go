@@ -24,8 +24,13 @@ const (
 var client schemas.SchemasServiceClient
 var apiContext context.Context
 
-func Ref(n *string) *entities.SchemaRef {
-	parts := strings.Split(*n, "/")
+func Ref(refString *string) *entities.SchemaRef {
+	parts := strings.Split(*refString, "/")
+
+	if len(parts) != 3 {
+		common.CliExit("Schema reference should consist of three parts: <handle>/<name>/<version>")
+	}
+
 	return &entities.SchemaRef{
 		Handle:  parts[0],
 		Name:    parts[1],
@@ -52,7 +57,6 @@ func List(req *schemas.ListSchemasRequest) *schemas.ListSchemasResponse {
 	common.CliExit(err)
 	return schemasList
 }
-
 
 func get(name *string, cmd *cobra.Command) {
 	flags := cmd.Flags()
@@ -114,12 +118,9 @@ func create(cmd *cobra.Command, args *string) {
 }
 
 func NamesCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
+
 	if common.BillingIdIsMissing() {
 		return common.MissingBillingIdCompletionError(cmd.CommandPath())
-	}
-	if len(args) != 0 {
-		// this one means you don't get two completion suggestions for one stream
-		return nil, cobra.ShellCompDirectiveNoFileComp
 	}
 
 	req := &schemas.ListSchemasRequest{BillingId: common.BillingId}
