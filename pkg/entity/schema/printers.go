@@ -6,7 +6,6 @@ import (
 	"github.com/spf13/cobra"
 	v1 "github.com/streammachineio/api-definitions-go/api/entities/v1"
 	"github.com/streammachineio/api-definitions-go/api/schemas/v1"
-	"google.golang.org/protobuf/proto"
 	"streammachine.io/strm/pkg/common"
 	"streammachine.io/strm/pkg/constants"
 	"streammachine.io/strm/pkg/util"
@@ -15,7 +14,7 @@ import (
 var printer util.Printer
 
 func configurePrinter(command *cobra.Command) util.Printer {
-	outputFormat := util.GetStringAndErr(command.Flags(), util.OutputFormatFlag)
+	outputFormat := util.GetStringAndErr(command.Flags(), constants.OutputFormatFlag)
 
 	p := availablePrinters()[outputFormat+command.Parent().Name()]
 
@@ -48,32 +47,32 @@ type listTablePrinter struct{}
 type getTablePrinter struct{}
 type createTablePrinter struct{}
 
-func (p listTablePrinter) Print(data proto.Message) {
+func (p listTablePrinter) Print(data interface{}) {
 	listResponse, _ := (data).(*schemas.ListSchemasResponse)
 	printTable(listResponse.Schemas)
 }
 
-func (p getTablePrinter) Print(data proto.Message) {
+func (p getTablePrinter) Print(data interface{}) {
 	getResponse, _ := (data).(*schemas.GetSchemaResponse)
 	printTable([]*v1.Schema{getResponse.Schema})
 }
 
-func (p createTablePrinter) Print(data proto.Message) {
+func (p createTablePrinter) Print(data interface{}) {
 	createResponse, _ := (data).(*schemas.CreateSchemaResponse)
 	printTable([]*v1.Schema{createResponse.Schema})
 }
 
-func (p listPlainPrinter) Print(data proto.Message) {
+func (p listPlainPrinter) Print(data interface{}) {
 	listResponse, _ := (data).(*schemas.ListSchemasResponse)
 	printPlain(listResponse.Schemas)
 }
 
-func (p getPlainPrinter) Print(data proto.Message) {
+func (p getPlainPrinter) Print(data interface{}) {
 	getResponse, _ := (data).(*schemas.GetSchemaResponse)
 	printPlain([]*v1.Schema{getResponse.Schema})
 }
 
-func (p createPlainPrinter) Print(data proto.Message) {
+func (p createPlainPrinter) Print(data interface{}) {
 	createResponse, _ := (data).(*schemas.CreateSchemaResponse)
 	printPlain([]*v1.Schema{createResponse.Schema})
 }

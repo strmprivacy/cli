@@ -7,7 +7,6 @@ import (
 	"github.com/streammachineio/api-definitions-go/api/entities/v1"
 	v1 "github.com/streammachineio/api-definitions-go/api/entities/v1"
 	"github.com/streammachineio/api-definitions-go/api/streams/v1"
-	"google.golang.org/protobuf/proto"
 	"streammachine.io/strm/pkg/common"
 	"streammachine.io/strm/pkg/constants"
 	"streammachine.io/strm/pkg/util"
@@ -16,7 +15,7 @@ import (
 var printer util.Printer
 
 func configurePrinter(command *cobra.Command) util.Printer {
-	outputFormat := util.GetStringAndErr(command.Flags(), util.OutputFormatFlag)
+	outputFormat := util.GetStringAndErr(command.Flags(), constants.OutputFormatFlag)
 
 	p := availablePrinters()[outputFormat+command.Parent().Name()]
 
@@ -53,37 +52,37 @@ type createTablePrinter struct{}
 
 type deletePrinter struct{}
 
-func (p listTablePrinter) Print(data proto.Message) {
+func (p listTablePrinter) Print(data interface{}) {
 	listResponse, _ := (data).(*streams.ListStreamsResponse)
 	printTable(listResponse.Streams)
 }
 
-func (p getTablePrinter) Print(data proto.Message) {
+func (p getTablePrinter) Print(data interface{}) {
 	getResponse, _ := (data).(*streams.GetStreamResponse)
 	printTable([]*v1.StreamTree{getResponse.StreamTree})
 }
 
-func (p createTablePrinter) Print(data proto.Message) {
+func (p createTablePrinter) Print(data interface{}) {
 	createResponse, _ := (data).(*streams.CreateStreamResponse)
 	printTable([]*v1.StreamTree{{Stream: createResponse.Stream}})
 }
 
-func (p listPlainPrinter) Print(data proto.Message) {
+func (p listPlainPrinter) Print(data interface{}) {
 	listResponse, _ := (data).(*streams.ListStreamsResponse)
 	printPlain(listResponse.Streams)
 }
 
-func (p getPlainPrinter) Print(data proto.Message) {
+func (p getPlainPrinter) Print(data interface{}) {
 	getResponse, _ := (data).(*streams.GetStreamResponse)
 	printPlain([]*v1.StreamTree{getResponse.StreamTree})
 }
 
-func (p createPlainPrinter) Print(data proto.Message) {
+func (p createPlainPrinter) Print(data interface{}) {
 	createResponse, _ := (data).(*streams.CreateStreamResponse)
 	printPlain([]*v1.StreamTree{{Stream: createResponse.Stream}})
 }
 
-func (p deletePrinter) Print(_ proto.Message) {
+func (p deletePrinter) Print(data interface{}) {
 	fmt.Println("Stream has been deleted")
 }
 
@@ -105,7 +104,6 @@ func printTable(streamTreeArray []*v1.StreamTree) {
 			consentLevelType,
 			stream.Stream.ConsentLevels,
 			stream.Stream.Enabled,
-			stream.KeyStream != nil,
 		})
 	}
 
@@ -116,7 +114,6 @@ func printTable(streamTreeArray []*v1.StreamTree) {
 			"Consent Level Type",
 			"Consent Levels",
 			"Enabled",
-			"Has Key Stream",
 		},
 		rows,
 	)

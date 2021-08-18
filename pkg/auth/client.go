@@ -15,6 +15,8 @@ import (
 	"time"
 )
 
+const StrmCredsFilePrefix = "strm-creds"
+
 var Client Auth
 var ConfigPath string
 
@@ -146,7 +148,7 @@ func (authorizer *Auth) getSaveFilename() string {
 	if TokenFile == "" {
 		u, err := url.Parse(authorizer.Uri)
 		common.CliExit(err)
-		filename := fmt.Sprintf("strm-creds-%s.json", u.Hostname())
+		filename := fmt.Sprintf("%v-%s.json", StrmCredsFilePrefix, u.Hostname())
 		return path.Join(ConfigPath, filename)
 	} else {
 		return TokenFile

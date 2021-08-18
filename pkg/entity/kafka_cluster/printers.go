@@ -6,7 +6,6 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/streammachineio/api-definitions-go/api/entities/v1"
 	"github.com/streammachineio/api-definitions-go/api/kafka_clusters/v1"
-	"google.golang.org/protobuf/proto"
 	"streammachine.io/strm/pkg/common"
 	"streammachine.io/strm/pkg/constants"
 	"streammachine.io/strm/pkg/util"
@@ -15,7 +14,7 @@ import (
 var printer util.Printer
 
 func configurePrinter(command *cobra.Command) util.Printer {
-	outputFormat := util.GetStringAndErr(command.Flags(), util.OutputFormatFlag)
+	outputFormat := util.GetStringAndErr(command.Flags(), constants.OutputFormatFlag)
 
 	p := availablePrinters()[outputFormat+command.Parent().Name()]
 
@@ -44,22 +43,22 @@ type getPlainPrinter struct{}
 type listTablePrinter struct{}
 type getTablePrinter struct{}
 
-func (p listTablePrinter) Print(data proto.Message) {
+func (p listTablePrinter) Print(data interface{}) {
 	listResponse, _ := (data).(*kafka_clusters.ListKafkaClustersResponse)
 	printTable(listResponse.KafkaClusters)
 }
 
-func (p getTablePrinter) Print(data proto.Message) {
+func (p getTablePrinter) Print(data interface{}) {
 	getResponse, _ := (data).(*kafka_clusters.GetKafkaClusterResponse)
 	printTable([]*entities.KafkaCluster{getResponse.KafkaCluster})
 }
 
-func (p listPlainPrinter) Print(data proto.Message) {
+func (p listPlainPrinter) Print(data interface{}) {
 	listResponse, _ := (data).(*kafka_clusters.ListKafkaClustersResponse)
 	printPlain(listResponse.KafkaClusters)
 }
 
-func (p getPlainPrinter) Print(data proto.Message) {
+func (p getPlainPrinter) Print(data interface{}) {
 	getResponse, _ := (data).(*kafka_clusters.GetKafkaClusterResponse)
 	printPlain([]*entities.KafkaCluster{getResponse.KafkaCluster})
 }

@@ -1,18 +1,16 @@
 package cmd
 
 import (
-	"fmt"
 	"github.com/spf13/cobra"
+	"streammachine.io/strm/pkg/context"
 )
 
 var ContextCommand = &cobra.Command{
 	Use:   "context",
 	Short: "Print the CLI context",
-	Run: func(cmd *cobra.Command, _ []string) {
-		printContext(cmd)
-	},
 }
 
-func printContext(cmd *cobra.Command) {
-	fmt.Println(cmd.Context())
+func init() {
+	ContextCommand.AddCommand(context.Configuration())
+	ContextCommand.AddCommand(context.EntityInfo())
 }

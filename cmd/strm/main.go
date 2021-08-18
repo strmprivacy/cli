@@ -34,7 +34,6 @@ var configPath string
 
 const (
 	apiHostFlag           = "api-host"
-	defaultConfigFilename = "strm"
 
 	// The environment variable prefix of all environment variables bound to our command line flags.
 	// For example, --api-host is bound to STRM_API_HOST
@@ -129,9 +128,9 @@ func init() {
 	persistentFlags.StringVar(&auth.TokenFile, "token-file", "",
 		"Token file that contains an access token (default is $HOME/.config/stream-machine/strm-creds-<api-auth-host>.json)")
 	persistentFlags.String(egress.UrlFlag, "wss://out.strm.services/ws", "Websocket to receive events from")
-	persistentFlags.StringP(util.OutputFormatFlag, "o", "table", fmt.Sprintf("Output format [%v]", constants.OutputFormatFlagAllowedValuesText))
+	persistentFlags.StringP(constants.OutputFormatFlag, constants.OutputFormatFlagShort, constants.OutputFormatTable, fmt.Sprintf("Output format [%v]", constants.OutputFormatFlagAllowedValuesText))
 
-	err := RootCmd.RegisterFlagCompletionFunc(util.OutputFormatFlag, func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	err := RootCmd.RegisterFlagCompletionFunc(constants.OutputFormatFlag, func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		return constants.OutputFormatFlagAllowedValues, cobra.ShellCompDirectiveNoFileComp
 	})
 
@@ -167,7 +166,7 @@ func initializeConfig(cmd *cobra.Command) error {
 	viperConfig := viper.New()
 
 	// Set the base name of the config file, without the file extension.
-	viperConfig.SetConfigName(defaultConfigFilename)
+	viperConfig.SetConfigName(constants.DefaultConfigFilename)
 
 	// Set as many paths as you like where viper should look for the
 	// config file.

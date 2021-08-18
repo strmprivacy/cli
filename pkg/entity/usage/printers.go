@@ -6,7 +6,6 @@ import (
 	"github.com/jedib0t/go-pretty/v6/table"
 	"github.com/spf13/cobra"
 	"github.com/streammachineio/api-definitions-go/api/usage/v1"
-	"google.golang.org/protobuf/proto"
 	"math"
 	"streammachine.io/strm/pkg/common"
 	"streammachine.io/strm/pkg/constants"
@@ -17,7 +16,7 @@ import (
 var printer util.Printer
 
 func configurePrinter(command *cobra.Command) util.Printer {
-	outputFormat := util.GetStringAndErr(command.Flags(), util.OutputFormatFlag)
+	outputFormat := util.GetStringAndErr(command.Flags(), constants.OutputFormatFlag)
 
 	p := availablePrinters()[outputFormat]
 
@@ -30,15 +29,15 @@ func configurePrinter(command *cobra.Command) util.Printer {
 
 func availablePrinters() map[string]util.Printer {
 	return map[string]util.Printer{
-		constants.OutputFormatJsonRaw: util.GenericRawJsonPrinter{},
-		constants.OutputFormatJson:    util.GenericPrettyJsonPrinter{},
+		constants.OutputFormatJsonRaw: util.ProtoMessageJsonRawPrinter{},
+		constants.OutputFormatJson:    util.ProtoMessageJsonPrettyPrinter{},
 		constants.OutputFormatCsv:     getCsvPrinter{},
 	}
 }
 
 type getCsvPrinter struct{}
 
-func (p getCsvPrinter) Print(data proto.Message) {
+func (p getCsvPrinter) Print(data interface{}) {
 	streamUsage, _ := (data).(*usage.GetStreamEventUsageResponse)
 
 	rows := make([]table.Row, 0, len(streamUsage.Windows))

@@ -6,7 +6,6 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/streammachineio/api-definitions-go/api/entities/v1"
 	"github.com/streammachineio/api-definitions-go/api/sinks/v1"
-	"google.golang.org/protobuf/proto"
 	"streammachine.io/strm/pkg/common"
 	"streammachine.io/strm/pkg/constants"
 	"streammachine.io/strm/pkg/util"
@@ -15,7 +14,7 @@ import (
 var printer util.Printer
 
 func configurePrinter(command *cobra.Command) util.Printer {
-	outputFormat := util.GetStringAndErr(command.Flags(), util.OutputFormatFlag)
+	outputFormat := util.GetStringAndErr(command.Flags(), constants.OutputFormatFlag)
 
 	p := availablePrinters()[outputFormat+command.Parent().Name()]
 
@@ -58,37 +57,37 @@ type deletePrinter struct {
 	recursive bool
 }
 
-func (p listTablePrinter) Print(data proto.Message) {
+func (p listTablePrinter) Print(data interface{}) {
 	listResponse, _ := (data).(*sinks.ListSinksResponse)
 	printTable(listResponse.Sinks, p.recursive)
 }
 
-func (p getTablePrinter) Print(data proto.Message) {
+func (p getTablePrinter) Print(data interface{}) {
 	getResponse, _ := (data).(*sinks.GetSinkResponse)
 	printTable([]*entities.SinkTree{getResponse.SinkTree}, p.recursive)
 }
 
-func (p createTablePrinter) Print(data proto.Message) {
+func (p createTablePrinter) Print(data interface{}) {
 	createResponse, _ := (data).(*sinks.CreateSinkResponse)
 	printTable([]*entities.SinkTree{{Sink: createResponse.Sink}}, false)
 }
 
-func (p listPlainPrinter) Print(data proto.Message) {
+func (p listPlainPrinter) Print(data interface{}) {
 	listResponse, _ := (data).(*sinks.ListSinksResponse)
 	printPlain(listResponse.Sinks)
 }
 
-func (p getPlainPrinter) Print(data proto.Message) {
+func (p getPlainPrinter) Print(data interface{}) {
 	getResponse, _ := (data).(*sinks.GetSinkResponse)
 	printPlain([]*entities.SinkTree{getResponse.SinkTree})
 }
 
-func (p createPlainPrinter) Print(data proto.Message) {
+func (p createPlainPrinter) Print(data interface{}) {
 	createResponse, _ := (data).(*sinks.CreateSinkResponse)
 	printPlain([]*entities.SinkTree{{Sink: createResponse.Sink}})
 }
 
-func (p deletePrinter) Print(_ proto.Message) {
+func (p deletePrinter) Print(data interface{}) {
 	if p.recursive {
 		fmt.Println("Sink and linked resources have been deleted")
 	} else {
