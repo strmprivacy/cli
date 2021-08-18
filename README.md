@@ -24,7 +24,7 @@ In order to set up command completion, please follow the instructions below:
   ensure that shell completion is enabled, then run (only needs to be done once):
   `/bin/zsh -c 'strm completion zsh > "${fpath[1]}/_strm"'`
 - for fish users \
-  `strm completion fish > ~/.config/fish/completions/strm.fish`
+  `strm completion fish > ~/.config/fish/completions/strm.fish` (or `$XDG_CONFIG_HOME` instead of `~/.config`)
 
 ### Homebrew
 

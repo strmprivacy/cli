@@ -26,6 +26,7 @@ func GetCmd() *cobra.Command {
 		ValidArgsFunction: refsCompletion,
 	}
 }
+
 func ListCmd() *cobra.Command {
 	return &cobra.Command{
 		Use:   "event-contracts",
@@ -38,6 +39,7 @@ func ListCmd() *cobra.Command {
 		},
 	}
 }
+
 func CreateCmd() *cobra.Command {
 	contract := &cobra.Command{
 		Use:   "event-contract (reference)",

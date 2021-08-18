@@ -35,7 +35,7 @@ Zsh:
 
 fish:
 
-  $ strm completion fish > ~/.config/fish/completions/strm.fish
+  $ strm completion fish > ~/.config/fish/completions/strm.fish # or $XDG_CONFIG_HOME instead of ~/.config
 
 PowerShell:
 

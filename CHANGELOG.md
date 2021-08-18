@@ -1,3 +1,29 @@
+# [1.6.0](https://github.com/streammachineio/cli/compare/v1.5.0...v1.6.0) (2021-08-18)
+
+
+### Features
+
+* **batch-exporters:** implement plain, table, json, json-raw printers for batch-exporters ([1a8ebc0](https://github.com/streammachineio/cli/commit/1a8ebc030da793c8b8e8c4a80b03d3159e1b836a))
+* **event-contract:** create event contract now partially asks for cli flags and a definition ([dfa0d74](https://github.com/streammachineio/cli/commit/dfa0d74387936c730504eecd96c9a3c32b627806)), closes [#33](https://github.com/streammachineio/cli/issues/33)
+* **event-contracts:** implement plain, table, json, json-raw printers for event-contracts ([8f5931f](https://github.com/streammachineio/cli/commit/8f5931f0cd0fe42f9c53355af857c56ca6f90295))
+* **kafka-clusters:** implement plain, table, json, json-raw printers for kafka-clusters ([6dbe06e](https://github.com/streammachineio/cli/commit/6dbe06ed6c08e9d32749e5140315b7a1bcc44404))
+* **kafka-exporters:** implement plain, table, json, json-raw printers for kafka-exporters ([04ee444](https://github.com/streammachineio/cli/commit/04ee44467c338527cbfa135c751e2d74f435ca3c))
+* **kafka-users:** implement plain, table, json, json-raw printers for kafka-users ([fa6473e](https://github.com/streammachineio/cli/commit/fa6473efe68abadca4c98ea0b0b2a453ccf1c435))
+* **key-streams:** implement plain, table, json, json-raw printers for key-streams ([e8efd41](https://github.com/streammachineio/cli/commit/e8efd4162b8e785b00db6bf6c3a62b061d2e8a6e))
+* **printers:** added interface for printers; implemented list streams printer ([39b183a](https://github.com/streammachineio/cli/commit/39b183ae5b55959868b35d36026d32deddba7a9e)), closes [#14](https://github.com/streammachineio/cli/issues/14)
+* **schemas:** implement plain, table, json, json-raw printers for schemas ([f205174](https://github.com/streammachineio/cli/commit/f20517479bcf09178502af13ba4372b69b563871))
+* **sinks:** implement plain, table, json, json-raw printers for sinks ([6dc2c77](https://github.com/streammachineio/cli/commit/6dc2c772d00b27414da15856c8cff8115d824e48))
+* **streams:** implement plain, table, json, json-raw printers for streams ([7d10c42](https://github.com/streammachineio/cli/commit/7d10c42cad8d52a6a4d3f3ca64420a46798b65a0))
+* **usage:** added missing column in usage csv ([4af404d](https://github.com/streammachineio/cli/commit/4af404dd1ed88fc4b68e01781c7f14f7b74e9c71))
+* **usage:** implement csv, json, json-raw printers for usage ([6e96b2e](https://github.com/streammachineio/cli/commit/6e96b2e00f50dcd7d3f5fc8a395eac2e8df46230))
+
+# [1.5.0](https://github.com/streammachineio/cli/compare/v1.4.0...v1.5.0) (2021-08-18)
+
+
+### Features
+
+* **event-contract:** create event contract now partially asks for cli flags and a definition ([#40](https://github.com/streammachineio/cli/issues/40)) ([ee06c74](https://github.com/streammachineio/cli/commit/ee06c749be3b272e1796075c2453e1bca1723287)), closes [#33](https://github.com/streammachineio/cli/issues/33)
+
 # [1.4.0](https://github.com/streammachineio/cli/compare/v1.3.0...v1.4.0) (2021-08-12)
 
 

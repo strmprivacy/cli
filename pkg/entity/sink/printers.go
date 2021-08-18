@@ -17,47 +17,29 @@ var printer util.Printer
 func configurePrinter(command *cobra.Command) util.Printer {
 	outputFormat := util.GetStringAndErr(command.Flags(), util.OutputFormatFlag)
 
-	var recursive bool
+	p := availablePrinters()[outputFormat+command.Parent().Name()]
 
-	if command.Parent().Name() != constants.CreateCommandName {
-		recursive = util.GetBoolAndErr(command.Flags(), constants.RecursiveFlagName)
-	}
-
-	switch outputFormat {
-	case constants.OutputFormatJson:
-		return util.GenericPrettyJsonPrinter{}
-	case constants.OutputFormatJsonRaw:
-		return util.GenericRawJsonPrinter{}
-	case constants.OutputFormatTable:
-		switch command.Parent().Name() {
-		case constants.ListCommandName:
-			return listTablePrinter{recursive}
-		case constants.GetCommandName:
-			return getTablePrinter{recursive}
-		case constants.DeleteCommandName:
-			return deletePrinter{recursive}
-		case constants.CreateCommandName:
-			return createTablePrinter{}
-		}
-
-		return util.GenericPrettyJsonPrinter{}
-	case constants.OutputFormatPlain:
-		switch command.Parent().Name() {
-		case constants.ListCommandName:
-			return listPlainPrinter{}
-		case constants.GetCommandName:
-			return getPlainPrinter{}
-		case constants.DeleteCommandName:
-			return deletePrinter{recursive}
-		case constants.CreateCommandName:
-			return createPlainPrinter{}
-		}
-
-		return util.GenericPrettyJsonPrinter{}
-	default:
+	if p == nil {
 		common.CliExit(fmt.Sprintf("Output format '%v' is not supported. Allowed values: %v", outputFormat, constants.OutputFormatFlagAllowedValuesText))
-		return nil
 	}
+
+	return p
+}
+
+func availablePrinters() map[string]util.Printer {
+	return util.MergePrinterMaps(
+		util.DefaultPrinters,
+		map[string]util.Printer{
+			constants.OutputFormatTable + constants.ListCommandName:   listTablePrinter{},
+			constants.OutputFormatTable + constants.GetCommandName:    getTablePrinter{},
+			constants.OutputFormatTable + constants.DeleteCommandName: deletePrinter{},
+			constants.OutputFormatTable + constants.CreateCommandName: createTablePrinter{},
+			constants.OutputFormatPlain + constants.ListCommandName:   listPlainPrinter{},
+			constants.OutputFormatPlain + constants.GetCommandName:    getPlainPrinter{},
+			constants.OutputFormatPlain + constants.DeleteCommandName: deletePrinter{},
+			constants.OutputFormatPlain + constants.CreateCommandName: createPlainPrinter{},
+		},
+	)
 }
 
 type listPlainPrinter struct{}

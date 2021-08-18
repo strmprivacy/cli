@@ -14,7 +14,6 @@ import (
 	"strings"
 )
 
-// strings used in the cli
 const (
 	kafkaClusterFlag = "kafka-cluster"
 	definitionFlag   = "definition"

@@ -58,4 +58,4 @@ brews:
            /bin/zsh -c '{{ .ProjectName }} completion zsh > "${fpath[1]}/_{{ .ProjectName }}"'
 
        for fish users
-         {{ .ProjectName }} completion fish > ~/.config/fish/completions/{{ .ProjectName }}.fish
+         {{ .ProjectName }} completion fish > ~/.config/fish/completions/{{ .ProjectName }}.fish # or $XDG_CONFIG_HOME instead of ~/.config

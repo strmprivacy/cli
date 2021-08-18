@@ -2,6 +2,7 @@ package usage
 
 import (
 	"fmt"
+	"github.com/bykof/gostradamus"
 	"github.com/jedib0t/go-pretty/v6/table"
 	"github.com/spf13/cobra"
 	"github.com/streammachineio/api-definitions-go/api/usage/v1"
@@ -10,23 +11,28 @@ import (
 	"streammachine.io/strm/pkg/common"
 	"streammachine.io/strm/pkg/constants"
 	"streammachine.io/strm/pkg/util"
+	"time"
 )
 
 var printer util.Printer
 
-func configurePrinter(cmd *cobra.Command) util.Printer {
-	outputFormat := util.GetStringAndErr(cmd.Flags(), util.OutputFormatFlag)
+func configurePrinter(command *cobra.Command) util.Printer {
+	outputFormat := util.GetStringAndErr(command.Flags(), util.OutputFormatFlag)
 
-	switch outputFormat {
-	case constants.OutputFormatJsonRaw:
-		return util.GenericRawJsonPrinter{}
-	case constants.OutputFormatJson:
-		return util.GenericPrettyJsonPrinter{}
-	case constants.OutputFormatCsv:
-		return getCsvPrinter{}
-	default:
+	p := availablePrinters()[outputFormat]
+
+	if p == nil {
 		common.CliExit(fmt.Sprintf("Output format '%v' is not supported for usage. Allowed values: %v", outputFormat, constants.UsageOutputFormatFlagAllowedValuesText))
-		return nil
+	}
+
+	return p
+}
+
+func availablePrinters() map[string]util.Printer {
+	return map[string]util.Printer{
+		constants.OutputFormatJsonRaw: util.GenericRawJsonPrinter{},
+		constants.OutputFormatJson:    util.GenericPrettyJsonPrinter{},
+		constants.OutputFormatCsv:     getCsvPrinter{},
 	}
 }
 
@@ -49,6 +55,7 @@ func (p getCsvPrinter) Print(data proto.Message) {
 		rate := change / windowDuration.Seconds()
 
 		rows = append(rows, table.Row{
+			isoFormat(window.StartTime.AsTime()),
 			fmt.Sprintf("%d", windowCount),
 			fmt.Sprintf("%.0f", windowDuration.Seconds()),
 			fmt.Sprintf("%v", change),
@@ -66,4 +73,9 @@ func (p getCsvPrinter) Print(data proto.Message) {
 		},
 		rows,
 	)
+}
+
+func isoFormat(t time.Time) string {
+	n := gostradamus.DateTimeFromTime(t)
+	return n.InTimezone(tz).IsoFormatTZ()
 }

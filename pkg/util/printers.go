@@ -10,12 +10,24 @@ import (
 	"google.golang.org/protobuf/proto"
 	"os"
 	"streammachine.io/strm/pkg/common"
+	"streammachine.io/strm/pkg/constants"
 )
 
 const OutputFormatFlag = "output"
 
 type Printer interface {
 	Print(proto proto.Message)
+}
+
+var DefaultPrinters = map[string]Printer{
+	constants.OutputFormatJson + constants.ListCommandName:      GenericPrettyJsonPrinter{},
+	constants.OutputFormatJson + constants.GetCommandName:       GenericPrettyJsonPrinter{},
+	constants.OutputFormatJson + constants.DeleteCommandName:    GenericPrettyJsonPrinter{},
+	constants.OutputFormatJson + constants.CreateCommandName:    GenericPrettyJsonPrinter{},
+	constants.OutputFormatJsonRaw + constants.ListCommandName:   GenericRawJsonPrinter{},
+	constants.OutputFormatJsonRaw + constants.GetCommandName:    GenericRawJsonPrinter{},
+	constants.OutputFormatJsonRaw + constants.DeleteCommandName: GenericRawJsonPrinter{},
+	constants.OutputFormatJsonRaw + constants.CreateCommandName: GenericRawJsonPrinter{},
 }
 
 type GenericRawJsonPrinter struct{}
@@ -53,11 +65,34 @@ func protoMessageToRawJson(proto proto.Message) bytes.Buffer {
 	return buffer
 }
 
+func MergePrinterMaps(maps ...map[string]Printer) (result map[string]Printer) {
+	result = make(map[string]Printer)
+
+	for _, m := range maps {
+		for k, v := range m {
+			result[k] = v
+		}
+	}
+	return result
+}
+
 func RenderPlain(text string) {
 	if len(text) == 0 {
 		fmt.Println("No entities of this resource type exist.")
 	} else {
 		fmt.Println(text)
+	}
+}
+
+func RenderCsv(headers table.Row, rows []table.Row) {
+	if len(rows) == 0 {
+		fmt.Println("No usage in the provided time period.")
+	} else {
+		t := table.NewWriter()
+		t.SetOutputMirror(os.Stdout)
+		t.AppendHeader(headers)
+		t.AppendRows(rows)
+		t.RenderCSV()
 	}
 }
 
@@ -72,18 +107,6 @@ func RenderTable(headers table.Row, rows []table.Row) {
 		t.AppendRows(rows)
 		t.SetStyle(noBordersStyle)
 		t.Render()
-	}
-}
-
-func RenderCsv(headers table.Row, rows []table.Row) {
-	if len(rows) == 0 {
-		fmt.Println("No usage in the provided time period.")
-	} else {
-		t := table.NewWriter()
-		t.SetOutputMirror(os.Stdout)
-		t.AppendHeader(headers)
-		t.AppendRows(rows)
-		t.RenderCSV()
 	}
 }
 
