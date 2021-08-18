@@ -1,3 +1,10 @@
+# [1.8.0](https://github.com/streammachineio/cli/compare/v1.7.0...v1.8.0) (2021-08-18)
+
+
+### Features
+
+* **config:** create default config if not exists; save all entities to a a subdir under configpath ([e8380d5](https://github.com/streammachineio/cli/commit/e8380d577d0e4f503c8181499800d4079a4a95ac))
+
 # [1.7.0](https://github.com/streammachineio/cli/compare/v1.6.0...v1.7.0) (2021-08-18)
 
 
