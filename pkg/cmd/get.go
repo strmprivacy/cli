@@ -16,7 +16,6 @@ import (
 	"streammachine.io/strm/pkg/entity/usage"
 )
 
-
 var GetCmd = &cobra.Command{
 	Use:   constants.GetCommandName,
 	Short: "Get an entity",

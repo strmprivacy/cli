@@ -33,7 +33,7 @@ import (
 var configPath string
 
 const (
-	apiHostFlag           = "api-host"
+	apiHostFlag = "api-host"
 
 	// The environment variable prefix of all environment variables bound to our command line flags.
 	// For example, --api-host is bound to STRM_API_HOST
@@ -48,6 +48,7 @@ var RootCmd = &cobra.Command{
 	Use:   common.RootCommandName,
 	Short: fmt.Sprintf("Stream Machine CLI %s", cmd.Version),
 	PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
+		constants.ConfigPath = configPath
 		util.CreateConfigDirAndFileIfNotExists()
 		err := initializeConfig(cmd)
 
@@ -60,7 +61,6 @@ var RootCmd = &cobra.Command{
 			}
 		})
 
-		constants.ConfigPath = configPath
 		auth.SetupClient(util.GetStringAndErr(cmd.Flags(), auth.ApiAuthUrlFlag))
 
 		var billingId = ""
