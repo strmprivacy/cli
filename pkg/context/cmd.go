@@ -29,8 +29,7 @@ func Configuration() *cobra.Command {
 		constants.OutputFormatFlag,
 		constants.OutputFormatFlagShort,
 		constants.OutputFormatPlain,
-		fmt.Sprintf("Configuration output format [%v]", constants.ConfigOutputFormatFlagAllowedValues,
-		),
+		fmt.Sprintf("Configuration output format [%v]", constants.ConfigOutputFormatFlagAllowedValues),
 	)
 	err := configuration.RegisterFlagCompletionFunc(constants.OutputFormatFlag, func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		return constants.ConfigOutputFormatFlagAllowedValues, cobra.ShellCompDirectiveNoFileComp
@@ -59,8 +58,7 @@ func EntityInfo() *cobra.Command {
 		constants.OutputFormatFlag,
 		constants.OutputFormatFlagShort,
 		constants.OutputFormatFilepath,
-		fmt.Sprintf("Entity information output format [%v]", constants.ContextOutputFormatFlagAllowedValues,
-		),
+		fmt.Sprintf("Entity information output format [%v]", constants.ContextOutputFormatFlagAllowedValues),
 	)
 	err := entityInfo.RegisterFlagCompletionFunc(constants.OutputFormatFlag, func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		return constants.ContextOutputFormatFlagAllowedValues, cobra.ShellCompDirectiveNoFileComp
