@@ -92,5 +92,5 @@ Or [email Developer Support](mailto:developer-support@streammachine.io), with th
 
 ## More resources
 
-See our [documentation](https://docs.streammachine.io) or [reach out to us](https://docs.streammachine.io/docs/0.3.4/contact/index.html).
+See our [documentation](https://docs.streammachine.io) or [reach out to us](https://docs.streammachine.io/docs/latest/contact/index.html).
 
