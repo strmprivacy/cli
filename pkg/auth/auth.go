@@ -15,7 +15,6 @@ import (
 	"github.com/int128/oauth2cli"
 	"github.com/int128/oauth2cli/oauth2params"
 	"github.com/pkg/browser"
-	"github.com/spf13/cobra"
 	"golang.org/x/oauth2"
 	"golang.org/x/sync/errgroup"
 	"golang.org/x/term"
@@ -32,7 +31,7 @@ const (
 	PasswordFlag      = "password"
 )
 
-func login(s *string, cmd *cobra.Command) {
+func login() {
 	oautLogin()
 	/*
 	flags := cmd.Flags()

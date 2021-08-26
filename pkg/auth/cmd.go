@@ -7,15 +7,13 @@ import (
 
 func LoginCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "login [email]",
+		Use:   "login",
 		Short: "Login",
 		Run: func(cmd *cobra.Command, args []string) {
-			login(&args[0], cmd)
+			login()
 		},
-		Args: cobra.ExactArgs(1), // the stream name
+		Args: cobra.ExactArgs(0),
 	}
-	flags := cmd.Flags()
-	flags.String(PasswordFlag, "", "password")
 	return cmd
 }
 
