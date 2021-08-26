@@ -8,11 +8,13 @@ require (
 	github.com/fsnotify/fsnotify v1.4.9 // indirect
 	github.com/golang/protobuf v1.5.2
 	github.com/gorilla/websocket v1.4.2
+	github.com/int128/oauth2cli v1.13.0
+	github.com/jedib0t/go-pretty/v6 v6.2.4
 	github.com/joho/godotenv v1.3.0
 	github.com/magiconair/properties v1.8.5
 	github.com/mitchellh/mapstructure v1.4.1 // indirect
-	github.com/jedib0t/go-pretty/v6 v6.2.4 // indirect
 	github.com/pelletier/go-toml v1.9.1 // indirect
+	github.com/pkg/browser v0.0.0-20180916011732-0a3d74bf9ce4
 	github.com/sirupsen/logrus v1.8.1
 	github.com/spf13/afero v1.6.0 // indirect
 	github.com/spf13/cast v1.3.1 // indirect
@@ -23,6 +25,8 @@ require (
 	github.com/streammachineio/api-definitions-go v1.16.0
 	github.com/stretchr/testify v1.7.0 // indirect
 	golang.org/x/net v0.0.0-20210610132358-84b48f89b13b // indirect
+	golang.org/x/oauth2 v0.0.0-20200107190931-bf48bf16ab8d
+	golang.org/x/sync v0.0.0-20200317015054-43a5402ce75a
 	golang.org/x/sys v0.0.0-20210630005230-0f9fa26af87c // indirect
 	golang.org/x/term v0.0.0-20201126162022-7de9c90e9dd1
 	google.golang.org/grpc v1.39.0
