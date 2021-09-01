@@ -13,7 +13,6 @@ import (
 	"context"
 	"fmt"
 	"github.com/int128/oauth2cli"
-	"github.com/int128/oauth2cli/oauth2params"
 	"github.com/pkg/browser"
 	"golang.org/x/oauth2"
 	"golang.org/x/sync/errgroup"
@@ -34,19 +33,19 @@ const (
 func login() {
 	oautLogin()
 	/*
-	flags := cmd.Flags()
-	password, _ := flags.GetString(PasswordFlag)
-	if password == "" {
-		password = askPassword()
-		fmt.Println()
-	}
+		flags := cmd.Flags()
+		password, _ := flags.GetString(PasswordFlag)
+		if password == "" {
+			password = askPassword()
+			fmt.Println()
+		}
 
-	Client.AuthenticateLogin(s, &password)
-	_, billingId := Client.GetToken(false)
-	fmt.Println("Billing id:", billingId)
-	filename := Client.StoreLogin()
-	fmt.Println("Saved login to:", filename)
-	 */
+		Client.AuthenticateLogin(s, &password)
+		_, billingId := Client.GetToken(false)
+		fmt.Println("Billing id:", billingId)
+		filename := Client.StoreLogin()
+		fmt.Println("Saved login to:", filename)
+	*/
 }
 
 func askPassword() string {
@@ -70,29 +69,27 @@ func Refresh() {
 
 func oautLogin() {
 
-	pkce, err := oauth2params.NewPKCE()
-	if err != nil {
-		log.Fatalf("error: %s", err)
-	}
 	ready := make(chan string, 1)
 	defer close(ready)
 	cfg := oauth2cli.Config{
 		OAuth2Config: oauth2.Config{
-			ClientID:     "cGjXcQXJsXGciMXWzoXvjn8zlhn4omo2",
-			ClientSecret: "fNLTD2WEXLki-yMI9qIEaqdqKVcss7MV7YrSlpHJyyZH-MIFZ943fL8scFBXfFTw",
+			ClientID:     "k04TCdBzSedw3JXDpCg0LejEU7kf0nch",
+			ClientSecret: "8Hw5SbyGF-jrhyJSHOfGsU5KWGBpXhuQ-YWczNI2bBy6nICbkaM3qxIyflEGHIXh",
 			Endpoint: oauth2.Endpoint{
 				AuthURL:  "https://dev-p6wb4vof.eu.auth0.com/authorize",
 				TokenURL: "https://dev-p6wb4vof.eu.auth0.com/oauth/token",
 			},
-			Scopes: strings.Split("email", ","),
+			Scopes: []string{"offline_access", "profile", "email", "openid"},
 		},
-		AuthCodeOptions:      pkce.AuthCodeOptions(),
-		TokenRequestOptions:  pkce.TokenRequestOptions(),
-		LocalServerReadyChan: ready,
-		LocalServerCertFile:  "",
-		LocalServerKeyFile:   "",
-		LocalServerBindAddress: strings.Split("127.0.0.1:10000",","),
-		Logf:                 log.Printf,
+		AuthCodeOptions: []oauth2.AuthCodeOption{
+			oauth2.SetAuthURLParam("audience", "https://apis.streammachine.io"),
+		},
+		//TokenRequestOptions:    pkce.TokenRequestOptions(),
+		LocalServerReadyChan:   ready,
+		LocalServerCertFile:    "",
+		LocalServerKeyFile:     "",
+		LocalServerBindAddress: strings.Split("127.0.0.1:10000", ","),
+		Logf:                   log.Printf,
 	}
 
 	ctx := context.Background()
@@ -115,7 +112,9 @@ func oautLogin() {
 			return fmt.Errorf("could not get a token: %w", err)
 		}
 		log.Printf("You got a valid token until %s", token.Expiry)
-		log.Printf("token\n%s\n", token.AccessToken)
+		log.Printf("Access Token:\n\n%v\n", token.AccessToken)
+		log.Printf("Refresh Token:\n\n%v\n", token.RefreshToken)
+		log.Printf("Raw:\n\n%v\n", token)
 		return nil
 	})
 	if err := eg.Wait(); err != nil {
