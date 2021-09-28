@@ -9,6 +9,7 @@ import (
 	"github.com/streammachineio/api-definitions-go/api/event_contracts/v1"
 	"google.golang.org/grpc"
 	"io/ioutil"
+	"streammachine.io/strm/pkg/auth"
 	"streammachine.io/strm/pkg/common"
 	"streammachine.io/strm/pkg/entity/schema"
 	"streammachine.io/strm/pkg/util"
@@ -51,7 +52,7 @@ func SetupClient(clientConnection *grpc.ClientConn, ctx context.Context) {
 }
 
 func list() {
-	req := &event_contracts.ListEventContractsRequest{BillingId: common.BillingId}
+	req := &event_contracts.ListEventContractsRequest{BillingId: auth.Auth.BillingId()}
 	response, err := client.ListEventContracts(apiContext, req)
 	common.CliExit(err)
 	printer.Print(response)
@@ -59,7 +60,7 @@ func list() {
 
 func get(name *string) {
 	req := &event_contracts.GetEventContractRequest{
-		BillingId: common.BillingId,
+		BillingId: auth.Auth.BillingId(),
 		Ref:       ref(name)}
 	response, err := client.GetEventContract(apiContext, req)
 	common.CliExit(err)
@@ -76,7 +77,7 @@ func create(cmd *cobra.Command, contractReference *string) {
 	definition := readContractDefinition(&definitionFilename)
 
 	req := &event_contracts.CreateEventContractRequest{
-		BillingId: common.BillingId,
+		BillingId: auth.Auth.BillingId(),
 		EventContract: &entities.EventContract{
 			Ref:         ref(contractReference),
 			SchemaRef:   schema.Ref(&schemaRef),
@@ -104,7 +105,7 @@ func readContractDefinition(filename *string) EventContractDefinition {
 }
 
 func refsCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
-	if common.BillingIdIsMissing() {
+	if auth.Auth.BillingIdAbsent() {
 		return common.MissingBillingIdCompletionError(cmd.CommandPath())
 	}
 	if len(args) != 0 {
@@ -112,7 +113,7 @@ func refsCompletion(cmd *cobra.Command, args []string, complete string) ([]strin
 		return nil, cobra.ShellCompDirectiveNoFileComp
 	}
 
-	req := &event_contracts.ListEventContractsRequest{BillingId: common.BillingId}
+	req := &event_contracts.ListEventContractsRequest{BillingId: auth.Auth.BillingId()}
 	response, err := client.ListEventContracts(apiContext, req)
 
 	if err != nil {

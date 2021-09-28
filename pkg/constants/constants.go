@@ -4,6 +4,12 @@ import "strings"
 
 var ConfigPath string
 
+// The environment variable prefix of all environment variables bound to our command line flags.
+// For example, --api-host is bound to STRM_API_HOST
+const EnvPrefix = "STRM"
+
+const AuthSuccessHTML = `<html><head><meta http-equiv="refresh" content="0; url=https://streammachine.io"/></head><body></body></html>`
+
 const DefaultConfigFilename = "strm"
 const DefaultConfigFileSuffix = ".yaml"
 

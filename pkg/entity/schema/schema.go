@@ -9,6 +9,7 @@ import (
 	"github.com/streammachineio/api-definitions-go/api/schemas/v1"
 	"google.golang.org/grpc"
 	"io/ioutil"
+	"streammachine.io/strm/pkg/auth"
 	"streammachine.io/strm/pkg/common"
 	"streammachine.io/strm/pkg/util"
 	"strings"
@@ -47,7 +48,7 @@ func SetupClient(clientConnection *grpc.ClientConn, ctx context.Context) {
 }
 
 func list() {
-	req := &schemas.ListSchemasRequest{BillingId: common.BillingId}
+	req := &schemas.ListSchemasRequest{BillingId: auth.Auth.BillingId()}
 	response, err := client.ListSchemas(apiContext, req)
 	common.CliExit(err)
 
@@ -82,7 +83,7 @@ func getClusterRef(flags *pflag.FlagSet) (*entities.KafkaClusterRef, error) {
 
 func GetSchema(name *string, clusterRef *entities.KafkaClusterRef) *schemas.GetSchemaResponse {
 	req := &schemas.GetSchemaRequest{
-		BillingId:  common.BillingId,
+		BillingId:  auth.Auth.BillingId(),
 		Ref:        Ref(name),
 		ClusterRef: clusterRef,
 	}
@@ -101,7 +102,7 @@ func create(cmd *cobra.Command, args *string) {
 
 	ref := Ref(args)
 	req := &schemas.CreateSchemaRequest{
-		BillingId: common.BillingId,
+		BillingId: auth.Auth.BillingId(),
 		Schema: &entities.Schema{
 			Ref:        ref,
 			Definition: string(definition),
@@ -115,11 +116,11 @@ func create(cmd *cobra.Command, args *string) {
 
 func NamesCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
 
-	if common.BillingIdIsMissing() {
+	if auth.Auth.BillingIdAbsent() {
 		return common.MissingBillingIdCompletionError(cmd.CommandPath())
 	}
 
-	req := &schemas.ListSchemasRequest{BillingId: common.BillingId}
+	req := &schemas.ListSchemasRequest{BillingId: auth.Auth.BillingId()}
 	response, err := client.ListSchemas(apiContext, req)
 
 	if err != nil {

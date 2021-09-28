@@ -6,6 +6,7 @@ import (
 	"github.com/streammachineio/api-definitions-go/api/entities/v1"
 	"github.com/streammachineio/api-definitions-go/api/key_streams/v1"
 	"google.golang.org/grpc"
+	"streammachine.io/strm/pkg/auth"
 	"streammachine.io/strm/pkg/common"
 )
 
@@ -18,7 +19,7 @@ func SetupClient(clientConnection *grpc.ClientConn, ctx context.Context) {
 }
 
 func list() {
-	req := &key_streams.ListKeyStreamsRequest{BillingId: common.BillingId}
+	req := &key_streams.ListKeyStreamsRequest{BillingId: auth.Auth.BillingId()}
 	response, err := client.ListKeyStreams(apiContext, req)
 	common.CliExit(err)
 	printer.Print(response)
@@ -32,11 +33,11 @@ func get(name *string) {
 }
 
 func ref(n *string) *entities.KeyStreamRef {
-	return &entities.KeyStreamRef{BillingId: common.BillingId, Name: *n}
+	return &entities.KeyStreamRef{BillingId: auth.Auth.BillingId(), Name: *n}
 }
 
 func NamesCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
-	if common.BillingIdIsMissing() {
+	if auth.Auth.BillingIdAbsent() {
 		return common.MissingBillingIdCompletionError(cmd.CommandPath())
 	}
 	if len(args) != 0 {
@@ -44,7 +45,7 @@ func NamesCompletion(cmd *cobra.Command, args []string, complete string) ([]stri
 		return nil, cobra.ShellCompDirectiveNoFileComp
 	}
 
-	req := &key_streams.ListKeyStreamsRequest{BillingId: common.BillingId}
+	req := &key_streams.ListKeyStreamsRequest{BillingId: auth.Auth.BillingId()}
 	response, err := client.ListKeyStreams(apiContext, req)
 
 	if err != nil {

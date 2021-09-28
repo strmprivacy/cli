@@ -2,14 +2,14 @@ package entity
 
 import (
 	"context"
-	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/metadata"
+	"streammachine.io/strm/pkg/common"
 	"strings"
 )
 
-func SetupGrpc(host string, token string) (*grpc.ClientConn, context.Context) {
+func SetupGrpc(host string, token *string) (*grpc.ClientConn, context.Context) {
 
 	var err error
 	var creds grpc.DialOption
@@ -21,13 +21,11 @@ func SetupGrpc(host string, token string) (*grpc.ClientConn, context.Context) {
 	}
 
 	clientConnection, err := grpc.Dial(host, creds)
-	if err != nil {
-		log.Fatalf("Could not connect: %v", err)
-	}
+	common.CliExit(err)
 
 	var md metadata.MD
-	if len(token) != 0 {
-		md = metadata.New(map[string]string{"authorization": "Bearer " + token})
+	if token != nil {
+		md = metadata.New(map[string]string{"authorization": "Bearer " + *token})
 	} else {
 		md = metadata.New(map[string]string{})
 	}

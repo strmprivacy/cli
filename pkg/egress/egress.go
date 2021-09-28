@@ -19,7 +19,7 @@ const (
 
 func Run(cmd *cobra.Command, streamName *string) {
 	s := &entities.Stream{
-		Ref: &entities.StreamRef{BillingId: common.BillingId, Name: *streamName},
+		Ref: &entities.StreamRef{BillingId: auth.Auth.BillingId(), Name: *streamName},
 	}
 	flags := cmd.Flags()
 	u := util.GetStringAndErr(flags, UrlFlag)
@@ -37,11 +37,11 @@ func Run(cmd *cobra.Command, streamName *string) {
 		})
 	}
 	sts := util.GetStringAndErr(flags, auth.EventAuthHostFlag)
-	authClient := &auth.Auth{Uri: sts}
+	authClient := &auth.Authenticator{Uri: sts}
 	authClient.AuthenticateEvent(s.Ref.BillingId, s.Credentials[0].ClientId, s.Credentials[0].ClientSecret)
 
-	token, _ := authClient.GetToken(false)
-	header := http.Header{"authorization": []string{"Bearer " + token}}
+	token := authClient.GetToken()
+	header := http.Header{"authorization": []string{"Bearer " + *token}}
 	c, _, err := websocket.DefaultDialer.Dial(u, header)
 	common.CliExit(err)
 

@@ -6,6 +6,7 @@ import (
 	"github.com/streammachineio/api-definitions-go/api/entities/v1"
 	"github.com/streammachineio/api-definitions-go/api/kafka_users/v1"
 	"google.golang.org/grpc"
+	"streammachine.io/strm/pkg/auth"
 	"streammachine.io/strm/pkg/common"
 	"streammachine.io/strm/pkg/entity/kafka_exporter"
 	"streammachine.io/strm/pkg/util"
@@ -15,7 +16,7 @@ var client kafka_users.KafkaUsersServiceClient
 var apiContext context.Context
 
 func ref(n *string) *entities.KafkaUserRef {
-	return &entities.KafkaUserRef{BillingId: common.BillingId, Name: *n}
+	return &entities.KafkaUserRef{BillingId: auth.Auth.BillingId(), Name: *n}
 }
 
 func SetupClient(clientConnection *grpc.ClientConn, ctx context.Context) {
@@ -26,7 +27,7 @@ func SetupClient(clientConnection *grpc.ClientConn, ctx context.Context) {
 func list(exporterName *string) {
 	req := &kafka_users.ListKafkaUsersRequest{
 		Ref: &entities.KafkaExporterRef{
-			BillingId: common.BillingId,
+			BillingId: auth.Auth.BillingId(),
 			Name:      *exporterName,
 		},
 	}
@@ -58,7 +59,7 @@ func create(kafkaExporterName *string, cmd *cobra.Command) {
 	exporter := kafka_exporter.Get(kafkaExporterName).KafkaExporter
 	kafkaUser := &entities.KafkaUser{
 		Ref: &entities.KafkaUserRef{
-			BillingId: common.BillingId,
+			BillingId: auth.Auth.BillingId(),
 		},
 		KafkaExporterName: exporter.Ref.Name,
 	}
@@ -76,7 +77,7 @@ func create(kafkaExporterName *string, cmd *cobra.Command) {
 }
 
 func namesCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
-	if common.BillingIdIsMissing() {
+	if auth.Auth.BillingIdAbsent() {
 		return common.MissingBillingIdCompletionError(cmd.CommandPath())
 	}
 	if len(args) != 0 {
@@ -85,7 +86,7 @@ func namesCompletion(cmd *cobra.Command, args []string, complete string) ([]stri
 	}
 
 	req := &kafka_users.ListKafkaUsersRequest{
-		Ref: &entities.KafkaExporterRef{BillingId: common.BillingId},
+		Ref: &entities.KafkaExporterRef{BillingId: auth.Auth.BillingId()},
 	}
 	response, err := client.ListKafkaUsers(apiContext, req)
 

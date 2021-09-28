@@ -9,6 +9,7 @@ import (
 	"github.com/streammachineio/api-definitions-go/api/sinks/v1"
 	"google.golang.org/grpc"
 	"io/ioutil"
+	"streammachine.io/strm/pkg/auth"
 	"streammachine.io/strm/pkg/common"
 	"streammachine.io/strm/pkg/util"
 )
@@ -17,7 +18,7 @@ var Client sinks.SinksServiceClient
 var apiContext context.Context
 
 func ref(n *string) *entities.SinkRef {
-	return &entities.SinkRef{BillingId: common.BillingId, Name: *n}
+	return &entities.SinkRef{BillingId: auth.Auth.BillingId(), Name: *n}
 }
 
 func SetupClient(clientConnection *grpc.ClientConn, ctx context.Context) {
@@ -26,7 +27,7 @@ func SetupClient(clientConnection *grpc.ClientConn, ctx context.Context) {
 }
 
 func list(recursive bool) {
-	req := &sinks.ListSinksRequest{Recursive: recursive, BillingId: common.BillingId}
+	req := &sinks.ListSinksRequest{Recursive: recursive, BillingId: auth.Auth.BillingId()}
 	response, err := Client.ListSinks(apiContext, req)
 	common.CliExit(err)
 	printer.Print(response)
@@ -82,7 +83,7 @@ func parseSyncType(flags *pflag.FlagSet) entities.SinkType {
 }
 
 func NamesCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
-	if common.BillingIdIsMissing() {
+	if auth.Auth.BillingIdAbsent() {
 		return common.MissingBillingIdCompletionError(cmd.CommandPath())
 	}
 	if len(args) != 0 {
@@ -90,7 +91,7 @@ func NamesCompletion(cmd *cobra.Command, args []string, complete string) ([]stri
 		return nil, cobra.ShellCompDirectiveNoFileComp
 	}
 
-	req := &sinks.ListSinksRequest{BillingId: common.BillingId}
+	req := &sinks.ListSinksRequest{BillingId: auth.Auth.BillingId()}
 	response, err := Client.ListSinks(apiContext, req)
 
 	if err != nil {

@@ -19,7 +19,7 @@ import (
 
 // start a random simulator
 func run(cmd *cobra.Command, streamName *string) {
-	s := &entities.Stream{Ref: &entities.StreamRef{BillingId: common.BillingId, Name: *streamName}}
+	s := &entities.Stream{Ref: &entities.StreamRef{BillingId: auth.Auth.BillingId(), Name: *streamName}}
 	flags := cmd.Flags()
 	// loads Stream definition from save version
 	if err := util.TryLoad(s, streamName); err != nil {
@@ -55,7 +55,7 @@ func run(cmd *cobra.Command, streamName *string) {
 	if len(consentLevels) == 0 {
 		log.Fatalf("%v is not a valid set of consent levels", consentLevels)
 	}
-	authClient := &auth.Auth{Uri: sts}
+	authClient := &auth.Authenticator{Uri: sts}
 	authClient.AuthenticateEvent(s.Ref.BillingId, s.Credentials[0].ClientId, s.Credentials[0].ClientSecret)
 	if !quiet {
 		fmt.Printf("Starting to simulate random %s events to stream %s. ",
@@ -76,8 +76,8 @@ func run(cmd *cobra.Command, streamName *string) {
 	for {
 		sessionId := fmt.Sprintf("%s-%d", sessionPrefix, rand.Intn(sessionRange))
 		event := f(randomConsentLevels(consentLevels), sessionId)
-		token, _ := authClient.GetToken(quiet)
-		go sender.Send(event, token)
+		token := authClient.GetToken()
+		go sender.Send(event, *token)
 		ct += 1
 		time.Sleep(interval * time.Millisecond)
 		if !quiet && time.Now().Sub(now) > 5*time.Second {

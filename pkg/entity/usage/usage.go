@@ -12,6 +12,7 @@ import (
 	"google.golang.org/grpc"
 	"regexp"
 	"strconv"
+	"streammachine.io/strm/pkg/auth"
 	"streammachine.io/strm/pkg/common"
 	"streammachine.io/strm/pkg/util"
 	"strings"
@@ -59,7 +60,7 @@ func get(cmd *cobra.Command, streamName *string) {
 	}
 
 	req := &usage.GetStreamEventUsageRequest{Ref: &entities.StreamRef{
-		BillingId: common.BillingId,
+		BillingId: auth.Auth.BillingId(),
 		Name:      *streamName,
 	},
 		StartTime: &timestamp.Timestamp{Seconds: startTime.UnixTimestamp()},

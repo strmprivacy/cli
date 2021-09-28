@@ -10,7 +10,7 @@ import (
 
 func TestAuthAccessTokenOutputsTheAccessTokenWhenLoggedIn(t *testing.T) {
 	_ = newConfigDir()
-	out := ExecuteCliAndGetOutput(t, "test/simple-token.json", "auth", "access-token")
+	out := ExecuteCliAndGetOutput(t, "test/simple-token.json", "auth", "print-access-token")
 
 	assert.Equal(t, out, "id.token.test\nExpires at: 2021-07-02 15:42:54 +0000 UTC\nBilling id: my.billing.id\n")
 }
@@ -19,7 +19,7 @@ func TestAuthAccessTokenOutputsAnErrorWhenNotLoggedIn(t *testing.T) {
 	_ = newConfigDir()
 	tokenFileName := CreateNonExistingTokenFileName()
 
-	out := ExecuteCliAndGetOutput(t, tokenFileName, "auth", "access-token")
+	out := ExecuteCliAndGetOutput(t, tokenFileName, "auth", "print-access-token")
 
 	assert.Equal(t, out, "Error: No login information found. Use: `dstrm auth login` first.\n")
 }
