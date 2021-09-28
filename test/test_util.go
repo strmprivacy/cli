@@ -1,9 +1,13 @@
 package test
 
 import (
+	"context"
 	"fmt"
+	"github.com/go-rod/rod"
+	"github.com/go-rod/rod/lib/launcher"
 	"github.com/joho/godotenv"
 	"github.com/magiconair/properties/assert"
+	"golang.org/x/sync/errgroup"
 	"io/ioutil"
 	"os"
 	"os/exec"
@@ -59,6 +63,7 @@ func newConfigDir() string {
 	_ = os.Setenv("STRM_EVENTS_GATEWAY", "https://in.dev.strm.services/event")
 	_ = os.Setenv("STRM_API_AUTH_URL", "https://api.dev.streammachine.io/v1")
 	_ = os.Setenv("STRM_API_HOST", "apis.dev.streammachine.io:443")
+	_ = os.Setenv("STRM_HEADLESS", "true")
 
 	return configDir
 }
@@ -107,8 +112,7 @@ func executeCli(t *testing.T, tokenFile string, cmd ...string) *exec.Cmd {
 
 func initializeStrmEntities(t *testing.T, tokenFileName string) {
 	// Create a default login for this test run
-	loginOut := ExecuteCliAndGetOutput(t, tokenFileName, "auth", "login", testConfig().email, "--password="+testConfig().password)
-	assert.Equal(t, loginOut, "Billing id: testBillingId\nSaved login to: "+defaultTokenFileName+"\n")
+	performCliLogin(t, tokenFileName)
 
 	// Remove all resources (ugly implementation until we have plain text output in the CLI)
 	nameMatcher := regexp.MustCompile(`"name":"([^"]+)"`)
@@ -158,4 +162,36 @@ func CreateNonExistingTokenFileName() string {
 	tokenDir, _ := ioutil.TempDir("", "strm_test")
 	tokenFileName := tokenDir + "/nonexisting.json"
 	return tokenFileName
+}
+
+func performCliLogin(t *testing.T, tokenFileName string) {
+	ctx := context.Background()
+	eg, ctx := errgroup.WithContext(ctx)
+
+	eg.Go(func() error {
+		out := ExecuteCliAndGetOutput(t, tokenFileName, "auth", "login")
+		assert.Matches(t, out, ".*https://accounts\\.dev\\.streammachine\\.io/auth/realms/users/protocol/openid-connect/auth.*")
+		assert.Matches(t, out, ".*You are now logged in as \\[clitest-dev@streammachine\\.io\\]\\.")
+
+		return nil
+	})
+	eg.Go(loginInBrowser)
+
+	if err := eg.Wait(); err != nil {
+		fmt.Println(err)
+		t.Fail()
+	}
+}
+
+func loginInBrowser() error {
+	chrome := launcher.New().Headless(true).MustLaunch()
+
+	page := rod.New().ControlURL(chrome).MustConnect().MustPage("http://localhost:10000")
+
+	page.MustElement("#username").MustInput(testConfig().email)
+	page.MustElement("#password").MustInput(testConfig().password)
+	page.MustElement("#kc-login").MustClick()
+	page.MustWaitLoad()
+
+	return nil
 }

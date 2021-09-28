@@ -11,6 +11,7 @@ import (
 	"golang.org/x/oauth2"
 	"golang.org/x/sync/errgroup"
 	"net/http"
+	"os"
 	"streammachine.io/strm/pkg/common"
 	"streammachine.io/strm/pkg/constants"
 	"streammachine.io/strm/pkg/entity"
@@ -35,6 +36,9 @@ func (authorizer *Authenticator) Login() {
 		LocalServerReadyChan:   ready,
 		LocalServerBindAddress: strings.Split("127.0.0.1:10000", ","),
 		LocalServerSuccessHTML: constants.AuthSuccessHTML,
+		AuthCodeOptions: []oauth2.AuthCodeOption{
+			oauth2.SetAuthURLParam("prompt", "login"),
+		},
 	}
 
 	ctx := context.Background()
@@ -76,15 +80,22 @@ func startBrowserLoginFlow(ready chan string, ctx context.Context) func() error 
 	return func() error {
 		select {
 		case localhostCallbackUrl := <-ready:
-			err := browser.OpenURL(localhostCallbackUrl)
-			if err != nil {
-				browserOpenError := fmt.Sprintf("Unable to open browser for authentication: %s", err)
-				log.Error(browserOpenError)
-				common.CliExit(browserOpenError)
-			} else {
-				fmt.Println("Follow the login flow in your browser, which is opened automatically. If not, open the following URL to complete the login:")
-				fmt.Println(fmt.Sprintf("\n    %v", authorizationCodeFlowUrl(localhostCallbackUrl)))
+			// TODO add flag to skip opening the browser for test purposes
+			headless := os.Getenv("STRM_HEADLESS")
+
+			if headless != "true" {
+				err := browser.OpenURL(localhostCallbackUrl)
+
+				if err != nil {
+					browserOpenError := fmt.Sprintf("Unable to open browser for authentication: %s", err)
+					log.Error(browserOpenError)
+					common.CliExit(browserOpenError)
+				}
 			}
+
+			fmt.Println("Follow the login flow in your browser, which is opened automatically. If not, open the following URL to complete the login:")
+			fmt.Println(fmt.Sprintf("\n    %v", authorizationCodeFlowUrl(localhostCallbackUrl)))
+
 			return nil
 		case <-ctx.Done():
 			contextError := fmt.Errorf("context done while waiting for authorization: %w", ctx.Err())

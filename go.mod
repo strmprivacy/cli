@@ -6,6 +6,7 @@ require (
 	github.com/actgardner/gogen-avro/v7 v7.3.1
 	github.com/bykof/gostradamus v1.0.4
 	github.com/fsnotify/fsnotify v1.4.9 // indirect
+	github.com/go-rod/rod v0.101.8 // indirect
 	github.com/golang-jwt/jwt/v4 v4.0.0
 	github.com/golang/protobuf v1.5.2
 	github.com/gorilla/websocket v1.4.2
