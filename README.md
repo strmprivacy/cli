@@ -66,7 +66,7 @@ Below are the default values for all `strm` flags, in the YAML format used by th
 save: true
 event-auth-host: https://auth.strm.services
 events-gateway: https://in.strm.services/event
-api-auth-url: https://api.streammachine.io/v1
+api-auth-host: https://accounts.streammachine.io
 api-host: apis.streammachine.io:443
 ```
 
