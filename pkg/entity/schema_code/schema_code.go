@@ -12,7 +12,6 @@ import (
 	"streammachine.io/strm/pkg/util"
 )
 
-// strings used in the cli
 const (
 	languageFlag  = "language"
 	filenameFlag  = "output-file"

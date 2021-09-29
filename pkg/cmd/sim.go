@@ -6,18 +6,16 @@ import (
 	"streammachine.io/strm/pkg/sim/randomsim"
 )
 
-func SimCmd() (cmd *cobra.Command) {
-	// SimCmd represents the create command
-	simCmd := &cobra.Command{
-		Use:   "sim",
-		Short: "Simulate events",
-	}
+var SimCmd = &cobra.Command{
+	Use:   "sim",
+	Short: "Simulate events",
+}
 
-	flags := simCmd.PersistentFlags()
+func init() {
+	flags := SimCmd.PersistentFlags()
 	flags.String(sim.SchemaFlag, "streammachine/demo/1.0.2", "what schema to simulate")
-	_ = simCmd.RegisterFlagCompletionFunc(sim.SchemaFlag, schemaCompletion)
-	simCmd.AddCommand(randomsim.RunCmd())
-	return simCmd
+	_ = SimCmd.RegisterFlagCompletionFunc(sim.SchemaFlag, schemaCompletion)
+	SimCmd.AddCommand(randomsim.RunCmd())
 }
 
 func schemaCompletion(_ *cobra.Command, _ []string, _ string) ([]string, cobra.ShellCompDirective) {

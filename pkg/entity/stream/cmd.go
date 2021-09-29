@@ -3,7 +3,7 @@ package stream
 import (
 	"github.com/spf13/cobra"
 	"streammachine.io/strm/pkg/common"
-	"streammachine.io/strm/pkg/constants"
+
 )
 
 func CreateCmd() *cobra.Command {
@@ -49,7 +49,7 @@ func DeleteCmd() *cobra.Command {
 			printer = configurePrinter(cmd)
 		},
 		Run: func(cmd *cobra.Command, args []string) {
-			recursive, _ := cmd.Flags().GetBool(constants.RecursiveFlagName)
+			recursive, _ := cmd.Flags().GetBool(common.RecursiveFlagName)
 			del(&args[0], recursive)
 		},
 		Args:              cobra.ExactArgs(1), // the stream name
@@ -64,7 +64,7 @@ func GetCmd() *cobra.Command {
 			printer = configurePrinter(cmd)
 		},
 		Run: func(cmd *cobra.Command, args []string) {
-			recursive, _ := cmd.Flags().GetBool(constants.RecursiveFlagName)
+			recursive, _ := cmd.Flags().GetBool(common.RecursiveFlagName)
 			get(&args[0], recursive)
 		},
 		Args:              cobra.ExactArgs(1), // the stream name
@@ -79,7 +79,7 @@ func ListCmd() *cobra.Command {
 			printer = configurePrinter(cmd)
 		},
 		Run: func(cmd *cobra.Command, args []string) {
-			recursive, _ := cmd.Flags().GetBool(constants.RecursiveFlagName)
+			recursive, _ := cmd.Flags().GetBool(common.RecursiveFlagName)
 			list(recursive)
 		},
 		ValidArgsFunction: common.NoFilesEmptyCompletion,

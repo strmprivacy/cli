@@ -38,7 +38,6 @@ func run(cmd *cobra.Command, streamName *string) {
 		log.Fatalf("You can't run a simulator on a derived stream")
 	}
 	interval := time.Duration(util.GetIntAndErr(flags, sim.IntervalFlag))
-	sts := util.GetStringAndErr(flags, auth.EventAuthHostFlag)
 	sessionRange := util.GetIntAndErr(flags, sim.SessionRangeFlag)
 	sessionPrefix := util.GetStringAndErr(flags, sim.SessionPrefixFlag)
 	gateway := util.GetStringAndErr(flags, sim.EventGatewayFlag)
@@ -55,8 +54,7 @@ func run(cmd *cobra.Command, streamName *string) {
 	if len(consentLevels) == 0 {
 		log.Fatalf("%v is not a valid set of consent levels", consentLevels)
 	}
-	authClient := &auth.Authenticator{Uri: sts}
-	authClient.AuthenticateEvent(s.Ref.BillingId, s.Credentials[0].ClientId, s.Credentials[0].ClientSecret)
+
 	if !quiet {
 		fmt.Printf("Starting to simulate random %s events to stream %s. ",
 			schema, *streamName)
@@ -76,8 +74,9 @@ func run(cmd *cobra.Command, streamName *string) {
 	for {
 		sessionId := fmt.Sprintf("%s-%d", sessionPrefix, rand.Intn(sessionRange))
 		event := f(randomConsentLevels(consentLevels), sessionId)
-		token := authClient.GetToken()
-		go sender.Send(event, *token)
+		token := auth.GetEventToken(s.Ref.BillingId, s.Credentials[0].ClientId, s.Credentials[0].ClientSecret)
+
+		go sender.Send(event, token)
 		ct += 1
 		time.Sleep(interval * time.Millisecond)
 		if !quiet && time.Now().Sub(now) > 5*time.Second {

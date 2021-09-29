@@ -6,7 +6,6 @@ import (
 	"path"
 	"streammachine.io/strm/pkg/auth"
 	"streammachine.io/strm/pkg/common"
-	"streammachine.io/strm/pkg/constants"
 	"strings"
 )
 
@@ -23,10 +22,10 @@ func showConfiguration() {
 	common.CliExit(err)
 
 	configuration := configuration{
-		ConfigPath:     constants.ConfigPath,
+		ConfigPath:     common.ConfigPath,
 		ConfigFilepath: configFilepath,
 		Contents:       contents,
-		SavedEntities:  listSavedEntities(path.Join(constants.ConfigPath, constants.SavedEntitiesDirectory)),
+		SavedEntities:  listSavedEntities(path.Join(common.ConfigPath, common.SavedEntitiesDirectory)),
 	}
 
 	printer.Print(configuration)
@@ -38,7 +37,7 @@ type savedEntity struct {
 }
 
 func entityInfo(args []string) {
-	filepath := path.Join(constants.ConfigPath, constants.SavedEntitiesDirectory, args[0]+".json")
+	filepath := path.Join(common.ConfigPath, common.SavedEntitiesDirectory, args[0]+".json")
 	contents, err := ioutil.ReadFile(filepath)
 	common.CliExit(err)
 
@@ -68,14 +67,14 @@ func listSavedEntities(p string) []string {
 }
 
 func findConfigFile() string {
-	files, err := ioutil.ReadDir(constants.ConfigPath)
+	files, err := ioutil.ReadDir(common.ConfigPath)
 	common.CliExit(err)
 
 	var configFilepath string
 
 	for _, f := range files {
-		if f.Name() == constants.DefaultConfigFilename+constants.DefaultConfigFileSuffix || f.Name() == constants.DefaultConfigFilename+constants.DefaultConfigFileSuffix {
-			configFilepath = path.Join(constants.ConfigPath, f.Name())
+		if f.Name() == common.DefaultConfigFilename+common.DefaultConfigFileSuffix || f.Name() == common.DefaultConfigFilename+common.DefaultConfigFileSuffix {
+			configFilepath = path.Join(common.ConfigPath, f.Name())
 		}
 	}
 

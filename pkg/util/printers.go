@@ -10,7 +10,6 @@ import (
 	"google.golang.org/protobuf/proto"
 	"os"
 	"streammachine.io/strm/pkg/common"
-	"streammachine.io/strm/pkg/constants"
 )
 
 type Printer interface {
@@ -18,14 +17,14 @@ type Printer interface {
 }
 
 var DefaultPrinters = map[string]Printer{
-	constants.OutputFormatJson + constants.ListCommandName:      ProtoMessageJsonPrettyPrinter{},
-	constants.OutputFormatJson + constants.GetCommandName:       ProtoMessageJsonPrettyPrinter{},
-	constants.OutputFormatJson + constants.DeleteCommandName:    ProtoMessageJsonPrettyPrinter{},
-	constants.OutputFormatJson + constants.CreateCommandName:    ProtoMessageJsonPrettyPrinter{},
-	constants.OutputFormatJsonRaw + constants.ListCommandName:   ProtoMessageJsonRawPrinter{},
-	constants.OutputFormatJsonRaw + constants.GetCommandName:    ProtoMessageJsonRawPrinter{},
-	constants.OutputFormatJsonRaw + constants.DeleteCommandName: ProtoMessageJsonRawPrinter{},
-	constants.OutputFormatJsonRaw + constants.CreateCommandName: ProtoMessageJsonRawPrinter{},
+	common.OutputFormatJson + common.ListCommandName:      ProtoMessageJsonPrettyPrinter{},
+	common.OutputFormatJson + common.GetCommandName:       ProtoMessageJsonPrettyPrinter{},
+	common.OutputFormatJson + common.DeleteCommandName:    ProtoMessageJsonPrettyPrinter{},
+	common.OutputFormatJson + common.CreateCommandName:    ProtoMessageJsonPrettyPrinter{},
+	common.OutputFormatJsonRaw + common.ListCommandName:   ProtoMessageJsonRawPrinter{},
+	common.OutputFormatJsonRaw + common.GetCommandName:    ProtoMessageJsonRawPrinter{},
+	common.OutputFormatJsonRaw + common.DeleteCommandName: ProtoMessageJsonRawPrinter{},
+	common.OutputFormatJsonRaw + common.CreateCommandName: ProtoMessageJsonRawPrinter{},
 }
 
 type ProtoMessageJsonRawPrinter struct{}

@@ -9,7 +9,6 @@ import (
 	"os"
 	"streammachine.io/strm/pkg/cmd"
 	"streammachine.io/strm/pkg/common"
-	"streammachine.io/strm/pkg/constants"
 	"streammachine.io/strm/pkg/entity"
 	"streammachine.io/strm/pkg/entity/batch_exporter"
 	"streammachine.io/strm/pkg/entity/event_contract"
@@ -38,7 +37,7 @@ func SetupVerbs(rootCmd *cobra.Command) {
 	rootCmd.AddCommand(cmd.DeleteCmd)
 	rootCmd.AddCommand(cmd.ListCmd)
 	rootCmd.AddCommand(cmd.CompletionCmd)
-	rootCmd.AddCommand(cmd.SimCmd())
+	rootCmd.AddCommand(cmd.SimCmd)
 	rootCmd.AddCommand(cmd.EgressCmd)
 	rootCmd.AddCommand(cmd.AuthCmd)
 	rootCmd.AddCommand(cmd.VersionCmd)
@@ -67,7 +66,7 @@ func ConfigPath() string {
 	// Cobra supports persistent flags, which, if defined here,
 	// will be global for your application.
 	// set the default configuration path
-	configPathEnvVar := constants.EnvPrefix + "_CONFIG_PATH"
+	configPathEnvVar := common.EnvPrefix + "_CONFIG_PATH"
 	configPathEnv := os.Getenv(configPathEnvVar)
 	defaultConfigPath := "~/.config/stream-machine"
 
@@ -91,11 +90,11 @@ func InitializeConfig(cmd *cobra.Command) error {
 	viperConfig := viper.New()
 
 	// Set the base name of the config file, without the file extension.
-	viperConfig.SetConfigName(constants.DefaultConfigFilename)
+	viperConfig.SetConfigName(common.DefaultConfigFilename)
 
 	// Set as many paths as you like where viper should look for the
 	// config file.
-	viperConfig.AddConfigPath(constants.ConfigPath)
+	viperConfig.AddConfigPath(common.ConfigPath)
 
 	// Attempt to read the config file, gracefully ignoring errors
 	// caused by a config file not being found. Return an error
@@ -112,7 +111,7 @@ func InitializeConfig(cmd *cobra.Command) error {
 	// binds to an environment variable STING_NUMBER. This helps
 	// avoid conflicts.
 	// you could set STRM_BILLINGID for instance
-	viperConfig.SetEnvPrefix(constants.EnvPrefix)
+	viperConfig.SetEnvPrefix(common.EnvPrefix)
 
 	// Bind to environment variables
 	// Works great for simple config names, but needs help for names
@@ -134,7 +133,7 @@ func bindFlags(cmd *cobra.Command, v *viper.Viper) {
 		// keys with underscores, e.g. --favorite-color to STING_FAVORITE_COLOR
 		if strings.Contains(f.Name, "-") {
 			envVarSuffix := strings.ToUpper(strings.ReplaceAll(f.Name, "-", "_"))
-			err := v.BindEnv(f.Name, fmt.Sprintf("%s_%s", constants.EnvPrefix, envVarSuffix))
+			err := v.BindEnv(f.Name, fmt.Sprintf("%s_%s", common.EnvPrefix, envVarSuffix))
 			common.CliExit(err)
 		}
 

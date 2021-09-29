@@ -4,7 +4,7 @@ var TokenFile string
 
 const (
 	EventAuthHostFlag = "event-auth-host"
-	ApiAuthUrlFlag    = "api-auth-url"
+	ApiAuthHostFlag   = "api-auth-host"
 )
 
 func login() {

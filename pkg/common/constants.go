@@ -1,4 +1,4 @@
-package constants
+package common
 
 import "strings"
 
@@ -17,7 +17,7 @@ var DefaultConfigFileContents = []byte(`# The following configuration options ar
 # save: true
 # event-auth-host: https://auth.strm.services
 # events-gateway: https://in.strm.services/event
-# api-auth-url: https://api.streammachine.io/v1
+# api-auth-host: https://accounts.streammachine.io
 # api-host: apis.streammachine.io:443
 `)
 

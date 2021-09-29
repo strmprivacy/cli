@@ -6,14 +6,13 @@ import (
 	"github.com/spf13/cobra"
 	"gopkg.in/natefinch/lumberjack.v2"
 	"runtime"
-	"streammachine.io/strm/pkg/constants"
 )
 
-// note that this can be overridden via the go build flags
 var RootCommandName = "strm"
 
-var AuthHost string
+var ApiAuthHost string
 var ApiHost string
+var EventAuthHost string
 
 func InitLogging() {
 	log.SetLevel(log.TraceLevel)
@@ -22,11 +21,11 @@ func InitLogging() {
 		MaxSize:    1, // MB
 		MaxBackups: 0,
 	})
-	log.Info(fmt.Sprintf("Config path is set to: %v", constants.ConfigPath))
+	log.Info(fmt.Sprintf("Config path is set to: %v", ConfigPath))
 }
 
 func LogFileName() string {
-	return constants.ConfigPath + "/" + RootCommandName + ".log"
+	return ConfigPath + "/" + RootCommandName + ".log"
 }
 
 func CliExit(msg interface{}) {

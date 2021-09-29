@@ -9,7 +9,6 @@ import (
 	"streammachine.io/strm/pkg/bootstrap"
 	"streammachine.io/strm/pkg/cmd"
 	"streammachine.io/strm/pkg/common"
-	"streammachine.io/strm/pkg/constants"
 	"streammachine.io/strm/pkg/egress"
 	"streammachine.io/strm/pkg/util"
 )
@@ -38,10 +37,10 @@ func rootCmdPreRun() func(cmd *cobra.Command, args []string) error {
 			log.Infoln(fmt.Sprintf("flag %v=%v", flag.Name, flag.Value))
 		})
 
-		common.AuthHost = util.GetStringAndErr(cmd.Flags(), auth.ApiAuthUrlFlag)
 		common.ApiHost = util.GetStringAndErr(cmd.Flags(), apiHostFlag)
+		common.ApiAuthHost = util.GetStringAndErr(cmd.Flags(), auth.ApiAuthHostFlag)
+		common.EventAuthHost = util.GetStringAndErr(cmd.Flags(), auth.EventAuthHostFlag)
 
-		auth.SetupAuth(common.AuthHost)
 		if auth.Auth.LoadLogin() == nil {
 			bootstrap.SetupServiceClients(auth.Auth.GetToken())
 		}
@@ -51,20 +50,20 @@ func rootCmdPreRun() func(cmd *cobra.Command, args []string) error {
 }
 
 func init() {
-	constants.ConfigPath = bootstrap.ConfigPath()
+	common.ConfigPath = bootstrap.ConfigPath()
 	common.InitLogging()
 
 	persistentFlags := RootCmd.PersistentFlags()
 	persistentFlags.String(apiHostFlag, "apis.streammachine.io:443", "API host and port")
-	persistentFlags.String(auth.EventAuthHostFlag, "https://auth.strm.services", "Security Token Service for events")
-	persistentFlags.String(auth.ApiAuthUrlFlag, "https://api.streammachine.io/v1", "Auth URL for user logins")
+	persistentFlags.String(auth.EventAuthHostFlag, "https://auth.strm.services", "Event authentication host")
+	persistentFlags.String(auth.ApiAuthHostFlag, "https://accounts.dev.streammachine.io", "User authentication host")
 	persistentFlags.StringVar(&auth.TokenFile, "token-file", "",
 		"Token file that contains an access token (default is $HOME/.config/stream-machine/strm-creds-<api-auth-host>.json)")
 	persistentFlags.String(egress.UrlFlag, "wss://out.strm.services/ws", "Websocket to receive events from")
-	persistentFlags.StringP(constants.OutputFormatFlag, constants.OutputFormatFlagShort, constants.OutputFormatTable, fmt.Sprintf("Output format [%v]", constants.OutputFormatFlagAllowedValuesText))
+	persistentFlags.StringP(common.OutputFormatFlag, common.OutputFormatFlagShort, common.OutputFormatTable, fmt.Sprintf("Output format [%v]", common.OutputFormatFlagAllowedValuesText))
 
-	err := RootCmd.RegisterFlagCompletionFunc(constants.OutputFormatFlag, func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
-		return constants.OutputFormatFlagAllowedValues, cobra.ShellCompDirectiveNoFileComp
+	err := RootCmd.RegisterFlagCompletionFunc(common.OutputFormatFlag, func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		return common.OutputFormatFlagAllowedValues, cobra.ShellCompDirectiveNoFileComp
 	})
 
 	common.CliExit(err)

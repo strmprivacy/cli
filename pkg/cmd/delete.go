@@ -2,7 +2,7 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
-	"streammachine.io/strm/pkg/constants"
+	"streammachine.io/strm/pkg/common"
 	"streammachine.io/strm/pkg/entity/batch_exporter"
 	"streammachine.io/strm/pkg/entity/kafka_exporter"
 	"streammachine.io/strm/pkg/entity/kafka_user"
@@ -12,7 +12,7 @@ import (
 
 // DeleteCmd represents the delete command
 var DeleteCmd = &cobra.Command{
-	Use:   constants.DeleteCommandName,
+	Use:   common.DeleteCommandName,
 	Short: "Delete an entity",
 }
 
@@ -23,5 +23,5 @@ func init() {
 	DeleteCmd.AddCommand(sink.DeleteCmd())
 	DeleteCmd.AddCommand(kafka_user.DeleteCmd())
 
-	DeleteCmd.PersistentFlags().BoolP(constants.RecursiveFlagName, constants.RecursiveFlagShorthand, false, constants.RecursiveFlagUsage)
+	DeleteCmd.PersistentFlags().BoolP(common.RecursiveFlagName, common.RecursiveFlagShorthand, false, common.RecursiveFlagUsage)
 }

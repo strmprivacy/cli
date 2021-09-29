@@ -11,7 +11,6 @@ import (
 	"path"
 	"path/filepath"
 	"streammachine.io/strm/pkg/common"
-	"streammachine.io/strm/pkg/constants"
 	"time"
 )
 
@@ -34,8 +33,8 @@ func (e *EmptyTokenError) Error() string {
 	return fmt.Sprintf("Token from file %v is empty", e.tokenFilePath)
 }
 
-func (authorizer *Authenticator) LoadLogin() error {
-	filename := authorizer.getSaveFilename()
+func (authenticator *Authenticator) LoadLogin() error {
+	filename := authenticator.getSaveFilename()
 	b, err := ioutil.ReadFile(filename)
 
 	if err != nil {
@@ -44,36 +43,36 @@ func (authorizer *Authenticator) LoadLogin() error {
 		return &EmptyTokenError{}
 	} else {
 		storedToken := unmarshalStoredToken(err, b)
-		authorizer.populateValues(storedToken)
+		authenticator.populateValues(storedToken)
 
 		return nil
 	}
 }
 
-func (authorizer *Authenticator) populateValues(storedToken storedToken) {
-	authorizer.storedToken = storedToken
-	authorizer.tokenSource = createTokenSource(authorizer.storedToken)
-	authorizer.billingId = &authorizer.storedToken.BillingId
-	authorizer.Email = authorizer.storedToken.Email
+func (authenticator *Authenticator) populateValues(storedToken storedToken) {
+	authenticator.storedToken = storedToken
+	authenticator.tokenSource = createTokenSource(authenticator.storedToken)
+	authenticator.billingId = &authenticator.storedToken.BillingId
+	authenticator.Email = authenticator.storedToken.Email
 }
 
-func (authorizer *Authenticator) StoreLogin() string {
-	filename := authorizer.getSaveFilename()
+func (authenticator *Authenticator) StoreLogin() string {
+	filename := authenticator.getSaveFilename()
 	err := os.MkdirAll(filepath.Dir(filename), 0700)
 	common.CliExit(err)
-	b, err := json.Marshal(authorizer.storedToken)
+	b, err := json.Marshal(authenticator.storedToken)
 	common.CliExit(err)
 	err = ioutil.WriteFile(filename, b, 0644)
 	common.CliExit(err)
 	return filename
 }
 
-func (authorizer *Authenticator) getSaveFilename() string {
+func (authenticator *Authenticator) getSaveFilename() string {
 	if TokenFile == "" {
-		u, err := url.Parse(authorizer.Uri)
+		u, err := url.Parse(common.ApiAuthHost)
 		common.CliExit(err)
 		filename := fmt.Sprintf("%v-%s.json", StrmCredsFilePrefix, u.Hostname())
-		return path.Join(constants.ConfigPath, filename)
+		return path.Join(common.ConfigPath, filename)
 	} else {
 		return TokenFile
 	}
@@ -95,6 +94,7 @@ func createTokenSource(storedToken storedToken) oauth2.TokenSource {
 	}
 
 	ctx := context.Background()
+	oAuth2Config := oAuth2Config()
 	tokenSource := oAuth2Config.TokenSource(ctx, oauth2Token)
 	return tokenSource
 }

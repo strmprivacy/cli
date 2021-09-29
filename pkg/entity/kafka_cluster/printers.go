@@ -7,19 +7,18 @@ import (
 	"github.com/streammachineio/api-definitions-go/api/entities/v1"
 	"github.com/streammachineio/api-definitions-go/api/kafka_clusters/v1"
 	"streammachine.io/strm/pkg/common"
-	"streammachine.io/strm/pkg/constants"
 	"streammachine.io/strm/pkg/util"
 )
 
 var printer util.Printer
 
 func configurePrinter(command *cobra.Command) util.Printer {
-	outputFormat := util.GetStringAndErr(command.Flags(), constants.OutputFormatFlag)
+	outputFormat := util.GetStringAndErr(command.Flags(), common.OutputFormatFlag)
 
 	p := availablePrinters()[outputFormat+command.Parent().Name()]
 
 	if p == nil {
-		common.CliExit(fmt.Sprintf("Output format '%v' is not supported. Allowed values: %v", outputFormat, constants.OutputFormatFlagAllowedValuesText))
+		common.CliExit(fmt.Sprintf("Output format '%v' is not supported. Allowed values: %v", outputFormat, common.OutputFormatFlagAllowedValuesText))
 	}
 
 	return p
@@ -29,10 +28,10 @@ func availablePrinters() map[string]util.Printer {
 	return util.MergePrinterMaps(
 		util.DefaultPrinters,
 		map[string]util.Printer{
-			constants.OutputFormatTable + constants.ListCommandName: listTablePrinter{},
-			constants.OutputFormatTable + constants.GetCommandName:  getTablePrinter{},
-			constants.OutputFormatPlain + constants.ListCommandName: listPlainPrinter{},
-			constants.OutputFormatPlain + constants.GetCommandName:  getPlainPrinter{},
+			common.OutputFormatTable + common.ListCommandName: listTablePrinter{},
+			common.OutputFormatTable + common.GetCommandName:  getTablePrinter{},
+			common.OutputFormatPlain + common.ListCommandName: listPlainPrinter{},
+			common.OutputFormatPlain + common.GetCommandName:  getPlainPrinter{},
 		},
 	)
 }

@@ -11,8 +11,6 @@ import (
 	"path/filepath"
 	"strconv"
 	"streammachine.io/strm/pkg/common"
-	"streammachine.io/strm/pkg/constants"
-	"streammachine.io/strm/pkg/demoschema"
 )
 
 func atoi(s string) int {
@@ -88,26 +86,19 @@ func DeleteSaved(m proto.Message, name *string) {
 
 func getSaveFilename(m proto.Message, name *string) string {
 	cat := fmt.Sprint(m.ProtoReflect().Descriptor().Name())
-	return path.Join(constants.ConfigPath, constants.SavedEntitiesDirectory, cat, *name+".json")
-}
-
-func CreateUnionString(s string) *demoschema.UnionNullString {
-	v := demoschema.NewUnionNullString()
-	v.UnionType = demoschema.UnionNullStringTypeEnumString
-	v.String = s
-	return v
+	return path.Join(common.ConfigPath, common.SavedEntitiesDirectory, cat, *name+".json")
 }
 
 func CreateConfigDirAndFileIfNotExists() {
-	err := os.MkdirAll(filepath.Dir(constants.ConfigPath), 0700)
+	err := os.MkdirAll(filepath.Dir(common.ConfigPath), 0700)
 	common.CliExit(err)
 
-	configFilepath := path.Join(constants.ConfigPath, constants.DefaultConfigFilename+constants.DefaultConfigFileSuffix)
+	configFilepath := path.Join(common.ConfigPath, common.DefaultConfigFilename+common.DefaultConfigFileSuffix)
 
 	if _, err := os.Stat(configFilepath); os.IsNotExist(err) {
 		writeFileError := ioutil.WriteFile(
 			configFilepath,
-			constants.DefaultConfigFileContents,
+			common.DefaultConfigFileContents,
 			0644,
 		)
 

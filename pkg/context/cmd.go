@@ -5,7 +5,6 @@ import (
 	"github.com/spf13/cobra"
 	"path"
 	"streammachine.io/strm/pkg/common"
-	"streammachine.io/strm/pkg/constants"
 )
 
 const (
@@ -26,13 +25,13 @@ func Configuration() *cobra.Command {
 	}
 
 	configuration.Flags().StringP(
-		constants.OutputFormatFlag,
-		constants.OutputFormatFlagShort,
-		constants.OutputFormatPlain,
-		fmt.Sprintf("Configuration output format [%v]", constants.ConfigOutputFormatFlagAllowedValues),
+		common.OutputFormatFlag,
+		common.OutputFormatFlagShort,
+		common.OutputFormatPlain,
+		fmt.Sprintf("Configuration output format [%v]", common.ConfigOutputFormatFlagAllowedValues),
 	)
-	err := configuration.RegisterFlagCompletionFunc(constants.OutputFormatFlag, func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
-		return constants.ConfigOutputFormatFlagAllowedValues, cobra.ShellCompDirectiveNoFileComp
+	err := configuration.RegisterFlagCompletionFunc(common.OutputFormatFlag, func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		return common.ConfigOutputFormatFlagAllowedValues, cobra.ShellCompDirectiveNoFileComp
 	})
 
 	common.CliExit(err)
@@ -55,13 +54,13 @@ func EntityInfo() *cobra.Command {
 	}
 
 	entityInfo.Flags().StringP(
-		constants.OutputFormatFlag,
-		constants.OutputFormatFlagShort,
-		constants.OutputFormatFilepath,
-		fmt.Sprintf("Entity information output format [%v]", constants.ContextOutputFormatFlagAllowedValues),
+		common.OutputFormatFlag,
+		common.OutputFormatFlagShort,
+		common.OutputFormatFilepath,
+		fmt.Sprintf("Entity information output format [%v]", common.ContextOutputFormatFlagAllowedValues),
 	)
-	err := entityInfo.RegisterFlagCompletionFunc(constants.OutputFormatFlag, func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
-		return constants.ContextOutputFormatFlagAllowedValues, cobra.ShellCompDirectiveNoFileComp
+	err := entityInfo.RegisterFlagCompletionFunc(common.OutputFormatFlag, func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		return common.ContextOutputFormatFlagAllowedValues, cobra.ShellCompDirectiveNoFileComp
 	})
 
 	common.CliExit(err)
@@ -70,5 +69,5 @@ func EntityInfo() *cobra.Command {
 }
 
 func savedEntitiesCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
-	return listSavedEntities(path.Join(constants.ConfigPath, constants.SavedEntitiesDirectory)), cobra.ShellCompDirectiveNoFileComp
+	return listSavedEntities(path.Join(common.ConfigPath, common.SavedEntitiesDirectory)), cobra.ShellCompDirectiveNoFileComp
 }

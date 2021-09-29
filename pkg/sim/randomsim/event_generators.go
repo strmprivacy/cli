@@ -3,10 +3,9 @@ package randomsim
 import (
 	"fmt"
 	"math/rand"
-	"streammachine.io/strm/pkg/clickstream"
-	"streammachine.io/strm/pkg/demoschema"
+	"streammachine.io/strm/pkg/schemas/clickstream"
+	"streammachine.io/strm/pkg/schemas/demoschema"
 	"streammachine.io/strm/pkg/sim"
-	"streammachine.io/strm/pkg/util"
 )
 
 func createRandomDemo102Event(consentLevels []int32, sessionId string) sim.StreammachineEvent {
@@ -17,9 +16,9 @@ func createRandomDemo102Event(consentLevels []int32, sessionId string) sim.Strea
 		EventContractRef: eventContractRef,
 	}
 	event.ConsistentValue = sessionId
-	event.UniqueIdentifier = util.CreateUnionString(fmt.Sprintf("unique-%d", rand.Intn(100)))
-	event.SomeSensitiveValue = util.CreateUnionString(fmt.Sprintf("sensitive-%d", rand.Intn(100)))
-	event.NotSensitiveValue = util.CreateUnionString(fmt.Sprintf("not-sensitive-%d", rand.Intn(100)))
+	event.UniqueIdentifier = createUnionString(fmt.Sprintf("unique-%d", rand.Intn(100)))
+	event.SomeSensitiveValue = createUnionString(fmt.Sprintf("sensitive-%d", rand.Intn(100)))
+	event.NotSensitiveValue = createUnionString(fmt.Sprintf("not-sensitive-%d", rand.Intn(100)))
 	return event
 }
 
@@ -35,4 +34,11 @@ func createRandomClickstreamEvent(consentLevels []int32, sessionId string) sim.S
 var EventGenerators = map[string]func([]int32, string) sim.StreammachineEvent{
 	"clickstream":              createRandomClickstreamEvent,
 	"streammachine/demo/1.0.2": createRandomDemo102Event,
+}
+
+func createUnionString(s string) *demoschema.UnionNullString {
+	v := demoschema.NewUnionNullString()
+	v.UnionType = demoschema.UnionNullStringTypeEnumString
+	v.String = s
+	return v
 }

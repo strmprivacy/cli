@@ -8,7 +8,6 @@ import (
 	"github.com/streammachineio/api-definitions-go/api/usage/v1"
 	"math"
 	"streammachine.io/strm/pkg/common"
-	"streammachine.io/strm/pkg/constants"
 	"streammachine.io/strm/pkg/util"
 	"time"
 )
@@ -16,12 +15,12 @@ import (
 var printer util.Printer
 
 func configurePrinter(command *cobra.Command) util.Printer {
-	outputFormat := util.GetStringAndErr(command.Flags(), constants.OutputFormatFlag)
+	outputFormat := util.GetStringAndErr(command.Flags(), common.OutputFormatFlag)
 
 	p := availablePrinters()[outputFormat]
 
 	if p == nil {
-		common.CliExit(fmt.Sprintf("Output format '%v' is not supported for usage. Allowed values: %v", outputFormat, constants.UsageOutputFormatFlagAllowedValuesText))
+		common.CliExit(fmt.Sprintf("Output format '%v' is not supported for usage. Allowed values: %v", outputFormat, common.UsageOutputFormatFlagAllowedValuesText))
 	}
 
 	return p
@@ -29,9 +28,9 @@ func configurePrinter(command *cobra.Command) util.Printer {
 
 func availablePrinters() map[string]util.Printer {
 	return map[string]util.Printer{
-		constants.OutputFormatJsonRaw: util.ProtoMessageJsonRawPrinter{},
-		constants.OutputFormatJson:    util.ProtoMessageJsonPrettyPrinter{},
-		constants.OutputFormatCsv:     getCsvPrinter{},
+		common.OutputFormatJsonRaw: util.ProtoMessageJsonRawPrinter{},
+		common.OutputFormatJson:    util.ProtoMessageJsonPrettyPrinter{},
+		common.OutputFormatCsv:     getCsvPrinter{},
 	}
 }
 

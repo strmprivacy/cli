@@ -185,8 +185,8 @@ func performCliLogin(t *testing.T, tokenFileName string) {
 
 func loginInBrowser() error {
 	chrome := launcher.New().Headless(true).MustLaunch()
-
-	page := rod.New().ControlURL(chrome).MustConnect().MustPage("http://localhost:10000")
+	connection := rod.New().ControlURL(chrome).MustConnect()
+	page := connection.MustPage("http://localhost:10000")
 
 	page.MustElement("#username").MustInput(testConfig().email)
 	page.MustElement("#password").MustInput(testConfig().password)
