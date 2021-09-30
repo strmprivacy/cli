@@ -3,8 +3,8 @@ package auth
 var TokenFile string
 
 const (
-	EventAuthHostFlag = "event-auth-host"
-	ApiAuthHostFlag   = "api-auth-host"
+	EventsAuthUrlFlag = "events-auth-url"
+	ApiAuthUrlFlag    = "api-auth-url"
 )
 
 func login() {

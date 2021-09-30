@@ -15,9 +15,9 @@ const DefaultConfigFileSuffix = ".yaml"
 
 var DefaultConfigFileContents = []byte(`# The following configuration options are reflected in the CLI's flags
 # save: true
-# event-auth-host: https://auth.strm.services
-# events-gateway: https://in.strm.services/event
-# api-auth-host: https://accounts.streammachine.io
+# events-auth-url: https://auth.strm.services
+# events-api-url: https://in.strm.services/event
+# api-auth-url: https://accounts.streammachine.io
 # api-host: apis.streammachine.io:443
 `)
 

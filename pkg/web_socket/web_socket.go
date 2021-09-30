@@ -1,4 +1,4 @@
-package egress
+package web_socket
 
 import (
 	"fmt"
@@ -9,12 +9,12 @@ import (
 	"net/http"
 	"streammachine.io/strm/pkg/auth"
 	"streammachine.io/strm/pkg/common"
-	"streammachine.io/strm/pkg/sim"
+	"streammachine.io/strm/pkg/simulator"
 	"streammachine.io/strm/pkg/util"
 )
 
 const (
-	UrlFlag = "egress"
+	WebSocketUrl = "web-socket-url"
 )
 
 func Run(cmd *cobra.Command, streamName *string) {
@@ -22,7 +22,7 @@ func Run(cmd *cobra.Command, streamName *string) {
 		Ref: &entities.StreamRef{BillingId: auth.Auth.BillingId(), Name: *streamName},
 	}
 	flags := cmd.Flags()
-	u := util.GetStringAndErr(flags, UrlFlag)
+	u := util.GetStringAndErr(flags, WebSocketUrl)
 	// loads Stream definition from save version
 	if err := util.TryLoad(s, streamName); err != nil {
 		// there was no saved version, try to get credentials from the command options

@@ -59,9 +59,9 @@ func newConfigDir() string {
 	_ = os.Setenv("TZ", "UTC")
 	_ = os.Setenv("STRM_CONFIG_PATH", configDir)
 
-	_ = os.Setenv("STRM_EVENT_AUTH_HOST", "https://auth.dev.strm.services")
-	_ = os.Setenv("STRM_EVENTS_GATEWAY", "https://in.dev.strm.services/event")
-	_ = os.Setenv("STRM_API_AUTH_URL", "https://api.dev.streammachine.io/v1")
+	_ = os.Setenv("STRM_EVENTS_AUTH_URL", "https://auth.dev.strm.services")
+	_ = os.Setenv("STRM_EVENTS_API_URL", "https://in.dev.strm.services/event")
+	_ = os.Setenv("STRM_API_AUTH_URL", "https://accounts.dev.streammachine.io")
 	_ = os.Setenv("STRM_API_HOST", "apis.dev.streammachine.io:443")
 	_ = os.Setenv("STRM_HEADLESS", "true")
 
@@ -190,7 +190,7 @@ func loginInBrowser() error {
 
 	page.MustElement("#username").MustInput(testConfig().email)
 	page.MustElement("#password").MustInput(testConfig().password)
-	page.MustElement("#kc-login").MustClick()
+	page.MustElement("button[name=login]").MustClick()
 	page.MustWaitLoad()
 
 	return nil

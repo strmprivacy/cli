@@ -1,14 +1,14 @@
-package randomsim
+package random_events
 
 import (
 	"fmt"
 	"math/rand"
 	"streammachine.io/strm/pkg/schemas/clickstream"
 	"streammachine.io/strm/pkg/schemas/demoschema"
-	"streammachine.io/strm/pkg/sim"
+	"streammachine.io/strm/pkg/simulator"
 )
 
-func createRandomDemo102Event(consentLevels []int32, sessionId string) sim.StreammachineEvent {
+func createRandomDemo102Event(consentLevels []int32, sessionId string) sim.StreamMachineEvent {
 	event := demoschema.NewDemoEvent()
 	const eventContractRef = "streammachine/example/1.3.0"
 	event.StrmMeta = &demoschema.StrmMeta{
@@ -22,7 +22,7 @@ func createRandomDemo102Event(consentLevels []int32, sessionId string) sim.Strea
 	return event
 }
 
-func createRandomClickstreamEvent(consentLevels []int32, sessionId string) sim.StreammachineEvent {
+func createRandomClickstreamEvent(consentLevels []int32, sessionId string) sim.StreamMachineEvent {
 	event := clickstream.NewClickstreamEvent()
 	event.StrmMeta = &clickstream.StrmMeta{ConsentLevels: consentLevels}
 	event.ProducerSessionId = sessionId
@@ -31,7 +31,7 @@ func createRandomClickstreamEvent(consentLevels []int32, sessionId string) sim.S
 	return event
 }
 
-var EventGenerators = map[string]func([]int32, string) sim.StreammachineEvent{
+var EventGenerators = map[string]func([]int32, string) sim.StreamMachineEvent{
 	"clickstream":              createRandomClickstreamEvent,
 	"streammachine/demo/1.0.2": createRandomDemo102Event,
 }

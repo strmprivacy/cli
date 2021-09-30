@@ -177,7 +177,7 @@ func getEmailFromClaims(t oauth2.Token) string {
 }
 
 func authorizationCodeFlowUrl(url string) string {
-	locationResponse, err := http.Get("http://localhost:10000")
+	locationResponse, err := http.Get(url)
 	if err != nil {
 		common.CliExit("Could not retrieve authorization code flow URL. Please retry or contact Stream Machine support if the problem persists.")
 	}

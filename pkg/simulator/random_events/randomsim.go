@@ -1,4 +1,4 @@
-package randomsim
+package random_events
 
 import (
 	"fmt"
@@ -13,7 +13,7 @@ import (
 	"streammachine.io/strm/pkg/auth"
 	"streammachine.io/strm/pkg/common"
 	"streammachine.io/strm/pkg/entity/stream"
-	"streammachine.io/strm/pkg/sim"
+	"streammachine.io/strm/pkg/simulator"
 	"streammachine.io/strm/pkg/util"
 )
 
@@ -40,7 +40,7 @@ func run(cmd *cobra.Command, streamName *string) {
 	interval := time.Duration(util.GetIntAndErr(flags, sim.IntervalFlag))
 	sessionRange := util.GetIntAndErr(flags, sim.SessionRangeFlag)
 	sessionPrefix := util.GetStringAndErr(flags, sim.SessionPrefixFlag)
-	gateway := util.GetStringAndErr(flags, sim.EventGatewayFlag)
+	gateway := util.GetStringAndErr(flags, sim.EventsApiUrlFlag)
 	quiet := util.GetBoolAndErr(flags, sim.QuietFlag)
 	consentLevels, err := flags.GetStringSlice(sim.ConsentLevelsFlag)
 	common.CliExit(err)
