@@ -1,3 +1,10 @@
+# [1.9.0](https://github.com/streammachineio/cli/compare/v1.8.1...v1.9.0) (2021-10-04)
+
+
+### Features
+
+* replace login flow with OAuth2.0 Authorization Code flow ([#51](https://github.com/streammachineio/cli/issues/51)) ([9b6d871](https://github.com/streammachineio/cli/commit/9b6d871f4dac8dda6445a2373043cabe9fa8c679))
+
 ## [1.8.1](https://github.com/streammachineio/cli/compare/v1.8.0...v1.8.1) (2021-08-19)
 
 
