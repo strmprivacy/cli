@@ -6,7 +6,6 @@ import (
 	"github.com/spf13/cobra"
 	"os"
 	"streammachine.io/strm/pkg/common"
-	"streammachine.io/strm/pkg/constants"
 	"streammachine.io/strm/pkg/util"
 	"strings"
 )
@@ -14,7 +13,7 @@ import (
 var printer util.Printer
 
 func configurePrinter(command *cobra.Command) util.Printer {
-	outputFormat := util.GetStringAndErr(command.Flags(), constants.OutputFormatFlag)
+	outputFormat := util.GetStringAndErr(command.Flags(), common.OutputFormatFlag)
 
 	p := availablePrinters()[outputFormat+command.Name()]
 
@@ -23,9 +22,9 @@ func configurePrinter(command *cobra.Command) util.Printer {
 
 		switch command.Name() {
 		case entityInfoCommandName:
-			allowedValues = constants.ContextOutputFormatFlagAllowedValuesText
+			allowedValues = common.ContextOutputFormatFlagAllowedValuesText
 		case configCommandName:
-			allowedValues = constants.ConfigOutputFormatFlagAllowedValuesText
+			allowedValues = common.ConfigOutputFormatFlagAllowedValuesText
 		}
 
 		common.CliExit(fmt.Sprintf("Output format '%v' is not supported for '%v'. Allowed values: %v", command.CommandPath(), outputFormat, allowedValues))
@@ -36,10 +35,10 @@ func configurePrinter(command *cobra.Command) util.Printer {
 
 func availablePrinters() map[string]util.Printer {
 	return map[string]util.Printer{
-		constants.OutputFormatJsonRaw + entityInfoCommandName:  jsonRawPrinter{},
-		constants.OutputFormatJson + entityInfoCommandName:     jsonPrettyPrinter{},
-		constants.OutputFormatFilepath + entityInfoCommandName: filepathPrinter{},
-		constants.OutputFormatPlain + configCommandName:        plainPrinter{},
+		common.OutputFormatJsonRaw + entityInfoCommandName:  jsonRawPrinter{},
+		common.OutputFormatJson + entityInfoCommandName:     jsonPrettyPrinter{},
+		common.OutputFormatFilepath + entityInfoCommandName: filepathPrinter{},
+		common.OutputFormatPlain + configCommandName:        plainPrinter{},
 	}
 }
 

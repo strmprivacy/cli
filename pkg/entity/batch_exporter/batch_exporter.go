@@ -9,6 +9,7 @@ import (
 	"github.com/streammachineio/api-definitions-go/api/entities/v1"
 	"github.com/streammachineio/api-definitions-go/api/sinks/v1"
 	"google.golang.org/grpc"
+	"streammachine.io/strm/pkg/auth"
 	"streammachine.io/strm/pkg/common"
 	"streammachine.io/strm/pkg/entity/sink"
 	"streammachine.io/strm/pkg/util"
@@ -23,7 +24,7 @@ func SetupClient(clientConnection *grpc.ClientConn, ctx context.Context) {
 }
 
 func list() {
-	req := &batch_exporters.ListBatchExportersRequest{BillingId: common.BillingId}
+	req := &batch_exporters.ListBatchExportersRequest{BillingId: auth.Auth.BillingId()}
 	response, err := client.ListBatchExporters(apiContext, req)
 	common.CliExit(err)
 
@@ -32,7 +33,7 @@ func list() {
 
 func get(name *string, _ *cobra.Command) {
 	ref := &entities.BatchExporterRef{
-		Name: *name, BillingId: common.BillingId,
+		Name: *name, BillingId: auth.Auth.BillingId(),
 	}
 	req := &batch_exporters.GetBatchExporterRequest{Ref: ref}
 	response, err := client.GetBatchExporter(apiContext, req)
@@ -42,7 +43,7 @@ func get(name *string, _ *cobra.Command) {
 
 func del(name *string) {
 	req := &batch_exporters.DeleteBatchExporterRequest{Ref: &entities.BatchExporterRef{
-		BillingId: common.BillingId, Name: *name}}
+		BillingId: auth.Auth.BillingId(), Name: *name}}
 	response, err := client.DeleteBatchExporter(apiContext, req)
 	common.CliExit(err)
 	printer.Print(response)
@@ -71,7 +72,7 @@ func create(streamName *string, cmd *cobra.Command) {
 		SinkName: sinkName,
 		Ref: &entities.BatchExporterRef{
 			Name:      exporterName,
-			BillingId: common.BillingId,
+			BillingId: auth.Auth.BillingId(),
 		},
 		Interval:   &interval,
 		PathPrefix: pathPrefix,
@@ -79,11 +80,11 @@ func create(streamName *string, cmd *cobra.Command) {
 	if keyStream {
 		exporter.StreamOrKeyStreamRef = &entities.BatchExporter_KeyStreamRef{
 			KeyStreamRef: &entities.KeyStreamRef{
-				Name: *streamName, BillingId: common.BillingId}}
+				Name: *streamName, BillingId: auth.Auth.BillingId()}}
 	} else {
 		exporter.StreamOrKeyStreamRef = &entities.BatchExporter_StreamRef{
 			StreamRef: &entities.StreamRef{
-				Name: *streamName, BillingId: common.BillingId}}
+				Name: *streamName, BillingId: auth.Auth.BillingId()}}
 	}
 
 	response, err := client.CreateBatchExporter(apiContext,
@@ -93,7 +94,7 @@ func create(streamName *string, cmd *cobra.Command) {
 }
 
 func getSinkNames() []string {
-	req := &sinks.ListSinksRequest{BillingId: common.BillingId}
+	req := &sinks.ListSinksRequest{BillingId: auth.Auth.BillingId()}
 	response, err := sink.Client.ListSinks(apiContext, req)
 
 	common.CliExit(err)
@@ -111,10 +112,10 @@ func namesCompletion(cmd *cobra.Command, args []string, complete string) ([]stri
 		// this one means you don't get two completion suggestions for one stream
 		return nil, cobra.ShellCompDirectiveNoFileComp
 	}
-	if common.BillingIdIsMissing() {
+	if auth.Auth.BillingIdAbsent() {
 		return common.MissingBillingIdCompletionError(cmd.CommandPath())
 	}
-	req := &batch_exporters.ListBatchExportersRequest{BillingId: common.BillingId}
+	req := &batch_exporters.ListBatchExportersRequest{BillingId: auth.Auth.BillingId()}
 	response, err := client.ListBatchExporters(apiContext, req)
 
 	if err != nil {

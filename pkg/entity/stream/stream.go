@@ -9,6 +9,7 @@ import (
 	"github.com/streammachineio/api-definitions-go/api/entities/v1"
 	"github.com/streammachineio/api-definitions-go/api/streams/v1"
 	"google.golang.org/grpc"
+	"streammachine.io/strm/pkg/auth"
 	"streammachine.io/strm/pkg/common"
 	"streammachine.io/strm/pkg/util"
 	"strings"
@@ -33,13 +34,13 @@ func SetupClient(clientConnection *grpc.ClientConn, ctx context.Context) {
 }
 
 func Get(streamName *string, recursive bool) *streams.GetStreamResponse {
-	if len(strings.TrimSpace(common.BillingId)) == 0 {
+	if len(strings.TrimSpace(auth.Auth.BillingId())) == 0 {
 		common.CliExit(fmt.Sprintf("No login information found. Use: `%v auth login` first.", common.RootCommandName))
 	}
 
 	req := &streams.GetStreamRequest{
 		Recursive: recursive,
-		Ref:       &entities.StreamRef{BillingId: common.BillingId, Name: *streamName},
+		Ref:       &entities.StreamRef{BillingId: auth.Auth.BillingId(), Name: *streamName},
 	}
 	stream, err := client.GetStream(apiContext, req)
 	common.CliExit(err)
@@ -47,7 +48,7 @@ func Get(streamName *string, recursive bool) *streams.GetStreamResponse {
 }
 
 func list(recursive bool) {
-	req := &streams.ListStreamsRequest{BillingId: common.BillingId, Recursive: recursive}
+	req := &streams.ListStreamsRequest{BillingId: auth.Auth.BillingId(), Recursive: recursive}
 	response, err := client.ListStreams(apiContext, req)
 	common.CliExit(err)
 	printer.Print(response)
@@ -61,7 +62,7 @@ func get(streamName *string, recursive bool) {
 func del(streamName *string, recursive bool) {
 	response := Get(streamName, recursive)
 	req := &streams.DeleteStreamRequest{
-		Recursive: recursive, Ref: &entities.StreamRef{BillingId: common.BillingId, Name: *streamName},
+		Recursive: recursive, Ref: &entities.StreamRef{BillingId: auth.Auth.BillingId(), Name: *streamName},
 	}
 	_, err := client.DeleteStream(apiContext, req)
 	common.CliExit(err)
@@ -72,7 +73,7 @@ func create(args []string, cmd *cobra.Command) {
 	var err error
 	flags := cmd.Flags()
 	linkedStream := util.GetStringAndErr(flags, linkedStreamFlag)
-	stream := &entities.Stream{Ref: &entities.StreamRef{BillingId: common.BillingId}}
+	stream := &entities.Stream{Ref: &entities.StreamRef{BillingId: auth.Auth.BillingId()}}
 	if len(args) > 0 {
 		stream.Ref.Name = args[0]
 	}
@@ -120,14 +121,14 @@ func parseConsentLevelType(flags *pflag.FlagSet) (entities.ConsentLevelType, err
 }
 
 func NamesCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
-	if common.BillingIdIsMissing() {
+	if auth.Auth.BillingIdAbsent() {
 		return common.MissingBillingIdCompletionError(cmd.CommandPath())
 	}
 	if len(args) != 0 {
 		return nil, cobra.ShellCompDirectiveNoFileComp
 	}
 
-	req := &streams.ListStreamsRequest{BillingId: common.BillingId}
+	req := &streams.ListStreamsRequest{BillingId: auth.Auth.BillingId()}
 	response, err := client.ListStreams(apiContext, req)
 
 	if err != nil {
@@ -143,7 +144,7 @@ func NamesCompletion(cmd *cobra.Command, args []string, complete string) ([]stri
 }
 
 func SourceNamesCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
-	if common.BillingIdIsMissing() {
+	if auth.Auth.BillingIdAbsent() {
 		return common.MissingBillingIdCompletionError(cmd.CommandPath())
 	}
 	if len(args) != 0 {
@@ -151,7 +152,7 @@ func SourceNamesCompletion(cmd *cobra.Command, args []string, complete string) (
 		return nil, cobra.ShellCompDirectiveNoFileComp
 	}
 
-	req := &streams.ListStreamsRequest{BillingId: common.BillingId}
+	req := &streams.ListStreamsRequest{BillingId: auth.Auth.BillingId()}
 	response, err := client.ListStreams(apiContext, req)
 
 	if err != nil {

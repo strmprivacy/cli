@@ -6,12 +6,12 @@ import (
 	"github.com/streammachineio/api-definitions-go/api/schemas/v1"
 	"google.golang.org/grpc"
 	"os"
+	"streammachine.io/strm/pkg/auth"
 	"streammachine.io/strm/pkg/common"
 	"streammachine.io/strm/pkg/entity/schema"
 	"streammachine.io/strm/pkg/util"
 )
 
-// strings used in the cli
 const (
 	languageFlag  = "language"
 	filenameFlag  = "output-file"
@@ -37,7 +37,7 @@ func GetSchemaCode(cmd *cobra.Command, name *string) string {
 	outputFile := util.GetStringAndErr(flags, filenameFlag)
 	overwrite := util.GetBoolAndErr(flags, overwriteFlag)
 	req := &schemas.GetSchemaCodeRequest{
-		BillingId: common.BillingId,
+		BillingId: auth.Auth.BillingId(),
 		Language:  language,
 		Ref:       schema.Ref(name),
 	}

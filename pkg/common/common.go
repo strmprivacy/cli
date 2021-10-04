@@ -6,23 +6,26 @@ import (
 	"github.com/spf13/cobra"
 	"gopkg.in/natefinch/lumberjack.v2"
 	"runtime"
-	"strings"
 )
 
-// Auth properties
-var BillingId = ""
-
-// note that this can be overridden via the go build flags
 var RootCommandName = "strm"
 
-func InitLogging(configPath string) {
+var ApiAuthHost string
+var ApiHost string
+var EventAuthHost string
+
+func InitLogging() {
 	log.SetLevel(log.TraceLevel)
 	log.SetOutput(&lumberjack.Logger{
-		Filename:   configPath + "/" + RootCommandName + ".log",
+		Filename:   LogFileName(),
 		MaxSize:    1, // MB
 		MaxBackups: 0,
 	})
-	log.Info(fmt.Sprintf("Config path is set to: %v", configPath))
+	log.Info(fmt.Sprintf("Config path is set to: %v", ConfigPath))
+}
+
+func LogFileName() string {
+	return ConfigPath + "/" + RootCommandName + ".log"
 }
 
 func CliExit(msg interface{}) {
@@ -50,10 +53,6 @@ func GrpcRequestCompletionError(err error) ([]string, cobra.ShellCompDirective) 
 	cobra.CompErrorln(errorMessage)
 
 	return nil, cobra.ShellCompDirectiveNoFileComp
-}
-
-func BillingIdIsMissing() bool {
-	return len(strings.TrimSpace(BillingId)) == 0
 }
 
 func NoFilesEmptyCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {

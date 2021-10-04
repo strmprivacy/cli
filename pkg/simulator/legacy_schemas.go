@@ -13,7 +13,7 @@ type LegacySender struct {
 	Client          http.Client
 }
 
-func (s LegacySender) Send(event StreammachineEvent, token string) {
+func (s LegacySender) Send(event StreamMachineEvent, token string) {
 	b := &bytes.Buffer{}
 	err := event.Serialize(b)
 	common.CliExit(err)

@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/spf13/cobra"
 	"streammachine.io/strm/pkg/common"
-	"streammachine.io/strm/pkg/constants"
 	"streammachine.io/strm/pkg/entity/stream"
 )
 
@@ -61,9 +60,9 @@ from,count,duration,change,rate
 	_ = usage.RegisterFlagCompletionFunc(fromFlag, dateCompletion)
 	_ = usage.RegisterFlagCompletionFunc(untilFlag, dateCompletion)
 
-	flags.StringP(constants.OutputFormatFlag, constants.OutputFormatFlagShort, "csv", fmt.Sprintf("Usage output format [%v]", constants.UsageOutputFormatFlagAllowedValuesText))
-	err := usage.RegisterFlagCompletionFunc(constants.OutputFormatFlag, func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
-		return constants.UsageOutputFormatFlagAllowedValues, cobra.ShellCompDirectiveNoFileComp
+	flags.StringP(common.OutputFormatFlag, common.OutputFormatFlagShort, "csv", fmt.Sprintf("Usage output format [%v]", common.UsageOutputFormatFlagAllowedValuesText))
+	err := usage.RegisterFlagCompletionFunc(common.OutputFormatFlag, func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		return common.UsageOutputFormatFlagAllowedValues, cobra.ShellCompDirectiveNoFileComp
 	})
 
 	common.CliExit(err)

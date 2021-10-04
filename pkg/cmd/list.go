@@ -2,7 +2,7 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
-	"streammachine.io/strm/pkg/constants"
+	"streammachine.io/strm/pkg/common"
 	"streammachine.io/strm/pkg/entity/batch_exporter"
 	"streammachine.io/strm/pkg/entity/event_contract"
 	"streammachine.io/strm/pkg/entity/kafka_cluster"
@@ -15,7 +15,7 @@ import (
 )
 
 var ListCmd = &cobra.Command{
-	Use:   constants.ListCommandName,
+	Use:   common.ListCommandName,
 	Short: "List entities",
 }
 
@@ -30,5 +30,5 @@ func init() {
 	ListCmd.AddCommand(schema.ListCmd())
 	ListCmd.AddCommand(event_contract.ListCmd())
 
-	ListCmd.PersistentFlags().BoolP(constants.RecursiveFlagName, constants.RecursiveFlagShorthand, false, constants.RecursiveFlagUsage)
+	ListCmd.PersistentFlags().BoolP(common.RecursiveFlagName, common.RecursiveFlagShorthand, false, common.RecursiveFlagUsage)
 }

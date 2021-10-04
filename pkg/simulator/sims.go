@@ -10,7 +10,7 @@ import (
 
 const (
 	IntervalFlag      = "interval"
-	EventGatewayFlag  = "events-gateway"
+	EventsApiUrlFlag  = "events-api-url"
 	SessionRangeFlag  = "session-range"
 	SessionPrefixFlag = "session-prefix"
 	ClientIdFlag      = "client-id"
@@ -20,12 +20,12 @@ const (
 	SchemaFlag        = "schema"
 )
 
-type StreammachineEvent interface {
+type StreamMachineEvent interface {
 	Serialize(w io.Writer) error
 }
 
 type Sender interface {
-	Send(event StreammachineEvent, token string)
+	Send(event StreamMachineEvent, token string)
 }
 
 type ModernSender struct {
@@ -33,8 +33,7 @@ type ModernSender struct {
 	Client          http.Client
 }
 
-// new school send events.
-func (s ModernSender) Send(event StreammachineEvent, token string) {
+func (s ModernSender) Send(event StreamMachineEvent, token string) {
 	b := &bytes.Buffer{}
 	err := event.Serialize(b)
 	common.CliExit(err)

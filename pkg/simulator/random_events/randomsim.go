@@ -1,4 +1,4 @@
-package randomsim
+package random_events
 
 import (
 	"fmt"
@@ -13,13 +13,13 @@ import (
 	"streammachine.io/strm/pkg/auth"
 	"streammachine.io/strm/pkg/common"
 	"streammachine.io/strm/pkg/entity/stream"
-	"streammachine.io/strm/pkg/sim"
+	"streammachine.io/strm/pkg/simulator"
 	"streammachine.io/strm/pkg/util"
 )
 
 // start a random simulator
 func run(cmd *cobra.Command, streamName *string) {
-	s := &entities.Stream{Ref: &entities.StreamRef{BillingId: common.BillingId, Name: *streamName}}
+	s := &entities.Stream{Ref: &entities.StreamRef{BillingId: auth.Auth.BillingId(), Name: *streamName}}
 	flags := cmd.Flags()
 	// loads Stream definition from save version
 	if err := util.TryLoad(s, streamName); err != nil {
@@ -38,10 +38,9 @@ func run(cmd *cobra.Command, streamName *string) {
 		log.Fatalf("You can't run a simulator on a derived stream")
 	}
 	interval := time.Duration(util.GetIntAndErr(flags, sim.IntervalFlag))
-	sts := util.GetStringAndErr(flags, auth.EventAuthHostFlag)
 	sessionRange := util.GetIntAndErr(flags, sim.SessionRangeFlag)
 	sessionPrefix := util.GetStringAndErr(flags, sim.SessionPrefixFlag)
-	gateway := util.GetStringAndErr(flags, sim.EventGatewayFlag)
+	gateway := util.GetStringAndErr(flags, sim.EventsApiUrlFlag)
 	quiet := util.GetBoolAndErr(flags, sim.QuietFlag)
 	consentLevels, err := flags.GetStringSlice(sim.ConsentLevelsFlag)
 	common.CliExit(err)
@@ -55,8 +54,7 @@ func run(cmd *cobra.Command, streamName *string) {
 	if len(consentLevels) == 0 {
 		log.Fatalf("%v is not a valid set of consent levels", consentLevels)
 	}
-	authClient := &auth.Auth{Uri: sts}
-	authClient.AuthenticateEvent(s.Ref.BillingId, s.Credentials[0].ClientId, s.Credentials[0].ClientSecret)
+
 	if !quiet {
 		fmt.Printf("Starting to simulate random %s events to stream %s. ",
 			schema, *streamName)
@@ -76,7 +74,8 @@ func run(cmd *cobra.Command, streamName *string) {
 	for {
 		sessionId := fmt.Sprintf("%s-%d", sessionPrefix, rand.Intn(sessionRange))
 		event := f(randomConsentLevels(consentLevels), sessionId)
-		token, _ := authClient.GetToken(quiet)
+		token := auth.GetEventToken(s.Ref.BillingId, s.Credentials[0].ClientId, s.Credentials[0].ClientSecret)
+
 		go sender.Send(event, token)
 		ct += 1
 		time.Sleep(interval * time.Millisecond)
