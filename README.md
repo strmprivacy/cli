@@ -53,10 +53,11 @@ The `strm` CLI can be configured using either the flags as specified by the help
 | Flag  | Description |
 | ------------- | ------------- |
 | save  | indicates whether the output of create commands is saved to files in your Stream Machine [Configuration directory](#configuration-directory). Useful in some situations, but be aware that this is sensitive information  |
-| events-auth-url  | used for retrieving/refreshing (JWT) authentication tokens for sending events (with the `sim` command) |
+| events-auth-url  | used for retrieving/refreshing (JWT) authentication tokens for sending events (with the `simulate` command) |
 | events-api-url | where to send events to (with the `sim` command in the CLI) |
 | api-auth-url  | used for logging in and retrieving/refreshing ([JWT](https://jwt.io/)) authentication tokens  |
 | api-host | used for interacting with the API (e.g. managing streams, sinks, etc) |
+| web-socket-url | used to listen to events with the `listen web-socket` command |
 
 ### Default configuration values
 
@@ -68,6 +69,7 @@ events-auth-url: https://auth.strm.services
 events-api-url: https://in.strm.services/event
 api-auth-url: https://accounts.streammachine.io
 api-host: apis.streammachine.io:443
+web-socket-url: wss://out.strm.services/ws
 ```
 
 In normal circumstances, these defaults should work and there is no need to create this configuration file and override any Flags. It can be useful in special cases, for example if you'd like to use a mock endpoint for testing.
