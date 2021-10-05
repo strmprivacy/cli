@@ -4,10 +4,10 @@ import (
 	"context"
 	"fmt"
 	"github.com/golang-jwt/jwt/v4"
-	"github.com/int128/oauth2cli"
 	"github.com/pkg/browser"
 	log "github.com/sirupsen/logrus"
 	"github.com/streammachineio/api-definitions-go/api/account/v1"
+	"github.com/trietsch/oauth2cli"
 	"golang.org/x/oauth2"
 	"golang.org/x/sync/errgroup"
 	"net"
@@ -88,7 +88,8 @@ func (authenticator *Authenticator) Login() {
 		OAuth2Config:           oAuth2Config(),
 		LocalServerReadyChan:   ready,
 		LocalServerBindAddress: strings.Split(fmt.Sprintf("127.0.0.1:%d", port), ","),
-		LocalServerSuccessHTML: common.AuthSuccessHTML,
+		SuccessRedirectUrl: "https://streammachine.io/auth-success",
+		FailureRedirectUrl: "https://streammachine.io/auth-failure",
 		AuthCodeOptions: []oauth2.AuthCodeOption{
 			oauth2.SetAuthURLParam("prompt", "login"),
 		},
