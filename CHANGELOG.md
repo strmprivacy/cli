@@ -1,3 +1,10 @@
+## [1.9.2](https://github.com/streammachineio/cli/compare/v1.9.1...v1.9.2) (2021-10-05)
+
+
+### Bug Fixes
+
+* **event-auth:** only run authenticate at the start of event auth and not for every sent event ([#53](https://github.com/streammachineio/cli/issues/53)) ([907097f](https://github.com/streammachineio/cli/commit/907097fad7abdae5381fcc5694c460a563257ae1))
+
 ## [1.9.1](https://github.com/streammachineio/cli/compare/v1.9.0...v1.9.1) (2021-10-05)
 
 
