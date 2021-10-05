@@ -8,8 +8,6 @@ var ConfigPath string
 // For example, --api-host is bound to STRM_API_HOST
 const EnvPrefix = "STRM"
 
-const AuthSuccessHTML = `<html><head><meta http-equiv="refresh" content="0; url=https://streammachine.io"/></head><body></body></html>`
-
 const DefaultConfigFilename = "strm"
 const DefaultConfigFileSuffix = ".yaml"
 

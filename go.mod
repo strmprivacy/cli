@@ -6,11 +6,10 @@ require (
 	github.com/actgardner/gogen-avro/v7 v7.3.1
 	github.com/bykof/gostradamus v1.0.4
 	github.com/fsnotify/fsnotify v1.4.9 // indirect
-	github.com/go-rod/rod v0.101.8 // indirect
+	github.com/go-rod/rod v0.101.8
 	github.com/golang-jwt/jwt/v4 v4.0.0
 	github.com/golang/protobuf v1.5.2
 	github.com/gorilla/websocket v1.4.2
-	github.com/int128/oauth2cli v1.13.0
 	github.com/jedib0t/go-pretty/v6 v6.2.4
 	github.com/joho/godotenv v1.3.0
 	github.com/magiconair/properties v1.8.5
@@ -26,6 +25,7 @@ require (
 	github.com/spf13/viper v1.7.1
 	github.com/streammachineio/api-definitions-go v1.21.1-0.20210922103820-01a69205c68b //v1.16.0
 	github.com/stretchr/testify v1.7.0 // indirect
+	github.com/trietsch/oauth2cli v1.13.1-0.20211005100207-e9a0b788d614
 	golang.org/x/net v0.0.0-20210610132358-84b48f89b13b // indirect
 	golang.org/x/oauth2 v0.0.0-20200107190931-bf48bf16ab8d
 	golang.org/x/sync v0.0.0-20200317015054-43a5402ce75a
