@@ -1,3 +1,10 @@
+## [1.9.1](https://github.com/streammachineio/cli/compare/v1.9.0...v1.9.1) (2021-10-05)
+
+
+### Bug Fixes
+
+* proper auth success and failure redirects after login ([#52](https://github.com/streammachineio/cli/issues/52)) ([adac9a6](https://github.com/streammachineio/cli/commit/adac9a60e47d46f3d59f0656f80923c7fe508c93))
+
 # [1.9.0](https://github.com/streammachineio/cli/compare/v1.8.1...v1.9.0) (2021-10-04)
 
 
