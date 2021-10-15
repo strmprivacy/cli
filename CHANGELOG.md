@@ -1,3 +1,10 @@
+# [1.10.0](https://github.com/streammachineio/cli/compare/v1.9.2...v1.10.0) (2021-10-15)
+
+
+### Features
+
+* add AssumeRole to S3 Sink ([#55](https://github.com/streammachineio/cli/issues/55)) ([625bc5a](https://github.com/streammachineio/cli/commit/625bc5acc989635d4e91200c0e8a95cbd7ea3251))
+
 ## [1.9.2](https://github.com/streammachineio/cli/compare/v1.9.1...v1.9.2) (2021-10-05)
 
 
