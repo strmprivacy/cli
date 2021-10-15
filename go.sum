@@ -243,8 +243,8 @@ github.com/spf13/pflag v1.0.5/go.mod h1:McXfInJRrz4CZXVZOBLb0bTZqETkiAhM9Iw0y3An
 github.com/spf13/viper v1.7.0/go.mod h1:8WkrPz2fc9jxqZNCJI/76HCieCp4Q8HaLFoCha5qpdg=
 github.com/spf13/viper v1.7.1 h1:pM5oEahlgWv/WnHXpgbKz7iLIxRf65tye2Ci+XFK5sk=
 github.com/spf13/viper v1.7.1/go.mod h1:8WkrPz2fc9jxqZNCJI/76HCieCp4Q8HaLFoCha5qpdg=
-github.com/streammachineio/api-definitions-go v1.21.1-0.20210922103820-01a69205c68b h1:UQfNPDX8g24riae4k5O015y/jybKNqkO/xjz830/pu0=
-github.com/streammachineio/api-definitions-go v1.21.1-0.20210922103820-01a69205c68b/go.mod h1:MiOKCF/zMEmxcsskQQlLWsH7nm+YARGXhGzxTc10rDY=
+github.com/streammachineio/api-definitions-go v1.25.0 h1:zLifSDsIo25KoGCwLYT4XoKLVKk2Mpp4Tn5nExLvsIQ=
+github.com/streammachineio/api-definitions-go v1.25.0/go.mod h1:MiOKCF/zMEmxcsskQQlLWsH7nm+YARGXhGzxTc10rDY=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
 github.com/stretchr/objx v0.1.1/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
 github.com/stretchr/testify v1.2.2/go.mod h1:a8OnRcib4nhh0OaRAV+Yts87kKdq0PP7pXfy6kDkUVs=
@@ -257,8 +257,6 @@ github.com/stretchr/testify v1.7.0/go.mod h1:6Fq8oRcR53rry900zMqJjRRixrwX3KX962/
 github.com/subosito/gotenv v1.2.0 h1:Slr1R9HxAlEKefgq5jn9U+DnETlIUa6HfgEzj0g5d7s=
 github.com/subosito/gotenv v1.2.0/go.mod h1:N0PQaV/YGNqwC0u51sEeR/aUtSLEXKX9iv69rRypqCw=
 github.com/tmc/grpc-websocket-proxy v0.0.0-20190109142713-0ad062ec5ee5/go.mod h1:ncp9v5uamzpCO7NfCPTXjqaC+bZgJeR0sMTm6dMHP7U=
-github.com/trietsch/oauth2cli v1.13.1-0.20211005094053-f2a16dde3dd2 h1:UWMKAnBkgxlyy5ZLmue8zdC6o1osB54ruNxKQ4fhn+I=
-github.com/trietsch/oauth2cli v1.13.1-0.20211005094053-f2a16dde3dd2/go.mod h1:UP0F4n4ywpN8HJ3YhmijNS2NaH/uwepJP63hExUCagY=
 github.com/trietsch/oauth2cli v1.13.1-0.20211005100207-e9a0b788d614 h1:h2ZYmBR2pWl1h3iU53vEHt1uqg3jE+qAq8J0N9rg/E4=
 github.com/trietsch/oauth2cli v1.13.1-0.20211005100207-e9a0b788d614/go.mod h1:UP0F4n4ywpN8HJ3YhmijNS2NaH/uwepJP63hExUCagY=
 github.com/xiang90/probing v0.0.0-20190116061207-43a291ad63a2/go.mod h1:UETIi67q53MR2AWcXfiuqkDkRtnGDLqkBTpCHuJHxtU=
