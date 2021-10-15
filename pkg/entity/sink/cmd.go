@@ -8,6 +8,7 @@ import (
 const (
 	sinkTypeFlag        = "sink-type"
 	credentialsFileFlag = "credentials-file"
+	assumeRoleArnFlag   = "assume-role-arn"
 )
 
 func GetCmd() *cobra.Command {
@@ -69,6 +70,7 @@ func CreateCmd() *cobra.Command {
 	flags := sink.Flags()
 	flags.String(sinkTypeFlag, "", "S3 or GCLOUD")
 	flags.String(credentialsFileFlag, "", "file with credentials")
+	flags.String(assumeRoleArnFlag, "", "ARN of the role to assume")
 	_ = sink.MarkFlagRequired(credentialsFileFlag)
 	_ = sink.MarkFlagFilename(credentialsFileFlag, "json")
 	err := sink.RegisterFlagCompletionFunc(sinkTypeFlag, sinkTypesCompletion)

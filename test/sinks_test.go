@@ -23,7 +23,7 @@ func TestSinks(t *testing.T) {
 	awsCredentialsFileName := createAwsCredentialsFile(t)
 
 	out := ExecuteCliAndGetOutput(t, "", "create", "stream", "teststream")
-	assert.Equal(t, out, `{"stream":{"ref":{"billingId":"testBillingId","name":"teststream"},"enabled":true,"limits":{"eventRate":"999999","eventCount":"999999999"},"credentials":[{"clientId":"clientId","clientSecret":"clientSecret"}]}}
+	assert.Equal(t, out, `{"stream":{"ref":{"billingId":"testBillingId","name":"teststream"},"enabled":true,"limits":{"eventRate":"10000","eventCount":"10000000"},"credentials":[{"clientId":"clientId","clientSecret":"clientSecret"}]}}
 `)
 	out = ExecuteCliAndGetOutput(t, "", "list", "sinks")
 	assert.Equal(t, out, `{}

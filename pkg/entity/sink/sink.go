@@ -52,8 +52,10 @@ func create(sinkName *string, bucketName *string, cmd *cobra.Command) {
 	sink := &entities.Sink{Ref: ref(sinkName),
 		Config: &entities.Sink_Bucket{
 			Bucket: &entities.BucketConfig{
-				BucketName:  *bucketName,
-				Credentials: readCredentialsFile(flags)},
+				BucketName:    *bucketName,
+				Credentials:   readCredentialsFile(flags),
+				AssumeRoleArn: util.GetStringAndErr(flags, assumeRoleArnFlag),
+			},
 		},
 		SinkType: parseSyncType(flags),
 	}
