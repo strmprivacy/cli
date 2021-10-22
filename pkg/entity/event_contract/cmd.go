@@ -23,7 +23,7 @@ func GetCmd() *cobra.Command {
 			get(&args[0])
 		},
 		Args:              cobra.ExactArgs(1), // the contract reference
-		ValidArgsFunction: refsCompletion,
+		ValidArgsFunction: RefsCompletion,
 	}
 }
 

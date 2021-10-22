@@ -23,6 +23,10 @@ const (
 	tagsFlag             = "tags"
 	descriptionFlag      = "description"
 	saveFlag             = "save"
+	maskedFieldsFlag     = "masked-fields"
+	maskedFieldHelp = `-M streammachine/example/1.3.0:sensitiveValue,anotherOne \
+   		-M dpg/nps_unified/v3:kiosk_v1,customer_id --masked_fields_file
+	`
 )
 
 var client streams.StreamsServiceClient
@@ -93,6 +97,7 @@ func create(args []string, cmd *cobra.Command) {
 
 	stream.Description = util.GetStringAndErr(flags, descriptionFlag)
 	stream.Tags, err = flags.GetStringSlice(tagsFlag)
+	stream.MaskedFields = parseMaskedFields(flags)
 	common.CliExit(err)
 	req := &streams.CreateStreamRequest{Stream: stream}
 	response, err := client.CreateStream(apiContext, req)
@@ -103,6 +108,26 @@ func create(args []string, cmd *cobra.Command) {
 	}
 
 	printer.Print(response)
+}
+/*
+		-M streammachine/example/1.3.0:sensitiveValue,anotherOne \
+   		-M dpg/nps_unified/v3:kiosk_v1,customer_id --masked_fields_file
+ */
+func parseMaskedFields(flags *pflag.FlagSet) *entities.MaskedFields {
+	masked,err := flags.GetStringArray(maskedFieldsFlag)
+	common.CliExit(err)
+	maskedField := &entities.MaskedFields{
+		HashType:      "",
+		Seed:          "",
+		FieldPatterns:  map[string]*entities.MaskedFields_PatternList{},
+	}
+	for _, s := range masked {
+		parts := strings.Split(s, ":")
+		ecRef := parts[0]
+		p := &entities.MaskedFields_PatternList{FieldPatterns: strings.Split(parts[1], ",")}
+		maskedField.FieldPatterns[ecRef] = p
+	}
+	return maskedField
 }
 
 func parseConsentLevelType(flags *pflag.FlagSet) (entities.ConsentLevelType, error) {
