@@ -2,8 +2,8 @@ package batch_exporter
 
 import (
 	"context"
+
 	"github.com/golang/protobuf/ptypes/duration"
-	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/streammachineio/api-definitions-go/api/batch_exporters/v1"
 	"github.com/streammachineio/api-definitions-go/api/entities/v1"
@@ -58,7 +58,7 @@ func create(streamName *string, cmd *cobra.Command) {
 		sinkName = sinkNames[0]
 	}
 	if len(sinkName) == 0 {
-		log.Fatalf("You must provide a sink name when creating a batch exporter")
+		common.CliExit("You must provide a sink name when creating a batch exporter")
 	}
 	// this exporterName might be empty, in which case the API will set it to
 	// the appropriate default

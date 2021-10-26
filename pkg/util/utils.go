@@ -65,7 +65,7 @@ func TryLoad(m proto.Message, name *string) error {
 	if err != nil {
 		return err
 	}
-	err = protojson.Unmarshal(bytes, m)
+	err = protojson.UnmarshalOptions{DiscardUnknown: true}.Unmarshal(bytes, m)
 	return err
 }
 

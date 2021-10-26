@@ -3,6 +3,8 @@ package stream
 import (
 	"context"
 	"fmt"
+	"strings"
+
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
@@ -12,7 +14,6 @@ import (
 	"streammachine.io/strm/pkg/auth"
 	"streammachine.io/strm/pkg/common"
 	"streammachine.io/strm/pkg/util"
-	"strings"
 )
 
 // strings used in the cli
@@ -85,13 +86,13 @@ func create(args []string, cmd *cobra.Command) {
 	if len(linkedStream) != 0 {
 		stream.ConsentLevels, err = flags.GetInt32Slice(consentLevelsFlag)
 		if len(stream.ConsentLevels) == 0 {
-			log.Fatalf("You need consent levels when creating a derived stream")
+			common.CliExit("You need consent levels when creating a derived stream")
 		}
 		stream.ConsentLevelType, err = parseConsentLevelType(flags)
 		stream.LinkedStream = linkedStream
 	} else {
 		if len(stream.Ref.Name) == 0 {
-			log.Fatalf("You must provide a name when creating a source stream")
+			common.CliExit("You must provide a name when creating a source stream")
 		}
 	}
 
