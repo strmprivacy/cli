@@ -1,3 +1,10 @@
+## [1.10.1](https://github.com/streammachineio/cli/compare/v1.10.0...v1.10.1) (2021-10-26)
+
+
+### Bug Fixes
+
+* error messages via util.CliExit ([fc80631](https://github.com/streammachineio/cli/commit/fc80631f87573b23f2a4599778c7ccdf1d990ad0))
+
 # [1.10.0](https://github.com/streammachineio/cli/compare/v1.9.2...v1.10.0) (2021-10-15)
 
 
