@@ -2,13 +2,14 @@ package sink
 
 import (
 	"context"
-	log "github.com/sirupsen/logrus"
+	"fmt"
+	"io/ioutil"
+
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 	"github.com/streammachineio/api-definitions-go/api/entities/v1"
 	"github.com/streammachineio/api-definitions-go/api/sinks/v1"
 	"google.golang.org/grpc"
-	"io/ioutil"
 	"streammachine.io/strm/pkg/auth"
 	"streammachine.io/strm/pkg/common"
 	"streammachine.io/strm/pkg/util"
@@ -78,8 +79,8 @@ func parseSyncType(flags *pflag.FlagSet) entities.SinkType {
 	}
 	sinkType, ok := entities.SinkType_value[typeString]
 	if !ok {
-		log.Fatalf("Can't convert %s to a known consent sink type, types are %v",
-			typeString, entities.SinkType_value)
+		common.CliExit(fmt.Sprintf("Can't convert %s to a known consent sink type, types are %v",
+			typeString, entities.SinkType_value))
 	}
 	return entities.SinkType(sinkType)
 }

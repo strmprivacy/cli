@@ -7,13 +7,12 @@ import (
 	"strings"
 	"time"
 
-	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/streammachineio/api-definitions-go/api/entities/v1"
 	"streammachine.io/strm/pkg/auth"
 	"streammachine.io/strm/pkg/common"
 	"streammachine.io/strm/pkg/entity/stream"
-	"streammachine.io/strm/pkg/simulator"
+	sim "streammachine.io/strm/pkg/simulator"
 	"streammachine.io/strm/pkg/util"
 )
 
@@ -27,7 +26,7 @@ func run(cmd *cobra.Command, streamName *string) {
 		clientId := util.GetStringAndErr(flags, sim.ClientIdFlag)
 		clientSecret := util.GetStringAndErr(flags, sim.ClientSecretFlag)
 		if len(clientId) == 0 || len(clientSecret) == 0 {
-			log.Fatalf("There are no credentials stored for stream '%s'", *streamName)
+			common.CliExit(fmt.Sprintf("There are no credentials stored for stream '%s'", *streamName))
 		}
 		s.Credentials = append(s.Credentials, &entities.Credentials{
 			ClientSecret: clientSecret, ClientId: clientId,
@@ -35,7 +34,7 @@ func run(cmd *cobra.Command, streamName *string) {
 	}
 	streamInfo := stream.Get(streamName, false)
 	if len(streamInfo.StreamTree.Stream.LinkedStream) != 0 {
-		log.Fatalf("You can't run a simulator on a derived stream")
+		common.CliExit("You can't run a simulator on a derived stream")
 	}
 	interval := time.Duration(util.GetIntAndErr(flags, sim.IntervalFlag))
 	sessionRange := util.GetIntAndErr(flags, sim.SessionRangeFlag)
@@ -52,7 +51,7 @@ func run(cmd *cobra.Command, streamName *string) {
 	}
 
 	if len(consentLevels) == 0 {
-		log.Fatalf("%v is not a valid set of consent levels", consentLevels)
+		common.CliExit(fmt.Sprintf("%v is not a valid set of consent levels", consentLevels))
 	}
 
 	if !quiet {
