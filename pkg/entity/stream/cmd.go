@@ -4,6 +4,7 @@ import (
 	"github.com/spf13/cobra"
 	"streammachine.io/strm/pkg/common"
 	"streammachine.io/strm/pkg/entity/event_contract"
+	"streammachine.io/strm/pkg/util"
 )
 
 func CreateCmd() *cobra.Command {
@@ -40,6 +41,7 @@ func CreateCmd() *cobra.Command {
 
 func completion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
 	s, c := event_contract.RefsCompletion(cmd, args, complete)
+	s = util.MapStrings(s, func(j string) string { return j + ":handle/name/version" })
 	// add : to each of the completions
 	return s, c
 
