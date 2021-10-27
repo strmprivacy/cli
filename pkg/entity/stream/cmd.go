@@ -41,8 +41,7 @@ func CreateCmd() *cobra.Command {
 
 func completion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
 	s, c := event_contract.RefsCompletion(cmd, args, complete)
-	s = util.MapStrings(s, func(j string) string { return j + ":handle/name/version" })
-	// add : to each of the completions
+	s = util.MapStrings(s, func(j string) string { return j + ":" })
 	return s, c
 
 }

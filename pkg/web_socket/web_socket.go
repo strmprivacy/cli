@@ -29,21 +29,42 @@ func Run(cmd *cobra.Command, streamName *string) {
 		clientSecret := util.GetStringAndErr(flags, sim.ClientSecretFlag)
 		if len(clientId) == 0 || len(clientSecret) == 0 {
 			common.CliExit(fmt.Sprintf("There's no saved stream for %s and clientId %s clientSecret %s are missing as options",
-				streamName, clientId, clientSecret))
+				*streamName, clientId, clientSecret))
 		}
 		s.Credentials = append(s.Credentials, &entities.Credentials{
 			ClientSecret: clientSecret, ClientId: clientId,
 		})
 	}
-	token := auth.GetEventToken(s.Ref.BillingId, s.Credentials[0].ClientId, s.Credentials[0].ClientSecret)
-
-	header := http.Header{"authorization": []string{"Bearer " + token}}
-	c, _, err := websocket.DefaultDialer.Dial(u, header)
-	common.CliExit(err)
-
 	for {
-		_, message, err := c.ReadMessage()
+
+		token := auth.GetEventToken(s.Ref.BillingId, s.Credentials[0].ClientId, s.Credentials[0].ClientSecret)
+		header := http.Header{"authorization": []string{"Bearer " + token}}
+		ws, _, err := websocket.DefaultDialer.Dial(u, header)
 		common.CliExit(err)
-		fmt.Println(string(message))
+
+	innerLoop:
+		for {
+			_, message, err := ws.ReadMessage()
+			if err == nil {
+				fmt.Println(string(message))
+			} else {
+				// there was an error. Check it for normal websocket timeouts
+				// and in that case just re-authenticate and reconnect
+				if ce, ok := err.(*websocket.CloseError); ok {
+					switch ce.Code {
+					case websocket.CloseNormalClosure,
+						websocket.CloseGoingAway,
+						websocket.CloseNoStatusReceived:
+						break innerLoop
+					default:
+						// not one of the above errors
+						common.CliExit(err)
+					}
+				} else {
+					// not a websocket.CloseError
+					common.CliExit(err)
+				}
+			}
+		}
 	}
 }

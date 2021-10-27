@@ -8,6 +8,8 @@ import (
 	"github.com/joho/godotenv"
 	"github.com/magiconair/properties/assert"
 	"golang.org/x/sync/errgroup"
+	"google.golang.org/protobuf/encoding/protojson"
+	"google.golang.org/protobuf/proto"
 	"io/ioutil"
 	"os"
 	"os/exec"
@@ -194,4 +196,8 @@ func loginInBrowser() error {
 	page.MustWaitLoad()
 
 	return nil
+}
+func TryLoad(m *proto.Message, s string) error {
+	err := protojson.UnmarshalOptions{DiscardUnknown: true}.Unmarshal([]byte(s), *m)
+	return err
 }

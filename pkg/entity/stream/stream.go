@@ -71,6 +71,7 @@ func del(streamName *string, recursive bool) {
 	}
 	_, err := client.DeleteStream(apiContext, req)
 	common.CliExit(err)
+	util.DeleteSaved(response.StreamTree.Stream, streamName)
 	printer.Print(response)
 }
 
