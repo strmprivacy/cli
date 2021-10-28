@@ -32,6 +32,7 @@ func CreateCmd() *cobra.Command {
 	flags.StringSlice(tagsFlag, []string{}, "tags")
 	flags.Bool(saveFlag, false, "save the result in the config directory")
 	flags.StringArrayP(maskedFieldsFlag, "M", []string{}, maskedFieldHelp)
+	flags.String(maskedFieldsSeed, "", `A seed used for masking`)
 
 	err := stream.RegisterFlagCompletionFunc(linkedStreamFlag, SourceNamesCompletion)
 	err = stream.RegisterFlagCompletionFunc(maskedFieldsFlag, completion)
