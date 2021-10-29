@@ -223,7 +223,11 @@ func ExecuteAndVerify(t *testing.T, expected proto.Message, args ...string) {
 		call
 	*/
 	outputMessage := proto.Clone(expected)
-	out, err := TryLoad(outputMessage, ExecuteCliAndGetOutput(t, "", args...))
+	output := ExecuteCliAndGetOutput(t, "", args...)
+	if strings.HasPrefix(output, "Error") {
+		t.Error(output)
+	}
+	out, err := TryLoad(outputMessage, output)
 	if err != nil {
 		fmt.Println("Can't execute", args)
 		t.Fail()
