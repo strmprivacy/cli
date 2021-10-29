@@ -19,7 +19,7 @@ func init() {
 		Limits:       limits,
 		Tags:         []string{"foo", "bar", "baz"},
 		Credentials:  []*entities.Credentials{creds},
-		MaskedFields: &entities.MaskedFields{},
+		MaskedFields: &entities.MaskedFields{Seed: "****"},
 	}
 	streamWithTagsWithoutSecret = (proto.Clone(streamWithTags)).(*entities.Stream)
 	streamWithTagsWithoutSecret.Credentials = []*entities.Credentials{{ClientId: "clientId"}}
@@ -51,8 +51,10 @@ func createStreamTest1(t *testing.T) {
 }
 
 func createStreamTest2(t *testing.T) {
-	ExecuteAndVerify(t,
-	&streams.CreateStreamResponse{Stream: streamWithTags},
+	s := &entities.Stream{}
+	proto.Merge(s, streamWithTags)
+	s.MaskedFields= &entities.MaskedFields{}
+	ExecuteAndVerify(t, &streams.CreateStreamResponse{Stream: s},
 	"create", "stream", "clitest-with-tags", "--tags=foo,bar,baz")
 }
 
