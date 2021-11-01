@@ -1,3 +1,10 @@
+# [1.11.0](https://github.com/streammachineio/cli/compare/v1.10.1...v1.11.0) (2021-11-01)
+
+
+### Features
+
+* masked fields ([#63](https://github.com/streammachineio/cli/issues/63)) ([fbecd35](https://github.com/streammachineio/cli/commit/fbecd35266177f71f12c4be01540b1bbc9b73a5d))
+
 ## [1.10.1](https://github.com/streammachineio/cli/compare/v1.10.0...v1.10.1) (2021-10-26)
 
 
