@@ -3,7 +3,8 @@ package stream
 import (
 	"github.com/spf13/cobra"
 	"streammachine.io/strm/pkg/common"
-
+	"streammachine.io/strm/pkg/entity/event_contract"
+	"streammachine.io/strm/pkg/util"
 )
 
 func CreateCmd() *cobra.Command {
@@ -30,10 +31,20 @@ func CreateCmd() *cobra.Command {
 	flags.String(descriptionFlag, "", "description")
 	flags.StringSlice(tagsFlag, []string{}, "tags")
 	flags.Bool(saveFlag, false, "save the result in the config directory")
+	flags.StringArrayP(maskedFieldsFlag, "M", []string{}, maskedFieldHelp)
+	flags.String(maskedFieldsSeed, "", `A seed used for masking`)
 
 	err := stream.RegisterFlagCompletionFunc(linkedStreamFlag, SourceNamesCompletion)
+	err = stream.RegisterFlagCompletionFunc(maskedFieldsFlag, completion)
 	common.CliExit(err)
 	return stream
+}
+
+func completion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
+	s, c := event_contract.RefsCompletion(cmd, args, complete)
+	s = util.MapStrings(s, func(j string) string { return j + ":" })
+	return s, c
+
 }
 
 func DeleteCmd() *cobra.Command {

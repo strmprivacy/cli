@@ -2,9 +2,16 @@ package test
 
 import (
 	"encoding/json"
-	"github.com/magiconair/properties/assert"
 	"io/ioutil"
+	"strings"
 	"testing"
+
+	"github.com/golang/protobuf/ptypes/duration"
+	"github.com/streammachineio/api-definitions-go/api/batch_exporters/v1"
+	"github.com/streammachineio/api-definitions-go/api/entities/v1"
+	"github.com/streammachineio/api-definitions-go/api/sinks/v1"
+	"github.com/streammachineio/api-definitions-go/api/streams/v1"
+	"google.golang.org/protobuf/proto"
 )
 
 type AccessKey struct {
@@ -13,54 +20,170 @@ type AccessKey struct {
 	SecretAccessKey string `json:"SecretAccessKey"`
 }
 
+var awsCredentialsFileName string
+var streamRef *entities.StreamRef
+var sinkRef, anotherSinkRef *entities.SinkRef
+var sink, anotherSink *entities.Sink
+var bucketConfig *entities.BucketConfig
+var batchExporterRef *entities.BatchExporterRef
+var batchExporter, anotherBatchExporter *entities.BatchExporter
+
+const (
+	bucketCredentials = `{"AccessKey":{"UserName":"UserName","AccessKeyId":"AccessKeyId","SecretAccessKey":"SecretAccessKey"}}`
+	billingId         = "testBillingId"
+)
+
+func TestSinks(t *testing.T) {
+	awsCredentialsFileName = createAwsCredentialsFile(t)
+	t.Run("createStreamForSinkTest", createStreamForSinkTest)
+	t.Run("listSinks", listSinks)
+	t.Run("createSink", createSink)
+	t.Run("listSinks2", listSinks2)
+	t.Run("createBatchExporter", createBatchExporter)
+	t.Run("createSink2", createSink2)
+	t.Run("createAnotherBatchExporter", createAnotherBatchExporter)
+	t.Run("listBatchExporters", listBatchExporters)
+	t.Run("getBatchExporter", getBatchExporter)
+	t.Run("listSinksRecursive", listSinksRecursive)
+	t.Run("getAnotherSinkRecursive", getAnotherSinkRecursive)
+	t.Run("deleteAnotherSinkRecursive", deleteAnotherSinkRecursive)
+	t.Run("deleteSinkNonRecursive", deleteSinkNonRecursive)
+}
+
+/*
+setup some constant values.
+ */
+func init() {
+	streamRef = &entities.StreamRef{BillingId: billingId, Name: "teststream"}
+	sinkRef = &entities.SinkRef{BillingId: billingId, Name: "s3sink"}
+	anotherSinkRef = &entities.SinkRef{BillingId: billingId, Name: "another-sink"}
+	bucketConfig = &entities.BucketConfig{BucketName: "strm-cli-tester"}
+
+	sink = &entities.Sink{
+		Ref: sinkRef, SinkType: entities.SinkType_S3,
+		Config: &entities.Sink_Bucket{Bucket: bucketConfig},
+	}
+	anotherSink = &entities.Sink{
+		Ref: anotherSinkRef, SinkType: entities.SinkType_S3,
+		Config: &entities.Sink_Bucket{Bucket: bucketConfig},
+	}
+	batchExporterRef = &entities.BatchExporterRef{BillingId: billingId, Name: sinkRef.Name + "-" + streamRef.Name}
+	batchExporter = &entities.BatchExporter{
+		Ref:                  batchExporterRef,
+		StreamOrKeyStreamRef: &entities.BatchExporter_StreamRef{StreamRef: streamRef},
+		SinkName:             sinkRef.Name,
+		Interval:             &duration.Duration{Seconds: 60},
+	}
+
+	anotherBatchExporter = &entities.BatchExporter{}
+	proto.Merge(anotherBatchExporter, batchExporter)
+	anotherBatchExporter.SinkName = anotherSink.Ref.Name
+	anotherBatchExporter.Ref.Name = "another-batch-exporter"
+	anotherBatchExporter.PathPrefix = "some-prefix"
+	anotherBatchExporter.Interval = &duration.Duration{Seconds: 300}
+
+	_ = newConfigDir()
+}
+
 type AwsCredentials struct {
 	AccessKey AccessKey `json:"AccessKey"`
 }
 
-func TestSinks(t *testing.T) {
-	_ = newConfigDir()
+func createStreamForSinkTest(t *testing.T) {
+	ExecuteAndVerify(t, &streams.CreateStreamResponse{
+		Stream: &entities.Stream{
+			Ref:          streamRef,
+			Enabled:      true,
+			Limits:       limits,
+			Credentials:  []*entities.Credentials{creds},
+			MaskedFields: &entities.MaskedFields{}}},
+"create", "stream", streamRef.Name)
+}
 
-	awsCredentialsFileName := createAwsCredentialsFile(t)
+func listSinks(t *testing.T) {
+	ExecuteAndVerify(t, &sinks.ListSinksResponse{}, "list", "sinks")
+}
 
-	out := ExecuteCliAndGetOutput(t, "", "create", "stream", "teststream")
-	assert.Equal(t, out, `{"stream":{"ref":{"billingId":"testBillingId","name":"teststream"},"enabled":true,"limits":{"eventRate":"10000","eventCount":"10000000"},"credentials":[{"clientId":"clientId","clientSecret":"clientSecret"}]}}
-`)
-	out = ExecuteCliAndGetOutput(t, "", "list", "sinks")
-	assert.Equal(t, out, `{}
-`)
-	out = ExecuteCliAndGetOutput(t, "", "create", "sink", "s3sink", "strm-cli-tester", "--sink-type=S3", "--credentials-file="+awsCredentialsFileName)
-	assert.Equal(t, out, `{"sink":{"ref":{"billingId":"testBillingId","name":"s3sink"},"sinkType":"S3","bucket":{"bucketName":"strm-cli-tester","credentials":"{\"AccessKey\":{\"UserName\":\"UserName\",\"AccessKeyId\":\"AccessKeyId\",\"SecretAccessKey\":\"SecretAccessKey\"}}"}}}
-`)
-	out = ExecuteCliAndGetOutput(t, "", "list", "sinks")
-	assert.Equal(t, out, `{"sinks":[{"sink":{"ref":{"billingId":"testBillingId","name":"s3sink"},"sinkType":"S3","bucket":{"bucketName":"strm-cli-tester"}}}]}
-`)
-	out = ExecuteCliAndGetOutput(t, "", "create", "batch-exporter", "teststream")
-	assert.Equal(t, out, `{"batchExporter":{"ref":{"billingId":"testBillingId","name":"s3sink-teststream"},"streamRef":{"billingId":"testBillingId","name":"teststream"},"interval":"60s","sinkName":"s3sink"}}
-`)
-	out = ExecuteCliAndGetOutput(t, "", "create", "sink", "another-sink", "strm-cli-tester", "--sink-type=S3", "--credentials-file="+awsCredentialsFileName)
-	assert.Equal(t, out, `{"sink":{"ref":{"billingId":"testBillingId","name":"another-sink"},"sinkType":"S3","bucket":{"bucketName":"strm-cli-tester","credentials":"{\"AccessKey\":{\"UserName\":\"UserName\",\"AccessKeyId\":\"AccessKeyId\",\"SecretAccessKey\":\"SecretAccessKey\"}}"}}}
-`)
-	out = ExecuteCliAndGetOutput(t, "", "create", "batch-exporter", "teststream", "--sink=another-sink", "--interval=300", "--name=another-batch-exporter", "--path-prefix=some-prefix")
-	assert.Equal(t, out, `{"batchExporter":{"ref":{"billingId":"testBillingId","name":"another-batch-exporter"},"streamRef":{"billingId":"testBillingId","name":"teststream"},"interval":"300s","sinkName":"another-sink","pathPrefix":"some-prefix"}}
-`)
-	out = ExecuteCliAndGetOutput(t, "", "list", "batch-exporters")
-	assert.Equal(t, out, `{"batchExporters":[{"ref":{"billingId":"testBillingId","name":"s3sink-teststream"},"streamRef":{"billingId":"testBillingId","name":"teststream"},"interval":"60s","sinkName":"s3sink"},{"ref":{"billingId":"testBillingId","name":"another-batch-exporter"},"streamRef":{"billingId":"testBillingId","name":"teststream"},"interval":"300s","sinkName":"another-sink","pathPrefix":"some-prefix"}]}
-`)
-	out = ExecuteCliAndGetOutput(t, "", "get", "batch-exporter", "another-batch-exporter")
-	assert.Equal(t, out, `{"batchExporter":{"ref":{"billingId":"testBillingId","name":"another-batch-exporter"},"streamRef":{"billingId":"testBillingId","name":"teststream"},"interval":"300s","sinkName":"another-sink","pathPrefix":"some-prefix"}}
-`)
-	out = ExecuteCliAndGetOutput(t, "", "list", "sinks", "--recursive")
-	assert.Equal(t, out, `{"sinks":[{"sink":{"ref":{"billingId":"testBillingId","name":"s3sink"},"sinkType":"S3","bucket":{"bucketName":"strm-cli-tester"}},"batchExporters":[{"ref":{"billingId":"testBillingId","name":"s3sink-teststream"},"streamRef":{"billingId":"testBillingId","name":"teststream"},"interval":"60s","sinkName":"s3sink"}]},{"sink":{"ref":{"billingId":"testBillingId","name":"another-sink"},"sinkType":"S3","bucket":{"bucketName":"strm-cli-tester"}},"batchExporters":[{"ref":{"billingId":"testBillingId","name":"another-batch-exporter"},"streamRef":{"billingId":"testBillingId","name":"teststream"},"interval":"300s","sinkName":"another-sink","pathPrefix":"some-prefix"}]}]}
-`)
-	out = ExecuteCliAndGetOutput(t, "", "get", "sink", "another-sink", "--recursive")
-	assert.Equal(t, out, `{"sinkTree":{"sink":{"ref":{"billingId":"testBillingId","name":"another-sink"},"sinkType":"S3","bucket":{"bucketName":"strm-cli-tester"}},"batchExporters":[{"ref":{"billingId":"testBillingId","name":"another-batch-exporter"},"streamRef":{"billingId":"testBillingId","name":"teststream"},"interval":"300s","sinkName":"another-sink","pathPrefix":"some-prefix"}]}}
-`)
-	out = ExecuteCliAndGetOutput(t, "", "delete", "sink", "another-sink", "--recursive")
-	assert.Equal(t, out, `{}
-`)
-	out = ExecuteCliAndGetOutput(t, "", "delete", "sink", "s3sink")
-	assert.Equal(t, out, `Error: rpc error: code = FailedPrecondition desc = Cannot delete sink with name s3sink, as it still has exporters linked to it. Delete those first before deleting this sink.
-`)
+func createSink(t *testing.T) {
+	s := &entities.Sink{}
+	proto.Merge(s, sink)
+	s.GetBucket().Credentials = bucketCredentials
+	ExecuteAndVerify(t, &sinks.CreateSinkResponse{Sink: s}, "create", "sink", sink.Ref.Name, "strm-cli-tester", "--sink-type=S3", "--credentials-file="+awsCredentialsFileName)
+}
+
+func listSinks2(t *testing.T) {
+	sinkTree := &entities.SinkTree{ Sink: sink }
+	ExecuteAndVerify(t, &sinks.ListSinksResponse{Sinks: []*entities.SinkTree{sinkTree}},
+		"list", "sinks")
+}
+
+func createBatchExporter(t *testing.T) {
+	b := &entities.BatchExporter{}
+	proto.Merge(b, batchExporter)
+	b.Interval = &duration.Duration{Seconds: 60}
+	b.SinkName = sink.Ref.Name
+
+	ExecuteAndVerify(t, &batch_exporters.CreateBatchExporterResponse{
+		BatchExporter: b}, "create", "batch-exporter", streamRef.Name)
+}
+
+func createSink2(t *testing.T) {
+	s := &entities.Sink{}
+	proto.Merge(s, anotherSink)
+	s.GetBucket().Credentials = bucketCredentials
+	ExecuteAndVerify(t, &sinks.CreateSinkResponse{Sink: s},
+		"create", "sink", s.Ref.Name, "strm-cli-tester", "--sink-type=S3", "--credentials-file="+awsCredentialsFileName)
+}
+
+func createAnotherBatchExporter(t *testing.T) {
+	ExecuteAndVerify(t, &batch_exporters.CreateBatchExporterResponse{BatchExporter: anotherBatchExporter},
+		"create", "batch-exporter", streamRef.Name, "--sink="+anotherSink.Ref.Name, "--interval=300",
+		"--name=another-batch-exporter", "--path-prefix=some-prefix")
+}
+
+func listBatchExporters(t *testing.T) {
+	ExecuteAndVerify(t, &batch_exporters.ListBatchExportersResponse{
+		BatchExporters: []*entities.BatchExporter{batchExporter, anotherBatchExporter}},
+		"list", "batch-exporters")
+}
+
+func getBatchExporter(t *testing.T) {
+	ExecuteAndVerify(t, &batch_exporters.GetBatchExporterResponse{BatchExporter: anotherBatchExporter},
+		"get", "batch-exporter", "another-batch-exporter")
+
+}
+
+func listSinksRecursive(t *testing.T) {
+	sinkTree := &entities.SinkTree{
+		Sink:           sink,
+		BatchExporters: []*entities.BatchExporter{batchExporter},
+	}
+	anotherSinkTree := &entities.SinkTree{
+		Sink:           anotherSink,
+		BatchExporters: []*entities.BatchExporter{anotherBatchExporter},
+	}
+	ExecuteAndVerify(t, &sinks.ListSinksResponse{Sinks: []*entities.SinkTree{sinkTree, anotherSinkTree}},
+		"list", "sinks", "--recursive")
+}
+
+func getAnotherSinkRecursive(t *testing.T) {
+	ExecuteAndVerify(t, &sinks.GetSinkResponse{
+		SinkTree: &entities.SinkTree{
+			Sink:           anotherSink,
+			BatchExporters: []*entities.BatchExporter{anotherBatchExporter},
+		},
+	}, "get", "sink", anotherSink.Ref.Name, "--recursive")
+}
+
+func deleteAnotherSinkRecursive(t *testing.T) {
+	ExecuteAndVerify(t, &sinks.DeleteSinkResponse{}, "delete", "sink", anotherSink.Ref.Name, "--recursive")
+}
+
+func deleteSinkNonRecursive(t *testing.T) {
+	output := ExecuteCliAndGetOutput(t, "", "delete", "sink", sink.Ref.Name)
+	if strings.Index(output, "FailedPrecondition") == -1 {
+		t.Fail()
+	}
 }
 
 func createAwsCredentialsFile(t *testing.T) string {

@@ -3,6 +3,7 @@ package auth
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 	"streammachine.io/strm/pkg/common"
@@ -62,10 +63,9 @@ func handleAuthResponse(resp *http.Response) {
 	eventToken := eventToken{}
 
 	err = json.Unmarshal(body, &eventToken)
-	if &eventToken.IdToken == nil {
-		common.CliExit("Cannot get ID token from auth response")
-	}
 	common.CliExit(err)
-
+	if &eventToken.IdToken == nil || len(eventToken.IdToken)==0 {
+		common.CliExit(fmt.Sprintf("Cannot get ID token from auth response %s", body))
+	}
 	token = &eventToken
 }

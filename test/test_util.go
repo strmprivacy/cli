@@ -8,10 +8,13 @@ import (
 	"github.com/joho/godotenv"
 	"github.com/magiconair/properties/assert"
 	"golang.org/x/sync/errgroup"
+	"google.golang.org/protobuf/encoding/protojson"
+	"google.golang.org/protobuf/proto"
 	"io/ioutil"
 	"os"
 	"os/exec"
 	"regexp"
+	"streammachine.io/strm/pkg/util"
 	"strings"
 	"testing"
 )
@@ -194,4 +197,40 @@ func loginInBrowser() error {
 	page.MustWaitLoad()
 
 	return nil
+}
+func TryLoad(m proto.Message, s string) (proto.Message, error) {
+	err := protojson.UnmarshalOptions{DiscardUnknown: true}.Unmarshal([]byte(s), m)
+	return m, err
+}
+
+func assertProtoEquals(t *testing.T, actual proto.Message, expected proto.Message) {
+	if !proto.Equal(actual, expected) {
+		printer := util.ProtoMessageJsonPrettyPrinter{}
+		fmt.Println("Assertion failure: different proto messages")
+		fmt.Println("expected:")
+		printer.Print(expected)
+		fmt.Println("actual:")
+		printer.Print(actual)
+		t.Fail()
+	}
+}
+
+func ExecuteAndVerify(t *testing.T, expected proto.Message, args ...string) {
+	/*
+		we need a proto message of the same type as the expected, and since
+		golang does not (yet) have generics, we can do it this way.
+		the contents of the cloned message are NOT used, only its address for the TryLoad
+		call
+	*/
+	outputMessage := proto.Clone(expected)
+	output := ExecuteCliAndGetOutput(t, "", args...)
+	if strings.HasPrefix(output, "Error") {
+		t.Error(output)
+	}
+	out, err := TryLoad(outputMessage, output)
+	if err != nil {
+		fmt.Println("Can't execute", args)
+		t.Fail()
+	}
+	assertProtoEquals(t, out, expected)
 }

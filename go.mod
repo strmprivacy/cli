@@ -24,7 +24,7 @@ require (
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect
 	github.com/spf13/pflag v1.0.5
 	github.com/spf13/viper v1.7.1
-	github.com/streammachineio/api-definitions-go v1.25.0 //v1.16.0
+	github.com/streammachineio/api-definitions-go v1.26.0 //v1.16.0
 	github.com/stretchr/testify v1.7.0 // indirect
 	golang.org/x/net v0.0.0-20210610132358-84b48f89b13b // indirect
 	golang.org/x/oauth2 v0.0.0-20211005180243-6b3c2da341f1

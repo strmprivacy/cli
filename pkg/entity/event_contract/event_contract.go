@@ -104,7 +104,7 @@ func readContractDefinition(filename *string) EventContractDefinition {
 	return contractDefinition
 }
 
-func refsCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
+func RefsCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
 	if auth.Auth.BillingIdAbsent() {
 		return common.MissingBillingIdCompletionError(cmd.CommandPath())
 	}
