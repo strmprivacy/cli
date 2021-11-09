@@ -52,7 +52,7 @@ func TestSinks(t *testing.T) {
 
 /*
 setup some constant values.
- */
+*/
 func init() {
 	streamRef = &entities.StreamRef{BillingId: billingId, Name: "teststream"}
 	sinkRef = &entities.SinkRef{BillingId: billingId, Name: "s3sink"}
@@ -97,7 +97,7 @@ func createStreamForSinkTest(t *testing.T) {
 			Limits:       limits,
 			Credentials:  []*entities.Credentials{creds},
 			MaskedFields: &entities.MaskedFields{}}},
-"create", "stream", streamRef.Name)
+		"create", "stream", streamRef.Name)
 }
 
 func listSinks(t *testing.T) {
@@ -112,7 +112,7 @@ func createSink(t *testing.T) {
 }
 
 func listSinks2(t *testing.T) {
-	sinkTree := &entities.SinkTree{ Sink: sink }
+	sinkTree := &entities.SinkTree{Sink: sink}
 	ExecuteAndVerify(t, &sinks.ListSinksResponse{Sinks: []*entities.SinkTree{sinkTree}},
 		"list", "sinks")
 }

@@ -8,6 +8,7 @@ import (
 	"github.com/streammachineio/api-definitions-go/api/entities/v1"
 	"github.com/streammachineio/api-definitions-go/api/schemas/v1"
 	"google.golang.org/grpc"
+	"google.golang.org/protobuf/encoding/protojson"
 	"io/ioutil"
 	"streammachine.io/strm/pkg/auth"
 	"streammachine.io/strm/pkg/common"
@@ -19,6 +20,7 @@ const (
 	kafkaClusterFlag = "kafka-cluster"
 	definitionFlag   = "definition"
 	publicFlag       = "public"
+	schemaTypeFlag   = "type"
 )
 
 var client schemas.SchemasServiceClient
@@ -95,20 +97,34 @@ func GetSchema(name *string, clusterRef *entities.KafkaClusterRef) *schemas.GetS
 func create(cmd *cobra.Command, args *string) {
 	flags := cmd.Flags()
 
+	typeString := util.GetStringAndErr(flags, schemaTypeFlag)
+	schemaType, ok := entities.SchemaType_value[typeString]
+	if !ok {
+		common.CliExit(fmt.Sprintf("Can't convert %s to a known consent sink type, types are %v",
+			typeString, entities.SchemaType_value))
+	}
 	definitionFilename := util.GetStringAndErr(flags, definitionFlag)
 	definition, err := ioutil.ReadFile(definitionFilename)
-
+	simple := &entities.Schema_SimpleSchemaDefinition{}
 	isPublic := util.GetBoolAndErr(flags, publicFlag)
-
 	ref := Ref(args)
+	ref.SchemaType = entities.SchemaType(schemaType)
 	req := &schemas.CreateSchemaRequest{
 		BillingId: auth.Auth.BillingId(),
 		Schema: &entities.Schema{
-			Ref:        ref,
-			Definition: string(definition),
-			IsPublic:   isPublic,
+			Ref:      ref,
+			IsPublic: isPublic,
 		},
 	}
+	err = protojson.Unmarshal(definition, simple)
+	if err == nil {
+		// it's a simple message
+		req.Schema.SimpleSchema = simple
+	} else {
+		req.Schema.Definition = string(definition)
+	}
+
+	println(protojson.Format(req))
 	response, err := client.CreateSchema(apiContext, req)
 	common.CliExit(err)
 	printer.Print(response)

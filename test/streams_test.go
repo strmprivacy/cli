@@ -9,7 +9,7 @@ import (
 )
 
 var creds = &entities.Credentials{ClientId: "clientId", ClientSecret: "clientSecret"}
-var limits = &entities.Limits{EventRate: 10000, EventCount: 10000000}
+var limits = &entities.Limits{EventRate: 10000, EventCount: 1000000}
 var streamWithTags, streamWithTagsWithoutSecret *entities.Stream
 
 func init() {
@@ -53,9 +53,9 @@ func createStreamTest1(t *testing.T) {
 func createStreamTest2(t *testing.T) {
 	s := &entities.Stream{}
 	proto.Merge(s, streamWithTags)
-	s.MaskedFields= &entities.MaskedFields{}
+	s.MaskedFields = &entities.MaskedFields{}
 	ExecuteAndVerify(t, &streams.CreateStreamResponse{Stream: s},
-	"create", "stream", "clitest-with-tags", "--tags=foo,bar,baz")
+		"create", "stream", "clitest-with-tags", "--tags=foo,bar,baz")
 }
 
 func createDerivedStream1(t *testing.T) {
@@ -69,16 +69,16 @@ func createDerivedStream1(t *testing.T) {
 			Credentials:      []*entities.Credentials{creds},
 			MaskedFields:     &entities.MaskedFields{}}}
 	ExecuteAndVerify(t, expected,
-	"create", "stream", "--derived-from=clitest-with-tags", "--levels=2")
+		"create", "stream", "--derived-from=clitest-with-tags", "--levels=2")
 }
 
 func getStream1(t *testing.T) {
 	ExecuteAndVerify(t,
-	&streams.GetStreamResponse{StreamTree: &entities.StreamTree{Stream: streamWithTagsWithoutSecret}},
-	"get", "stream", "clitest-with-tags")
+		&streams.GetStreamResponse{StreamTree: &entities.StreamTree{Stream: streamWithTagsWithoutSecret}},
+		"get", "stream", "clitest-with-tags")
 }
 
 func deleteStream1(t *testing.T) {
 	ExecuteAndVerify(t, &streams.DeleteStreamResponse{},
-	"delete", "stream", "clitest-with-tags", "--recursive")
+		"delete", "stream", "clitest-with-tags", "--recursive")
 }
