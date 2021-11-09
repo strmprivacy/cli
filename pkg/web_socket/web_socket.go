@@ -53,6 +53,7 @@ func Run(cmd *cobra.Command, streamName *string) {
 				if ce, ok := err.(*websocket.CloseError); ok {
 					switch ce.Code {
 					case websocket.CloseNormalClosure,
+						websocket.CloseAbnormalClosure, // this happens when the server is not sending anything!
 						websocket.CloseGoingAway,
 						websocket.CloseNoStatusReceived:
 						break innerLoop
