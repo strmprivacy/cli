@@ -3,17 +3,18 @@ package schema
 import (
 	"context"
 	"fmt"
+	"io/ioutil"
+	"strings"
+
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 	"github.com/streammachineio/api-definitions-go/api/entities/v1"
 	"github.com/streammachineio/api-definitions-go/api/schemas/v1"
 	"google.golang.org/grpc"
 	"google.golang.org/protobuf/encoding/protojson"
-	"io/ioutil"
 	"streammachine.io/strm/pkg/auth"
 	"streammachine.io/strm/pkg/common"
 	"streammachine.io/strm/pkg/util"
-	"strings"
 )
 
 const (
@@ -124,7 +125,6 @@ func create(cmd *cobra.Command, args *string) {
 		req.Schema.Definition = string(definition)
 	}
 
-	println(protojson.Format(req))
 	response, err := client.CreateSchema(apiContext, req)
 	common.CliExit(err)
 	printer.Print(response)
