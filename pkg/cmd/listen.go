@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
+	"streammachine.io/strm/pkg/kafkaconsumer"
 	"streammachine.io/strm/pkg/web_socket"
 )
 
@@ -12,4 +13,5 @@ var ListenCmd = &cobra.Command{
 
 func init() {
 	ListenCmd.AddCommand(web_socket.WebSocketCmd)
+	ListenCmd.AddCommand(kafkaconsumer.Cmd)
 }

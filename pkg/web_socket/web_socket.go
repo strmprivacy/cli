@@ -8,7 +8,6 @@ import (
 	"net/http"
 	"streammachine.io/strm/pkg/auth"
 	"streammachine.io/strm/pkg/common"
-	"streammachine.io/strm/pkg/simulator"
 	"streammachine.io/strm/pkg/util"
 )
 
@@ -25,8 +24,8 @@ func Run(cmd *cobra.Command, streamName *string) {
 	// loads Stream definition from save version
 	if err := util.TryLoad(s, streamName); err != nil {
 		// there was no saved version, try to get credentials from the command options
-		clientId := util.GetStringAndErr(flags, sim.ClientIdFlag)
-		clientSecret := util.GetStringAndErr(flags, sim.ClientSecretFlag)
+		clientId := util.GetStringAndErr(flags, common.ClientIdFlag)
+		clientSecret := util.GetStringAndErr(flags, common.ClientSecretFlag)
 		if len(clientId) == 0 || len(clientSecret) == 0 {
 			common.CliExit(fmt.Sprintf("There's no saved stream for %s and clientId %s clientSecret %s are missing as options",
 				*streamName, clientId, clientSecret))

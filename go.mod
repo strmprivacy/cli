@@ -5,6 +5,7 @@ go 1.16
 require (
 	github.com/actgardner/gogen-avro/v7 v7.3.1
 	github.com/bykof/gostradamus v1.0.4
+	github.com/confluentinc/confluent-kafka-go v1.7.0
 	github.com/fsnotify/fsnotify v1.4.9 // indirect
 	github.com/go-rod/rod v0.101.8
 	github.com/golang-jwt/jwt/v4 v4.0.0
