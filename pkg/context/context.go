@@ -2,6 +2,7 @@ package context
 
 import (
 	"fmt"
+	"io/fs"
 	"io/ioutil"
 	"path"
 	"streammachine.io/strm/pkg/auth"
@@ -12,8 +13,15 @@ import (
 type configuration struct {
 	ConfigPath     string
 	ConfigFilepath string
-	Contents       []byte
+	Contents       string
 	SavedEntities  []string
+	ApiUrls        apiUrls
+}
+
+type apiUrls struct {
+	ApiHost       string
+	ApiAuthHost   string
+	EventAuthHost string
 }
 
 func showConfiguration() {
@@ -24,10 +32,14 @@ func showConfiguration() {
 	configuration := configuration{
 		ConfigPath:     common.ConfigPath,
 		ConfigFilepath: configFilepath,
-		Contents:       contents,
+		Contents:       string(contents),
 		SavedEntities:  listSavedEntities(path.Join(common.ConfigPath, common.SavedEntitiesDirectory)),
+		ApiUrls: apiUrls{
+			ApiHost:       common.ApiHost,
+			ApiAuthHost:   common.ApiAuthHost,
+			EventAuthHost: common.EventAuthHost,
+		},
 	}
-
 	printer.Print(configuration)
 }
 
@@ -43,6 +55,17 @@ func entityInfo(args []string) {
 
 	entity := savedEntity{Path: filepath, Contents: contents}
 	printer.Print(entity)
+}
+
+func billingIdInfo() {
+	b, err := auth.GetBillingId()
+	if err != nil {
+		if fileError, ok := err.(*fs.PathError); ok {
+			common.CliExit(fmt.Sprintf("Can't %s %s", fileError.Op, fileError.Path))
+		}
+	}
+	common.CliExit(err)
+	printer.Print(b)
 }
 
 func listSavedEntities(p string) []string {

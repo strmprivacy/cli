@@ -13,4 +13,5 @@ var ContextCommand = &cobra.Command{
 func init() {
 	ContextCommand.AddCommand(context.Configuration())
 	ContextCommand.AddCommand(context.EntityInfo())
+	ContextCommand.AddCommand(context.BillingIdInfo())
 }

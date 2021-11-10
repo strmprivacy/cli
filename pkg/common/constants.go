@@ -49,5 +49,8 @@ var UsageOutputFormatFlagAllowedValuesText = strings.Join(UsageOutputFormatFlagA
 var ContextOutputFormatFlagAllowedValues = []string{OutputFormatJson, OutputFormatJsonRaw, OutputFormatFilepath}
 var ContextOutputFormatFlagAllowedValuesText = strings.Join(ContextOutputFormatFlagAllowedValues, ", ")
 
-var ConfigOutputFormatFlagAllowedValues = []string{OutputFormatPlain}
+var ConfigOutputFormatFlagAllowedValues = []string{OutputFormatPlain, OutputFormatJson}
 var ConfigOutputFormatFlagAllowedValuesText = strings.Join(ConfigOutputFormatFlagAllowedValues, ", ")
+
+var BillingIdOutputFormatFlagAllowedValues = []string{OutputFormatPlain}
+var BillingIdOutputFormatFlagAllowedValuesText = strings.Join(BillingIdOutputFormatFlagAllowedValues, ", ")

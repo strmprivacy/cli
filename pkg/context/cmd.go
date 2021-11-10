@@ -2,14 +2,16 @@ package context
 
 import (
 	"fmt"
-	"github.com/spf13/cobra"
 	"path"
+
+	"github.com/spf13/cobra"
 	"streammachine.io/strm/pkg/common"
 )
 
 const (
-	configCommandName     = "config"
-	entityInfoCommandName = "info"
+	configCommandName        = "config"
+	entityInfoCommandName    = "info"
+	billingIdInfoCommandName = "billing-id"
 )
 
 func Configuration() *cobra.Command {
@@ -37,6 +39,31 @@ func Configuration() *cobra.Command {
 	common.CliExit(err)
 
 	return configuration
+}
+
+func BillingIdInfo() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   billingIdInfoCommandName,
+		Short: "Show the billing id.",
+		PreRun: func(cmd *cobra.Command, args []string) {
+			printer = configurePrinter(cmd)
+		},
+		Run: func(cmd *cobra.Command, args []string) {
+			billingIdInfo()
+		},
+	}
+	cmd.Flags().StringP(
+		common.OutputFormatFlag,
+		common.OutputFormatFlagShort,
+		common.OutputFormatPlain,
+		common.BillingIdOutputFormatFlagAllowedValuesText,
+	)
+	err := cmd.RegisterFlagCompletionFunc(common.OutputFormatFlag, func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		return common.BillingIdOutputFormatFlagAllowedValues, cobra.ShellCompDirectiveNoFileComp
+	})
+
+	common.CliExit(err)
+	return cmd
 }
 
 func EntityInfo() *cobra.Command {
