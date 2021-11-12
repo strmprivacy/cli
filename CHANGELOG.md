@@ -1,3 +1,10 @@
+## [1.12.3](https://github.com/streammachineio/cli/compare/v1.12.2...v1.12.3) (2021-11-12)
+
+
+### Bug Fixes
+
+* goarch amd64 only ([2457a88](https://github.com/streammachineio/cli/commit/2457a8882a8c3a5931069a6b7cf83d87190cf26d))
+
 ## [1.12.2](https://github.com/streammachineio/cli/compare/v1.12.1...v1.12.2) (2021-11-12)
 
 
