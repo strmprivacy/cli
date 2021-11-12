@@ -1,3 +1,10 @@
+## [1.12.4](https://github.com/streammachineio/cli/compare/v1.12.3...v1.12.4) (2021-11-12)
+
+
+### Bug Fixes
+
+* cgo disabled ([c42f1b9](https://github.com/streammachineio/cli/commit/c42f1b98b016be4f3619c40d06dc81166dcd977c))
+
 ## [1.12.3](https://github.com/streammachineio/cli/compare/v1.12.2...v1.12.3) (2021-11-12)
 
 
