@@ -12,7 +12,7 @@ var Cmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		Run(cmd, &args[0])
 	},
-	Args: cobra.ExactArgs(1), // the kafka-exporter name
+	Args:              cobra.ExactArgs(1), // the kafka-exporter name
 	ValidArgsFunction: kafka_exporter.NamesCompletion,
 }
 
@@ -21,4 +21,5 @@ func init() {
 	flags.String(common.ClientIdFlag, "", "Client id to be used for receiving data")
 	flags.String(common.ClientSecretFlag, "", "Client secret to be used for receiving data")
 	flags.String(GroupIdFlag, "", "Kafka consumer group id. Uses a random value when not set")
+	flags.String(SslCaLocationFlag, "", "The location of the SSL CA pem file. Only needed in specific cases. Sets the OpenSSL 'ssl.ca.location' flag.")
 }

@@ -17,8 +17,9 @@ import (
 )
 
 const (
-	KafkaBrokerFlag = "kafka-broker"
-	GroupIdFlag = "group-id"
+	KafkaBrokerFlag   = "kafka-broker"
+	GroupIdFlag       = "group-id"
+	SslCaLocationFlag = "ssl-ca-location"
 )
 
 func init() {
@@ -27,8 +28,8 @@ func init() {
 
 func Run(cmd *cobra.Command, kafkaExporterName *string) {
 	flags := cmd.Flags()
-	clientId := util.GetStringAndErr(flags, common.ClientIdFlag )
-	clientSecret := util.GetStringAndErr(flags, common.ClientSecretFlag )
+	clientId := util.GetStringAndErr(flags, common.ClientIdFlag)
+	clientSecret := util.GetStringAndErr(flags, common.ClientSecretFlag)
 	brokers := util.GetStringAndErr(flags, KafkaBrokerFlag)
 	kafkaExporter := kafka_exporter.Get(kafkaExporterName).KafkaExporter
 
@@ -38,18 +39,25 @@ func Run(cmd *cobra.Command, kafkaExporterName *string) {
 	clientSecret = kafkaExporter.Users[0].ClientSecret
 	topic := kafkaExporter.Target.Topic
 	groupId := util.GetStringAndErr(flags, GroupIdFlag)
-	if len(groupId)==0 {
+	if len(groupId) == 0 {
 		groupId = fmt.Sprintf("random-%d", rand.Int())
 	}
 
-	consumer, err := kafka.NewConsumer(&kafka.ConfigMap{
+	sslCaLocation := util.GetStringAndErr(flags, SslCaLocationFlag)
+
+	configMap := kafka.ConfigMap{
 		"bootstrap.servers":       brokers,
 		"security.protocol":       "SASL_SSL",
 		"sasl.mechanisms":         "OAUTHBEARER",
 		"group.id":                groupId,
 		"socket.keepalive.enable": "true",
 		"log.connection.close":    "false",
-	})
+	}
+	if len(sslCaLocation) > 0 {
+		_ = configMap.SetKey("ssl.ca.location", sslCaLocation)
+	}
+
+	consumer, err := kafka.NewConsumer(&configMap)
 	common.CliExit(err)
 
 	clientConfig := &clientcredentials.Config{
@@ -68,7 +76,7 @@ func Run(cmd *cobra.Command, kafkaExporterName *string) {
 	// Process messages
 	// librdkafka shows `AllBrokersDown` messages for a simple tcp disconnect.
 	// we're only acting on it if we have 2 in a row in the poll loop
-	hadError  := false
+	hadError := false
 	run := true
 	for run == true {
 		select {
