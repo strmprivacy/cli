@@ -17,6 +17,8 @@ builds:
       - linux
       - windows
       - darwin
+    goarch:
+      - amd64
 
 archives:
   - name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}"
