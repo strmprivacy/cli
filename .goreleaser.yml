@@ -10,12 +10,12 @@ builds:
     binary: strm
     main: ./cmd/strm
     env:
-      - CGO_ENABLED=0
+      - CGO_ENABLED=1
     ldflags:
       - -s -w -X streammachine.io/strm/pkg/cmd.Version={{.Version}} -X streammachine.io/strm/pkg/cmd.GitSha={{.Commit}} -X streammachine.io/strm/pkg/cmd.BuiltOn={{.Date}}
     goos:
       - linux
-        #- windows
+      - windows
       - darwin
 
 archives:
