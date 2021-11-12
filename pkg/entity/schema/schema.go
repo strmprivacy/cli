@@ -124,7 +124,6 @@ func create(cmd *cobra.Command, args *string) {
 		req.Schema.Definition = string(definition)
 	}
 
-	println(protojson.Format(req))
 	response, err := client.CreateSchema(apiContext, req)
 	common.CliExit(err)
 	printer.Print(response)
