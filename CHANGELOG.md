@@ -1,3 +1,10 @@
+# [1.12.0](https://github.com/streammachineio/cli/compare/v1.11.0...v1.12.0) (2021-11-12)
+
+
+### Features
+
+* updated readme ([3a3770e](https://github.com/streammachineio/cli/commit/3a3770e878ba0670b9a4addadab3db26761c77f1))
+
 # [1.11.0](https://github.com/streammachineio/cli/compare/v1.10.1...v1.11.0) (2021-11-01)
 
 
