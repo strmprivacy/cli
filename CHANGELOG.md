@@ -1,3 +1,10 @@
+## [1.12.1](https://github.com/streammachineio/cli/compare/v1.12.0...v1.12.1) (2021-11-12)
+
+
+### Bug Fixes
+
+* temporarily disable failing windows build ([6eef102](https://github.com/streammachineio/cli/commit/6eef102aa3e288be9e79fd8efc1c21fab9aa2c58))
+
 # [1.12.0](https://github.com/streammachineio/cli/compare/v1.11.0...v1.12.0) (2021-11-12)
 
 
