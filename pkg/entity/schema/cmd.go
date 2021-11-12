@@ -48,6 +48,7 @@ func CreateCmd() *cobra.Command {
 	flags := createCmd.Flags()
 	flags.String(definitionFlag, "", "filename of the definition")
 	_ = createCmd.MarkFlagRequired(definitionFlag)
+	flags.String(schemaTypeFlag, "AVRO", "type of schema")
 	flags.Bool(publicFlag, false, "should the schema become public")
 	return createCmd
 }

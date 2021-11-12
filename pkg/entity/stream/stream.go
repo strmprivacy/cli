@@ -26,7 +26,7 @@ const (
 	saveFlag             = "save"
 	maskedFieldsFlag     = "masked-fields"
 	maskedFieldsSeed     = "mask-seed"
-	maskedFieldHelp = `-M streammachine/example/1.3.0:sensitiveValue,consistentValue \
+	maskedFieldHelp      = `-M streammachine/example/1.3.0:sensitiveValue,consistentValue \
 -M streammachine/clickstream/1.0.0:sessionId
 
 Masks fields values in the output stream via hashing.
@@ -114,18 +114,19 @@ func create(args []string, cmd *cobra.Command) {
 
 	printer.Print(response)
 }
+
 /*
 		-M streammachine/example/1.3.0:sensitiveValue,anotherOne \
    		-M dpg/nps_unified/v3:kiosk_v1,customer_id --masked_fields_file
- */
+*/
 func parseMaskedFields(flags *pflag.FlagSet) *entities.MaskedFields {
-	masked,err := flags.GetStringArray(maskedFieldsFlag)
+	masked, err := flags.GetStringArray(maskedFieldsFlag)
 	seed, err := flags.GetString(maskedFieldsSeed)
 	common.CliExit(err)
 	maskedField := &entities.MaskedFields{
 		HashType:      "",
 		Seed:          seed,
-		FieldPatterns:  map[string]*entities.MaskedFields_PatternList{},
+		FieldPatterns: map[string]*entities.MaskedFields_PatternList{},
 	}
 	for _, s := range masked {
 		parts := strings.Split(s, ":")

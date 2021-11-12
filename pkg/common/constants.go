@@ -8,6 +8,9 @@ var ConfigPath string
 // For example, --api-host is bound to STRM_API_HOST
 const EnvPrefix = "STRM"
 
+
+const ClientIdFlag      = "client-id"
+const ClientSecretFlag  = "client-secret"
 const DefaultConfigFilename = "strm"
 const DefaultConfigFileSuffix = ".yaml"
 
@@ -17,6 +20,7 @@ var DefaultConfigFileContents = []byte(`# The following configuration options ar
 # events-api-url: https://in.strm.services/event
 # api-auth-url: https://accounts.streammachine.io
 # api-host: apis.streammachine.io:443
+# kafka-broker: export-bootstrap.kafka.strmprivacy.io:9092
 `)
 
 const SavedEntitiesDirectory = "saved-entities"
@@ -49,5 +53,8 @@ var UsageOutputFormatFlagAllowedValuesText = strings.Join(UsageOutputFormatFlagA
 var ContextOutputFormatFlagAllowedValues = []string{OutputFormatJson, OutputFormatJsonRaw, OutputFormatFilepath}
 var ContextOutputFormatFlagAllowedValuesText = strings.Join(ContextOutputFormatFlagAllowedValues, ", ")
 
-var ConfigOutputFormatFlagAllowedValues = []string{OutputFormatPlain}
+var ConfigOutputFormatFlagAllowedValues = []string{OutputFormatPlain, OutputFormatJson}
 var ConfigOutputFormatFlagAllowedValuesText = strings.Join(ConfigOutputFormatFlagAllowedValues, ", ")
+
+var BillingIdOutputFormatFlagAllowedValues = []string{OutputFormatPlain}
+var BillingIdOutputFormatFlagAllowedValuesText = strings.Join(BillingIdOutputFormatFlagAllowedValues, ", ")

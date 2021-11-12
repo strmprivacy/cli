@@ -2,6 +2,7 @@ package random_events
 
 import (
 	"github.com/spf13/cobra"
+	"streammachine.io/strm/pkg/common"
 	"streammachine.io/strm/pkg/entity/stream"
 	"streammachine.io/strm/pkg/simulator"
 )
@@ -22,8 +23,8 @@ Uses a saved stream definition if available, otherwise, client id and secret are
 	flags.Int(sim.IntervalFlag, 1000, "Interval in ms. between simulated events")
 	flags.Int(sim.SessionRangeFlag, 1000, "Number of different sessions being generated")
 	flags.String(sim.SessionPrefixFlag, "session", "Prefix string for sessions")
-	flags.String(sim.ClientIdFlag, "", "Client id to be used for sending data")
-	flags.String(sim.ClientSecretFlag, "", "Client secret to be used for sending data")
+	flags.String(common.ClientIdFlag, "", "Client id to be used for sending data")
+	flags.String(common.ClientSecretFlag, "", "Client secret to be used for sending data")
 	flags.Bool(sim.QuietFlag, false, "don't spam stderr")
 	flags.StringSlice(sim.ConsentLevelsFlag, []string{"", "0", "0/1", "0/1/2", "0/1/2/3"}, "consent levels to be simulated")
 	return simCmd

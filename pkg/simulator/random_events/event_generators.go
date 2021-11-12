@@ -31,9 +31,24 @@ func createRandomClickstreamEvent(consentLevels []int32, sessionId string) sim.S
 	return event
 }
 
+func createRandomSimpleDemoEvent(consentLevels []int32, sessionId string) sim.StreamMachineEvent {
+	event := demoschema.NewDemoEvent()
+	const eventContractRef = "streammachine/simpledemo/1.0.0"
+	event.StrmMeta = &demoschema.StrmMeta{
+		ConsentLevels:    consentLevels,
+		EventContractRef: eventContractRef,
+	}
+	event.ConsistentValue = sessionId
+	event.UniqueIdentifier = createUnionString(fmt.Sprintf("unique-%d", rand.Intn(100)))
+	event.SomeSensitiveValue = createUnionString(fmt.Sprintf("sensitive-%d", rand.Intn(100)))
+	event.NotSensitiveValue = createUnionString(fmt.Sprintf("not-sensitive-%d", rand.Intn(100)))
+	return event
+}
+
 var EventGenerators = map[string]func([]int32, string) sim.StreamMachineEvent{
-	"clickstream":              createRandomClickstreamEvent,
-	"streammachine/demo/1.0.2": createRandomDemo102Event,
+	"clickstream":                    createRandomClickstreamEvent,
+	"streammachine/demo/1.0.2":       createRandomDemo102Event,
+	"streammachine/simpledemo/1.0.0": createRandomSimpleDemoEvent,
 }
 
 func createUnionString(s string) *demoschema.UnionNullString {

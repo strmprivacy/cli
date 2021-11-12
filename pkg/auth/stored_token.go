@@ -98,3 +98,14 @@ func createTokenSource(storedToken storedToken) oauth2.TokenSource {
 	tokenSource := oAuth2Config.TokenSource(ctx, oauth2Token)
 	return tokenSource
 }
+
+func GetBillingId() (string, error) {
+	filename := (&Authenticator{}).getSaveFilename()
+	b, err := ioutil.ReadFile(filename)
+	if err != nil {
+		return "", err
+	}
+	token := unmarshalStoredToken(err, b)
+	billingId := token.BillingId
+	return billingId, err
+}

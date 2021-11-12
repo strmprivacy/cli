@@ -1,6 +1,7 @@
 package context
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/jedib0t/go-pretty/v6/list"
 	"github.com/spf13/cobra"
@@ -25,6 +26,8 @@ func configurePrinter(command *cobra.Command) util.Printer {
 			allowedValues = common.ContextOutputFormatFlagAllowedValuesText
 		case configCommandName:
 			allowedValues = common.ConfigOutputFormatFlagAllowedValuesText
+		case billingIdInfoCommandName:
+			allowedValues = common.ConfigOutputFormatFlagAllowedValuesText
 		}
 
 		common.CliExit(fmt.Sprintf("Output format '%v' is not supported for '%v'. Allowed values: %v", command.CommandPath(), outputFormat, allowedValues))
@@ -39,6 +42,8 @@ func availablePrinters() map[string]util.Printer {
 		common.OutputFormatJson + entityInfoCommandName:     jsonPrettyPrinter{},
 		common.OutputFormatFilepath + entityInfoCommandName: filepathPrinter{},
 		common.OutputFormatPlain + configCommandName:        plainPrinter{},
+		common.OutputFormatJson + configCommandName:         configJsonPrinter{},
+		common.OutputFormatPlain + billingIdInfoCommandName: billingIdPrinter{},
 	}
 }
 
@@ -46,6 +51,8 @@ type filepathPrinter struct{}
 type jsonRawPrinter struct{}
 type jsonPrettyPrinter struct{}
 type plainPrinter struct{}
+type configJsonPrinter struct{}
+type billingIdPrinter struct{}
 
 func (p filepathPrinter) Print(data interface{}) {
 	entity, _ := (data).(savedEntity)
@@ -83,4 +90,15 @@ func (p plainPrinter) Print(data interface{}) {
 		fmt.Println("Saved entities:")
 		l.Render()
 	}
+}
+
+func (p configJsonPrinter) Print(data interface{}) {
+	entity, _ := (data).(configuration)
+	b, _ := json.Marshal(entity)
+	rawJson := util.CompactJson(b)
+	fmt.Println(string(rawJson.Bytes()))
+}
+
+func (p billingIdPrinter) Print(data interface{}) {
+	fmt.Println(data)
 }

@@ -64,7 +64,7 @@ func handleAuthResponse(resp *http.Response) {
 
 	err = json.Unmarshal(body, &eventToken)
 	common.CliExit(err)
-	if &eventToken.IdToken == nil || len(eventToken.IdToken)==0 {
+	if &eventToken.IdToken == nil || len(eventToken.IdToken) == 0 {
 		common.CliExit(fmt.Sprintf("Cannot get ID token from auth response %s", body))
 	}
 	token = &eventToken

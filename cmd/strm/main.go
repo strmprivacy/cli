@@ -9,6 +9,7 @@ import (
 	"streammachine.io/strm/pkg/bootstrap"
 	"streammachine.io/strm/pkg/cmd"
 	"streammachine.io/strm/pkg/common"
+	"streammachine.io/strm/pkg/kafkaconsumer"
 	"streammachine.io/strm/pkg/util"
 	"streammachine.io/strm/pkg/web_socket"
 )
@@ -60,6 +61,7 @@ func init() {
 	persistentFlags.StringVar(&auth.TokenFile, "token-file", "",
 		"Token file that contains an access token (default is $HOME/.config/stream-machine/strm-creds-<api-auth-url>.json)")
 	persistentFlags.String(web_socket.WebSocketUrl, "wss://out.strm.services/ws", "Websocket to receive events from")
+	persistentFlags.String(kafkaconsumer.KafkaBrokerFlag, "export-bootstrap.kafka.strmprivacy.io:9092", "Kafka brokers")
 	persistentFlags.StringP(common.OutputFormatFlag, common.OutputFormatFlagShort, common.OutputFormatTable, fmt.Sprintf("Output format [%v]", common.OutputFormatFlagAllowedValuesText))
 
 	err := RootCmd.RegisterFlagCompletionFunc(common.OutputFormatFlag, func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {

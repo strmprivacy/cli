@@ -34,7 +34,6 @@ func MapStringsToInt32(vs []string, f func(string) int32) []int32 {
 	return vsm
 }
 
-
 func MapStrings(vs []string, f func(string) string) []string {
 	if len(vs) == 0 {
 		return []string{}

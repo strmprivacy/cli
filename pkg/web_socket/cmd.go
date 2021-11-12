@@ -2,8 +2,8 @@ package web_socket
 
 import (
 	"github.com/spf13/cobra"
+	"streammachine.io/strm/pkg/common"
 	"streammachine.io/strm/pkg/entity/stream"
-	"streammachine.io/strm/pkg/simulator"
 )
 
 var WebSocketCmd = &cobra.Command{
@@ -18,6 +18,6 @@ var WebSocketCmd = &cobra.Command{
 
 func init() {
 	flags := WebSocketCmd.Flags()
-	flags.String(sim.ClientIdFlag, "", "Client id to be used for receiving data")
-	flags.String(sim.ClientSecretFlag, "", "Client secret to be used for receiving data")
+	flags.String(common.ClientIdFlag, "", "Client id to be used for receiving data")
+	flags.String(common.ClientSecretFlag, "", "Client secret to be used for receiving data")
 }
