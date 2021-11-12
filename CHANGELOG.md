@@ -1,3 +1,10 @@
+## [1.12.5](https://github.com/streammachineio/cli/compare/v1.12.4...v1.12.5) (2021-11-12)
+
+
+### Bug Fixes
+
+* cgo=1 windows=0 ([12e6811](https://github.com/streammachineio/cli/commit/12e6811ff2cadee7025bc6ebc22793f4f990bcc4))
+
 ## [1.12.4](https://github.com/streammachineio/cli/compare/v1.12.3...v1.12.4) (2021-11-12)
 
 
