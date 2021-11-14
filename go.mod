@@ -3,9 +3,9 @@ module streammachine.io/strm
 go 1.16
 
 require (
+	github.com/Shopify/sarama v1.30.0
 	github.com/actgardner/gogen-avro/v7 v7.3.1
 	github.com/bykof/gostradamus v1.0.4
-	github.com/confluentinc/confluent-kafka-go v1.7.0
 	github.com/fsnotify/fsnotify v1.4.9 // indirect
 	github.com/go-rod/rod v0.101.8
 	github.com/golang-jwt/jwt/v4 v4.0.0
@@ -26,8 +26,6 @@ require (
 	github.com/spf13/pflag v1.0.5
 	github.com/spf13/viper v1.7.1
 	github.com/streammachineio/api-definitions-go v1.30.0 //v1.16.0
-	github.com/stretchr/testify v1.7.0 // indirect
-	golang.org/x/net v0.0.0-20210610132358-84b48f89b13b // indirect
 	golang.org/x/oauth2 v0.0.0-20211005180243-6b3c2da341f1
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c
 	golang.org/x/sys v0.0.0-20210630005230-0f9fa26af87c // indirect
