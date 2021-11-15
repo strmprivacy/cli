@@ -10,7 +10,7 @@ import (
 	"path"
 	"path/filepath"
 	"strconv"
-	"streammachine.io/strm/pkg/common"
+	"strmprivacy/strm/pkg/common"
 )
 
 func atoi(s string) int {

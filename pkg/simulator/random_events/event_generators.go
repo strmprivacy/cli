@@ -3,14 +3,14 @@ package random_events
 import (
 	"fmt"
 	"math/rand"
-	"streammachine.io/strm/pkg/schemas/clickstream"
-	"streammachine.io/strm/pkg/schemas/demoschema"
-	"streammachine.io/strm/pkg/simulator"
+	"strmprivacy/strm/pkg/schemas/clickstream"
+	"strmprivacy/strm/pkg/schemas/demoschema"
+	"strmprivacy/strm/pkg/simulator"
 )
 
-func createRandomDemo102Event(consentLevels []int32, sessionId string) sim.StreamMachineEvent {
+func createRandomDemoEvent(consentLevels []int32, sessionId string) sim.StrmPrivacyEvent {
 	event := demoschema.NewDemoEvent()
-	const eventContractRef = "streammachine/example/1.3.0"
+	const eventContractRef = "strmprivacy/example/1.3.0"
 	event.StrmMeta = &demoschema.StrmMeta{
 		ConsentLevels:    consentLevels,
 		EventContractRef: eventContractRef,
@@ -22,33 +22,8 @@ func createRandomDemo102Event(consentLevels []int32, sessionId string) sim.Strea
 	return event
 }
 
-func createRandomClickstreamEvent(consentLevels []int32, sessionId string) sim.StreamMachineEvent {
-	event := clickstream.NewClickstreamEvent()
-	event.StrmMeta = &clickstream.StrmMeta{ConsentLevels: consentLevels}
-	event.ProducerSessionId = sessionId
-	event.Customer = &clickstream.Customer{Id: "customer-" + event.ProducerSessionId}
-	event.Url = "https://www.streammachine.io/rules"
-	return event
-}
-
-func createRandomSimpleDemoEvent(consentLevels []int32, sessionId string) sim.StreamMachineEvent {
-	event := demoschema.NewDemoEvent()
-	const eventContractRef = "streammachine/simpledemo/1.0.0"
-	event.StrmMeta = &demoschema.StrmMeta{
-		ConsentLevels:    consentLevels,
-		EventContractRef: eventContractRef,
-	}
-	event.ConsistentValue = sessionId
-	event.UniqueIdentifier = createUnionString(fmt.Sprintf("unique-%d", rand.Intn(100)))
-	event.SomeSensitiveValue = createUnionString(fmt.Sprintf("sensitive-%d", rand.Intn(100)))
-	event.NotSensitiveValue = createUnionString(fmt.Sprintf("not-sensitive-%d", rand.Intn(100)))
-	return event
-}
-
-var EventGenerators = map[string]func([]int32, string) sim.StreamMachineEvent{
-	"clickstream":                    createRandomClickstreamEvent,
-	"streammachine/demo/1.0.2":       createRandomDemo102Event,
-	"streammachine/simpledemo/1.0.0": createRandomSimpleDemoEvent,
+var EventGenerators = map[string]func([]int32, string) sim.StrmPrivacyEvent{
+	"strmprivacy/demo/1.0.2": createRandomDemoEvent,
 }
 
 func createUnionString(s string) *demoschema.UnionNullString {

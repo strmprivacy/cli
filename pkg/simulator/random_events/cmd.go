@@ -2,9 +2,9 @@ package random_events
 
 import (
 	"github.com/spf13/cobra"
-	"streammachine.io/strm/pkg/common"
-	"streammachine.io/strm/pkg/entity/stream"
-	"streammachine.io/strm/pkg/simulator"
+	"strmprivacy/strm/pkg/common"
+	"strmprivacy/strm/pkg/entity/stream"
+	"strmprivacy/strm/pkg/simulator"
 )
 
 func RunCmd() (cmd *cobra.Command) {

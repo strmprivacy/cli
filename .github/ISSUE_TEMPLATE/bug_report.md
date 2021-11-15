@@ -26,8 +26,8 @@ If applicable, add screenshots to help explain your problem.
 **Hardware/software**
  - OS: [e.g. MacOS 11.2.3]
  - Terminal type [i.e. Bash, or Zsh]
- - Stream Machine CLI version [e.g. 1.0.0]
- - Stream Machine flags (either from the config file, or environment variables).
+ - STRM Privacy CLI version [e.g. 1.0.0]
+ - STRM Privacy flags (either from the config file, or environment variables).
 
 **Additional context**
 Add any other context about the problem here.

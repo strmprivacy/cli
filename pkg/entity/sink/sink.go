@@ -7,12 +7,12 @@ import (
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
-	"github.com/streammachineio/api-definitions-go/api/entities/v1"
-	"github.com/streammachineio/api-definitions-go/api/sinks/v1"
+	"github.com/strmprivacy/api-definitions-go/api/entities/v1"
+	"github.com/strmprivacy/api-definitions-go/api/sinks/v1"
 	"google.golang.org/grpc"
-	"streammachine.io/strm/pkg/auth"
-	"streammachine.io/strm/pkg/common"
-	"streammachine.io/strm/pkg/util"
+	"strmprivacy/strm/pkg/auth"
+	"strmprivacy/strm/pkg/common"
+	"strmprivacy/strm/pkg/util"
 )
 
 var Client sinks.SinksServiceClient

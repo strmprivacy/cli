@@ -10,7 +10,7 @@ import (
 	"os"
 	"path"
 	"path/filepath"
-	"streammachine.io/strm/pkg/common"
+	"strmprivacy/strm/pkg/common"
 	"time"
 )
 

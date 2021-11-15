@@ -2,7 +2,7 @@ package kafka_user
 
 import (
 	"github.com/spf13/cobra"
-	"streammachine.io/strm/pkg/entity/kafka_exporter"
+	"strmprivacy/strm/pkg/entity/kafka_exporter"
 )
 
 const (

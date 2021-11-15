@@ -2,9 +2,9 @@ package kafka_exporter
 
 import (
 	"github.com/spf13/cobra"
-	"streammachine.io/strm/pkg/common"
-	"streammachine.io/strm/pkg/entity/kafka_cluster"
-	"streammachine.io/strm/pkg/entity/stream"
+	"strmprivacy/strm/pkg/common"
+	"strmprivacy/strm/pkg/entity/kafka_cluster"
+	"strmprivacy/strm/pkg/entity/stream"
 )
 
 const (

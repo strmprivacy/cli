@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"streammachine.io/strm/pkg/common"
+	"strmprivacy/strm/pkg/common"
 )
 
 type LegacySender struct {
@@ -13,7 +13,7 @@ type LegacySender struct {
 	Client          http.Client
 }
 
-func (s LegacySender) Send(event StreamMachineEvent, token string) {
+func (s LegacySender) Send(event StrmPrivacyEvent, token string) {
 	b := &bytes.Buffer{}
 	err := event.Serialize(b)
 	common.CliExit(err)

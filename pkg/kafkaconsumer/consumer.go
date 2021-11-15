@@ -8,25 +8,25 @@ import (
 	"log"
 	"os"
 	"os/signal"
-	"streammachine.io/strm/pkg/auth"
-	"streammachine.io/strm/pkg/common"
-	"streammachine.io/strm/pkg/entity/kafka_exporter"
-	"streammachine.io/strm/pkg/util"
+	"strmprivacy/strm/pkg/auth"
+	"strmprivacy/strm/pkg/common"
+	"strmprivacy/strm/pkg/entity/kafka_exporter"
+	"strmprivacy/strm/pkg/util"
 	"strings"
 	"sync"
 	"syscall"
 )
 
 const (
-	KafkaBrokerFlag = "kafka-broker"
-	GroupIdFlag     = "group-id"
+	KafkaBootstrapHostFlag = "kafka-bootstrap-hosts"
+	GroupIdFlag            = "group-id"
 )
 
 func Run(cmd *cobra.Command, kafkaExporterName *string) {
 	flags := cmd.Flags()
 	clientId := util.GetStringAndErr(flags, common.ClientIdFlag)
 	clientSecret := util.GetStringAndErr(flags, common.ClientSecretFlag)
-	brokers := util.GetStringAndErr(flags, KafkaBrokerFlag)
+	bootstrapBrokers := util.GetStringAndErr(flags, KafkaBootstrapHostFlag)
 	kafkaExporter := kafka_exporter.Get(kafkaExporterName).KafkaExporter
 
 	// TODO this needs to be changed. The client secret shouldn't even be
@@ -55,7 +55,7 @@ func Run(cmd *cobra.Command, kafkaExporterName *string) {
 	}
 
 	ctx, cancel := context.WithCancel(context.Background())
-	client, err := sarama.NewConsumerGroup(strings.Split(brokers, ","), groupId, config)
+	client, err := sarama.NewConsumerGroup(strings.Split(bootstrapBrokers, ","), groupId, config)
 	if err != nil {
 		common.CliExit(fmt.Sprintf("Error creating consumer group client: %v", err))
 	}

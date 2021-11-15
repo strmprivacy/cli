@@ -8,12 +8,12 @@ import (
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
-	"github.com/streammachineio/api-definitions-go/api/entities/v1"
-	"github.com/streammachineio/api-definitions-go/api/streams/v1"
+	"github.com/strmprivacy/api-definitions-go/api/entities/v1"
+	"github.com/strmprivacy/api-definitions-go/api/streams/v1"
 	"google.golang.org/grpc"
-	"streammachine.io/strm/pkg/auth"
-	"streammachine.io/strm/pkg/common"
-	"streammachine.io/strm/pkg/util"
+	"strmprivacy/strm/pkg/auth"
+	"strmprivacy/strm/pkg/common"
+	"strmprivacy/strm/pkg/util"
 )
 
 // strings used in the cli
@@ -26,8 +26,8 @@ const (
 	saveFlag             = "save"
 	maskedFieldsFlag     = "masked-fields"
 	maskedFieldsSeed     = "mask-seed"
-	maskedFieldHelp      = `-M streammachine/example/1.3.0:sensitiveValue,consistentValue \
--M streammachine/clickstream/1.0.0:sessionId
+	maskedFieldHelp      = `-M strmprivacy/example/1.3.0:sensitiveValue,consistentValue \
+-M strmprivacy/clickstream/1.0.0:sessionId
 
 Masks fields values in the output stream via hashing.
 	`
@@ -116,7 +116,7 @@ func create(args []string, cmd *cobra.Command) {
 }
 
 /*
-		-M streammachine/example/1.3.0:sensitiveValue,anotherOne \
+		-M strmprivacy/example/1.3.0:sensitiveValue,anotherOne \
    		-M dpg/nps_unified/v3:kiosk_v1,customer_id --masked_fields_file
 */
 func parseMaskedFields(flags *pflag.FlagSet) *entities.MaskedFields {

@@ -9,7 +9,7 @@ import (
 	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/proto"
 	"os"
-	"streammachine.io/strm/pkg/common"
+	"strmprivacy/strm/pkg/common"
 )
 
 type Printer interface {

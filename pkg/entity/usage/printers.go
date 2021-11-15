@@ -5,10 +5,10 @@ import (
 	"github.com/bykof/gostradamus"
 	"github.com/jedib0t/go-pretty/v6/table"
 	"github.com/spf13/cobra"
-	"github.com/streammachineio/api-definitions-go/api/usage/v1"
+	"github.com/strmprivacy/api-definitions-go/api/usage/v1"
 	"math"
-	"streammachine.io/strm/pkg/common"
-	"streammachine.io/strm/pkg/util"
+	"strmprivacy/strm/pkg/common"
+	"strmprivacy/strm/pkg/util"
 	"time"
 )
 

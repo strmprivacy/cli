@@ -2,12 +2,12 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
-	"streammachine.io/strm/pkg/common"
-	"streammachine.io/strm/pkg/entity/batch_exporter"
-	"streammachine.io/strm/pkg/entity/kafka_exporter"
-	"streammachine.io/strm/pkg/entity/kafka_user"
-	"streammachine.io/strm/pkg/entity/sink"
-	"streammachine.io/strm/pkg/entity/stream"
+	"strmprivacy/strm/pkg/common"
+	"strmprivacy/strm/pkg/entity/batch_exporter"
+	"strmprivacy/strm/pkg/entity/kafka_exporter"
+	"strmprivacy/strm/pkg/entity/kafka_user"
+	"strmprivacy/strm/pkg/entity/sink"
+	"strmprivacy/strm/pkg/entity/stream"
 )
 
 // DeleteCmd represents the delete command

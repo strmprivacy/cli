@@ -8,12 +8,12 @@ import (
 	"time"
 
 	"github.com/spf13/cobra"
-	"github.com/streammachineio/api-definitions-go/api/entities/v1"
-	"streammachine.io/strm/pkg/auth"
-	"streammachine.io/strm/pkg/common"
-	"streammachine.io/strm/pkg/entity/stream"
-	sim "streammachine.io/strm/pkg/simulator"
-	"streammachine.io/strm/pkg/util"
+	"github.com/strmprivacy/api-definitions-go/api/entities/v1"
+	"strmprivacy/strm/pkg/auth"
+	"strmprivacy/strm/pkg/common"
+	"strmprivacy/strm/pkg/entity/stream"
+	sim "strmprivacy/strm/pkg/simulator"
+	"strmprivacy/strm/pkg/util"
 )
 
 // start a random simulator

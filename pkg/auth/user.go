@@ -7,14 +7,14 @@ import (
 	"github.com/int128/oauth2cli"
 	"github.com/pkg/browser"
 	log "github.com/sirupsen/logrus"
-	"github.com/streammachineio/api-definitions-go/api/account/v1"
+	"github.com/strmprivacy/api-definitions-go/api/account/v1"
 	"golang.org/x/oauth2"
 	"golang.org/x/sync/errgroup"
 	"net"
 	"net/http"
 	"os"
-	"streammachine.io/strm/pkg/common"
-	"streammachine.io/strm/pkg/entity"
+	"strmprivacy/strm/pkg/common"
+	"strmprivacy/strm/pkg/entity"
 	"strings"
 )
 
@@ -88,8 +88,8 @@ func (authenticator *Authenticator) Login() {
 		OAuth2Config:           oAuth2Config(),
 		LocalServerReadyChan:   ready,
 		LocalServerBindAddress: strings.Split(fmt.Sprintf("127.0.0.1:%d", port), ","),
-		SuccessRedirectURL:     "https://streammachine.io/auth-success",
-		FailureRedirectURL:     "https://streammachine.io/auth-failure",
+		SuccessRedirectURL:     "https://strmprivacy.io/auth-success",
+		FailureRedirectURL:     "https://strmprivacy.io/auth-failure",
 		AuthCodeOptions: []oauth2.AuthCodeOption{
 			oauth2.SetAuthURLParam("prompt", "login"),
 		},
@@ -180,7 +180,7 @@ func getEmailFromClaims(t oauth2.Token) string {
 func authorizationCodeFlowUrl(url string) string {
 	locationResponse, err := http.Get(url)
 	if err != nil {
-		common.CliExit("Could not retrieve authorization code flow URL. Please retry or contact Stream Machine support if the problem persists.")
+		common.CliExit("Could not retrieve authorization code flow URL. Please retry or contact STRM Privacy support if the problem persists.")
 	}
 
 	return locationResponse.Request.URL.String()

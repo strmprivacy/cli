@@ -2,7 +2,7 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
-	"streammachine.io/strm/pkg/auth"
+	"strmprivacy/strm/pkg/auth"
 )
 
 var AuthCmd = &cobra.Command{

@@ -95,11 +95,11 @@ func (r *StrmMeta) Serialize(w io.Writer) error {
 }
 
 func (r *StrmMeta) Schema() string {
-	return "{\"fields\":[{\"name\":\"eventContractRef\",\"type\":\"string\"},{\"default\":null,\"name\":\"nonce\",\"type\":[\"null\",\"int\"]},{\"default\":null,\"logicalType\":\"date\",\"name\":\"timestamp\",\"type\":[\"null\",\"long\"]},{\"default\":null,\"name\":\"keyLink\",\"type\":[\"null\",\"string\"]},{\"default\":null,\"name\":\"billingId\",\"type\":[\"null\",\"string\"]},{\"name\":\"consentLevels\",\"type\":{\"items\":\"int\",\"type\":\"array\"}}],\"name\":\"io.streammachine.schemas.demo.v1.StrmMeta\",\"type\":\"record\"}"
+	return "{\"fields\":[{\"name\":\"eventContractRef\",\"type\":\"string\"},{\"default\":null,\"name\":\"nonce\",\"type\":[\"null\",\"int\"]},{\"default\":null,\"logicalType\":\"date\",\"name\":\"timestamp\",\"type\":[\"null\",\"long\"]},{\"default\":null,\"name\":\"keyLink\",\"type\":[\"null\",\"string\"]},{\"default\":null,\"name\":\"billingId\",\"type\":[\"null\",\"string\"]},{\"name\":\"consentLevels\",\"type\":{\"items\":\"int\",\"type\":\"array\"}}],\"name\":\"io.strmprivacy.schemas.demo.v1.StrmMeta\",\"type\":\"record\"}"
 }
 
 func (r *StrmMeta) SchemaName() string {
-	return "io.streammachine.schemas.demo.v1.StrmMeta"
+	return "io.strmprivacy.schemas.demo.v1.StrmMeta"
 }
 
 func (_ *StrmMeta) SetBoolean(v bool)    { panic("Unsupported operation") }

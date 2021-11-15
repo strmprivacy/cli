@@ -42,11 +42,11 @@ jobs:
           git config --global user.name "${APIS_USERNAME}"
           tag_name="${GITHUB_REF##*/}"
           cd dist
-          git clone "https://git:${GITHUB_TOKEN}@github.com/streammachineio/homebrew-cli.git"
+          git clone "https://git:${GITHUB_TOKEN}@github.com/strmprivacy/homebrew-cli.git"
           cp -f strm.rb homebrew-cli
           cd homebrew-cli
           git add .
-          git commit -m "Release brew formula for Stream Machine CLI ${tag_name}"
+          git commit -m "Release brew formula for STRM Privacy CLI ${tag_name}"
           git push
-          git tag -a "${tag_name}" -m "Release brew formula for Stream Machine CLI ${tag_name}"
+          git tag -a "${tag_name}" -m "Release brew formula for STRM Privacy CLI ${tag_name}"
           git push --tags

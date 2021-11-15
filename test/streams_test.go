@@ -3,8 +3,8 @@ package test
 import (
 	"testing"
 
-	"github.com/streammachineio/api-definitions-go/api/entities/v1"
-	"github.com/streammachineio/api-definitions-go/api/streams/v1"
+	"github.com/strmprivacy/api-definitions-go/api/entities/v1"
+	"github.com/strmprivacy/api-definitions-go/api/streams/v1"
 	"google.golang.org/protobuf/proto"
 )
 

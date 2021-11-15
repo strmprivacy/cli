@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"streammachine.io/strm/pkg/common"
+	"strmprivacy/strm/pkg/common"
 	"time"
 )
 

@@ -5,8 +5,8 @@ import (
 	"io/fs"
 	"io/ioutil"
 	"path"
-	"streammachine.io/strm/pkg/auth"
-	"streammachine.io/strm/pkg/common"
+	"strmprivacy/strm/pkg/auth"
+	"strmprivacy/strm/pkg/common"
 	"strings"
 )
 
