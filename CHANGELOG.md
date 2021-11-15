@@ -1,3 +1,10 @@
+## [1.12.6](https://github.com/streammachineio/cli/compare/v1.12.5...v1.12.6) (2021-11-15)
+
+
+### Bug Fixes
+
+* cross compile fixed + switched to sarama kafka consumer ([#68](https://github.com/streammachineio/cli/issues/68)) ([0e728e3](https://github.com/streammachineio/cli/commit/0e728e338b77c5fb8c760195067239e759fac149))
+
 ## [1.12.5](https://github.com/streammachineio/cli/compare/v1.12.4...v1.12.5) (2021-11-12)
 
 
