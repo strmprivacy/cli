@@ -21,5 +21,4 @@ func init() {
 	flags.String(common.ClientIdFlag, "", "Client id to be used for receiving data")
 	flags.String(common.ClientSecretFlag, "", "Client secret to be used for receiving data")
 	flags.String(GroupIdFlag, "", "Kafka consumer group id. Uses a random value when not set")
-	flags.String(SslCaLocationFlag, "", "The location of the SSL CA pem file. Only needed in specific cases. Sets the OpenSSL 'ssl.ca.location' flag.")
 }

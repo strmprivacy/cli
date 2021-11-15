@@ -6,7 +6,6 @@ import (
 	"github.com/Shopify/sarama"
 	"github.com/spf13/cobra"
 	"log"
-	"math/rand"
 	"os"
 	"os/signal"
 	"streammachine.io/strm/pkg/auth"
@@ -16,18 +15,12 @@ import (
 	"strings"
 	"sync"
 	"syscall"
-	"time"
 )
 
 const (
-	KafkaBrokerFlag   = "kafka-broker"
-	GroupIdFlag       = "group-id"
-	SslCaLocationFlag = "ssl-ca-location"
+	KafkaBrokerFlag = "kafka-broker"
+	GroupIdFlag     = "group-id"
 )
-
-func init() {
-	rand.Seed(time.Now().UnixNano())
-}
 
 func Run(cmd *cobra.Command, kafkaExporterName *string) {
 	flags := cmd.Flags()
@@ -43,7 +36,7 @@ func Run(cmd *cobra.Command, kafkaExporterName *string) {
 	topic := kafkaExporter.Target.Topic
 	groupId := util.GetStringAndErr(flags, GroupIdFlag)
 	if len(groupId) == 0 {
-		groupId = fmt.Sprintf("random-%d", rand.Int())
+		common.CliExit(fmt.Sprintf("Please set a Kafka Consumer group id with --%v", GroupIdFlag))
 	}
 
 	//sarama.Logger = log.New(os.Stdout, "[sarama] ", log.LstdFlags)
