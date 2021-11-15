@@ -3,28 +3,24 @@ package kafkaconsumer
 import (
 	"context"
 	"fmt"
-	"github.com/confluentinc/confluent-kafka-go/kafka"
+	"github.com/Shopify/sarama"
 	"github.com/spf13/cobra"
-	"golang.org/x/oauth2/clientcredentials"
-	"math/rand"
+	"log"
 	"os"
 	"os/signal"
+	"streammachine.io/strm/pkg/auth"
 	"streammachine.io/strm/pkg/common"
 	"streammachine.io/strm/pkg/entity/kafka_exporter"
 	"streammachine.io/strm/pkg/util"
+	"strings"
+	"sync"
 	"syscall"
-	"time"
 )
 
 const (
-	KafkaBrokerFlag   = "kafka-broker"
-	GroupIdFlag       = "group-id"
-	SslCaLocationFlag = "ssl-ca-location"
+	KafkaBrokerFlag = "kafka-broker"
+	GroupIdFlag     = "group-id"
 )
-
-func init() {
-	rand.Seed(time.Now().UnixNano())
-}
 
 func Run(cmd *cobra.Command, kafkaExporterName *string) {
 	flags := cmd.Flags()
@@ -40,80 +36,90 @@ func Run(cmd *cobra.Command, kafkaExporterName *string) {
 	topic := kafkaExporter.Target.Topic
 	groupId := util.GetStringAndErr(flags, GroupIdFlag)
 	if len(groupId) == 0 {
-		groupId = fmt.Sprintf("random-%d", rand.Int())
+		common.CliExit(fmt.Sprintf("Please set a Kafka Consumer group id with --%v", GroupIdFlag))
 	}
 
-	sslCaLocation := util.GetStringAndErr(flags, SslCaLocationFlag)
+	//sarama.Logger = log.New(os.Stdout, "[sarama] ", log.LstdFlags)
 
-	configMap := kafka.ConfigMap{
-		"bootstrap.servers":       brokers,
-		"security.protocol":       "SASL_SSL",
-		"sasl.mechanisms":         "OAUTHBEARER",
-		"group.id":                groupId,
-		"socket.keepalive.enable": "true",
-		"log.connection.close":    "false",
-	}
-	if len(sslCaLocation) > 0 {
-		_ = configMap.SetKey("ssl.ca.location", sslCaLocation)
-	}
+	config := sarama.NewConfig()
+	config.Consumer.Group.Rebalance.Strategy = sarama.BalanceStrategyRoundRobin
+	config.Net.SASL.Enable = true
+	config.Net.SASL.Mechanism = sarama.SASLTypeOAuth
+	config.Net.TLS.Enable = true
+	config.Consumer.Return.Errors = true
+	config.Version = sarama.MaxVersion
+	config.Net.SASL.TokenProvider = auth.NewTokenProvider(clientId, clientSecret, common.EventAuthHost+"/token")
 
-	consumer, err := kafka.NewConsumer(&configMap)
-	common.CliExit(err)
-
-	clientConfig := &clientcredentials.Config{
-		ClientID:     clientId,
-		ClientSecret: clientSecret,
-		TokenURL:     common.EventAuthHost + "/token",
+	consumer := Consumer{
+		ready: make(chan bool),
 	}
 
-	refreshToken(clientConfig, consumer)
-	err = consumer.SubscribeTopics([]string{topic}, nil)
-	common.CliExit(err)
+	ctx, cancel := context.WithCancel(context.Background())
+	client, err := sarama.NewConsumerGroup(strings.Split(brokers, ","), groupId, config)
+	if err != nil {
+		common.CliExit(fmt.Sprintf("Error creating consumer group client: %v", err))
+	}
 
-	sigchan := make(chan os.Signal, 1)
-	signal.Notify(sigchan, syscall.SIGINT, syscall.SIGTERM)
-
-	// Process messages
-	// librdkafka shows `AllBrokersDown` messages for a simple tcp disconnect.
-	// we're only acting on it if we have 2 in a row in the poll loop
-	hadError := false
-	run := true
-	for run == true {
-		select {
-		case sig := <-sigchan:
-			fmt.Printf("Caught signal %v: terminating\n", sig)
-			run = false
-		default:
-			ev := consumer.Poll(100)
-			if ev == nil {
-				continue
+	wg := &sync.WaitGroup{}
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		for {
+			// `Consume` should be called inside an infinite loop, when a
+			// server-side rebalance happens, the consumer session will need to be
+			// recreated to get the new claims
+			if err := client.Consume(ctx, []string{topic}, &consumer); err != nil {
+				common.CliExit(fmt.Sprintf("Error from consumer: %v", err))
 			}
-			switch e := ev.(type) {
-			case *kafka.Message:
-				fmt.Println(string(e.Value))
-				hadError = false
-			case kafka.OffsetsCommitted:
-			case kafka.OAuthBearerTokenRefresh:
-				refreshToken(clientConfig, consumer)
-			case kafka.Error:
-				if hadError {
-					common.CliExit(e)
-				}
-				//fmt.Println("Error", e)
-				hadError = true
+			// check if context was cancelled, signaling that the consumer should stop
+			if ctx.Err() != nil {
+				return
 			}
+			consumer.ready = make(chan bool)
 		}
+	}()
+
+	<-consumer.ready // Await till the consumer has been set up
+
+	sigterm := make(chan os.Signal, 1)
+	signal.Notify(sigterm, syscall.SIGINT, syscall.SIGTERM)
+	select {
+	case <-ctx.Done():
+		log.Println("Shutting down Kafka Consumer")
+	case <-sigterm:
+		log.Println("Shutting down Kafka Consumer")
 	}
-	_ = consumer.Close()
+	cancel()
+	wg.Wait()
+	if err = client.Close(); err != nil {
+		common.CliExit(fmt.Sprintf("Error closing client: %v", err))
+	}
+
 }
 
-func refreshToken(config *clientcredentials.Config, consumer *kafka.Consumer) {
-	token, err := config.Token(context.Background())
-	common.CliExit(err)
-	err = consumer.SetOAuthBearerToken(kafka.OAuthBearerToken{
-		TokenValue: token.AccessToken,
-		Expiration: token.Expiry,
-	})
-	common.CliExit(err)
-	//_, _ = fmt.Fprintf(os.Stderr, "Token refreshed until %s", gostradamus.DateTimeFromTime(token.Expiry).IsoFormat())
+// Consumer represents a Sarama consumer group consumer
+type Consumer struct {
+	ready chan bool
+}
+
+// Setup is run at the beginning of a new session, before ConsumeClaim
+func (consumer *Consumer) Setup(sarama.ConsumerGroupSession) error {
+	// Mark the consumer as ready
+	close(consumer.ready)
+	return nil
+}
+
+// Cleanup is run at the end of a session, once all ConsumeClaim goroutines have exited
+func (consumer *Consumer) Cleanup(sarama.ConsumerGroupSession) error {
+	return nil
+}
+
+// ConsumeClaim must start a consumer loop of ConsumerGroupClaim's Messages().
+func (consumer *Consumer) ConsumeClaim(session sarama.ConsumerGroupSession, claim sarama.ConsumerGroupClaim) error {
+	for message := range claim.Messages() {
+		fmt.Println(string(message.Value))
+		session.MarkMessage(message, "")
+	}
+
+	return nil
 }
