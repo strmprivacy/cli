@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"github.com/spf13/cobra"
-	"github.com/strmprivacy/api-definitions-go/api/entities/v1"
+	"github.com/strmprivacy/api-definitions-go/v2/api/entities/v1"
 	"strmprivacy/strm/pkg/auth"
 	"strmprivacy/strm/pkg/common"
 	"strmprivacy/strm/pkg/entity/stream"

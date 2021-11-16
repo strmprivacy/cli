@@ -7,6 +7,7 @@ import (
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
 	"os"
+	"strings"
 	"strmprivacy/strm/pkg/cmd"
 	"strmprivacy/strm/pkg/common"
 	"strmprivacy/strm/pkg/entity"
@@ -22,7 +23,6 @@ import (
 	"strmprivacy/strm/pkg/entity/stream"
 	"strmprivacy/strm/pkg/entity/usage"
 	"strmprivacy/strm/pkg/util"
-	"strings"
 )
 
 /**
@@ -68,7 +68,7 @@ func ConfigPath() string {
 	// set the default configuration path
 	configPathEnvVar := common.EnvPrefix + "_CONFIG_PATH"
 	configPathEnv := os.Getenv(configPathEnvVar)
-	defaultConfigPath := "~/.config/stream-machine"
+	defaultConfigPath := "~/.config/strmprivacy"
 
 	var err error
 

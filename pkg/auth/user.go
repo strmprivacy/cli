@@ -7,7 +7,7 @@ import (
 	"github.com/int128/oauth2cli"
 	"github.com/pkg/browser"
 	log "github.com/sirupsen/logrus"
-	"github.com/strmprivacy/api-definitions-go/api/account/v1"
+	"github.com/strmprivacy/api-definitions-go/v2/api/account/v1"
 	"golang.org/x/oauth2"
 	"golang.org/x/sync/errgroup"
 	"net"

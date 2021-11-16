@@ -3,7 +3,7 @@ package schema_code
 import (
 	"context"
 	"github.com/spf13/cobra"
-	"github.com/strmprivacy/api-definitions-go/api/schemas/v1"
+	"github.com/strmprivacy/api-definitions-go/v2/api/schemas/v1"
 	"google.golang.org/grpc"
 	"os"
 	"strmprivacy/strm/pkg/auth"

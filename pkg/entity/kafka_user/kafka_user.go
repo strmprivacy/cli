@@ -3,8 +3,8 @@ package kafka_user
 import (
 	"context"
 	"github.com/spf13/cobra"
-	"github.com/strmprivacy/api-definitions-go/api/entities/v1"
-	"github.com/strmprivacy/api-definitions-go/api/kafka_users/v1"
+	"github.com/strmprivacy/api-definitions-go/v2/api/entities/v1"
+	"github.com/strmprivacy/api-definitions-go/v2/api/kafka_users/v1"
 	"google.golang.org/grpc"
 	"strmprivacy/strm/pkg/auth"
 	"strmprivacy/strm/pkg/common"

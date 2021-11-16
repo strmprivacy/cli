@@ -1,7 +1,6 @@
 # STRM Privacy Command Line Interface
 [![GitHub Actions](https://github.com/strmprivacy/cli/workflows/Build/badge.svg)](https://github.com/strmprivacy/cli/actions)
 [![Latest Release](https://img.shields.io/github/v/release/strmprivacy/cli)](https://github.com/strmprivacy/cli/releases/latest)
-[![Gitter chat](https://badges.gitter.im/gitterHQ/gitter.png)](https://gitter.im/stream-machine/community)
 
 This package contains a command line interface (CLI) for interacting with [STRM Privacy](https://www.strmprivacy.io).
 
@@ -76,7 +75,7 @@ In normal circumstances, these defaults should work and there is no need to crea
 
 ### Configuration directory
 The STRM Privacy CLI stores it's information in a configuration directory, by default located in:
-`$HOME/.config/stream-machine/`. In this directory, the CLI looks for a file named: `strm.yaml`, which is used for setting global flags.
+`$HOME/.config/strmprivacy/`. In this directory, the CLI looks for a file named: `strm.yaml`, which is used for setting global flags.
 
 By default, this directory also contains the login information used by the `strm auth` commands, in a file named: `strm-creds-<api-auth-url>.json`. This file is generated and updated by the CLI, so there is no need for any manual editing.
 
@@ -88,9 +87,7 @@ If you encounter an error, or you'd like a new feature, please create an issue [
 
 ***IMPORTANT: Don't provide the login configuration JSON file, as it includes sensitive information!***
 
-We’re also frequently checking our [Gitter](https://gitter.im/stream-machine/community) channel, and others in the STRM Privacy community may be able to help you as well.
-
-Or [email Developer Support](mailto:developer-support@strmprivacy.io), with the details of the issue you’re experiencing. A minimum working example (MWE) would help us in reproducing the issue, and could help in solving it sooner for you. If you have to option to include an MWE, please do so.
+[Email Developer Support](mailto:developer-support@strmprivacy.io), with the details of the issue you’re experiencing. A minimum working example (MWE) would help us in reproducing the issue, and could help in solving it sooner for you. If you have to option to include an MWE, please do so.
 
 ## About expired LetsEncrypt root certificates
 On September 30 2021, a LetsEncrypt Root CA has expired. They've provided a fix for this, but at this time (November 12 2021) the LibreSSL that comes packaged with MacOS doesn't correctly handle this. To work around this, we have a configuration setting: `ssl-ca-location`, with which you can override the default to a more up-to-date location, for example the location of the Homebrew installed OpenSSL (i.e. `/usr/local/etc/openssl@1.1/cert.pem`).

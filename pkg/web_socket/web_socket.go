@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/gorilla/websocket"
 	"github.com/spf13/cobra"
-	"github.com/strmprivacy/api-definitions-go/api/entities/v1"
+	"github.com/strmprivacy/api-definitions-go/v2/api/entities/v1"
 	"net/http"
 	"strmprivacy/strm/pkg/auth"
 	"strmprivacy/strm/pkg/common"
