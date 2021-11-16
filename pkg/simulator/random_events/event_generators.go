@@ -3,7 +3,6 @@ package random_events
 import (
 	"fmt"
 	"math/rand"
-	"strmprivacy/strm/pkg/schemas/clickstream"
 	"strmprivacy/strm/pkg/schemas/demoschema"
 	"strmprivacy/strm/pkg/simulator"
 )
