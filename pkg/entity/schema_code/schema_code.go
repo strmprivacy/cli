@@ -3,13 +3,13 @@ package schema_code
 import (
 	"context"
 	"github.com/spf13/cobra"
-	"github.com/streammachineio/api-definitions-go/api/schemas/v1"
+	"github.com/strmprivacy/api-definitions-go/api/schemas/v1"
 	"google.golang.org/grpc"
 	"os"
-	"streammachine.io/strm/pkg/auth"
-	"streammachine.io/strm/pkg/common"
-	"streammachine.io/strm/pkg/entity/schema"
-	"streammachine.io/strm/pkg/util"
+	"strmprivacy/strm/pkg/auth"
+	"strmprivacy/strm/pkg/common"
+	"strmprivacy/strm/pkg/entity/schema"
+	"strmprivacy/strm/pkg/util"
 )
 
 const (

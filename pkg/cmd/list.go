@@ -2,16 +2,16 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
-	"streammachine.io/strm/pkg/common"
-	"streammachine.io/strm/pkg/entity/batch_exporter"
-	"streammachine.io/strm/pkg/entity/event_contract"
-	"streammachine.io/strm/pkg/entity/kafka_cluster"
-	"streammachine.io/strm/pkg/entity/kafka_exporter"
-	"streammachine.io/strm/pkg/entity/kafka_user"
-	"streammachine.io/strm/pkg/entity/key_stream"
-	"streammachine.io/strm/pkg/entity/schema"
-	"streammachine.io/strm/pkg/entity/sink"
-	"streammachine.io/strm/pkg/entity/stream"
+	"strmprivacy/strm/pkg/common"
+	"strmprivacy/strm/pkg/entity/batch_exporter"
+	"strmprivacy/strm/pkg/entity/event_contract"
+	"strmprivacy/strm/pkg/entity/kafka_cluster"
+	"strmprivacy/strm/pkg/entity/kafka_exporter"
+	"strmprivacy/strm/pkg/entity/kafka_user"
+	"strmprivacy/strm/pkg/entity/key_stream"
+	"strmprivacy/strm/pkg/entity/schema"
+	"strmprivacy/strm/pkg/entity/sink"
+	"strmprivacy/strm/pkg/entity/stream"
 )
 
 var ListCmd = &cobra.Command{

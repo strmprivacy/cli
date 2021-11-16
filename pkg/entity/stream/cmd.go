@@ -2,9 +2,9 @@ package stream
 
 import (
 	"github.com/spf13/cobra"
-	"streammachine.io/strm/pkg/common"
-	"streammachine.io/strm/pkg/entity/event_contract"
-	"streammachine.io/strm/pkg/util"
+	"strmprivacy/strm/pkg/common"
+	"strmprivacy/strm/pkg/entity/event_contract"
+	"strmprivacy/strm/pkg/util"
 )
 
 func CreateCmd() *cobra.Command {

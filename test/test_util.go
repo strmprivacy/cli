@@ -14,7 +14,7 @@ import (
 	"os"
 	"os/exec"
 	"regexp"
-	"streammachine.io/strm/pkg/util"
+	"strmprivacy/strm/pkg/util"
 	"strings"
 	"testing"
 )
@@ -62,10 +62,10 @@ func newConfigDir() string {
 	_ = os.Setenv("TZ", "UTC")
 	_ = os.Setenv("STRM_CONFIG_PATH", configDir)
 
-	_ = os.Setenv("STRM_EVENTS_AUTH_URL", "https://auth.dev.strm.services")
-	_ = os.Setenv("STRM_EVENTS_API_URL", "https://in.dev.strm.services/event")
-	_ = os.Setenv("STRM_API_AUTH_URL", "https://accounts.dev.streammachine.io")
-	_ = os.Setenv("STRM_API_HOST", "apis.dev.streammachine.io:443")
+	_ = os.Setenv("STRM_EVENTS_AUTH_URL", "https://sts.dev.strmprivacy.io")
+	_ = os.Setenv("STRM_EVENTS_API_URL", "https://events.dev.strmprivacy.io/event")
+	_ = os.Setenv("STRM_API_AUTH_URL", "https://accounts.dev.strmprivacy.io")
+	_ = os.Setenv("STRM_API_HOST", "api.dev.strmprivacy.io:443")
 	_ = os.Setenv("STRM_HEADLESS", "true")
 
 	return configDir
@@ -173,8 +173,8 @@ func performCliLogin(t *testing.T, tokenFileName string) {
 
 	eg.Go(func() error {
 		out := ExecuteCliAndGetOutput(t, tokenFileName, "auth", "login")
-		assert.Matches(t, out, ".*https://accounts\\.dev\\.streammachine\\.io/auth/realms/users/protocol/openid-connect/auth.*")
-		assert.Matches(t, out, ".*You are now logged in as \\[clitest-dev@streammachine\\.io\\]\\.")
+		assert.Matches(t, out, ".*https://accounts\\.dev\\.strmprivacy\\.io/auth/realms/users/protocol/openid-connect/auth.*")
+		assert.Matches(t, out, ".*You are now logged in as \\[clitest-dev@strmprivacy\\.io\\]\\.")
 
 		return nil
 	})

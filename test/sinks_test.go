@@ -7,10 +7,10 @@ import (
 	"testing"
 
 	"github.com/golang/protobuf/ptypes/duration"
-	"github.com/streammachineio/api-definitions-go/api/batch_exporters/v1"
-	"github.com/streammachineio/api-definitions-go/api/entities/v1"
-	"github.com/streammachineio/api-definitions-go/api/sinks/v1"
-	"github.com/streammachineio/api-definitions-go/api/streams/v1"
+	"github.com/strmprivacy/api-definitions-go/api/batch_exporters/v1"
+	"github.com/strmprivacy/api-definitions-go/api/entities/v1"
+	"github.com/strmprivacy/api-definitions-go/api/sinks/v1"
+	"github.com/strmprivacy/api-definitions-go/api/streams/v1"
 	"google.golang.org/protobuf/proto"
 )
 

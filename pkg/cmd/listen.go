@@ -2,8 +2,8 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
-	"streammachine.io/strm/pkg/kafkaconsumer"
-	"streammachine.io/strm/pkg/web_socket"
+	"strmprivacy/strm/pkg/kafkaconsumer"
+	"strmprivacy/strm/pkg/web_socket"
 )
 
 var ListenCmd = &cobra.Command{

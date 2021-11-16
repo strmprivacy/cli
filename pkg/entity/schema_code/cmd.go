@@ -2,7 +2,7 @@ package schema_code
 
 import (
 	"github.com/spf13/cobra"
-	"streammachine.io/strm/pkg/entity/schema"
+	"strmprivacy/strm/pkg/entity/schema"
 )
 
 func GetCmd() *cobra.Command {

@@ -2,8 +2,8 @@ package event_contract
 
 import (
 	"github.com/spf13/cobra"
-	"streammachine.io/strm/pkg/common"
-	"streammachine.io/strm/pkg/entity/schema"
+	"strmprivacy/strm/pkg/common"
+	"strmprivacy/strm/pkg/entity/schema"
 )
 
 const (
@@ -69,7 +69,7 @@ func CreateCmd() *cobra.Command {
         {
             "field": "referrerUrl",
             "type": "regex",
-            "value": "^.*streammachine.*$"
+            "value": "^.*strmprivacy.*$"
         }
     ]
 }`)

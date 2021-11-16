@@ -3,13 +3,13 @@ package kafka_user
 import (
 	"context"
 	"github.com/spf13/cobra"
-	"github.com/streammachineio/api-definitions-go/api/entities/v1"
-	"github.com/streammachineio/api-definitions-go/api/kafka_users/v1"
+	"github.com/strmprivacy/api-definitions-go/api/entities/v1"
+	"github.com/strmprivacy/api-definitions-go/api/kafka_users/v1"
 	"google.golang.org/grpc"
-	"streammachine.io/strm/pkg/auth"
-	"streammachine.io/strm/pkg/common"
-	"streammachine.io/strm/pkg/entity/kafka_exporter"
-	"streammachine.io/strm/pkg/util"
+	"strmprivacy/strm/pkg/auth"
+	"strmprivacy/strm/pkg/common"
+	"strmprivacy/strm/pkg/entity/kafka_exporter"
+	"strmprivacy/strm/pkg/util"
 )
 
 var client kafka_users.KafkaUsersServiceClient

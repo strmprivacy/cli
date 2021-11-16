@@ -2,8 +2,8 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
-	"streammachine.io/strm/pkg/simulator"
-	"streammachine.io/strm/pkg/simulator/random_events"
+	"strmprivacy/strm/pkg/simulator"
+	"strmprivacy/strm/pkg/simulator/random_events"
 )
 
 var SimulateCmd = &cobra.Command{
@@ -13,7 +13,7 @@ var SimulateCmd = &cobra.Command{
 
 func init() {
 	flags := SimulateCmd.PersistentFlags()
-	flags.String(sim.SchemaFlag, "streammachine/demo/1.0.2", "Which schema to use for creating simulated events")
+	flags.String(sim.SchemaFlag, "strmprivacy/demo/1.0.2", "Which schema to use for creating simulated events")
 	_ = SimulateCmd.RegisterFlagCompletionFunc(sim.SchemaFlag, schemaCompletion)
 	SimulateCmd.AddCommand(random_events.RunCmd())
 }

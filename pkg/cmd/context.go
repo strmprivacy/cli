@@ -2,7 +2,7 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
-	"streammachine.io/strm/pkg/context"
+	"strmprivacy/strm/pkg/context"
 )
 
 var ContextCommand = &cobra.Command{

@@ -5,7 +5,7 @@ import (
 	"path"
 
 	"github.com/spf13/cobra"
-	"streammachine.io/strm/pkg/common"
+	"strmprivacy/strm/pkg/common"
 )
 
 const (

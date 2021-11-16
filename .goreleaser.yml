@@ -10,7 +10,7 @@ builds:
     binary: strm
     main: ./cmd/strm
     ldflags:
-      - -s -w -X streammachine.io/strm/pkg/cmd.Version={{.Version}} -X streammachine.io/strm/pkg/cmd.GitSha={{.Commit}} -X streammachine.io/strm/pkg/cmd.BuiltOn={{.Date}}
+      - -s -w -X strmprivacy/strm/pkg/cmd.Version={{.Version}} -X strmprivacy/strm/pkg/cmd.GitSha={{.Commit}} -X strmprivacy/strm/pkg/cmd.BuiltOn={{.Date}}
     goos:
       - linux
       - windows
@@ -30,11 +30,11 @@ snapshot:
 
 brews:
   - tap:
-      owner: streammachineio
+      owner: strmprivacy
       name: homebrew-cli
-    url_template: "https://github.com/streammachineio/cli/releases/download/{{ .Tag }}/{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}.tar.gz"
-    homepage: "https://streammachine.io"
-    description: "Command Line Interface for https://streammachine.io"
+    url_template: "https://github.com/strmprivacy/cli/releases/download/{{ .Tag }}/{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}.tar.gz"
+    homepage: "https://strmprivacy.io"
+    description: "Command Line Interface for https://strmprivacy.io"
     install: |
       bin.install "strm"
     folder: Formula

@@ -6,8 +6,8 @@ import (
 	"github.com/jedib0t/go-pretty/v6/list"
 	"github.com/spf13/cobra"
 	"os"
-	"streammachine.io/strm/pkg/common"
-	"streammachine.io/strm/pkg/util"
+	"strmprivacy/strm/pkg/common"
+	"strmprivacy/strm/pkg/util"
 	"strings"
 )
 

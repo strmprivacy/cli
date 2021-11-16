@@ -4,11 +4,11 @@ import (
 	"context"
 	"fmt"
 	"github.com/spf13/cobra"
-	"github.com/streammachineio/api-definitions-go/api/entities/v1"
-	"github.com/streammachineio/api-definitions-go/api/kafka_clusters/v1"
+	"github.com/strmprivacy/api-definitions-go/api/entities/v1"
+	"github.com/strmprivacy/api-definitions-go/api/kafka_clusters/v1"
 	"google.golang.org/grpc"
-	"streammachine.io/strm/pkg/auth"
-	"streammachine.io/strm/pkg/common"
+	"strmprivacy/strm/pkg/auth"
+	"strmprivacy/strm/pkg/common"
 )
 
 // strings used in the cli

@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"github.com/jedib0t/go-pretty/v6/table"
 	"github.com/spf13/cobra"
-	"github.com/streammachineio/api-definitions-go/api/entities/v1"
-	"github.com/streammachineio/api-definitions-go/api/kafka_exporters/v1"
-	"streammachine.io/strm/pkg/common"
-	"streammachine.io/strm/pkg/entity/kafka_cluster"
-	"streammachine.io/strm/pkg/util"
+	"github.com/strmprivacy/api-definitions-go/api/entities/v1"
+	"github.com/strmprivacy/api-definitions-go/api/kafka_exporters/v1"
+	"strmprivacy/strm/pkg/common"
+	"strmprivacy/strm/pkg/entity/kafka_cluster"
+	"strmprivacy/strm/pkg/util"
 )
 
 var printer util.Printer

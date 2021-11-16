@@ -12,11 +12,11 @@ zsh-completion:
 # for a speedier build than with goreleaser
 source_files := $(shell find . -name "*.go")
 
-targetVar := streammachine.io/strm/pkg/common.RootCommandName
+targetVar := strmprivacy/strm/pkg/common.RootCommandName
 
 target := dstrm
 
-ldflags := -X '${targetVar}=${target}' -X streammachine.io/strm/pkg/cmd.Version=local -X streammachine.io/strm/pkg/cmd.GitSha=local -X streammachine.io/strm/pkg/cmd.BuiltOn=local
+ldflags := -X '${targetVar}=${target}' -X strmprivacy/strm/pkg/cmd.Version=local -X strmprivacy/strm/pkg/cmd.GitSha=local -X strmprivacy/strm/pkg/cmd.BuiltOn=local
 
 dist/${target}: ${source_files} Makefile
 	go build -ldflags="${ldflags}" -o $@ ./cmd/strm

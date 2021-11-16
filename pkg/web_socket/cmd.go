@@ -2,8 +2,8 @@ package web_socket
 
 import (
 	"github.com/spf13/cobra"
-	"streammachine.io/strm/pkg/common"
-	"streammachine.io/strm/pkg/entity/stream"
+	"strmprivacy/strm/pkg/common"
+	"strmprivacy/strm/pkg/entity/stream"
 )
 
 var WebSocketCmd = &cobra.Command{

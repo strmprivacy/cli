@@ -2,8 +2,8 @@ package kafkaconsumer
 
 import (
 	"github.com/spf13/cobra"
-	"streammachine.io/strm/pkg/common"
-	"streammachine.io/strm/pkg/entity/kafka_exporter"
+	"strmprivacy/strm/pkg/common"
+	"strmprivacy/strm/pkg/entity/kafka_exporter"
 )
 
 var Cmd = &cobra.Command{

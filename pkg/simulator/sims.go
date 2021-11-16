@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"streammachine.io/strm/pkg/common"
+	"strmprivacy/strm/pkg/common"
 )
 
 const (
@@ -18,12 +18,12 @@ const (
 	SchemaFlag        = "schema"
 )
 
-type StreamMachineEvent interface {
+type StrmPrivacyEvent interface {
 	Serialize(w io.Writer) error
 }
 
 type Sender interface {
-	Send(event StreamMachineEvent, token string)
+	Send(event StrmPrivacyEvent, token string)
 }
 
 type ModernSender struct {
@@ -31,7 +31,7 @@ type ModernSender struct {
 	Client          http.Client
 }
 
-func (s ModernSender) Send(event StreamMachineEvent, token string) {
+func (s ModernSender) Send(event StrmPrivacyEvent, token string) {
 	b := &bytes.Buffer{}
 	err := event.Serialize(b)
 	common.CliExit(err)

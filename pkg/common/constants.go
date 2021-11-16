@@ -16,11 +16,11 @@ const DefaultConfigFileSuffix = ".yaml"
 
 var DefaultConfigFileContents = []byte(`# The following configuration options are reflected in the CLI's flags
 # save: true
-# events-auth-url: https://auth.strm.services
-# events-api-url: https://in.strm.services/event
-# api-auth-url: https://accounts.streammachine.io
-# api-host: apis.streammachine.io:443
-# kafka-broker: export-bootstrap.kafka.strmprivacy.io:9092
+# events-auth-url: https://sts.strmprivacy.io
+# events-api-url: https://events.strmprivacy.io/event
+# api-auth-url: https://accounts.strmprivacy.io
+# api-host: api.strmprivacy.io:443
+# kafka-bootstrap-hosts: export-bootstrap.kafka.strmprivacy.io:9092
 `)
 
 const SavedEntitiesDirectory = "saved-entities"

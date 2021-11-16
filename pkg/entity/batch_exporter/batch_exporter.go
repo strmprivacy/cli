@@ -5,14 +5,14 @@ import (
 
 	"github.com/golang/protobuf/ptypes/duration"
 	"github.com/spf13/cobra"
-	"github.com/streammachineio/api-definitions-go/api/batch_exporters/v1"
-	"github.com/streammachineio/api-definitions-go/api/entities/v1"
-	"github.com/streammachineio/api-definitions-go/api/sinks/v1"
+	"github.com/strmprivacy/api-definitions-go/api/batch_exporters/v1"
+	"github.com/strmprivacy/api-definitions-go/api/entities/v1"
+	"github.com/strmprivacy/api-definitions-go/api/sinks/v1"
 	"google.golang.org/grpc"
-	"streammachine.io/strm/pkg/auth"
-	"streammachine.io/strm/pkg/common"
-	"streammachine.io/strm/pkg/entity/sink"
-	"streammachine.io/strm/pkg/util"
+	"strmprivacy/strm/pkg/auth"
+	"strmprivacy/strm/pkg/common"
+	"strmprivacy/strm/pkg/entity/sink"
+	"strmprivacy/strm/pkg/util"
 )
 
 var client batch_exporters.BatchExportersServiceClient

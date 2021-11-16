@@ -5,7 +5,7 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/metadata"
-	"streammachine.io/strm/pkg/common"
+	"strmprivacy/strm/pkg/common"
 	"strings"
 )
 
