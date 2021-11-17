@@ -45,7 +45,7 @@ For the complete command reference, see the [CLI documentation section](https://
 
 ## Configuration
 
-The `strm` CLI can be configured using either the flags as specified by the help (as command line arguments), with environment variables, or with a configuration file, named strm.yaml, located in the STRM Privacy [Configuration directory](#configuration-directory). If a flag is not present, the default value is used.
+The `strm` CLI can be configured using either the flags as specified by the help (as command line arguments), with environment variables, or with a configuration file, named `config.yaml`, located in the STRM Privacy [Configuration directory](#configuration-directory). If a flag is not present, the default value is used.
 
 *Note: The ordering is the same as specified above, so arguments take precedence over environment variables, which take precedence over the configuration file, which takes precedence over the default values.*
 
@@ -75,7 +75,7 @@ In normal circumstances, these defaults should work and there is no need to crea
 
 ### Configuration directory
 The STRM Privacy CLI stores it's information in a configuration directory, by default located in:
-`$HOME/.config/strmprivacy/`. In this directory, the CLI looks for a file named: `strm.yaml`, which is used for setting global flags.
+`$HOME/.config/strmprivacy/`. In this directory, the CLI looks for a file named: `config.yaml`, which is used for setting global flags.
 
 By default, this directory also contains the login information used by the `strm auth` commands, in a file named: `strm-creds-<api-auth-url>.json`. This file is generated and updated by the CLI, so there is no need for any manual editing.
 

@@ -19,7 +19,7 @@ Uses a saved stream definition if available, otherwise, client id and secret are
 		ValidArgsFunction: stream.SourceNamesCompletion,
 	}
 	flags := simCmd.Flags()
-	flags.String(sim.EventsApiUrlFlag, "https://in.strm.services/event", "Endpoint to send events to")
+	flags.String(sim.EventsApiUrlFlag, "https://events.strmprivacy.io/event", "Endpoint to send events to")
 	flags.Int(sim.IntervalFlag, 1000, "Interval in ms. between simulated events")
 	flags.Int(sim.SessionRangeFlag, 1000, "Number of different sessions being generated")
 	flags.String(sim.SessionPrefixFlag, "session", "Prefix string for sessions")

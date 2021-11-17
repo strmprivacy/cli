@@ -9,11 +9,11 @@ import (
 	"github.com/strmprivacy/api-definitions-go/v2/api/event_contracts/v1"
 	"google.golang.org/grpc"
 	"io/ioutil"
+	"strings"
 	"strmprivacy/strm/pkg/auth"
 	"strmprivacy/strm/pkg/common"
 	"strmprivacy/strm/pkg/entity/schema"
 	"strmprivacy/strm/pkg/util"
-	"strings"
 )
 
 // strings used in the cli
