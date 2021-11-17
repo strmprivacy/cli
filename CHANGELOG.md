@@ -1,3 +1,10 @@
+# [1.14.0](https://github.com/strmprivacy/cli/compare/v1.13.0...v1.14.0) (2021-11-17)
+
+
+### Features
+
+* rename to new strmprivacy api ([35543ef](https://github.com/strmprivacy/cli/commit/35543efdb62ce9183099df9723d9e94fd88bb9c5))
+
 # [1.13.0](https://github.com/strmprivacy/cli/compare/v1.12.6...v1.13.0) (2021-11-16)
 
 
