@@ -5,7 +5,7 @@ import (
 	"github.com/bykof/gostradamus"
 	"github.com/jedib0t/go-pretty/v6/table"
 	"github.com/spf13/cobra"
-	"github.com/strmprivacy/api-definitions-go/api/usage/v1"
+	"github.com/strmprivacy/api-definitions-go/v2/api/usage/v1"
 	"math"
 	"strmprivacy/strm/pkg/common"
 	"strmprivacy/strm/pkg/util"

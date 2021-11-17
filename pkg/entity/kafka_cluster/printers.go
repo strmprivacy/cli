@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"github.com/jedib0t/go-pretty/v6/table"
 	"github.com/spf13/cobra"
-	"github.com/strmprivacy/api-definitions-go/api/entities/v1"
-	"github.com/strmprivacy/api-definitions-go/api/kafka_clusters/v1"
+	"github.com/strmprivacy/api-definitions-go/v2/api/entities/v1"
+	"github.com/strmprivacy/api-definitions-go/v2/api/kafka_clusters/v1"
 	"strmprivacy/strm/pkg/common"
 	"strmprivacy/strm/pkg/util"
 )

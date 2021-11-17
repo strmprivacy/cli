@@ -5,15 +5,15 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/spf13/cobra"
-	"github.com/strmprivacy/api-definitions-go/api/entities/v1"
-	"github.com/strmprivacy/api-definitions-go/api/event_contracts/v1"
+	"github.com/strmprivacy/api-definitions-go/v2/api/entities/v1"
+	"github.com/strmprivacy/api-definitions-go/v2/api/event_contracts/v1"
 	"google.golang.org/grpc"
 	"io/ioutil"
+	"strings"
 	"strmprivacy/strm/pkg/auth"
 	"strmprivacy/strm/pkg/common"
 	"strmprivacy/strm/pkg/entity/schema"
 	"strmprivacy/strm/pkg/util"
-	"strings"
 )
 
 // strings used in the cli

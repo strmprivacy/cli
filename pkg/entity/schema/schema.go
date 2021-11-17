@@ -8,8 +8,8 @@ import (
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
-	"github.com/strmprivacy/api-definitions-go/api/entities/v1"
-	"github.com/strmprivacy/api-definitions-go/api/schemas/v1"
+	"github.com/strmprivacy/api-definitions-go/v2/api/entities/v1"
+	"github.com/strmprivacy/api-definitions-go/v2/api/schemas/v1"
 	"google.golang.org/grpc"
 	"google.golang.org/protobuf/encoding/protojson"
 	"strmprivacy/strm/pkg/auth"

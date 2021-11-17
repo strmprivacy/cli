@@ -11,7 +11,7 @@ const EnvPrefix = "STRM"
 
 const ClientIdFlag      = "client-id"
 const ClientSecretFlag  = "client-secret"
-const DefaultConfigFilename = "strm"
+const DefaultConfigFilename = "config"
 const DefaultConfigFileSuffix = ".yaml"
 
 var DefaultConfigFileContents = []byte(`# The following configuration options are reflected in the CLI's flags

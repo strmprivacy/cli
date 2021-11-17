@@ -5,9 +5,9 @@ import (
 
 	"github.com/golang/protobuf/ptypes/duration"
 	"github.com/spf13/cobra"
-	"github.com/strmprivacy/api-definitions-go/api/batch_exporters/v1"
-	"github.com/strmprivacy/api-definitions-go/api/entities/v1"
-	"github.com/strmprivacy/api-definitions-go/api/sinks/v1"
+	"github.com/strmprivacy/api-definitions-go/v2/api/batch_exporters/v1"
+	"github.com/strmprivacy/api-definitions-go/v2/api/entities/v1"
+	"github.com/strmprivacy/api-definitions-go/v2/api/sinks/v1"
 	"google.golang.org/grpc"
 	"strmprivacy/strm/pkg/auth"
 	"strmprivacy/strm/pkg/common"

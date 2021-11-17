@@ -101,7 +101,7 @@
 
 ### Bug Fixes
 
-* **strm.yaml:** configuration directory wasn't set yet ([#46](https://github.com/strmprivacy/cli/issues/46)) ([4023657](https://github.com/strmprivacy/cli/commit/4023657fd629eab88dac2b8ca0d6c0ea049def68))
+* **config.yaml:** configuration directory wasn't set yet ([#46](https://github.com/strmprivacy/cli/issues/46)) ([4023657](https://github.com/strmprivacy/cli/commit/4023657fd629eab88dac2b8ca0d6c0ea049def68))
 
 # [1.8.0](https://github.com/strmprivacy/cli/compare/v1.7.0...v1.8.0) (2021-08-18)
 
