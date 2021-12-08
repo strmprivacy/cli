@@ -6,9 +6,9 @@ import (
 	"github.com/jedib0t/go-pretty/v6/list"
 	"github.com/spf13/cobra"
 	"os"
+	"strings"
 	"strmprivacy/strm/pkg/common"
 	"strmprivacy/strm/pkg/util"
-	"strings"
 )
 
 var printer util.Printer

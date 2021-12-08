@@ -6,6 +6,8 @@ import (
 	"io/ioutil"
 	"strings"
 
+	"sigs.k8s.io/yaml"
+
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 	"github.com/strmprivacy/api-definitions-go/v2/api/entities/v1"
@@ -117,9 +119,15 @@ func create(cmd *cobra.Command, args *string) {
 			IsPublic: isPublic,
 		},
 	}
+	// try yaml
+	convertedToJson, err := yaml.YAMLToJSON(definition)
+	if err == nil {
+		definition = convertedToJson
+	}
+	// try json
 	err = protojson.Unmarshal(definition, simple)
 	if err == nil {
-		// it's a simple message
+		// it's a simple schema
 		req.Schema.SimpleSchema = simple
 	} else {
 		req.Schema.Definition = string(definition)

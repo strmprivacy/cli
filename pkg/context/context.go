@@ -5,9 +5,9 @@ import (
 	"io/fs"
 	"io/ioutil"
 	"path"
+	"strings"
 	"strmprivacy/strm/pkg/auth"
 	"strmprivacy/strm/pkg/common"
-	"strings"
 )
 
 type configuration struct {

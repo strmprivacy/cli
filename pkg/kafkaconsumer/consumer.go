@@ -8,11 +8,11 @@ import (
 	"log"
 	"os"
 	"os/signal"
+	"strings"
 	"strmprivacy/strm/pkg/auth"
 	"strmprivacy/strm/pkg/common"
 	"strmprivacy/strm/pkg/entity/kafka_exporter"
 	"strmprivacy/strm/pkg/util"
-	"strings"
 	"sync"
 	"syscall"
 )

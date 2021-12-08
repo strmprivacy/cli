@@ -14,8 +14,8 @@ import (
 	"os"
 	"os/exec"
 	"regexp"
-	"strmprivacy/strm/pkg/util"
 	"strings"
+	"strmprivacy/strm/pkg/util"
 	"testing"
 )
 
