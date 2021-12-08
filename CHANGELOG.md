@@ -1,3 +1,10 @@
+# [1.15.0](https://github.com/strmprivacy/cli/compare/v1.14.0...v1.15.0) (2021-12-08)
+
+
+### Features
+
+* reads yaml simple schemas ([faacee4](https://github.com/strmprivacy/cli/commit/faacee4d4c8585927ce81134c7b79eeda5685420))
+
 # [1.14.0](https://github.com/strmprivacy/cli/compare/v1.13.0...v1.14.0) (2021-11-17)
 
 
