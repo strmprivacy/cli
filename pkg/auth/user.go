@@ -13,9 +13,9 @@ import (
 	"net"
 	"net/http"
 	"os"
+	"strings"
 	"strmprivacy/strm/pkg/common"
 	"strmprivacy/strm/pkg/entity"
-	"strings"
 )
 
 var Auth = Authenticator{}

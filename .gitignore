@@ -11,4 +11,4 @@ dstrm
 *.json
 *.tar.gz
 s3.json
-config.yaml
+/*.yaml

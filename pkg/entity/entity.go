@@ -5,8 +5,8 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/metadata"
-	"strmprivacy/strm/pkg/common"
 	"strings"
+	"strmprivacy/strm/pkg/common"
 )
 
 func SetupGrpc(host string, token *string) (*grpc.ClientConn, context.Context) {

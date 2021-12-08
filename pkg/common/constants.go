@@ -8,9 +8,8 @@ var ConfigPath string
 // For example, --api-host is bound to STRM_API_HOST
 const EnvPrefix = "STRM"
 
-
-const ClientIdFlag      = "client-id"
-const ClientSecretFlag  = "client-secret"
+const ClientIdFlag = "client-id"
+const ClientSecretFlag = "client-secret"
 const DefaultConfigFilename = "config"
 const DefaultConfigFileSuffix = ".yaml"
 
