@@ -52,6 +52,7 @@ func del(name *string) {
 func create(streamName *string, cmd *cobra.Command) {
 	flags := cmd.Flags()
 	keyStream := util.GetBoolAndErr(flags, exportKeys)
+	includeExistingEvents := util.GetBoolAndErr(flags, includeExistingEventsFlag)
 	sinkName := util.GetStringAndErr(flags, sinkFlag)
 	sinkNames := getSinkNames()
 	if len(sinkName) == 0 && len(sinkNames) == 1 {
@@ -74,8 +75,9 @@ func create(streamName *string, cmd *cobra.Command) {
 			Name:      exporterName,
 			BillingId: auth.Auth.BillingId(),
 		},
-		Interval:   &interval,
-		PathPrefix: pathPrefix,
+		Interval:              &interval,
+		PathPrefix:            pathPrefix,
+		IncludeExistingEvents: includeExistingEvents,
 	}
 	if keyStream {
 		exporter.StreamOrKeyStreamRef = &entities.BatchExporter_KeyStreamRef{

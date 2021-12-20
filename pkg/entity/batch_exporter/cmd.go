@@ -8,11 +8,12 @@ import (
 )
 
 const (
-	sinkFlag     = "sink"
-	nameFlag     = "name"
-	intervalFlag = "interval"
-	pathPrefix   = "path-prefix"
-	exportKeys   = "export-keys"
+	sinkFlag                  = "sink"
+	nameFlag                  = "name"
+	intervalFlag              = "interval"
+	pathPrefix                = "path-prefix"
+	exportKeys                = "export-keys"
+	includeExistingEventsFlag = "include-existing-events"
 )
 
 func DeleteCmd() *cobra.Command {
@@ -79,6 +80,7 @@ func CreateCmd() *cobra.Command {
 	flags.String(pathPrefix, "", "path prefix on bucket")
 	flags.Int64(intervalFlag, 60, "Interval in seconds between batches")
 	flags.Bool(exportKeys, false, "Do we want to export the keys stream")
+	flags.Bool(includeExistingEventsFlag, false, "Do we want to include all existing events")
 	err := batchExporter.RegisterFlagCompletionFunc(sinkFlag, sink.NamesCompletion)
 	common.CliExit(err)
 
