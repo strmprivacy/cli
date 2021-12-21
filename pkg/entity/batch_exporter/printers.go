@@ -102,6 +102,7 @@ func printTable(batchExporters []*v1.BatchExporter) {
 			batchExporter.Ref.Name,
 			streamOrKeyStreamName,
 			batchExporter.SinkName,
+			batchExporter.IncludeExistingEvents,
 			batchExporter.Interval,
 			batchExporter.PathPrefix,
 		})
@@ -112,6 +113,7 @@ func printTable(batchExporters []*v1.BatchExporter) {
 			"Batch Exporter",
 			"Stream",
 			"Sink",
+			"Include Existing Events",
 			"Interval",
 			"Path Prefix",
 		},
