@@ -1,3 +1,10 @@
+# [1.16.0](https://github.com/strmprivacy/cli/compare/v1.15.0...v1.16.0) (2021-12-21)
+
+
+### Features
+
+* update cli with include-existing-events for creating batch exporters ([354759a](https://github.com/strmprivacy/cli/commit/354759a874512714cbaa55224b1db3cf7b85acf7))
+
 # [1.15.0](https://github.com/strmprivacy/cli/compare/v1.14.0...v1.15.0) (2021-12-08)
 
 
