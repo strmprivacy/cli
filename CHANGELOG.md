@@ -1,3 +1,10 @@
+# [1.17.0](https://github.com/strmprivacy/cli/compare/v1.16.0...v1.17.0) (2021-12-29)
+
+
+### Features
+
+* **api:** api 2.10.0 with avro_name in simple schema ([de622ae](https://github.com/strmprivacy/cli/commit/de622aecbb8a76951408f014d9cc474e3e28d295))
+
 # [1.16.0](https://github.com/strmprivacy/cli/compare/v1.15.0...v1.16.0) (2021-12-21)
 
 
