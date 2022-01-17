@@ -89,9 +89,6 @@ If you encounter an error, or you'd like a new feature, please create an issue [
 
 [Email Developer Support](mailto:developer-support@strmprivacy.io), with the details of the issue you’re experiencing. A minimum working example (MWE) would help us in reproducing the issue, and could help in solving it sooner for you. If you have to option to include an MWE, please do so.
 
-## About expired LetsEncrypt root certificates
-On September 30 2021, a LetsEncrypt Root CA has expired. They've provided a fix for this, but at this time (November 12 2021) the LibreSSL that comes packaged with MacOS doesn't correctly handle this. To work around this, we have a configuration setting: `ssl-ca-location`, with which you can override the default to a more up-to-date location, for example the location of the Homebrew installed OpenSSL (i.e. `/usr/local/etc/openssl@1.1/cert.pem`).
-
 ## More resources
 
 See our [documentation](https://docs.strmprivacy.io) or [reach out to us](https://docs.strmprivacy.io/docs/latest/contact/index.html).
