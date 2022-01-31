@@ -12,6 +12,7 @@ import (
 	"strmprivacy/strm/pkg/common"
 	"strmprivacy/strm/pkg/entity"
 	"strmprivacy/strm/pkg/entity/batch_exporter"
+	"strmprivacy/strm/pkg/entity/batch_job"
 	"strmprivacy/strm/pkg/entity/event_contract"
 	"strmprivacy/strm/pkg/entity/kafka_cluster"
 	"strmprivacy/strm/pkg/entity/kafka_exporter"
@@ -50,6 +51,7 @@ func SetupServiceClients(accessToken *string) {
 	stream.SetupClient(clientConnection, ctx)
 	kafka_exporter.SetupClient(clientConnection, ctx)
 	batch_exporter.SetupClient(clientConnection, ctx)
+	batch_job.SetupClient(clientConnection, ctx)
 	sink.SetupClient(clientConnection, ctx)
 	kafka_cluster.SetupClient(clientConnection, ctx)
 	kafka_user.SetupClient(clientConnection, ctx)
