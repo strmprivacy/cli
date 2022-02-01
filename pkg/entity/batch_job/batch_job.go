@@ -1,8 +1,9 @@
 package batch_job
 
 import (
+	"bytes"
 	"context"
-	"encoding/json"
+	"github.com/golang/protobuf/jsonpb"
 	"github.com/spf13/cobra"
 	"github.com/strmprivacy/api-definitions-go/v2/api/batch_jobs/v1"
 	"google.golang.org/grpc"
@@ -48,30 +49,21 @@ func del(id *string) {
 
 func create(cmd *cobra.Command) {
 	flags := cmd.Flags()
+	batchJob := util.GetStringAndErr(flags, file)
 
-	derivedDataFile := util.GetStringAndErr(flags, file)
-	if len(derivedDataFile) == 0 {
-		common.CliExit("Please provide a json to create a batch job")
-	}
-
-	derivedData, err := ioutil.ReadFile(derivedDataFile)
+	batchJobData, err := ioutil.ReadFile(batchJob)
 	if err != nil {
 		common.CliExit(err)
 	}
 
 	job := &batch_jobs.BatchJob{}
-
-	err = json.Unmarshal(derivedData, job)
+	err = jsonpb.Unmarshal(bytes.NewReader(batchJobData), job)
 	if err != nil {
 		common.CliExit(err)
 	}
 
 	createBatchJobRequest := &batch_jobs.CreateBatchJobRequest{BatchJob: job}
 	job.Ref.BillingId = auth.Auth.BillingId()
-
-	if job.Consent.DefaultConsentLevels == nil && job.Consent.ConsentLevelExtractor == nil {
-		common.CliExit("Please provide consent levels in json file")
-	}
 
 	response, err := client.CreateBatchJob(apiContext,
 		createBatchJobRequest)

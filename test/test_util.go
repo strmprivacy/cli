@@ -32,6 +32,8 @@ var _testConfig TestConfig
 
 func testConfig() *TestConfig {
 	if (TestConfig{}) == _testConfig {
+		cwd, _ := os.Getwd()
+		fmt.Println(cwd)
 		_ = godotenv.Load()
 
 		_testConfig = TestConfig{

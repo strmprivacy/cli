@@ -82,6 +82,9 @@ By default, this directory also contains the login information used by the `strm
 In this directory you can also find all entities that have been `save`d (see the [Save](#configuration) option).
 These entities are saved in the following files: `<config-dir>/<Entity>/<name>.json`, where `Entity` is the Entity name, i.e. "Stream" or "Sink" and the `name` is the unique name of the created entity, i.e. "MyImportantStream" or "s3-sink".
 
+## Development
+In order to run tests locally while developing, copy `.env` file to `test` directory. Contents of the file can be found in 1Password.
+
 ## Getting help
 If you encounter an error, or you'd like a new feature, please create an issue [here](https://github.com/strmprivacy/cli-wip/issues/new). Please be thorough in your description, as it helps us to help you more quickly. At least include the version of the CLI, your OS. terminal and any custom STRM Privacy flags that are present in your config or environment.
 
