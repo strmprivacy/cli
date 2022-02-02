@@ -31,7 +31,8 @@ func list() {
 
 func get(id *string, _ *cobra.Command) {
 	ref := &batch_jobs.BatchJobRef{
-		BillingId: auth.Auth.BillingId(), Id: *id,
+		BillingId: auth.Auth.BillingId(),
+		Id:        *id,
 	}
 	req := &batch_jobs.GetBatchJobRequest{Ref: ref}
 	response, err := client.GetBatchJob(apiContext, req)
@@ -40,8 +41,11 @@ func get(id *string, _ *cobra.Command) {
 }
 
 func del(id *string) {
-	req := &batch_jobs.DeleteBatchJobRequest{Ref: &batch_jobs.BatchJobRef{
-		BillingId: auth.Auth.BillingId(), Id: *id}}
+	req := &batch_jobs.DeleteBatchJobRequest{
+		Ref: &batch_jobs.BatchJobRef{
+			BillingId: auth.Auth.BillingId(), Id: *id,
+		},
+	}
 	response, err := client.DeleteBatchJob(apiContext, req)
 	common.CliExit(err)
 	printer.Print(response)
@@ -49,7 +53,7 @@ func del(id *string) {
 
 func create(cmd *cobra.Command) {
 	flags := cmd.Flags()
-	batchJob := util.GetStringAndErr(flags, file)
+	batchJob := util.GetStringAndErr(flags, batch_jobs_configuration_flag_name)
 
 	batchJobData, err := ioutil.ReadFile(batchJob)
 	if err != nil {
@@ -65,8 +69,7 @@ func create(cmd *cobra.Command) {
 	createBatchJobRequest := &batch_jobs.CreateBatchJobRequest{BatchJob: job}
 	job.Ref.BillingId = auth.Auth.BillingId()
 
-	response, err := client.CreateBatchJob(apiContext,
-		createBatchJobRequest)
+	response, err := client.CreateBatchJob(apiContext, createBatchJobRequest)
 	common.CliExit(err)
 
 	printer.Print(response)
@@ -87,9 +90,9 @@ func namesCompletion(cmd *cobra.Command, args []string, complete string) ([]stri
 		return common.GrpcRequestCompletionError(err)
 	}
 
-	streamNames := make([]string, 0, len(response.BatchJobs))
+	batchJobIds := make([]string, 0, len(response.BatchJobs))
 	for _, s := range response.BatchJobs {
-		streamNames = append(streamNames, s.Ref.Id)
+		batchJobIds = append(batchJobIds, s.Ref.Id)
 	}
-	return streamNames, cobra.ShellCompDirectiveNoFileComp
+	return batchJobIds, cobra.ShellCompDirectiveNoFileComp
 }

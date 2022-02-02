@@ -5,9 +5,9 @@ import (
 	"github.com/jedib0t/go-pretty/v6/table"
 	"github.com/spf13/cobra"
 	"github.com/strmprivacy/api-definitions-go/v2/api/batch_jobs/v1"
+	"sort"
 	"strmprivacy/strm/pkg/common"
 	"strmprivacy/strm/pkg/util"
-	"time"
 )
 
 var printer util.Printer
@@ -87,16 +87,17 @@ func (p deletePrinter) Print(data interface{}) {
 func printTable(batchJobs []*batch_jobs.BatchJob) {
 	rows := make([]table.Row, 0, len(batchJobs))
 	for _, batchJob := range batchJobs {
-		currentState := ""
-		timestamp := time.Now()
-		for _, state := range batchJob.States {
-			timestamp = state.StateTime.AsTime().Local()
-			currentState = state.State.String()
-		}
+
+		states := batchJob.States[:]
+		sort.Slice(states, func(i, j int) bool {
+			// Reverse sort, j > i
+			return states[j].StateTime.AsTime().Before(states[i].StateTime.AsTime())
+		})
+
 		rows = append(rows, table.Row{
 			batchJob.Ref.Id,
-			currentState,
-			timestamp,
+			states[0].State.String(),
+			states[0].StateTime.AsTime(),
 		})
 	}
 
@@ -111,16 +112,16 @@ func printTable(batchJobs []*batch_jobs.BatchJob) {
 }
 
 func printPlain(batchJobs []*batch_jobs.BatchJob) {
-	var names string
+	var ids string
 	lastIndex := len(batchJobs) - 1
 
 	for index, batchJob := range batchJobs {
-		names = names + batchJob.Ref.Id
+		ids = ids + batchJob.Ref.Id
 
 		if index != lastIndex {
-			names = names + "\n"
+			ids = ids + "\n"
 		}
 	}
 
-	util.RenderPlain(names)
+	util.RenderPlain(ids)
 }
