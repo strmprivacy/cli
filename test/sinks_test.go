@@ -107,7 +107,6 @@ func listSinks(t *testing.T) {
 func createSink(t *testing.T) {
 	s := &entities.Sink{}
 	proto.Merge(s, sink)
-	s.GetBucket().Credentials = bucketCredentials
 	ExecuteAndVerify(t, &sinks.CreateSinkResponse{Sink: s}, "create", "sink", sink.Ref.Name, "strm-cli-tester", "--sink-type=S3", "--credentials-file="+awsCredentialsFileName)
 }
 
@@ -130,7 +129,6 @@ func createBatchExporter(t *testing.T) {
 func createSink2(t *testing.T) {
 	s := &entities.Sink{}
 	proto.Merge(s, anotherSink)
-	s.GetBucket().Credentials = bucketCredentials
 	ExecuteAndVerify(t, &sinks.CreateSinkResponse{Sink: s},
 		"create", "sink", s.Ref.Name, "strm-cli-tester", "--sink-type=S3", "--credentials-file="+awsCredentialsFileName)
 }

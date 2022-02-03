@@ -2,6 +2,7 @@
 node_modules
 protos
 .env
+test/.env
 .env-dev
 .env-prod
 .default-login-token.json

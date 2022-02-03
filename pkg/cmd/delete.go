@@ -4,6 +4,7 @@ import (
 	"github.com/spf13/cobra"
 	"strmprivacy/strm/pkg/common"
 	"strmprivacy/strm/pkg/entity/batch_exporter"
+	"strmprivacy/strm/pkg/entity/batch_job"
 	"strmprivacy/strm/pkg/entity/kafka_exporter"
 	"strmprivacy/strm/pkg/entity/kafka_user"
 	"strmprivacy/strm/pkg/entity/sink"
@@ -20,6 +21,7 @@ func init() {
 	DeleteCmd.AddCommand(stream.DeleteCmd())
 	DeleteCmd.AddCommand(kafka_exporter.DeleteCmd())
 	DeleteCmd.AddCommand(batch_exporter.DeleteCmd())
+	DeleteCmd.AddCommand(batch_job.DeleteCmd())
 	DeleteCmd.AddCommand(sink.DeleteCmd())
 	DeleteCmd.AddCommand(kafka_user.DeleteCmd())
 

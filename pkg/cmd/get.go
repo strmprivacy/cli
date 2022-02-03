@@ -4,6 +4,7 @@ import (
 	"github.com/spf13/cobra"
 	"strmprivacy/strm/pkg/common"
 	"strmprivacy/strm/pkg/entity/batch_exporter"
+	"strmprivacy/strm/pkg/entity/batch_job"
 	"strmprivacy/strm/pkg/entity/event_contract"
 	"strmprivacy/strm/pkg/entity/kafka_cluster"
 	"strmprivacy/strm/pkg/entity/kafka_exporter"
@@ -25,6 +26,7 @@ func init() {
 	GetCmd.AddCommand(stream.GetCmd())
 	GetCmd.AddCommand(kafka_exporter.GetCmd())
 	GetCmd.AddCommand(batch_exporter.GetCmd())
+	GetCmd.AddCommand(batch_job.GetCmd())
 	GetCmd.AddCommand(sink.GetCmd())
 	GetCmd.AddCommand(kafka_cluster.GetCmd())
 	GetCmd.AddCommand(kafka_user.GetCmd())
