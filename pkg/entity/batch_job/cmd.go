@@ -6,7 +6,7 @@ import (
 )
 
 const (
-	batch_jobs_configuration_flag_name = "file"
+	batch_jobs_file_flag_name = "file"
 )
 
 func DeleteCmd() *cobra.Command {
@@ -68,9 +68,9 @@ func CreateCmd() *cobra.Command {
 
 	flags := batchJob.Flags()
 
-	flags.StringP(batch_jobs_configuration_flag_name, "F", "",
+	flags.StringP(batch_jobs_file_flag_name, "F", "",
 		`The path to the JSON file containing the batch job configuration`)
-	err := batchJob.MarkFlagRequired(batch_jobs_configuration_flag_name)
+	err := batchJob.MarkFlagRequired(batch_jobs_file_flag_name)
 	common.CliExit(err)
 
 	return batchJob

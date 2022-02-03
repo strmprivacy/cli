@@ -53,21 +53,21 @@ func del(id *string) {
 
 func create(cmd *cobra.Command) {
 	flags := cmd.Flags()
-	batchJob := util.GetStringAndErr(flags, batch_jobs_configuration_flag_name)
+	batchJobFile := util.GetStringAndErr(flags, batch_jobs_file_flag_name)
 
-	batchJobData, err := ioutil.ReadFile(batchJob)
+	batchJobData, err := ioutil.ReadFile(batchJobFile)
 	if err != nil {
 		common.CliExit(err)
 	}
 
-	job := &batch_jobs.BatchJob{}
-	err = jsonpb.Unmarshal(bytes.NewReader(batchJobData), job)
+	batchJob := &batch_jobs.BatchJob{}
+	err = jsonpb.Unmarshal(bytes.NewReader(batchJobData), batchJob)
 	if err != nil {
 		common.CliExit(err)
 	}
 
-	createBatchJobRequest := &batch_jobs.CreateBatchJobRequest{BatchJob: job}
-	job.Ref.BillingId = auth.Auth.BillingId()
+	createBatchJobRequest := &batch_jobs.CreateBatchJobRequest{BatchJob: batchJob}
+	batchJob.Ref.BillingId = auth.Auth.BillingId()
 
 	response, err := client.CreateBatchJob(apiContext, createBatchJobRequest)
 	common.CliExit(err)
