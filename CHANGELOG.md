@@ -1,3 +1,10 @@
+# [1.18.0](https://github.com/strmprivacy/cli/compare/v1.17.0...v1.18.0) (2022-02-03)
+
+
+### Features
+
+* add batch-job support in cli ([#76](https://github.com/strmprivacy/cli/issues/76)) ([3d26943](https://github.com/strmprivacy/cli/commit/3d2694317e500080f62a2a80fb10d60920db0e8e))
+
 # [1.17.0](https://github.com/strmprivacy/cli/compare/v1.16.0...v1.17.0) (2021-12-29)
 
 
