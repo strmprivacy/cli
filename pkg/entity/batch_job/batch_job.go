@@ -8,6 +8,7 @@ import (
 	"github.com/strmprivacy/api-definitions-go/v2/api/batch_jobs/v1"
 	"google.golang.org/grpc"
 	"io/ioutil"
+	"strings"
 	"strmprivacy/strm/pkg/auth"
 	"strmprivacy/strm/pkg/common"
 	"strmprivacy/strm/pkg/util"
@@ -76,8 +77,8 @@ func create(cmd *cobra.Command) {
 }
 
 func namesCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
-	if len(args) != 0 {
-		// this one means you don't get two completion suggestions for one stream
+	if len(args) != 0 && strings.Fields(cmd.Short)[0] != "Delete" {
+		// this one means you don't get two completion suggestions for one stream if it's not a delete call
 		return nil, cobra.ShellCompDirectiveNoFileComp
 	}
 	if auth.Auth.BillingIdAbsent() {
