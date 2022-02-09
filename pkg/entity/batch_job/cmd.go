@@ -17,9 +17,11 @@ func DeleteCmd() *cobra.Command {
 			printer = configurePrinter(cmd)
 		},
 		Run: func(cmd *cobra.Command, args []string) {
-			del(&args[0])
+			for i, _ := range args {
+				del(&args[i])
+			}
 		},
-		Args:              cobra.ExactArgs(1),
+		Args:              cobra.MinimumNArgs(1),
 		ValidArgsFunction: namesCompletion,
 	}
 	return batchJob
