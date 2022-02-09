@@ -1,3 +1,10 @@
+# [1.19.0](https://github.com/strmprivacy/cli/compare/v1.18.0...v1.19.0) (2022-02-09)
+
+
+### Features
+
+* allow deletion of multiple batch-jobs ([#79](https://github.com/strmprivacy/cli/issues/79)) ([0396082](https://github.com/strmprivacy/cli/commit/0396082cc0ad58faee01eb0c4dc1230e38366d76))
+
 # [1.18.0](https://github.com/strmprivacy/cli/compare/v1.17.0...v1.18.0) (2022-02-03)
 
 
