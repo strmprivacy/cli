@@ -101,7 +101,6 @@ func createTokenSource(storedToken storedToken) oauth2.TokenSource {
 
 func GetBillingId() (string, error) {
 	filename := (&Authenticator{}).getSaveFilename()
-	fmt.Println(filename)
 	b, err := ioutil.ReadFile(filename)
 	if err != nil {
 		return "", err
