@@ -4,6 +4,7 @@ import (
 	"fmt"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
+	"github.com/spf13/cobra/doc"
 	"github.com/spf13/pflag"
 	"strmprivacy/strm/pkg/auth"
 	"strmprivacy/strm/pkg/bootstrap"
@@ -15,11 +16,36 @@ import (
 )
 
 const (
-	apiHostFlag = "api-host"
+	apiHostFlag      = "api-host"
+	generateDocsFlag = "generate-docs"
 )
 
 func main() {
-	common.CliExit(RootCmd.Execute())
+	flags := RootCmd.Flags()
+	flags.Bool(generateDocsFlag, false, "generate docs")
+	err := flags.MarkHidden("generate-docs")
+	if util.GetBoolAndErr(flags, generateDocsFlag) {
+		err := doc.GenMarkdownTree(RootCmd, "./docs")
+		if err != nil {
+			common.CliExit(err)
+		}
+	}
+
+	if err != nil {
+		return
+	}
+
+	err = RootCmd.Execute()
+	if err != nil {
+		common.CliExit(err)
+	}
+
+	if util.GetBoolAndErr(flags, generateDocsFlag) {
+		err := doc.GenMarkdownTree(RootCmd, "./docs")
+		if err != nil {
+			common.CliExit(err)
+		}
+	}
 }
 
 var RootCmd = &cobra.Command{
