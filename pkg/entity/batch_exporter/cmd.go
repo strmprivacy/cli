@@ -14,7 +14,6 @@ const (
 	pathPrefix                = "path-prefix"
 	exportKeys                = "export-keys"
 	includeExistingEventsFlag = "include-existing-events"
-	allFlag                   = "all"
 )
 
 func DeleteCmd() *cobra.Command {

@@ -41,7 +41,7 @@ func NamesCompletion(cmd *cobra.Command, args []string, complete string) ([]stri
 		return common.MissingBillingIdCompletionError(cmd.CommandPath())
 	}
 	if len(args) != 0 {
-		// this one means you don't get two completion suggestions for one stream
+		// this one means you don't get multiple completion suggestions for one stream
 		return nil, cobra.ShellCompDirectiveNoFileComp
 	}
 

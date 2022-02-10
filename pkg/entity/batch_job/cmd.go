@@ -7,7 +7,6 @@ import (
 
 const (
 	batch_jobs_file_flag_name = "file"
-	allFlag                   = "all"
 )
 
 func DeleteCmd() *cobra.Command {

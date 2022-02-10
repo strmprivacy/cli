@@ -112,7 +112,7 @@ func getSinkNames() []string {
 
 func namesCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
 	if len(args) != 0 && strings.Fields(cmd.Short)[0] != "Delete" {
-		// this one means you don't get two completion suggestions for one stream if it's not a delete call
+		// this one means you don't get multiple completion suggestions for one stream if it's not a delete call
 		return nil, cobra.ShellCompDirectiveNoFileComp
 	}
 	if auth.Auth.BillingIdAbsent() {
