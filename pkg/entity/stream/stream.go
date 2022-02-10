@@ -18,6 +18,7 @@ import (
 
 // strings used in the cli
 const (
+	allFlag              = "all"
 	linkedStreamFlag     = "derived-from"
 	consentLevelTypeFlag = "consent-type"
 	consentLevelsFlag    = "levels"
@@ -156,7 +157,8 @@ func NamesCompletion(cmd *cobra.Command, args []string, complete string) ([]stri
 	if auth.Auth.BillingIdAbsent() {
 		return common.MissingBillingIdCompletionError(cmd.CommandPath())
 	}
-	if len(args) != 0 {
+	if len(args) != 0 && strings.Fields(cmd.Short)[0] != "Delete" {
+		// this one means you don't get two completion suggestions for one stream if it's not a delete call
 		return nil, cobra.ShellCompDirectiveNoFileComp
 	}
 
@@ -179,8 +181,8 @@ func SourceNamesCompletion(cmd *cobra.Command, args []string, complete string) (
 	if auth.Auth.BillingIdAbsent() {
 		return common.MissingBillingIdCompletionError(cmd.CommandPath())
 	}
-	if len(args) != 0 {
-		// this one means you don't get two completion suggestions for one stream
+	if len(args) != 0 && strings.Fields(cmd.Short)[0] != "Delete" {
+		// this one means you don't get two completion suggestions for one stream if it's not a delete call
 		return nil, cobra.ShellCompDirectiveNoFileComp
 	}
 

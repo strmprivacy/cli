@@ -3,6 +3,8 @@ package context
 import (
 	"fmt"
 	"path"
+	"strings"
+	"strmprivacy/strm/pkg/auth"
 
 	"github.com/spf13/cobra"
 	"strmprivacy/strm/pkg/common"
@@ -49,6 +51,9 @@ func BillingIdInfo() *cobra.Command {
 			printer = configurePrinter(cmd)
 		},
 		Run: func(cmd *cobra.Command, args []string) {
+			if len(strings.TrimSpace(auth.Auth.BillingId())) == 0 {
+				common.CliExit(fmt.Sprintf("No login information found. Use: `%v auth login` first.", common.RootCommandName))
+			}
 			billingIdInfo()
 		},
 	}
