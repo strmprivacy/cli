@@ -30,7 +30,7 @@ func CreateCmd() *cobra.Command {
 		"comma separated list of integers for derived streams")
 	flags.String(descriptionFlag, "", "description")
 	flags.StringSlice(tagsFlag, []string{}, "tags")
-	flags.Bool(saveFlag, true, "if true, save the result in the config directory (default is true)")
+	flags.Bool(saveFlag, true, "if true, save the result in the config directory (~/.config/strmprivacy/saved-entities). (default is true)")
 	flags.StringArrayP(maskedFieldsFlag, "M", []string{}, maskedFieldHelp)
 	flags.String(maskedFieldsSeed, "", `A seed used for masking`)
 
@@ -49,7 +49,7 @@ func completion(cmd *cobra.Command, args []string, complete string) ([]string, c
 
 func DeleteCmd() *cobra.Command {
 	stream := &cobra.Command{
-		Use:   "stream [name, ...]",
+		Use:   "stream [name ...]",
 		Short: "Delete one or more streams",
 		Long: `Delete one or more streams.
 

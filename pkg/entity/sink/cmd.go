@@ -41,7 +41,7 @@ func ListCmd() *cobra.Command {
 }
 func DeleteCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:   "sink [name, ...]",
+		Use:   "sink [name ...]",
 		Short: "Delete sinks",
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)

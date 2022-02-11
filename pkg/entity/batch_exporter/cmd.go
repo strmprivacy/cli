@@ -18,7 +18,7 @@ const (
 
 func DeleteCmd() *cobra.Command {
 	batchExporter := &cobra.Command{
-		Use:   "batch-exporter [name, ...]",
+		Use:   "batch-exporter [name ...]",
 		Short: "Delete one or more Batch exporters by name",
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
