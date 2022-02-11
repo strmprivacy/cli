@@ -1,3 +1,10 @@
+# [1.20.0](https://github.com/strmprivacy/cli/compare/v1.19.0...v1.20.0) (2022-02-11)
+
+
+### Features
+
+* delete multiple entities; save credentials default true; ([#80](https://github.com/strmprivacy/cli/issues/80)) ([e675c85](https://github.com/strmprivacy/cli/commit/e675c85ed9fcabd81e9cc177e28da14aa63d9db1))
+
 # [1.19.0](https://github.com/strmprivacy/cli/compare/v1.18.0...v1.19.0) (2022-02-09)
 
 
