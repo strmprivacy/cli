@@ -41,16 +41,18 @@ func ListCmd() *cobra.Command {
 }
 func DeleteCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:   "sink [name]",
+		Use:   "sink [name ...]",
 		Short: "Delete sinks",
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
 		},
 		Run: func(cmd *cobra.Command, args []string) {
 			recursive, _ := cmd.Flags().GetBool(common.RecursiveFlagName)
-			del(&args[0], recursive)
+			for i, _ := range args {
+				del(&args[i], recursive)
+			}
 		},
-		Args:              cobra.ExactArgs(1),
+		Args:              cobra.MinimumNArgs(1),
 		ValidArgsFunction: NamesCompletion,
 	}
 }

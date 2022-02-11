@@ -11,8 +11,8 @@ const (
 
 func DeleteCmd() *cobra.Command {
 	batchJob := &cobra.Command{
-		Use:   "batch-job [id]",
-		Short: "Delete a Batch Job by id",
+		Use:   "batch-job [id ...]",
+		Short: "Delete on or more Batch Jobs by id",
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
 		},
@@ -24,6 +24,7 @@ func DeleteCmd() *cobra.Command {
 		Args:              cobra.MinimumNArgs(1),
 		ValidArgsFunction: namesCompletion,
 	}
+
 	return batchJob
 
 }

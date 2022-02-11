@@ -18,17 +18,20 @@ const (
 
 func DeleteCmd() *cobra.Command {
 	batchExporter := &cobra.Command{
-		Use:   "batch-exporter [name]",
-		Short: "Delete a Batch exporter by name",
+		Use:   "batch-exporter [name ...]",
+		Short: "Delete one or more Batch exporters by name",
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
 		},
 		Run: func(cmd *cobra.Command, args []string) {
-			del(&args[0])
+			for i, _ := range args {
+				del(&args[i])
+			}
 		},
-		Args:              cobra.ExactArgs(1), // the stream name
+		Args:              cobra.MinimumNArgs(1), // the stream names
 		ValidArgsFunction: namesCompletion,
 	}
+
 	return batchExporter
 
 }

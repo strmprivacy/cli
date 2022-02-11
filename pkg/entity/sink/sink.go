@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"io/ioutil"
+	"strings"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
@@ -89,11 +90,10 @@ func NamesCompletion(cmd *cobra.Command, args []string, complete string) ([]stri
 	if auth.Auth.BillingIdAbsent() {
 		return common.MissingBillingIdCompletionError(cmd.CommandPath())
 	}
-	if len(args) != 0 {
-		// this one means you don't get two completion suggestions for one stream
+	if len(args) != 0 && strings.Fields(cmd.Short)[0] != "Delete" {
+		// this one means you don't get multiple completion suggestions for one stream if it's not a delete call
 		return nil, cobra.ShellCompDirectiveNoFileComp
 	}
-
 	req := &sinks.ListSinksRequest{BillingId: auth.Auth.BillingId()}
 	response, err := Client.ListSinks(apiContext, req)
 

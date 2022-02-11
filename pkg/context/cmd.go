@@ -3,6 +3,7 @@ package context
 import (
 	"fmt"
 	"path"
+	"strmprivacy/strm/pkg/auth"
 
 	"github.com/spf13/cobra"
 	"strmprivacy/strm/pkg/common"
@@ -49,6 +50,7 @@ func BillingIdInfo() *cobra.Command {
 			printer = configurePrinter(cmd)
 		},
 		Run: func(cmd *cobra.Command, args []string) {
+			_ = auth.Auth.BillingId()
 			billingIdInfo()
 		},
 	}

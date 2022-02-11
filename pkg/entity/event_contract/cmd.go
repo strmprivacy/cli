@@ -42,8 +42,8 @@ func ListCmd() *cobra.Command {
 
 func CreateCmd() *cobra.Command {
 	contract := &cobra.Command{
-		Use:   "event-contract (reference)",
-		Short: "Create an event-contract",
+		Use:   "event-contract (handle/name/version)",
+		Short: "Create an event-contract with reference 'handle/name/version'",
 		Long:  `Create an event contract from a JSON definition file`,
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)

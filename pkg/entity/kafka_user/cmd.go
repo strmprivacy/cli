@@ -12,15 +12,17 @@ const (
 
 func DeleteCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:   "kafka-user [name]",
-		Short: "Delete a Kafka user",
+		Use:   "kafka-user [name ...]",
+		Short: "Delete one or more Kafka users",
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
 		},
 		Run: func(cmd *cobra.Command, args []string) {
-			del(&args[0])
+			for i, _ := range args {
+				del(&args[i])
+			}
 		},
-		Args:              cobra.ExactArgs(1), // the stream name
+		Args:              cobra.MinimumNArgs(1),
 		ValidArgsFunction: namesCompletion,
 	}
 }

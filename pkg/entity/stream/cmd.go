@@ -30,7 +30,7 @@ func CreateCmd() *cobra.Command {
 		"comma separated list of integers for derived streams")
 	flags.String(descriptionFlag, "", "description")
 	flags.StringSlice(tagsFlag, []string{}, "tags")
-	flags.Bool(saveFlag, false, "save the result in the config directory")
+	flags.Bool(saveFlag, true, "if true, save the result in the config directory (~/.config/strmprivacy/saved-entities). (default is true)")
 	flags.StringArrayP(maskedFieldsFlag, "M", []string{}, maskedFieldHelp)
 	flags.String(maskedFieldsSeed, "", `A seed used for masking`)
 
@@ -48,10 +48,10 @@ func completion(cmd *cobra.Command, args []string, complete string) ([]string, c
 }
 
 func DeleteCmd() *cobra.Command {
-	return &cobra.Command{
-		Use:   "stream [name]",
-		Short: "Delete a stream",
-		Long: `Delete a stream.
+	stream := &cobra.Command{
+		Use:   "stream [name ...]",
+		Short: "Delete one or more streams",
+		Long: `Delete one or more streams.
 
 	If a stream has dependents (like derived streams or exporters), you can use
 	the 'recursive' option to get rid of those also.
@@ -61,12 +61,17 @@ func DeleteCmd() *cobra.Command {
 		},
 		Run: func(cmd *cobra.Command, args []string) {
 			recursive, _ := cmd.Flags().GetBool(common.RecursiveFlagName)
-			del(&args[0], recursive)
+			for i, _ := range args {
+				del(&args[i], recursive)
+			}
 		},
-		Args:              cobra.ExactArgs(1), // the stream name
+		Args:              cobra.MinimumNArgs(1),
 		ValidArgsFunction: NamesCompletion,
 	}
+
+	return stream
 }
+
 func GetCmd() *cobra.Command {
 	return &cobra.Command{
 		Use:   "stream [name]",

@@ -6,6 +6,7 @@ import (
 	"github.com/strmprivacy/api-definitions-go/v2/api/entities/v1"
 	"github.com/strmprivacy/api-definitions-go/v2/api/kafka_users/v1"
 	"google.golang.org/grpc"
+	"strings"
 	"strmprivacy/strm/pkg/auth"
 	"strmprivacy/strm/pkg/common"
 	"strmprivacy/strm/pkg/entity/kafka_exporter"
@@ -80,8 +81,8 @@ func namesCompletion(cmd *cobra.Command, args []string, complete string) ([]stri
 	if auth.Auth.BillingIdAbsent() {
 		return common.MissingBillingIdCompletionError(cmd.CommandPath())
 	}
-	if len(args) != 0 {
-		// this one means you don't get two completion suggestions for one stream
+	if len(args) != 0 && strings.Fields(cmd.Short)[0] != "Delete" {
+		// this one means you don't get multiple completion suggestions for one stream if it's not a delete call
 		return nil, cobra.ShellCompDirectiveNoFileComp
 	}
 
