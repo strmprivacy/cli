@@ -12,8 +12,8 @@ const (
 
 func DeleteCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:   "kafka-user [name, ...]",
-		Short: "Delete on ore more Kafka users",
+		Use:   "kafka-user [name ...]",
+		Short: "Delete one or more Kafka users",
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
 		},
