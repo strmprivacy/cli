@@ -39,7 +39,7 @@ jobs:
           cp -rf ../generated_docs/* ./docs/cli-reference
           git add .
           git commit -m "add generated docs (${tag_name})"
-          git push -u origin test-branch
+          git push -u origin ${tag_name}
       - name: Run CLI tests
         env:
           STRM_TEST_USER_BILLING_ID: ${{ secrets.STRM_TEST_USER_BILLING_ID }}
