@@ -23,6 +23,23 @@ jobs:
       - name: Build CLI
         run: |
           make
+      - name: Publish Docs
+        env:
+          GITHUB_TOKEN: ${{secrets.GH_TOKEN}}
+          APIS_USERNAME: ${{secrets.APIS_USERNAME}}
+          APIS_EMAIL: ${{secrets.APIS_EMAIL}}
+        run: |
+          git config --global user.email "${APIS_EMAIL}"
+          git config --global user.name "${APIS_USERNAME}"
+          tag_name="${GITHUB_REF##*/}"          
+          mkdir generated_docs && strm --generate-docs
+          git clone "https://git:${{secrets.GH_TOKEN}}@github.com/strmprivacy/docs.git"
+          cd docs
+          git checkout -b ${tag_name}
+          cp -rf ../generated_docs/* ./docs/cli-reference
+          git add .
+          git commit -m "add generated docs (${tag_name})"
+          git push -u https://${{secrets.GH_TOKEN}}@github.com/strmprivacy/docs.git test-branch
       - name: Run CLI tests
         env:
           STRM_TEST_USER_BILLING_ID: ${{ secrets.STRM_TEST_USER_BILLING_ID }}

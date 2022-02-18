@@ -16,6 +16,16 @@ func LoginCmd() *cobra.Command {
 	return cmd
 }
 
+var docString = `## Nieuwe alinea
+
+geen probleem om hier gewoon een lange docstring neer te zetten
+
+Kan in principe alles aan
+
+### mini paragraaf
+[link](https://docs.strmprivacy.io)
+`
+
 func PrintTokenCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "print-access-token",
@@ -23,8 +33,8 @@ func PrintTokenCmd() *cobra.Command {
 		Long: `Prints an access token that can be used in an http header.
 Note that this token might be expired, so a refresh may be required.
 Use token as follows:
-'Authorization: Bearer <token>'
-`,
+'Authorization: Bearer &lt;token&gt;' 
+` + docString,
 		Run: func(cmd *cobra.Command, args []string) {
 			printAccessToken()
 		},

@@ -24,12 +24,6 @@ func main() {
 	flags := RootCmd.Flags()
 	flags.Bool(generateDocsFlag, false, "generate docs")
 	err := flags.MarkHidden("generate-docs")
-	if util.GetBoolAndErr(flags, generateDocsFlag) {
-		err := doc.GenMarkdownTree(RootCmd, "./docs")
-		if err != nil {
-			common.CliExit(err)
-		}
-	}
 
 	if err != nil {
 		return
@@ -41,7 +35,7 @@ func main() {
 	}
 
 	if util.GetBoolAndErr(flags, generateDocsFlag) {
-		err := doc.GenMarkdownTree(RootCmd, "./docs")
+		err := doc.GenMarkdownTree(RootCmd, "./generated_docs")
 		if err != nil {
 			common.CliExit(err)
 		}
