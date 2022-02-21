@@ -16,8 +16,9 @@ import (
 )
 
 var ListCmd = &cobra.Command{
-	Use:   common.ListCommandName,
-	Short: "List entities",
+	Use:               common.ListCommandName,
+	DisableAutoGenTag: true,
+	Short:             "List entities",
 }
 
 func init() {

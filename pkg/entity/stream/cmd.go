@@ -2,15 +2,20 @@ package stream
 
 import (
 	"github.com/spf13/cobra"
+	"io/ioutil"
 	"strmprivacy/strm/pkg/common"
 	"strmprivacy/strm/pkg/entity/event_contract"
 	"strmprivacy/strm/pkg/util"
 )
 
+var content, _ = ioutil.ReadFile("pkg/entity/stream/docstring.md")
+
 func CreateCmd() *cobra.Command {
 	stream := &cobra.Command{
-		Use:   "stream [name]",
-		Short: "Create a stream",
+		Use:               "stream [name]",
+		Short:             "Create a stream",
+		Long:              string(content),
+		DisableAutoGenTag: true,
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
 		},
@@ -51,11 +56,13 @@ func DeleteCmd() *cobra.Command {
 	stream := &cobra.Command{
 		Use:   "stream [name ...]",
 		Short: "Delete one or more streams",
-		Long: `Delete one or more streams.
-
-	If a stream has dependents (like derived streams or exporters), you can use
-	the 'recursive' option to get rid of those also.
-	Returns everything that was deleted. `,
+		Long:  string(content),
+		//	Long: `Delete one or more streams.
+		//
+		//If a stream has dependents (like derived streams or exporters), you can use
+		//the 'recursive' option to get rid of those also.
+		//Returns everything that was deleted. `,
+		DisableAutoGenTag: true,
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
 		},
@@ -74,8 +81,10 @@ func DeleteCmd() *cobra.Command {
 
 func GetCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:   "stream [name]",
-		Short: "Get stream by name",
+		Use:               "stream [name]",
+		Short:             "Get stream by name",
+		Long:              string(content),
+		DisableAutoGenTag: true,
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
 		},
@@ -89,8 +98,10 @@ func GetCmd() *cobra.Command {
 }
 func ListCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:   "streams",
-		Short: "List streams",
+		Use:               "streams",
+		Short:             "List streams",
+		Long:              string(content),
+		DisableAutoGenTag: true,
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
 		},

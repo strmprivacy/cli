@@ -1,11 +1,18 @@
 package key_stream
 
-import "github.com/spf13/cobra"
+import (
+	"github.com/spf13/cobra"
+	"io/ioutil"
+)
+
+var content, _ = ioutil.ReadFile("pkg/entity/key_stream/docstring.md")
 
 func GetCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:   "key-stream [name]",
-		Short: "Get key stream by name",
+		Use:               "key-stream [name]",
+		Short:             "Get key stream by name",
+		Long:              string(content),
+		DisableAutoGenTag: true,
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
 		},
@@ -18,8 +25,10 @@ func GetCmd() *cobra.Command {
 }
 func ListCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:   "key-streams",
-		Short: "List key streams",
+		Use:               "key-streams",
+		Short:             "List key streams",
+		Long:              string(content),
+		DisableAutoGenTag: true,
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
 		},

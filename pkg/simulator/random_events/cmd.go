@@ -2,18 +2,20 @@ package random_events
 
 import (
 	"github.com/spf13/cobra"
+	"io/ioutil"
 	"strmprivacy/strm/pkg/common"
 	"strmprivacy/strm/pkg/entity/stream"
 	"strmprivacy/strm/pkg/simulator"
 )
 
 func RunCmd() (cmd *cobra.Command) {
-	simCmd := &cobra.Command{
-		Use:   "random-events [stream-name]",
-		Short: "Run a simulator that will send random events to a stream",
-		Long: `Run a simulator that will send random events to a stream using the demo schema
+	var content, _ = ioutil.ReadFile("pkg/simulator/random_events/docstring.md")
 
-Uses a saved stream definition if available, otherwise, client id and secret are required`,
+	simCmd := &cobra.Command{
+		Use:               "random-events [stream-name]",
+		Short:             "Run a simulator that will send random events to a stream",
+		Long:              string(content),
+		DisableAutoGenTag: true,
 		Run:               func(cmd *cobra.Command, args []string) { run(cmd, &args[0]) },
 		Args:              cobra.ExactArgs(1), // the stream name
 		ValidArgsFunction: stream.SourceNamesCompletion,

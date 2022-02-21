@@ -2,6 +2,7 @@ package event_contract
 
 import (
 	"github.com/spf13/cobra"
+	"io/ioutil"
 	"strmprivacy/strm/pkg/common"
 	"strmprivacy/strm/pkg/entity/schema"
 )
@@ -12,10 +13,14 @@ const (
 	definitionFile = "definition-file"
 )
 
+var content, _ = ioutil.ReadFile("pkg/entity/batch_exporter/docstring.md")
+
 func GetCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:   "event-contract (reference)",
-		Short: "Get Event Contract by reference",
+		Use:               "event-contract (reference)",
+		Short:             "Get Event Contract by reference",
+		Long:              string(content),
+		DisableAutoGenTag: true,
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
 		},
@@ -29,8 +34,10 @@ func GetCmd() *cobra.Command {
 
 func ListCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:   "event-contracts",
-		Short: "List Event Contracts",
+		Use:               "event-contracts",
+		Short:             "List Event Contracts",
+		Long:              string(content),
+		DisableAutoGenTag: true,
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
 		},
@@ -42,9 +49,10 @@ func ListCmd() *cobra.Command {
 
 func CreateCmd() *cobra.Command {
 	contract := &cobra.Command{
-		Use:   "event-contract (handle/name/version)",
-		Short: "Create an event-contract with reference 'handle/name/version'",
-		Long:  `Create an event contract from a JSON definition file`,
+		Use:               "event-contract (handle/name/version)",
+		Short:             "Create an event-contract with reference 'handle/name/version'",
+		Long:              string(content),
+		DisableAutoGenTag: true,
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
 		},

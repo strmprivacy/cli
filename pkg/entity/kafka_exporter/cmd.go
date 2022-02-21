@@ -2,6 +2,7 @@ package kafka_exporter
 
 import (
 	"github.com/spf13/cobra"
+	"io/ioutil"
 	"strmprivacy/strm/pkg/common"
 	"strmprivacy/strm/pkg/entity/kafka_cluster"
 	"strmprivacy/strm/pkg/entity/stream"
@@ -12,14 +13,18 @@ const (
 	saveFlag    = "save"
 )
 
+var content, _ = ioutil.ReadFile("pkg/entity/kafka_exporter/docstring.md")
+
 func DeleteCmd() *cobra.Command {
 	return &cobra.Command{
 		Use:   "kafka-exporter [name]",
 		Short: "Delete a Kafka exporter",
-		Long: `Delete a Kafka exporter.
-	If a kafka-exporter has dependents (like Kafka users), you can use
-	the 'recursive' option to get rid of those also.
-	Returns everything that was deleted. `,
+		//	Long: `Delete a Kafka exporter.
+		//If a kafka-exporter has dependents (like Kafka users), you can use
+		//the 'recursive' option to get rid of those also.
+		//Returns everything that was deleted. `,
+		Long:              string(content),
+		DisableAutoGenTag: true,
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
 		},
@@ -34,8 +39,10 @@ func DeleteCmd() *cobra.Command {
 }
 func GetCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:   "kafka-exporter [name]",
-		Short: "Get Kafka exporter by name",
+		Use:               "kafka-exporter [name]",
+		Short:             "Get Kafka exporter by name",
+		Long:              string(content),
+		DisableAutoGenTag: true,
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
 		},
@@ -50,8 +57,10 @@ func GetCmd() *cobra.Command {
 
 func ListCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:   "kafka-exporters",
-		Short: "List Kafka exporters",
+		Use:               "kafka-exporters",
+		Short:             "List Kafka exporters",
+		Long:              string(content),
+		DisableAutoGenTag: true,
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
 		},
@@ -64,8 +73,10 @@ func ListCmd() *cobra.Command {
 
 func CreateCmd() *cobra.Command {
 	kafkaExporter := &cobra.Command{
-		Use:   "kafka-exporter [stream-name]",
-		Short: "Create a Kafka exporter",
+		Use:               "kafka-exporter [stream-name]",
+		Short:             "Create a Kafka exporter",
+		Long:              string(content),
+		DisableAutoGenTag: true,
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
 		},

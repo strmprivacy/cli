@@ -2,6 +2,7 @@ package kafka_user
 
 import (
 	"github.com/spf13/cobra"
+	"io/ioutil"
 	"strmprivacy/strm/pkg/entity/kafka_exporter"
 )
 
@@ -10,10 +11,14 @@ const (
 	saveFlag = "save"
 )
 
+var content, _ = ioutil.ReadFile("pkg/entity/kafka_user/docstring.md")
+
 func DeleteCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:   "kafka-user [name ...]",
-		Short: "Delete one or more Kafka users",
+		Use:               "kafka-user [name ...]",
+		Short:             "Delete one or more Kafka users",
+		Long:              string(content),
+		DisableAutoGenTag: true,
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
 		},
@@ -29,8 +34,10 @@ func DeleteCmd() *cobra.Command {
 
 func GetCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:   "kafka-user [name]",
-		Short: "Get Kafka user",
+		Use:               "kafka-user [name]",
+		Short:             "Get Kafka user",
+		Long:              string(content),
+		DisableAutoGenTag: true,
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
 		},
@@ -44,8 +51,10 @@ func GetCmd() *cobra.Command {
 
 func ListCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:   "kafka-users [kafka-exporter-name]",
-		Short: "List Kafka users",
+		Use:               "kafka-users [kafka-exporter-name]",
+		Short:             "List Kafka users",
+		Long:              string(content),
+		DisableAutoGenTag: true,
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
 		},
@@ -59,8 +68,10 @@ func ListCmd() *cobra.Command {
 
 func CreateCmd() *cobra.Command {
 	kafkaUser := &cobra.Command{
-		Use:   "kafka-user [exporter-name]",
-		Short: "Create a Kafka user on a Kafka exporter",
+		Use:               "kafka-user [exporter-name]",
+		Short:             "Create a Kafka user on a Kafka exporter",
+		Long:              string(content),
+		DisableAutoGenTag: true,
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
 		},

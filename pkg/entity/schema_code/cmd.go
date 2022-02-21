@@ -2,13 +2,18 @@ package schema_code
 
 import (
 	"github.com/spf13/cobra"
+	"io/ioutil"
 	"strmprivacy/strm/pkg/entity/schema"
 )
 
+var content, _ = ioutil.ReadFile("pkg/entity/schema_code/docstring.md")
+
 func GetCmd() *cobra.Command {
 	getCommand := &cobra.Command{
-		Use:   "schema-code (schema-ref)",
-		Short: "Get schema code archive by schema-ref",
+		Use:               "schema-code (schema-ref)",
+		Short:             "Get schema code archive by schema-ref",
+		Long:              string(content),
+		DisableAutoGenTag: true,
 		Run: func(cmd *cobra.Command, args []string) {
 			get(cmd, &args[0])
 		},

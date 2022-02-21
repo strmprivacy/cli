@@ -2,6 +2,7 @@ package batch_job
 
 import (
 	"github.com/spf13/cobra"
+	"io/ioutil"
 	"strmprivacy/strm/pkg/common"
 )
 
@@ -9,10 +10,14 @@ const (
 	batch_jobs_file_flag_name = "file"
 )
 
+var content, _ = ioutil.ReadFile("pkg/entity/batch_job/docstring.md")
+
 func DeleteCmd() *cobra.Command {
 	batchJob := &cobra.Command{
-		Use:   "batch-job [id ...]",
-		Short: "Delete on or more Batch Jobs by id",
+		Use:               "batch-job [id ...]",
+		Short:             "Delete on or more Batch Jobs by id",
+		Long:              string(content),
+		DisableAutoGenTag: true,
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
 		},
@@ -31,8 +36,10 @@ func DeleteCmd() *cobra.Command {
 
 func GetCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:   "batch-job [id]",
-		Short: "Get a Batch Job by id",
+		Use:               "batch-job [id]",
+		Short:             "Get a Batch Job by id",
+		Long:              string(content),
+		DisableAutoGenTag: true,
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
 		},
@@ -45,8 +52,10 @@ func GetCmd() *cobra.Command {
 }
 func ListCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:   "batch-jobs",
-		Short: "List Batch Jobs",
+		Use:               "batch-jobs",
+		Short:             "List Batch Jobs",
+		Long:              string(content),
+		DisableAutoGenTag: true,
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
 		},
@@ -58,8 +67,10 @@ func ListCmd() *cobra.Command {
 
 func CreateCmd() *cobra.Command {
 	batchJob := &cobra.Command{
-		Use:   "batch-job",
-		Short: "Create a Batch Job",
+		Use:               "batch-job",
+		Short:             "Create a Batch Job",
+		Long:              string(content),
+		DisableAutoGenTag: true,
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
 		},

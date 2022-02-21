@@ -7,8 +7,9 @@ import (
 )
 
 var Cmd = &cobra.Command{
-	Use:   "kafka (kafka-exporter-name)",
-	Short: "Read events via the kafka consumer (not for production purposes)",
+	Use:               "kafka (kafka-exporter-name)",
+	Short:             "Read events via the kafka consumer (not for production purposes)",
+	DisableAutoGenTag: true,
 	Run: func(cmd *cobra.Command, args []string) {
 		Run(cmd, &args[0])
 	},

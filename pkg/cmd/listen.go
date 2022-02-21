@@ -7,8 +7,9 @@ import (
 )
 
 var ListenCmd = &cobra.Command{
-	Use:   "listen",
-	Short: "Listen for events on a stream",
+	Use:               "listen",
+	DisableAutoGenTag: true,
+	Short:             "Listen for events on a stream",
 }
 
 func init() {

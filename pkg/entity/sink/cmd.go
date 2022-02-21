@@ -2,6 +2,7 @@ package sink
 
 import (
 	"github.com/spf13/cobra"
+	"io/ioutil"
 	"strmprivacy/strm/pkg/common"
 )
 
@@ -11,10 +12,14 @@ const (
 	assumeRoleArnFlag   = "assume-role-arn"
 )
 
+var content, _ = ioutil.ReadFile("pkg/entity/sink/docstring.md")
+
 func GetCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:   "sink [name]",
-		Short: "Get sink by name",
+		Use:               "sink [name]",
+		Short:             "Get sink by name",
+		Long:              string(content),
+		DisableAutoGenTag: true,
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
 		},
@@ -28,8 +33,10 @@ func GetCmd() *cobra.Command {
 }
 func ListCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:   "sinks",
-		Short: "List sinks",
+		Use:               "sinks",
+		Short:             "List sinks",
+		Long:              string(content),
+		DisableAutoGenTag: true,
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
 		},
@@ -41,8 +48,10 @@ func ListCmd() *cobra.Command {
 }
 func DeleteCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:   "sink [name ...]",
-		Short: "Delete sinks",
+		Use:               "sink [name ...]",
+		Short:             "Delete sinks",
+		Long:              string(content),
+		DisableAutoGenTag: true,
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
 		},
@@ -58,8 +67,10 @@ func DeleteCmd() *cobra.Command {
 }
 func CreateCmd() *cobra.Command {
 	sink := &cobra.Command{
-		Use:   "sink [sink-name] [bucket-name]",
-		Short: "Create sink",
+		Use:               "sink [sink-name] [bucket-name]",
+		Short:             "Create sink",
+		Long:              string(content),
+		DisableAutoGenTag: true,
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
 		},

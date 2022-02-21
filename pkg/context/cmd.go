@@ -17,8 +17,9 @@ const (
 
 func Configuration() *cobra.Command {
 	configuration := &cobra.Command{
-		Use:   configCommandName,
-		Short: "Shows the config path and preferences",
+		Use:               configCommandName,
+		Short:             "Shows the config path and preferences",
+		DisableAutoGenTag: true,
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
 		},
@@ -44,8 +45,9 @@ func Configuration() *cobra.Command {
 
 func BillingIdInfo() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   billingIdInfoCommandName,
-		Short: "Show the billing id.",
+		Use:               billingIdInfoCommandName,
+		Short:             "Show the billing id.",
+		DisableAutoGenTag: true,
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
 		},
@@ -70,8 +72,9 @@ func BillingIdInfo() *cobra.Command {
 
 func EntityInfo() *cobra.Command {
 	entityInfo := &cobra.Command{
-		Use:   entityInfoCommandName,
-		Short: "Show the stored information for a saved entity",
+		Use:               entityInfoCommandName,
+		Short:             "Show the stored information for a saved entity",
+		DisableAutoGenTag: true,
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
 		},
