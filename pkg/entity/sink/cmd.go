@@ -2,7 +2,6 @@ package sink
 
 import (
 	"github.com/spf13/cobra"
-	"io/ioutil"
 	"strmprivacy/strm/pkg/common"
 )
 
@@ -12,13 +11,20 @@ const (
 	assumeRoleArnFlag   = "assume-role-arn"
 )
 
-var content, _ = ioutil.ReadFile("pkg/entity/sink/docstring.md")
+var longDoc = `A Sink is a STRM Privacy configuration object for a remote file storage. For now, AWS S3 and Google Cloud Storage
+Buckets are supported. By itself, a Sink does nothing. A Batch Exporter needs to be connected to a Sink and a Stream to
+start outputting events.
+
+Upon creation, STRM Privacy validates whether or not the Bucket exists and if it is accessible with the given
+credentials.
+
+### Usage`
 
 func GetCmd() *cobra.Command {
 	return &cobra.Command{
 		Use:               "sink [name]",
 		Short:             "Get sink by name",
-		Long:              string(content),
+		Long:              longDoc,
 		DisableAutoGenTag: true,
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
@@ -35,7 +41,7 @@ func ListCmd() *cobra.Command {
 	return &cobra.Command{
 		Use:               "sinks",
 		Short:             "List sinks",
-		Long:              string(content),
+		Long:              longDoc,
 		DisableAutoGenTag: true,
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
@@ -50,7 +56,7 @@ func DeleteCmd() *cobra.Command {
 	return &cobra.Command{
 		Use:               "sink [name ...]",
 		Short:             "Delete sinks",
-		Long:              string(content),
+		Long:              longDoc,
 		DisableAutoGenTag: true,
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
@@ -69,7 +75,7 @@ func CreateCmd() *cobra.Command {
 	sink := &cobra.Command{
 		Use:               "sink [sink-name] [bucket-name]",
 		Short:             "Create sink",
-		Long:              string(content),
+		Long:              longDoc,
 		DisableAutoGenTag: true,
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)

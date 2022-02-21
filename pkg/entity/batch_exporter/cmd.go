@@ -2,7 +2,6 @@ package batch_exporter
 
 import (
 	"github.com/spf13/cobra"
-	"io/ioutil"
 	"strmprivacy/strm/pkg/common"
 	"strmprivacy/strm/pkg/entity/sink"
 	"strmprivacy/strm/pkg/entity/stream"
@@ -17,13 +16,24 @@ const (
 	includeExistingEventsFlag = "include-existing-events"
 )
 
-var content, _ = ioutil.ReadFile("pkg/entity/batch_exporter/docstring.md")
+var longDoc = `
+A Batch Exporter listens to a stream and outputs all events to files in a Sink. This happens with a regular interval.
+
+Each file follows the JSON Lines format, which is one full JSON document per line.
+
+A [sink](sink.md) is a configuration item that defines location
+(Gcloud, AWS, ..) bucket and associated credentials.
+
+A sink needs to be created *before* you can create a batch exporter that uses it.
+
+### Usage
+`
 
 func DeleteCmd() *cobra.Command {
 	batchExporter := &cobra.Command{
 		Use:   "batch-exporter [name ...]",
 		Short: "Delete one or more Batch exporters by name",
-		Long:  string(content),
+		Long:  longDoc,
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
 		},
@@ -45,7 +55,7 @@ func GetCmd() *cobra.Command {
 	return &cobra.Command{
 		Use:   "batch-exporter [name]",
 		Short: "Get Batch exporter by name",
-		Long:  string(content),
+		Long:  longDoc,
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
 		},
@@ -61,7 +71,7 @@ func ListCmd() *cobra.Command {
 	return &cobra.Command{
 		Use:   "batch-exporters",
 		Short: "List Batch exporters",
-		Long:  string(content),
+		Long:  longDoc,
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
 		},
@@ -73,11 +83,10 @@ func ListCmd() *cobra.Command {
 }
 
 func CreateCmd() *cobra.Command {
-	//content, _ := ioutil.("pkg/entity/batch_exporter/docstring.md")
 	batchExporter := &cobra.Command{
 		Use:   "batch-exporter [stream-name]",
 		Short: "Create batch exporter",
-		Long:  string(content),
+		Long:  longDoc,
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
 		},

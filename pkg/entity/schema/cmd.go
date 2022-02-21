@@ -2,16 +2,15 @@ package schema
 
 import (
 	"github.com/spf13/cobra"
-	"io/ioutil"
 )
 
-var content, _ = ioutil.ReadFile("pkg/entity/schema/docstring.md")
+var longDoc = `### Usage`
 
 func GetCmd() *cobra.Command {
 	getSchema := &cobra.Command{
 		Use:               "schema [name]",
 		Short:             "Get schema by name",
-		Long:              string(content),
+		Long:              longDoc,
 		DisableAutoGenTag: true,
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
@@ -31,7 +30,7 @@ func ListCmd() *cobra.Command {
 	return &cobra.Command{
 		Use:               "schemas",
 		Short:             "List schemas",
-		Long:              string(content),
+		Long:              longDoc,
 		DisableAutoGenTag: true,
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
@@ -46,7 +45,7 @@ func CreateCmd() *cobra.Command {
 	createCmd := &cobra.Command{
 		Use:               "schema (handle/name/version)",
 		Short:             "create a schema",
-		Long:              string(content),
+		Long:              longDoc,
 		DisableAutoGenTag: true,
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
