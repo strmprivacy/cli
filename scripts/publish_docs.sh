@@ -52,4 +52,4 @@ rm -rf ./docs/cli-reference/*
 cp -rf ../generated_docs/* ./docs/cli-reference
 git add .
 git commit -m "add generated docs (${tag_name})"
-git push -u origin $tag_name
+git push -f origin $tag_name
