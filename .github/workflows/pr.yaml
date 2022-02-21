@@ -23,14 +23,6 @@ jobs:
       - name: Build CLI
         run: |
           make
-      - name: Publish Docs
-        env:
-          GITHUB_TOKEN: ${{secrets.GH_TOKEN}}
-          APIS_USERNAME: ${{secrets.APIS_USERNAME}}
-          APIS_EMAIL: ${{secrets.APIS_EMAIL}}
-        run: |
-          chmod +x ./scripts/publish_docs.sh
-          ./scripts/publish_docs.sh
       - name: Run CLI tests
         env:
           STRM_TEST_USER_BILLING_ID: ${{ secrets.STRM_TEST_USER_BILLING_ID }}
