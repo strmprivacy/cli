@@ -53,6 +53,7 @@ jobs:
           git clone "https://git:${{secrets.GH_TOKEN}}@github.com/strmprivacy/docs.git"
           cd docs
           git checkout -b ${tag_name}
+          rm -rf ./docs/cli-reference/*
           cp -rf ../generated_docs/* ./docs/cli-reference
           git add .
           git commit -m "add generated docs (${tag_name})"
