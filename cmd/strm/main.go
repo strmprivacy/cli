@@ -6,6 +6,9 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/cobra/doc"
 	"github.com/spf13/pflag"
+	"path"
+	"path/filepath"
+	"strings"
 	"strmprivacy/strm/pkg/auth"
 	"strmprivacy/strm/pkg/bootstrap"
 	"strmprivacy/strm/pkg/cmd"
@@ -34,8 +37,27 @@ func main() {
 		common.CliExit(err)
 	}
 
+	const fmTemplate = `---
+title: "%s"
+---
+`
+
+	linkHandler := func(name string) string {
+		pathArray := strings.Split(name, "strm_")
+		name = pathArray[len(pathArray)-1]
+		return "/cli-reference/" + strings.Replace(name, "_", "/", -1)
+	}
+
+	filePrepender := func(filename string) string {
+		fmt.Println(filepath.Base(filename))
+		pathArray := strings.Split(filename, "_")
+		name := pathArray[len(pathArray)-1]
+		base := strings.TrimSuffix(name, path.Ext(name))
+		return fmt.Sprintf(fmTemplate, strings.Replace(base, "_", " ", -1))
+	}
+
 	if util.GetBoolAndErr(flags, generateDocsFlag) {
-		err := doc.GenMarkdownTree(RootCmd, "./generated_docs")
+		err := doc.GenMarkdownTreeCustom(RootCmd, "./generated_docs", filePrepender, linkHandler)
 		if err != nil {
 			common.CliExit(err)
 		}

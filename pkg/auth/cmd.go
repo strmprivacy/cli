@@ -36,7 +36,7 @@ func PrintTokenCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "print-access-token",
 		Short: "Print your current access-token to stdout",
-		Long:  string(longDocPrintToken),
+		Long:  longDocPrintToken,
 		Run: func(cmd *cobra.Command, args []string) {
 			printAccessToken()
 		},
