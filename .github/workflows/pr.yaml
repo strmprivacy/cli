@@ -31,7 +31,8 @@ jobs:
         run: |
           git config --global user.email "${APIS_EMAIL}"
           git config --global user.name "${APIS_USERNAME}"
-          tag_name="${GITHUB_REF##*/}"          
+          tag_name="${GITHUB_REF##*/}"
+          rm -rf generated_docs
           mkdir generated_docs
           ./dist/dstrm --generate-docs
           cd generated_docs
