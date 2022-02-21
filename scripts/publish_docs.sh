@@ -17,7 +17,7 @@ if [[ $LOCAL == 1 ]]
 then
   dstrm --generate-docs
 else
-  ./dist/strm --generate-docs
+  ./dist/dstrm --generate-docs
 fi
 
 cd generated_docs
