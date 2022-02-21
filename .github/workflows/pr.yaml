@@ -48,7 +48,7 @@ jobs:
           then
           dstrm --generate-docs
           else
-          ./dist/strm --generate-docs
+          ./dist/dstrm --generate-docs
           fi
           
           cd generated_docs
