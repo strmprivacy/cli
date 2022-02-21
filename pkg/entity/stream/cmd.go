@@ -68,14 +68,9 @@ func completion(cmd *cobra.Command, args []string, complete string) ([]string, c
 
 func DeleteCmd() *cobra.Command {
 	stream := &cobra.Command{
-		Use:   "stream [name ...]",
-		Short: "Delete one or more streams",
-		Long:  longDoc,
-		//	Long: `Delete one or more streams.
-		//
-		//If a stream has dependents (like derived streams or exporters), you can use
-		//the 'recursive' option to get rid of those also.
-		//Returns everything that was deleted. `,
+		Use:               "stream [name ...]",
+		Short:             "Delete one or more streams",
+		Long:              longDoc,
 		DisableAutoGenTag: true,
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
