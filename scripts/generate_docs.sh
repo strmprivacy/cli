@@ -31,7 +31,7 @@ for i in $(find . -name '*.md'); do
   FILENAME="${i##*_}"
   if [[ $DIRNAME_TO_PARSE != *md ]]
   then
-    DIRNAME=$(echo "${DIRNAME_TO_PARSE%%.md}" | sed -r 's/_/\//g')
+    DIRNAME=$(echo "${DIRNAME_TO_PARSE%%.md}" | "$SED" -r 's/_/\//g')
     mkdir -p "$DIRNAME"
     mv "$i" "$DIRNAME/$FILENAME"
   fi
