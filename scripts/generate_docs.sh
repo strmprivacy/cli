@@ -5,7 +5,6 @@ else
     SED="sed"
 fi
 
-make
 if [[ $APIS_EMAIL != "" ]]
 then
   git config --global user.email "${APIS_EMAIL}"
@@ -20,9 +19,10 @@ mkdir generated_docs
 
 if [[ $APIS_EMAIL == "" ]]
 then
-  dstrm --generate-docs > /dev/null 2>&1
+  make
+  ./dist/dstrm --generate-docs > /dev/null 2>&1
 else
-  ./dist/strm --generate-docs > /dev/null 2>&1
+  ./dist/strm_linux_amd64/strm --generate-docs > /dev/null 2>&1
 fi
 
 cd generated_docs

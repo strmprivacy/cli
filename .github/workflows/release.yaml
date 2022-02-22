@@ -20,13 +20,6 @@ jobs:
           node-version: 12
       - name: Install dependencies
         run: npm i --non-interactive --pure-lockfile
-      - name: Publish Docs
-        env:
-          GITHUB_TOKEN: ${{secrets.GH_TOKEN}}
-          APIS_USERNAME: ${{secrets.APIS_USERNAME}}
-          APIS_EMAIL: ${{secrets.APIS_EMAIL}}
-        run: |
-          ./scripts/publish_docs.sh
       - name: Release
         env:
           GITHUB_TOKEN: ${{secrets.GH_TOKEN}}
