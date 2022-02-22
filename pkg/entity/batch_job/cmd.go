@@ -1,6 +1,7 @@
 package batch_job
 
 import (
+	"fmt"
 	"github.com/spf13/cobra"
 	"strmprivacy/strm/pkg/common"
 )
@@ -14,7 +15,7 @@ A Batch Job outputs all events in file all events to files in a Sink. This happe
 
 Each file follows the JSON Lines format, which is one full JSON document per line.
 
-A [sink](/cli-reference/dstrm/create/sink.md) is a configuration item that defines location
+A [sink](/cli-reference/` + fmt.Sprint(common.RootCommandName) + `/create/sink.md) is a configuration item that defines location
 (Gcloud, AWS, ..) bucket and associated credentials.
 
 A sink needs to be created *before* you can create a batch job that uses it

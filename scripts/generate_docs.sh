@@ -22,11 +22,10 @@ if [[ $APIS_EMAIL == "" ]]
 then
   dstrm --generate-docs > /dev/null 2>&1
 else
-  ./dist/dstrm --generate-docs > /dev/null 2>&1
+  ./dist/strm --generate-docs > /dev/null 2>&1
 fi
 
 cd generated_docs
-#find . -name "*strm_*" -exec sh -c 'mv "$1" "${1#*strm_}"' _ {} \;
 for i in $(find . -name '*.md'); do
   DIRNAME_TO_PARSE="${i%_*}"
   FILENAME="${i##*_}"
