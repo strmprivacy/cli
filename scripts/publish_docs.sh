@@ -1,3 +1,4 @@
+#!/bin/bash
 ./scripts/generate_docs.sh
 
 if [[ $APIS_EMAIL != "" ]]

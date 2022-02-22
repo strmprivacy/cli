@@ -43,9 +43,6 @@ hide_title: true
 `
 
 	linkHandler := func(name string) string {
-		pathArray := strings.Split(name, "strm_")
-		name = pathArray[len(pathArray)-1]
-		pathArray = strings.Split(name, "_")
 		return "/cli-reference/" + strings.Replace(name, "_", "/", -1)
 	}
 
