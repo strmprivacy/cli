@@ -1,3 +1,10 @@
+# [1.21.0](https://github.com/strmprivacy/cli/compare/v1.20.0...v1.21.0) (2022-02-22)
+
+
+### Features
+
+* auto-publish cli-reference docs ([923566c](https://github.com/strmprivacy/cli/commit/923566ccb697f0777699f0872de0874b82978ca3))
+
 # [1.20.0](https://github.com/strmprivacy/cli/compare/v1.19.0...v1.20.0) (2022-02-11)
 
 ### Features
