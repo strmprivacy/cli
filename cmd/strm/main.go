@@ -7,7 +7,6 @@ import (
 	"github.com/spf13/cobra/doc"
 	"github.com/spf13/pflag"
 	"path"
-	"path/filepath"
 	"strings"
 	"strmprivacy/strm/pkg/auth"
 	"strmprivacy/strm/pkg/bootstrap"
@@ -39,18 +38,21 @@ func main() {
 
 	const fmTemplate = `---
 title: "%s"
+hide_title: true
 ---
 `
 
 	linkHandler := func(name string) string {
 		pathArray := strings.Split(name, "strm_")
 		name = pathArray[len(pathArray)-1]
+		pathArray = strings.Split(name, "_")
 		return "/cli-reference/" + strings.Replace(name, "_", "/", -1)
 	}
 
 	filePrepender := func(filename string) string {
-		fmt.Println(filepath.Base(filename))
-		pathArray := strings.Split(filename, "_")
+		pathArray := strings.Split(filename, "/")
+		filename = pathArray[len(pathArray)-1]
+		pathArray = strings.Split(filename, "_")
 		name := pathArray[len(pathArray)-1]
 		base := strings.TrimSuffix(name, path.Ext(name))
 		return fmt.Sprintf(fmTemplate, strings.Replace(base, "_", " ", -1))
@@ -68,6 +70,7 @@ var RootCmd = &cobra.Command{
 	Use:               common.RootCommandName,
 	Short:             fmt.Sprintf("STRM Privacy CLI %s", cmd.Version),
 	PersistentPreRunE: rootCmdPreRun(),
+	DisableAutoGenTag: true,
 }
 
 func rootCmdPreRun() func(cmd *cobra.Command, args []string) error {

@@ -1,4 +1,5 @@
-make
+./scripts/generate_docs.sh
+
 if [[ $APIS_EMAIL != "" ]]
 then
   git config --global user.email "${APIS_EMAIL}"
@@ -7,36 +8,6 @@ then
 else
   tag_name="local_test"
 fi
-
-rm -rf generated_docs docs
-mkdir generated_docs
-
-if [[ $APIS_EMAIL != "" ]]
-then
-  dstrm --generate-docs
-else
-  ./dist/dstrm --generate-docs
-fi
-
-cd generated_docs
-find . -name "*strm_*" -exec sh -c 'mv "$1" "${1#*strm_}"' _ {} \;
-rm -rf dstrm.md
-for i in $(find . -name '*.md'); do
-  DIRNAME_TO_PARSE="${i%_*}"
-  FILENAME="${i##*_}"
-  if [[ $DIRNAME_TO_PARSE != *md ]]
-  then
-    DIRNAME=$(echo "${DIRNAME_TO_PARSE%%.md}" | sed -r 's/_/\//g')
-    mkdir -p "$DIRNAME"
-    mv "$i" "$DIRNAME/$FILENAME"
-  else
-    mkdir -p "${FILENAME%.md}"
-    mv "$FILENAME" "${FILENAME%.md}/index.md"
-    rm -rf "${DIRNAME_TO_PARSE}"
-  fi
-done
-
-cd ..
 
 if [[ $GITHUB_TOKEN == "" ]]
 then
