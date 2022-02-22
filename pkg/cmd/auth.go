@@ -6,8 +6,9 @@ import (
 )
 
 var AuthCmd = &cobra.Command{
-	Use:   "auth",
-	Short: "Authentication command",
+	Use:               "auth",
+	DisableAutoGenTag: true,
+	Short:             "Authentication command",
 }
 
 func init() {

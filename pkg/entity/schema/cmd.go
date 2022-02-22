@@ -1,11 +1,17 @@
 package schema
 
-import "github.com/spf13/cobra"
+import (
+	"github.com/spf13/cobra"
+)
+
+var longDoc = `### Usage`
 
 func GetCmd() *cobra.Command {
 	getSchema := &cobra.Command{
-		Use:   "schema [name]",
-		Short: "Get schema by name",
+		Use:               "schema [name]",
+		Short:             "Get schema by name",
+		Long:              longDoc,
+		DisableAutoGenTag: true,
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
 		},
@@ -22,8 +28,10 @@ func GetCmd() *cobra.Command {
 }
 func ListCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:   "schemas",
-		Short: "List schemas",
+		Use:               "schemas",
+		Short:             "List schemas",
+		Long:              longDoc,
+		DisableAutoGenTag: true,
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
 		},
@@ -35,8 +43,10 @@ func ListCmd() *cobra.Command {
 
 func CreateCmd() *cobra.Command {
 	createCmd := &cobra.Command{
-		Use:   "schema (handle/name/version)",
-		Short: "create a schema",
+		Use:               "schema (handle/name/version)",
+		Short:             "create a schema",
+		Long:              longDoc,
+		DisableAutoGenTag: true,
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
 		},

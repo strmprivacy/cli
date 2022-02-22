@@ -13,8 +13,9 @@ import (
 
 // DeleteCmd represents the delete command
 var DeleteCmd = &cobra.Command{
-	Use:   common.DeleteCommandName,
-	Short: "Delete an entity",
+	Use:               common.DeleteCommandName,
+	DisableAutoGenTag: true,
+	Short:             "Delete an entity",
 }
 
 func init() {

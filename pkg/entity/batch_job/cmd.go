@@ -1,6 +1,7 @@
 package batch_job
 
 import (
+	"fmt"
 	"github.com/spf13/cobra"
 	"strmprivacy/strm/pkg/common"
 )
@@ -9,10 +10,25 @@ const (
 	batch_jobs_file_flag_name = "file"
 )
 
+var longDoc = `
+A Batch Job outputs all events in file all events to files in a Sink. This happens with a regular interval.
+
+Each file follows the JSON Lines format, which is one full JSON document per line.
+
+A [sink](/cli-reference/` + fmt.Sprint(common.RootCommandName) + `/create/sink.md) is a configuration item that defines location
+(Gcloud, AWS, ..) bucket and associated credentials.
+
+A sink needs to be created *before* you can create a batch job that uses it
+
+### Usage
+`
+
 func DeleteCmd() *cobra.Command {
 	batchJob := &cobra.Command{
-		Use:   "batch-job [id ...]",
-		Short: "Delete on or more Batch Jobs by id",
+		Use:               "batch-job [id ...]",
+		Short:             "Delete on or more Batch Jobs by id",
+		Long:              longDoc,
+		DisableAutoGenTag: true,
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
 		},
@@ -31,8 +47,10 @@ func DeleteCmd() *cobra.Command {
 
 func GetCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:   "batch-job [id]",
-		Short: "Get a Batch Job by id",
+		Use:               "batch-job [id]",
+		Short:             "Get a Batch Job by id",
+		Long:              longDoc,
+		DisableAutoGenTag: true,
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
 		},
@@ -45,8 +63,10 @@ func GetCmd() *cobra.Command {
 }
 func ListCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:   "batch-jobs",
-		Short: "List Batch Jobs",
+		Use:               "batch-jobs",
+		Short:             "List Batch Jobs",
+		Long:              longDoc,
+		DisableAutoGenTag: true,
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
 		},
@@ -58,8 +78,10 @@ func ListCmd() *cobra.Command {
 
 func CreateCmd() *cobra.Command {
 	batchJob := &cobra.Command{
-		Use:   "batch-job",
-		Short: "Create a Batch Job",
+		Use:               "batch-job",
+		Short:             "Create a Batch Job",
+		Long:              longDoc,
+		DisableAutoGenTag: true,
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
 		},

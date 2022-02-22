@@ -6,9 +6,18 @@ import (
 	"strmprivacy/strm/pkg/entity/stream"
 )
 
+var longDoc = `The global ` + "`listen`" + ` command is used for starting a Web Socket listener for a stream and output all events to the
+console.
+
+This command can receive events from both Source Streams and Derived Streams.
+
+### Usage`
+
 var WebSocketCmd = &cobra.Command{
-	Use:   "web-socket (stream-name)",
-	Short: "Read events via the web-socket (not for production purposes)",
+	Use:               "web-socket (stream-name)",
+	Short:             "Read events via the web-socket (not for production purposes)",
+	DisableAutoGenTag: true,
+	Long:              longDoc,
 	Run: func(cmd *cobra.Command, args []string) {
 		Run(cmd, &args[0])
 	},

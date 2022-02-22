@@ -1,6 +1,7 @@
 package batch_exporter
 
 import (
+	"fmt"
 	"github.com/spf13/cobra"
 	"strmprivacy/strm/pkg/common"
 	"strmprivacy/strm/pkg/entity/sink"
@@ -16,10 +17,24 @@ const (
 	includeExistingEventsFlag = "include-existing-events"
 )
 
+var longDoc = `
+A Batch Exporter listens to a stream and outputs all events to files in a Sink. This happens with a regular interval.
+
+Each file follows the JSON Lines format, which is one full JSON document per line.
+
+A [sink](/cli-reference/` + fmt.Sprint(common.RootCommandName) + `/create/sink.md) is a configuration item that defines location
+(Gcloud, AWS, ..) bucket and associated credentials.
+
+A sink needs to be created *before* you can create a batch exporter that uses it.
+
+### Usage
+`
+
 func DeleteCmd() *cobra.Command {
 	batchExporter := &cobra.Command{
 		Use:   "batch-exporter [name ...]",
 		Short: "Delete one or more Batch exporters by name",
+		Long:  longDoc,
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
 		},
@@ -29,6 +44,7 @@ func DeleteCmd() *cobra.Command {
 			}
 		},
 		Args:              cobra.MinimumNArgs(1), // the stream names
+		DisableAutoGenTag: true,
 		ValidArgsFunction: namesCompletion,
 	}
 
@@ -40,6 +56,7 @@ func GetCmd() *cobra.Command {
 	return &cobra.Command{
 		Use:   "batch-exporter [name]",
 		Short: "Get Batch exporter by name",
+		Long:  longDoc,
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
 		},
@@ -47,6 +64,7 @@ func GetCmd() *cobra.Command {
 			get(&args[0], cmd)
 		},
 		Args:              cobra.ExactArgs(1), // the stream name
+		DisableAutoGenTag: true,
 		ValidArgsFunction: namesCompletion,
 	}
 }
@@ -54,9 +72,11 @@ func ListCmd() *cobra.Command {
 	return &cobra.Command{
 		Use:   "batch-exporters",
 		Short: "List Batch exporters",
+		Long:  longDoc,
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
 		},
+		DisableAutoGenTag: true,
 		Run: func(cmd *cobra.Command, args []string) {
 			list()
 		},
@@ -67,9 +87,11 @@ func CreateCmd() *cobra.Command {
 	batchExporter := &cobra.Command{
 		Use:   "batch-exporter [stream-name]",
 		Short: "Create batch exporter",
+		Long:  longDoc,
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
 		},
+		DisableAutoGenTag: true,
 		Run: func(cmd *cobra.Command, args []string) {
 			create(&args[0], cmd)
 		},

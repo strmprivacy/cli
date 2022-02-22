@@ -14,11 +14,8 @@ const (
 	aggregateByFlag = "by"    // aggregation seconds
 )
 
-func GetCmd() *cobra.Command {
-	usage := &cobra.Command{
-		Use:   "usage (stream-name)",
-		Short: "Get Usage for a certain stream name",
-		Long: `Returns the usage for a certain stream over a certain period.
+var longDoc = `Usage allows you to see how many events were sent on a certain stream. This is currently only the events received on the
+event-gateway. Extracting events via Kafka or Batch exporters is not included.
 
 The values are interpolated from cumulative event accounts, and sampled over intervals
 (the --by option). The default output is csv, but json is also available.
@@ -27,6 +24,7 @@ The default range is over the last 24 hours, with a default interval of 15 minut
 
 Example:
 
+` + "```" + `
 strm get usage bart --by 15m --from 2021/7/27-10:00  --until 2021/7/27-12:00
 
 from,count,duration,change,rate
@@ -39,7 +37,16 @@ from,count,duration,change,rate
 2021-07-27T11:30:00.000000+0200,227134,900,8942,9.94
 2021-07-27T11:45:00.000000+0200,236078,900,8944,9.94
 2021-07-27T12:00:00.000000+0200,245023,900,8945,9.94
-`,
+` + "```" + `
+
+### Usage`
+
+func GetCmd() *cobra.Command {
+	usage := &cobra.Command{
+		Use:               "usage (stream-name)",
+		Short:             "Get Usage for a certain stream name",
+		Long:              longDoc,
+		DisableAutoGenTag: true,
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
 		},

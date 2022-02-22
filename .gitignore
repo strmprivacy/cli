@@ -13,3 +13,4 @@ dstrm
 *.tar.gz
 s3.json
 /*.yaml
+generated_docs

@@ -10,10 +10,20 @@ const (
 	saveFlag = "save"
 )
 
+var longDoc = `A Kafka User is a user on a Kafka Exporter, that can be used for authentication when connecting to a Kafka Exporter. By
+default, every Kafka Exporter gets one Kafka User upon creation, but these can be added/removed later.
+
+In the current data model, the user does not have a assignable name; it is assigned upon creation. It’s still very low
+level. See the end of this page for an example.
+
+### Usage`
+
 func DeleteCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:   "kafka-user [name ...]",
-		Short: "Delete one or more Kafka users",
+		Use:               "kafka-user [name ...]",
+		Short:             "Delete one or more Kafka users",
+		Long:              longDoc,
+		DisableAutoGenTag: true,
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
 		},
@@ -29,8 +39,10 @@ func DeleteCmd() *cobra.Command {
 
 func GetCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:   "kafka-user [name]",
-		Short: "Get Kafka user",
+		Use:               "kafka-user [name]",
+		Short:             "Get Kafka user",
+		Long:              longDoc,
+		DisableAutoGenTag: true,
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
 		},
@@ -44,8 +56,10 @@ func GetCmd() *cobra.Command {
 
 func ListCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:   "kafka-users [kafka-exporter-name]",
-		Short: "List Kafka users",
+		Use:               "kafka-users [kafka-exporter-name]",
+		Short:             "List Kafka users",
+		Long:              longDoc,
+		DisableAutoGenTag: true,
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
 		},
@@ -59,8 +73,10 @@ func ListCmd() *cobra.Command {
 
 func CreateCmd() *cobra.Command {
 	kafkaUser := &cobra.Command{
-		Use:   "kafka-user [exporter-name]",
-		Short: "Create a Kafka user on a Kafka exporter",
+		Use:               "kafka-user [exporter-name]",
+		Short:             "Create a Kafka user on a Kafka exporter",
+		Long:              longDoc,
+		DisableAutoGenTag: true,
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
 		},

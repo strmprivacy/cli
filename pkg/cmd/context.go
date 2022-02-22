@@ -6,8 +6,9 @@ import (
 )
 
 var ContextCommand = &cobra.Command{
-	Use:   "context",
-	Short: "Print the CLI context",
+	Use:               "context",
+	DisableAutoGenTag: true,
+	Short:             "Print the CLI context",
 }
 
 func init() {

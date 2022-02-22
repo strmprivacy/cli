@@ -4,7 +4,10 @@ import (
 	"fmt"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
+	"github.com/spf13/cobra/doc"
 	"github.com/spf13/pflag"
+	"path"
+	"strings"
 	"strmprivacy/strm/pkg/auth"
 	"strmprivacy/strm/pkg/bootstrap"
 	"strmprivacy/strm/pkg/cmd"
@@ -15,17 +18,56 @@ import (
 )
 
 const (
-	apiHostFlag = "api-host"
+	apiHostFlag      = "api-host"
+	generateDocsFlag = "generate-docs"
 )
 
 func main() {
-	common.CliExit(RootCmd.Execute())
+	flags := RootCmd.Flags()
+	flags.Bool(generateDocsFlag, false, "generate docs")
+	err := flags.MarkHidden("generate-docs")
+
+	if err != nil {
+		return
+	}
+
+	err = RootCmd.Execute()
+	if err != nil {
+		common.CliExit(err)
+	}
+
+	const fmTemplate = `---
+title: "%s"
+hide_title: true
+---
+`
+
+	linkHandler := func(name string) string {
+		return "/cli-reference/" + strings.Replace(name, "_", "/", -1)
+	}
+
+	filePrepender := func(filename string) string {
+		pathArray := strings.Split(filename, "/")
+		filename = pathArray[len(pathArray)-1]
+		pathArray = strings.Split(filename, "_")
+		name := pathArray[len(pathArray)-1]
+		base := strings.TrimSuffix(name, path.Ext(name))
+		return fmt.Sprintf(fmTemplate, strings.Replace(base, "_", " ", -1))
+	}
+
+	if util.GetBoolAndErr(flags, generateDocsFlag) {
+		err := doc.GenMarkdownTreeCustom(RootCmd, "./generated_docs", filePrepender, linkHandler)
+		if err != nil {
+			common.CliExit(err)
+		}
+	}
 }
 
 var RootCmd = &cobra.Command{
 	Use:               common.RootCommandName,
 	Short:             fmt.Sprintf("STRM Privacy CLI %s", cmd.Version),
 	PersistentPreRunE: rootCmdPreRun(),
+	DisableAutoGenTag: true,
 }
 
 func rootCmdPreRun() func(cmd *cobra.Command, args []string) error {

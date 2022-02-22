@@ -15,8 +15,9 @@ import (
 
 // CreateCmd represents the create command
 var CreateCmd = &cobra.Command{
-	Use:   common.CreateCommandName,
-	Short: "Create an entity",
+	Use:               common.CreateCommandName,
+	DisableAutoGenTag: true,
+	Short:             "Create an entity",
 }
 
 func init() {

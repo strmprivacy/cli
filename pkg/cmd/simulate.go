@@ -7,8 +7,9 @@ import (
 )
 
 var SimulateCmd = &cobra.Command{
-	Use:   "simulate",
-	Short: "Send simulated events with a predefined demo schema (not for production purposes)",
+	Use:               "simulate",
+	DisableAutoGenTag: true,
+	Short:             "Send simulated events with a predefined demo schema (not for production purposes)",
 }
 
 func init() {

@@ -11,10 +11,21 @@ const (
 	assumeRoleArnFlag   = "assume-role-arn"
 )
 
+var longDoc = `A Sink is a STRM Privacy configuration object for a remote file storage. For now, AWS S3 and Google Cloud Storage
+Buckets are supported. By itself, a Sink does nothing. A Batch Exporter needs to be connected to a Sink and a Stream to
+start outputting events.
+
+Upon creation, STRM Privacy validates whether or not the Bucket exists and if it is accessible with the given
+credentials.
+
+### Usage`
+
 func GetCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:   "sink [name]",
-		Short: "Get sink by name",
+		Use:               "sink [name]",
+		Short:             "Get sink by name",
+		Long:              longDoc,
+		DisableAutoGenTag: true,
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
 		},
@@ -28,8 +39,10 @@ func GetCmd() *cobra.Command {
 }
 func ListCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:   "sinks",
-		Short: "List sinks",
+		Use:               "sinks",
+		Short:             "List sinks",
+		Long:              longDoc,
+		DisableAutoGenTag: true,
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
 		},
@@ -41,8 +54,10 @@ func ListCmd() *cobra.Command {
 }
 func DeleteCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:   "sink [name ...]",
-		Short: "Delete sinks",
+		Use:               "sink [name ...]",
+		Short:             "Delete sinks",
+		Long:              longDoc,
+		DisableAutoGenTag: true,
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
 		},
@@ -58,8 +73,10 @@ func DeleteCmd() *cobra.Command {
 }
 func CreateCmd() *cobra.Command {
 	sink := &cobra.Command{
-		Use:   "sink [sink-name] [bucket-name]",
-		Short: "Create sink",
+		Use:               "sink [sink-name] [bucket-name]",
+		Short:             "Create sink",
+		Long:              longDoc,
+		DisableAutoGenTag: true,
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
 		},

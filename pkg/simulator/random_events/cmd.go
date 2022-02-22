@@ -7,13 +7,17 @@ import (
 	"strmprivacy/strm/pkg/simulator"
 )
 
+var longDoc = `The global ` + "`simulate`" + ` command runs a simulation with random events against a given Source Stream, using the ClickStream
+schema.
+
+### Usage`
+
 func RunCmd() (cmd *cobra.Command) {
 	simCmd := &cobra.Command{
-		Use:   "random-events [stream-name]",
-		Short: "Run a simulator that will send random events to a stream",
-		Long: `Run a simulator that will send random events to a stream using the demo schema
-
-Uses a saved stream definition if available, otherwise, client id and secret are required`,
+		Use:               "random-events [stream-name]",
+		Short:             "Run a simulator that will send random events to a stream",
+		Long:              longDoc,
+		DisableAutoGenTag: true,
 		Run:               func(cmd *cobra.Command, args []string) { run(cmd, &args[0]) },
 		Args:              cobra.ExactArgs(1), // the stream name
 		ValidArgsFunction: stream.SourceNamesCompletion,
