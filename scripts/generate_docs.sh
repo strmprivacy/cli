@@ -49,4 +49,3 @@ for i in $(find . -name '*.md'); do
     mv "$FILENAME" "${FILENAME%.md}/index.md"
   fi
 done
-
