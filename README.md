@@ -114,4 +114,3 @@ you have to option to include an MWE, please do so.
 
 See our [documentation](https://docs.strmprivacy.io)
 or [reach out to us](https://docs.strmprivacy.io/docs/latest/contact/index.html).
-
