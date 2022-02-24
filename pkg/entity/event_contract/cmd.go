@@ -37,8 +37,67 @@ The only restrictions are that version numbers:
 An Event Contract is uniquely identified by its Event Contract reference, in the format (organization handle/event
 contract name/version).
 
+An Event Contract MUST have the state ACTIVE to be used for processing events.
+
 ### Usage
 `
+
+func DeleteCmd() *cobra.Command {
+	eventContract := &cobra.Command{
+		Use:   "event-contract (reference)",
+		Short: "Delete Event Contract by reference",
+		Long:  longDoc,
+		PreRun: func(cmd *cobra.Command, args []string) {
+			printer = configurePrinter(cmd)
+		},
+		Run: func(cmd *cobra.Command, args []string) {
+			del(&args[0])
+		},
+		Args:              cobra.ExactArgs(1), // the contract reference
+		DisableAutoGenTag: true,
+		ValidArgsFunction: RefsCompletion,
+	}
+
+	return eventContract
+}
+
+func ActivateCmd() *cobra.Command {
+	eventContract := &cobra.Command{
+		Use:   "event-contract (reference)",
+		Short: "Set the state of an Event Contract to ACTIVATED",
+		Long:  longDoc,
+		PreRun: func(cmd *cobra.Command, args []string) {
+			printer = configurePrinter(cmd)
+		},
+		Run: func(cmd *cobra.Command, args []string) {
+			activate(&args[0])
+		},
+		Args:              cobra.ExactArgs(1), // the contract reference
+		DisableAutoGenTag: true,
+		ValidArgsFunction: RefsCompletion,
+	}
+
+	return eventContract
+}
+
+func ArchiveCmd() *cobra.Command {
+	eventContract := &cobra.Command{
+		Use:   "event-contract (reference)",
+		Short: "Set the state of an Event Contract to ARCHIVED",
+		Long:  longDoc,
+		PreRun: func(cmd *cobra.Command, args []string) {
+			printer = configurePrinter(cmd)
+		},
+		Run: func(cmd *cobra.Command, args []string) {
+			archive(&args[0])
+		},
+		Args:              cobra.ExactArgs(1), // the contract reference
+		DisableAutoGenTag: true,
+		ValidArgsFunction: RefsCompletion,
+	}
+
+	return eventContract
+}
 
 func GetCmd() *cobra.Command {
 	return &cobra.Command{
@@ -108,7 +167,7 @@ func CreateCmd() *cobra.Command {
 }`)
 
 	common.MarkRequiredFlags(contract, schemaRefFlag, definitionFile)
-	_ = contract.RegisterFlagCompletionFunc(schemaRefFlag, schema.NamesCompletion)
+	_ = contract.RegisterFlagCompletionFunc(schemaRefFlag, schema.RefsCompletion)
 
 	return contract
 }

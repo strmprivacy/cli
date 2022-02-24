@@ -29,12 +29,18 @@ func availablePrinters() map[string]util.Printer {
 	return util.MergePrinterMaps(
 		util.DefaultPrinters,
 		map[string]util.Printer{
-			common.OutputFormatTable + common.ListCommandName:   listTablePrinter{},
-			common.OutputFormatTable + common.GetCommandName:    getTablePrinter{},
-			common.OutputFormatTable + common.CreateCommandName: createTablePrinter{},
-			common.OutputFormatPlain + common.ListCommandName:   listPlainPrinter{},
-			common.OutputFormatPlain + common.GetCommandName:    getPlainPrinter{},
-			common.OutputFormatPlain + common.CreateCommandName: createPlainPrinter{},
+			common.OutputFormatTable + common.ListCommandName:     listTablePrinter{},
+			common.OutputFormatTable + common.GetCommandName:      getTablePrinter{},
+			common.OutputFormatTable + common.CreateCommandName:   createTablePrinter{},
+			common.OutputFormatTable + common.DeleteCommandName:   deletePrinter{},
+			common.OutputFormatTable + common.ActivateCommandName: activatePrinter{},
+			common.OutputFormatTable + common.ArchiveCommandName:  archivePrinter{},
+			common.OutputFormatPlain + common.ListCommandName:     listPlainPrinter{},
+			common.OutputFormatPlain + common.GetCommandName:      getPlainPrinter{},
+			common.OutputFormatPlain + common.CreateCommandName:   createPlainPrinter{},
+			common.OutputFormatPlain + common.DeleteCommandName:   deletePrinter{},
+			common.OutputFormatPlain + common.ActivateCommandName: activatePrinter{},
+			common.OutputFormatPlain + common.ArchiveCommandName:  archivePrinter{},
 		},
 	)
 }
@@ -46,6 +52,10 @@ type createPlainPrinter struct{}
 type listTablePrinter struct{}
 type getTablePrinter struct{}
 type createTablePrinter struct{}
+
+type deletePrinter struct{}
+type activatePrinter struct{}
+type archivePrinter struct{}
 
 func (p listTablePrinter) Print(data interface{}) {
 	listResponse, _ := (data).(*event_contracts.ListEventContractsResponse)
@@ -77,6 +87,18 @@ func (p createPlainPrinter) Print(data interface{}) {
 	printPlain([]*v1.EventContract{createResponse.EventContract})
 }
 
+func (p deletePrinter) Print(data interface{}) {
+	fmt.Println("Event Contract has been deleted")
+}
+
+func (p activatePrinter) Print(data interface{}) {
+	fmt.Println("Event Contract has been activated")
+}
+
+func (p archivePrinter) Print(data interface{}) {
+	fmt.Println("Event Contract has been archived")
+}
+
 func printTable(contracts []*v1.EventContract) {
 	rows := make([]table.Row, 0, len(contracts))
 
@@ -84,6 +106,7 @@ func printTable(contracts []*v1.EventContract) {
 		rows = append(rows, table.Row{
 			refToString(contract.Ref),
 			schema.RefToString(contract.SchemaRef),
+			contract.State,
 			contract.IsPublic,
 			contract.KeyField,
 			len(contract.PiiFields),
@@ -95,6 +118,7 @@ func printTable(contracts []*v1.EventContract) {
 		table.Row{
 			"Event Contract",
 			"Schema",
+			"State",
 			"Public",
 			"Key Field",
 			"# PII Fields",

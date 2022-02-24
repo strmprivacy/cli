@@ -28,12 +28,18 @@ func availablePrinters() map[string]util.Printer {
 	return util.MergePrinterMaps(
 		util.DefaultPrinters,
 		map[string]util.Printer{
-			common.OutputFormatTable + common.ListCommandName:   listTablePrinter{},
-			common.OutputFormatTable + common.GetCommandName:    getTablePrinter{},
-			common.OutputFormatTable + common.CreateCommandName: createTablePrinter{},
-			common.OutputFormatPlain + common.ListCommandName:   listPlainPrinter{},
-			common.OutputFormatPlain + common.GetCommandName:    getPlainPrinter{},
-			common.OutputFormatPlain + common.CreateCommandName: createPlainPrinter{},
+			common.OutputFormatTable + common.ListCommandName:     listTablePrinter{},
+			common.OutputFormatTable + common.GetCommandName:      getTablePrinter{},
+			common.OutputFormatTable + common.CreateCommandName:   createTablePrinter{},
+			common.OutputFormatTable + common.DeleteCommandName:   deletePrinter{},
+			common.OutputFormatTable + common.ActivateCommandName: activatePrinter{},
+			common.OutputFormatTable + common.ArchiveCommandName:  archivePrinter{},
+			common.OutputFormatPlain + common.ListCommandName:     listPlainPrinter{},
+			common.OutputFormatPlain + common.GetCommandName:      getPlainPrinter{},
+			common.OutputFormatPlain + common.CreateCommandName:   createPlainPrinter{},
+			common.OutputFormatPlain + common.DeleteCommandName:   deletePrinter{},
+			common.OutputFormatPlain + common.ActivateCommandName: activatePrinter{},
+			common.OutputFormatPlain + common.ArchiveCommandName:  archivePrinter{},
 		},
 	)
 }
@@ -45,6 +51,10 @@ type createPlainPrinter struct{}
 type listTablePrinter struct{}
 type getTablePrinter struct{}
 type createTablePrinter struct{}
+
+type deletePrinter struct{}
+type activatePrinter struct{}
+type archivePrinter struct{}
 
 func (p listTablePrinter) Print(data interface{}) {
 	listResponse, _ := (data).(*schemas.ListSchemasResponse)
@@ -76,12 +86,25 @@ func (p createPlainPrinter) Print(data interface{}) {
 	printPlain([]*v1.Schema{createResponse.Schema})
 }
 
+func (p deletePrinter) Print(data interface{}) {
+	fmt.Println("Schema has been deleted")
+}
+
+func (p activatePrinter) Print(data interface{}) {
+	fmt.Println("Schema has been activated")
+}
+
+func (p archivePrinter) Print(data interface{}) {
+	fmt.Println("Schema has been archived")
+}
+
 func printTable(schemas []*v1.Schema) {
 	rows := make([]table.Row, 0, len(schemas))
 
 	for _, schema := range schemas {
 		rows = append(rows, table.Row{
 			RefToString(schema.Ref),
+			schema.State,
 			schema.Ref.SchemaType.String(),
 			schema.IsPublic,
 			schema.Fingerprint,
@@ -91,6 +114,7 @@ func printTable(schemas []*v1.Schema) {
 	util.RenderTable(
 		table.Row{
 			"Schema",
+			"State",
 			"Type",
 			"Public",
 			"Fingerprint",

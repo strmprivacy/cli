@@ -5,8 +5,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/spf13/cobra"
-	"github.com/strmprivacy/api-definitions-go/v2/api/entities/v1"
-	"github.com/strmprivacy/api-definitions-go/v2/api/event_contracts/v1"
+	entities "github.com/strmprivacy/api-definitions-go/v2/api/entities/v1"
+	event_contracts "github.com/strmprivacy/api-definitions-go/v2/api/event_contracts/v1"
 	"google.golang.org/grpc"
 	"io/ioutil"
 	"strings"
@@ -55,6 +55,36 @@ func list() {
 	req := &event_contracts.ListEventContractsRequest{BillingId: auth.Auth.BillingId()}
 	response, err := client.ListEventContracts(apiContext, req)
 	common.CliExit(err)
+	printer.Print(response)
+}
+
+func del(name *string) {
+	req := &event_contracts.DeleteEventContractRequest{
+		BillingId:        auth.Auth.BillingId(),
+		EventContractRef: ref(name)}
+	response, err := client.DeleteEventContract(apiContext, req)
+	common.CliExit(err)
+
+	printer.Print(response)
+}
+
+func activate(name *string) {
+	req := &event_contracts.ActivateEventContractRequest{
+		BillingId:        auth.Auth.BillingId(),
+		EventContractRef: ref(name)}
+	response, err := client.ActivateEventContract(apiContext, req)
+	common.CliExit(err)
+
+	printer.Print(response)
+}
+
+func archive(name *string) {
+	req := &event_contracts.ArchiveEventContractRequest{
+		BillingId:        auth.Auth.BillingId(),
+		EventContractRef: ref(name)}
+	response, err := client.ArchiveEventContract(apiContext, req)
+	common.CliExit(err)
+
 	printer.Print(response)
 }
 
