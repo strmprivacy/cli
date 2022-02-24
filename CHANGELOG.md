@@ -1,3 +1,10 @@
+## [1.21.1](https://github.com/strmprivacy/cli/compare/v1.21.0...v1.21.1) (2022-02-22)
+
+
+### Bug Fixes
+
+* trigger pipeline ([f8090de](https://github.com/strmprivacy/cli/commit/f8090de941d0bff1ea11d671e85103667d01446e))
+
 # [1.21.0](https://github.com/strmprivacy/cli/compare/v1.20.0...v1.21.0) (2022-02-22)
 
 
