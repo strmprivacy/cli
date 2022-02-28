@@ -1,3 +1,10 @@
+# [1.22.0](https://github.com/strmprivacy/cli/compare/v1.21.2...v1.22.0) (2022-02-28)
+
+
+### Features
+
+* strm-719 - add delete, activate, archive schema and event-contract commands ([#83](https://github.com/strmprivacy/cli/issues/83)) ([c1e1c0c](https://github.com/strmprivacy/cli/commit/c1e1c0ca95b91ce376f6e9df53a4a067a47198b7))
+
 ## [1.21.2](https://github.com/strmprivacy/cli/compare/v1.21.1...v1.21.2) (2022-02-24)
 
 
