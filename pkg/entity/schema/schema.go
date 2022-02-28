@@ -10,8 +10,8 @@ import (
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
-	"github.com/strmprivacy/api-definitions-go/v2/api/entities/v1"
-	"github.com/strmprivacy/api-definitions-go/v2/api/schemas/v1"
+	entities "github.com/strmprivacy/api-definitions-go/v2/api/entities/v1"
+	schemas "github.com/strmprivacy/api-definitions-go/v2/api/schemas/v1"
 	"google.golang.org/grpc"
 	"google.golang.org/protobuf/encoding/protojson"
 	"strmprivacy/strm/pkg/auth"
@@ -55,6 +55,36 @@ func SetupClient(clientConnection *grpc.ClientConn, ctx context.Context) {
 func list() {
 	req := &schemas.ListSchemasRequest{BillingId: auth.Auth.BillingId()}
 	response, err := client.ListSchemas(apiContext, req)
+	common.CliExit(err)
+
+	printer.Print(response)
+}
+
+func del(name *string) {
+	req := &schemas.DeleteSchemaRequest{
+		BillingId: auth.Auth.BillingId(),
+		SchemaRef: Ref(name)}
+	response, err := client.DeleteSchema(apiContext, req)
+	common.CliExit(err)
+
+	printer.Print(response)
+}
+
+func activate(name *string) {
+	req := &schemas.ActivateSchemaRequest{
+		BillingId: auth.Auth.BillingId(),
+		SchemaRef: Ref(name)}
+	response, err := client.ActivateSchema(apiContext, req)
+	common.CliExit(err)
+
+	printer.Print(response)
+}
+
+func archive(name *string) {
+	req := &schemas.ArchiveSchemaRequest{
+		BillingId: auth.Auth.BillingId(),
+		SchemaRef: Ref(name)}
+	response, err := client.ArchiveSchema(apiContext, req)
 	common.CliExit(err)
 
 	printer.Print(response)
@@ -138,7 +168,7 @@ func create(cmd *cobra.Command, args *string) {
 	printer.Print(response)
 }
 
-func NamesCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
+func RefsCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
 
 	if auth.Auth.BillingIdAbsent() {
 		return common.MissingBillingIdCompletionError(cmd.CommandPath())

@@ -49,7 +49,6 @@ func DeleteCmd() *cobra.Command {
 	}
 
 	return batchExporter
-
 }
 
 func GetCmd() *cobra.Command {
@@ -68,6 +67,7 @@ func GetCmd() *cobra.Command {
 		ValidArgsFunction: namesCompletion,
 	}
 }
+
 func ListCmd() *cobra.Command {
 	return &cobra.Command{
 		Use:   "batch-exporters",
