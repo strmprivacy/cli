@@ -6,6 +6,7 @@ import (
 	"github.com/golang/protobuf/jsonpb"
 	"github.com/spf13/cobra"
 	"github.com/strmprivacy/api-definitions-go/v2/api/batch_jobs/v1"
+	"github.com/strmprivacy/api-definitions-go/v2/api/entities/v1"
 	"google.golang.org/grpc"
 	"io/ioutil"
 	"strings"
@@ -31,7 +32,7 @@ func list() {
 }
 
 func get(id *string, _ *cobra.Command) {
-	ref := &batch_jobs.BatchJobRef{
+	ref := &entities.BatchJobRef{
 		BillingId: auth.Auth.BillingId(),
 		Id:        *id,
 	}
@@ -43,7 +44,7 @@ func get(id *string, _ *cobra.Command) {
 
 func del(id *string) {
 	req := &batch_jobs.DeleteBatchJobRequest{
-		Ref: &batch_jobs.BatchJobRef{
+		Ref: &entities.BatchJobRef{
 			BillingId: auth.Auth.BillingId(), Id: *id,
 		},
 	}
@@ -61,7 +62,7 @@ func create(cmd *cobra.Command) {
 		common.CliExit(err)
 	}
 
-	batchJob := &batch_jobs.BatchJob{}
+	batchJob := &entities.BatchJob{}
 	err = jsonpb.Unmarshal(bytes.NewReader(batchJobData), batchJob)
 	if err != nil {
 		common.CliExit(err)
