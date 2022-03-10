@@ -5,6 +5,7 @@ import (
 	"github.com/jedib0t/go-pretty/v6/table"
 	"github.com/spf13/cobra"
 	"github.com/strmprivacy/api-definitions-go/v2/api/batch_jobs/v1"
+	"github.com/strmprivacy/api-definitions-go/v2/api/entities/v1"
 	"sort"
 	"strmprivacy/strm/pkg/common"
 	"strmprivacy/strm/pkg/util"
@@ -57,12 +58,12 @@ func (p listTablePrinter) Print(data interface{}) {
 
 func (p getTablePrinter) Print(data interface{}) {
 	getResponse, _ := (data).(*batch_jobs.GetBatchJobResponse)
-	printTable([]*batch_jobs.BatchJob{getResponse.BatchJob})
+	printTable([]*entities.BatchJob{getResponse.BatchJob})
 }
 
 func (p createTablePrinter) Print(data interface{}) {
 	createResponse, _ := (data).(*batch_jobs.CreateBatchJobResponse)
-	printTable([]*batch_jobs.BatchJob{createResponse.BatchJob})
+	printTable([]*entities.BatchJob{createResponse.BatchJob})
 }
 
 func (p listPlainPrinter) Print(data interface{}) {
@@ -72,19 +73,19 @@ func (p listPlainPrinter) Print(data interface{}) {
 
 func (p getPlainPrinter) Print(data interface{}) {
 	getResponse, _ := (data).(*batch_jobs.GetBatchJobResponse)
-	printPlain([]*batch_jobs.BatchJob{getResponse.BatchJob})
+	printPlain([]*entities.BatchJob{getResponse.BatchJob})
 }
 
 func (p createPlainPrinter) Print(data interface{}) {
 	createResponse, _ := (data).(*batch_jobs.CreateBatchJobResponse)
-	printPlain([]*batch_jobs.BatchJob{createResponse.BatchJob})
+	printPlain([]*entities.BatchJob{createResponse.BatchJob})
 }
 
 func (p deletePrinter) Print(data interface{}) {
 	fmt.Println("Batch Job has been deleted")
 }
 
-func printTable(batchJobs []*batch_jobs.BatchJob) {
+func printTable(batchJobs []*entities.BatchJob) {
 	rows := make([]table.Row, 0, len(batchJobs))
 	for _, batchJob := range batchJobs {
 
@@ -111,7 +112,7 @@ func printTable(batchJobs []*batch_jobs.BatchJob) {
 	)
 }
 
-func printPlain(batchJobs []*batch_jobs.BatchJob) {
+func printPlain(batchJobs []*entities.BatchJob) {
 	var ids string
 	lastIndex := len(batchJobs) - 1
 
