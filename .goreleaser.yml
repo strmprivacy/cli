@@ -10,7 +10,7 @@ builds:
     binary: strm
     main: ./cmd/strm
     ldflags:
-      - -s -w -X strmprivacy/strm/pkg/cmd.Version={{.Version}} -X strmprivacy/strm/pkg/cmd.GitSha={{.Commit}} -X strmprivacy/strm/pkg/cmd.BuiltOn={{.Date}}
+      - -s -w -X strmprivacy/strm/pkg/common.Version={{.Version}} -X strmprivacy/strm/pkg/common.GitSha={{.Commit}} -X strmprivacy/strm/pkg/common.BuiltOn={{.Date}}
     goos:
       - linux
       - windows

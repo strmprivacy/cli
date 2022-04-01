@@ -1,11 +1,17 @@
 package common
 
 import (
+	"context"
 	"fmt"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials"
+	"google.golang.org/grpc/credentials/insecure"
+	"google.golang.org/grpc/metadata"
 	"gopkg.in/natefinch/lumberjack.v2"
 	"runtime"
+	"strings"
 )
 
 var RootCommandName = "strm"
@@ -13,6 +19,31 @@ var RootCommandName = "strm"
 var ApiAuthHost string
 var ApiHost string
 var EventAuthHost string
+
+func SetupGrpc(host string, token *string) (*grpc.ClientConn, context.Context) {
+
+	var err error
+	var creds grpc.DialOption
+
+	if strings.Contains(host, ":50051") {
+		creds = grpc.WithTransportCredentials(insecure.NewCredentials())
+	} else {
+		creds = grpc.WithTransportCredentials(credentials.NewClientTLSFromCert(nil, ""))
+	}
+
+	clientConnection, err := grpc.Dial(host, creds)
+	CliExit(err)
+
+	var md metadata.MD
+	if token != nil {
+		md = metadata.New(map[string]string{"authorization": "Bearer " + *token, "strm-cli-version": Version})
+	} else {
+		md = metadata.New(map[string]string{"strm-cli-version": Version})
+	}
+
+	ctx := metadata.NewOutgoingContext(context.Background(), md)
+	return clientConnection, ctx
+}
 
 func InitLogging() {
 	log.SetLevel(log.TraceLevel)

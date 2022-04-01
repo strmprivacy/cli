@@ -16,7 +16,7 @@ targetVar := strmprivacy/strm/pkg/common.RootCommandName
 
 target := dstrm
 
-ldflags := -X '${targetVar}=${target}' -X strmprivacy/strm/pkg/cmd.Version=local -X strmprivacy/strm/pkg/cmd.GitSha=local -X strmprivacy/strm/pkg/cmd.BuiltOn=local
+ldflags := -X '${targetVar}=${target}' -X strmprivacy/strm/pkg/cmd.Version=local -X strmprivacy/strm/pkg/common.GitSha=local -X strmprivacy/strm/pkg/common.BuiltOn=local
 
 dist/${target}: ${source_files} Makefile
 	go build -ldflags="${ldflags}" -o $@ ./cmd/strm

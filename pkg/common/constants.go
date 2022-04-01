@@ -4,6 +4,10 @@ import "strings"
 
 var ConfigPath string
 
+var GitSha = "dev"
+var Version = "dev"
+var BuiltOn = "unknown"
+
 // The environment variable prefix of all environment variables bound to our command line flags.
 // For example, --api-host is bound to STRM_API_HOST
 const EnvPrefix = "STRM"
