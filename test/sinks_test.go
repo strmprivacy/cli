@@ -73,6 +73,10 @@ func init() {
 		StreamOrKeyStreamRef: &entities.BatchExporter_StreamRef{StreamRef: streamRef},
 		SinkName:             sinkRef.Name,
 		Interval:             &duration.Duration{Seconds: 60},
+		DataConnectorRef: &entities.DataConnectorRef{
+			BillingId: billingId,
+			Name:      sinkRef.Name,
+		},
 	}
 
 	anotherBatchExporter = &entities.BatchExporter{}
@@ -81,6 +85,10 @@ func init() {
 	anotherBatchExporter.Ref.Name = "another-batch-exporter"
 	anotherBatchExporter.PathPrefix = "some-prefix"
 	anotherBatchExporter.Interval = &duration.Duration{Seconds: 300}
+	anotherBatchExporter.DataConnectorRef = &entities.DataConnectorRef{
+		BillingId: billingId,
+		Name:      anotherSink.Ref.Name,
+	}
 
 	_ = newConfigDir()
 }
@@ -121,6 +129,7 @@ func createBatchExporter(t *testing.T) {
 	proto.Merge(b, batchExporter)
 	b.Interval = &duration.Duration{Seconds: 60}
 	b.SinkName = sink.Ref.Name
+	b.DataConnectorRef = nil
 
 	ExecuteAndVerify(t, &batch_exporters.CreateBatchExporterResponse{
 		BatchExporter: b}, "create", "batch-exporter", streamRef.Name)
@@ -134,7 +143,11 @@ func createSink2(t *testing.T) {
 }
 
 func createAnotherBatchExporter(t *testing.T) {
-	ExecuteAndVerify(t, &batch_exporters.CreateBatchExporterResponse{BatchExporter: anotherBatchExporter},
+	anotherBatchExporterCreate := &entities.BatchExporter{}
+	proto.Merge(anotherBatchExporterCreate, anotherBatchExporter)
+	anotherBatchExporterCreate.DataConnectorRef = nil
+
+	ExecuteAndVerify(t, &batch_exporters.CreateBatchExporterResponse{BatchExporter: anotherBatchExporterCreate},
 		"create", "batch-exporter", streamRef.Name, "--sink="+anotherSink.Ref.Name, "--interval=300",
 		"--name=another-batch-exporter", "--path-prefix=some-prefix")
 }
