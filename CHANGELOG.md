@@ -1,3 +1,10 @@
+# [1.23.0](https://github.com/strmprivacy/cli/compare/v1.22.0...v1.23.0) (2022-04-04)
+
+
+### Features
+
+* **strm-812:** add strm-cli-version header to every request ([#85](https://github.com/strmprivacy/cli/issues/85)) ([9b6a770](https://github.com/strmprivacy/cli/commit/9b6a7708deeba37ee9fd2a56e29536ee6caebcb4))
+
 # [1.22.0](https://github.com/strmprivacy/cli/compare/v1.21.2...v1.22.0) (2022-02-28)
 
 
