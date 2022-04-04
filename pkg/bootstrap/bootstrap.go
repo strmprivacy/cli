@@ -10,7 +10,6 @@ import (
 	"strings"
 	"strmprivacy/strm/pkg/cmd"
 	"strmprivacy/strm/pkg/common"
-	"strmprivacy/strm/pkg/entity"
 	"strmprivacy/strm/pkg/entity/batch_exporter"
 	"strmprivacy/strm/pkg/entity/batch_job"
 	"strmprivacy/strm/pkg/entity/event_contract"
@@ -48,7 +47,7 @@ func SetupVerbs(rootCmd *cobra.Command) {
 }
 
 func SetupServiceClients(accessToken *string) {
-	clientConnection, ctx := entity.SetupGrpc(common.ApiHost, accessToken)
+	clientConnection, ctx := common.SetupGrpc(common.ApiHost, accessToken)
 
 	stream.SetupClient(clientConnection, ctx)
 	kafka_exporter.SetupClient(clientConnection, ctx)

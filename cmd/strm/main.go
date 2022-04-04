@@ -10,7 +10,6 @@ import (
 	"strings"
 	"strmprivacy/strm/pkg/auth"
 	"strmprivacy/strm/pkg/bootstrap"
-	"strmprivacy/strm/pkg/cmd"
 	"strmprivacy/strm/pkg/common"
 	"strmprivacy/strm/pkg/kafkaconsumer"
 	"strmprivacy/strm/pkg/util"
@@ -65,7 +64,7 @@ hide_title: true
 
 var RootCmd = &cobra.Command{
 	Use:               common.RootCommandName,
-	Short:             fmt.Sprintf("STRM Privacy CLI %s", cmd.Version),
+	Short:             fmt.Sprintf("STRM Privacy CLI %s", common.Version),
 	PersistentPreRunE: rootCmdPreRun(),
 	DisableAutoGenTag: true,
 }

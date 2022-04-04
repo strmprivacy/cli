@@ -15,7 +15,6 @@ import (
 	"os"
 	"strings"
 	"strmprivacy/strm/pkg/common"
-	"strmprivacy/strm/pkg/entity"
 )
 
 var Auth = Authenticator{}
@@ -160,7 +159,7 @@ func startBrowserLoginFlow(ready chan string, ctx context.Context) func() error 
 }
 
 func getLegacyBillingId(accessToken string) string {
-	clientConnection, ctx := entity.SetupGrpc(common.ApiHost, &accessToken)
+	clientConnection, ctx := common.SetupGrpc(common.ApiHost, &accessToken)
 	accountClient := account.NewAccountServiceClient(clientConnection)
 
 	response, err := accountClient.GetLegacyBillingId(ctx, &account.GetLegacyBillingIdRequest{})
