@@ -68,7 +68,9 @@ func (authenticator *Authenticator) accessToken() *string {
 		return nil
 	} else {
 		tokens, err := authenticator.tokenSource.Token()
-		common.CliExit(err)
+		if err != nil {
+			common.CliExit(err.Error() + "\nYour session has expired. Please login using: `strm auth login`")
+		}
 		if authenticator.storedToken.AccessToken != tokens.AccessToken {
 			authenticator.populateValues(oauthTokenToStoredToken(*tokens))
 			authenticator.StoreLogin()
