@@ -6,7 +6,6 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/strmprivacy/api-definitions-go/v2/api/installations/v1"
 	"google.golang.org/grpc"
-	"strings"
 	"strmprivacy/strm/pkg/auth"
 	"strmprivacy/strm/pkg/common"
 )
@@ -19,18 +18,14 @@ func SetupClient(clientConnection *grpc.ClientConn, ctx context.Context) {
 	client = installations.NewInstallationsServiceClient(clientConnection)
 }
 
-func get(_ *cobra.Command) {
-	req := &installations.GetInstallationRequest{}
+func get(id *string, _ *cobra.Command) {
+	req := &installations.GetInstallationRequest{Id: *id}
 	response, err := client.GetInstallation(apiContext, req)
 	common.CliExit(err)
 	printer.Print(response)
 }
 
 func namesCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
-	if len(args) != 0 && strings.Fields(cmd.Short)[0] != "Delete" {
-		// this one means you don't get multiple completion suggestions for one stream if it's not a delete call
-		return nil, cobra.ShellCompDirectiveNoFileComp
-	}
 	if auth.Auth.BillingIdAbsent() {
 		return common.MissingBillingIdCompletionError(cmd.CommandPath())
 	}

@@ -10,17 +10,17 @@ var longDoc = `
 
 func GetCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:               "installation",
-		Short:             "Get your installation",
+		Use:               "installation [id]",
+		Short:             "Get your installation by id",
 		Long:              longDoc,
 		DisableAutoGenTag: true,
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
 		},
 		Run: func(cmd *cobra.Command, args []string) {
-			get(cmd)
+			get(&args[0], cmd)
 		},
-		Args:              cobra.ExactArgs(0),
+		Args:              cobra.ExactArgs(1),
 		ValidArgsFunction: namesCompletion,
 	}
 }
