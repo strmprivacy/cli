@@ -27,14 +27,10 @@ func availablePrinters() map[string]util.Printer {
 	return util.MergePrinterMaps(
 		util.DefaultPrinters,
 		map[string]util.Printer{
-			common.OutputFormatTable + common.ListCommandName:   listTablePrinter{},
-			common.OutputFormatTable + common.GetCommandName:    getTablePrinter{},
-			common.OutputFormatTable + common.DeleteCommandName: deletePrinter{},
-			common.OutputFormatTable + common.CreateCommandName: createTablePrinter{},
-			common.OutputFormatPlain + common.ListCommandName:   listPlainPrinter{},
-			common.OutputFormatPlain + common.GetCommandName:    getPlainPrinter{},
-			common.OutputFormatPlain + common.DeleteCommandName: deletePrinter{},
-			common.OutputFormatPlain + common.CreateCommandName: createPlainPrinter{},
+			common.OutputFormatTable + common.ListCommandName: listTablePrinter{},
+			common.OutputFormatTable + common.GetCommandName:  getTablePrinter{},
+			common.OutputFormatPlain + common.ListCommandName: listPlainPrinter{},
+			common.OutputFormatPlain + common.GetCommandName:  getPlainPrinter{},
 		},
 	)
 }
@@ -47,8 +43,6 @@ type listTablePrinter struct{}
 type getTablePrinter struct{}
 type createTablePrinter struct{}
 
-type deletePrinter struct{}
-
 func (p listTablePrinter) Print(data interface{}) {
 	listResponse, _ := (data).(*installations.ListInstallationsResponse)
 	printTable(listResponse.Installations)
@@ -59,11 +53,6 @@ func (p getTablePrinter) Print(data interface{}) {
 	printTable([]*installations.Installation{getResponse.Installation})
 }
 
-func (p createTablePrinter) Print(data interface{}) {
-	createResponse, _ := (data).(*installations.CreateInstallationResponse)
-	printTable([]*installations.Installation{createResponse.Installation})
-}
-
 func (p listPlainPrinter) Print(data interface{}) {
 	listResponse, _ := (data).(*installations.ListInstallationsResponse)
 	printPlain(listResponse.Installations)
@@ -72,15 +61,6 @@ func (p listPlainPrinter) Print(data interface{}) {
 func (p getPlainPrinter) Print(data interface{}) {
 	getResponse, _ := (data).(*installations.GetInstallationResponse)
 	printPlain([]*installations.Installation{getResponse.Installation})
-}
-
-func (p createPlainPrinter) Print(data interface{}) {
-	createResponse, _ := (data).(*installations.CreateInstallationResponse)
-	printPlain([]*installations.Installation{createResponse.Installation})
-}
-
-func (p deletePrinter) Print(data interface{}) {
-	fmt.Println("Installation has been deleted")
 }
 
 func printTable(installations []*installations.Installation) {
@@ -98,7 +78,7 @@ func printTable(installations []*installations.Installation) {
 		table.Row{
 			"Installation id",
 			"Type",
-			"Billing Account",
+			"Billing Account id",
 		},
 		rows,
 	)

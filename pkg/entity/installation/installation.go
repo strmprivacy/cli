@@ -19,8 +19,15 @@ func SetupClient(clientConnection *grpc.ClientConn, ctx context.Context) {
 }
 
 func get(id *string, _ *cobra.Command) {
-	req := &installations.GetInstallationRequest{Id: *id}
+	req := &installations.GetInstallationRequest{InstallationId: *id}
 	response, err := client.GetInstallation(apiContext, req)
+	common.CliExit(err)
+	printer.Print(response)
+}
+
+func list() {
+	req := &installations.ListInstallationsRequest{}
+	response, err := client.ListInstallations(apiContext, req)
 	common.CliExit(err)
 	printer.Print(response)
 }

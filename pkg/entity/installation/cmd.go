@@ -24,3 +24,18 @@ func GetCmd() *cobra.Command {
 		ValidArgsFunction: namesCompletion,
 	}
 }
+
+func ListCmd() *cobra.Command {
+	return &cobra.Command{
+		Use:               "installations",
+		Short:             "List your installations",
+		Long:              longDoc,
+		DisableAutoGenTag: true,
+		PreRun: func(cmd *cobra.Command, args []string) {
+			printer = configurePrinter(cmd)
+		},
+		Run: func(cmd *cobra.Command, args []string) {
+			list()
+		},
+	}
+}
