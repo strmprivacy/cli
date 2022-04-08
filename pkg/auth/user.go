@@ -70,7 +70,7 @@ func (authenticator *Authenticator) accessToken() *string {
 		tokens, err := authenticator.tokenSource.Token()
 		if err != nil {
 			authenticator.revoke()
-			common.CliExit("Your session has expired. Please re-login using: `strm auth login`")
+			common.CliExit(fmt.Sprintf("Your session has expired. Please re-login using: `%s auth login`", common.RootCommandName))
 		}
 		if authenticator.storedToken.AccessToken != tokens.AccessToken {
 			authenticator.populateValues(oauthTokenToStoredToken(*tokens))
