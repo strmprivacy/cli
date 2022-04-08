@@ -13,5 +13,6 @@ var AuthCmd = &cobra.Command{
 
 func init() {
 	AuthCmd.AddCommand(auth.LoginCmd())
+	AuthCmd.AddCommand(auth.RevokeCmd())
 	AuthCmd.AddCommand(auth.PrintTokenCmd())
 }

@@ -56,7 +56,7 @@ func (authenticator *Authenticator) populateValues(storedToken storedToken) {
 	authenticator.Email = authenticator.storedToken.Email
 }
 
-func (authenticator *Authenticator) StoreLogin() string {
+func (authenticator *Authenticator) storeLogin() string {
 	filename := authenticator.getSaveFilename()
 	err := os.MkdirAll(filepath.Dir(filename), 0700)
 	common.CliExit(err)
