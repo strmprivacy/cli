@@ -1,3 +1,10 @@
+# [1.24.0](https://github.com/strmprivacy/cli/compare/v1.23.0...v1.24.0) (2022-04-08)
+
+
+### Features
+
+* add getInstallation command ([#86](https://github.com/strmprivacy/cli/issues/86)) ([454fcb0](https://github.com/strmprivacy/cli/commit/454fcb0f1392f42677d481160e6144e85b363327))
+
 # [1.23.0](https://github.com/strmprivacy/cli/compare/v1.22.0...v1.23.0) (2022-04-04)
 
 
