@@ -20,7 +20,7 @@ mkdir generated_docs
 if [[ $APIS_EMAIL == "" ]]
 then
   make
-  ./dist/dstrm --generate-docs > /dev/null 2>&1
+  ./dist/strm --generate-docs > /dev/null 2>&1
 else
   ./dist/strm_linux_amd64/strm --generate-docs > /dev/null 2>&1
 fi

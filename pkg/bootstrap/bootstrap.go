@@ -13,6 +13,7 @@ import (
 	"strmprivacy/strm/pkg/entity/batch_exporter"
 	"strmprivacy/strm/pkg/entity/batch_job"
 	"strmprivacy/strm/pkg/entity/event_contract"
+	"strmprivacy/strm/pkg/entity/installation"
 	"strmprivacy/strm/pkg/entity/kafka_cluster"
 	"strmprivacy/strm/pkg/entity/kafka_exporter"
 	"strmprivacy/strm/pkg/entity/kafka_user"
@@ -61,6 +62,7 @@ func SetupServiceClients(accessToken *string) {
 	schema_code.SetupClient(clientConnection, ctx)
 	event_contract.SetupClient(clientConnection, ctx)
 	usage.SetupClient(clientConnection, ctx)
+	installation.SetupClient(clientConnection, ctx)
 }
 
 func ConfigPath() string {
