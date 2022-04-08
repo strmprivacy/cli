@@ -1,3 +1,10 @@
+## [1.24.1](https://github.com/strmprivacy/cli/compare/v1.24.0...v1.24.1) (2022-04-08)
+
+
+### Bug Fixes
+
+* **strm-922:** revoke the current stored credentials if they are invalid ([f9ce73d](https://github.com/strmprivacy/cli/commit/f9ce73d26fd9dafbd2bc21616446591896543962))
+
 # [1.24.0](https://github.com/strmprivacy/cli/compare/v1.23.0...v1.24.0) (2022-04-08)
 
 
