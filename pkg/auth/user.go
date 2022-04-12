@@ -68,16 +68,25 @@ func (authenticator *Authenticator) accessToken() *string {
 		return nil
 	} else {
 		tokens, err := authenticator.tokenSource.Token()
-		common.CliExit(err)
+		if err != nil {
+			authenticator.revoke()
+			common.CliExit(fmt.Sprintf("Your session has expired. Please re-login using: `%s auth login`", common.RootCommandName))
+		}
 		if authenticator.storedToken.AccessToken != tokens.AccessToken {
 			authenticator.populateValues(oauthTokenToStoredToken(*tokens))
-			authenticator.StoreLogin()
+			authenticator.storeLogin()
 		}
 		return &tokens.AccessToken
 	}
 }
 
-func (authenticator *Authenticator) Login() {
+func (authenticator *Authenticator) revoke() {
+	filename := authenticator.getSaveFilename()
+	err := os.Remove(filename)
+	common.CliExit(err)
+}
+
+func (authenticator *Authenticator) login() {
 	ready := make(chan string, 1)
 	defer close(ready)
 
@@ -111,7 +120,7 @@ func (authenticator *Authenticator) handleLogin(ctx context.Context, cfg oauth2c
 		common.CliExit(err)
 
 		authenticator.populateValues(oauthTokenToStoredToken(*oAuthToken))
-		authenticator.StoreLogin()
+		authenticator.storeLogin()
 
 		fmt.Println(fmt.Sprintf("\nYou are now logged in as [%v].", authenticator.Email))
 

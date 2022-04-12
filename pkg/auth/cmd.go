@@ -32,6 +32,21 @@ to allow the CLI access to the STRM Privacy APIs.`,
 	}
 	return cmd
 }
+
+func RevokeCmd() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "revoke",
+		Short: "Revoke",
+		Long:  `Revoke your current login session and stored credentials.`,
+		Run: func(cmd *cobra.Command, args []string) {
+			revoke()
+		},
+		DisableAutoGenTag: true,
+		Args:              cobra.ExactArgs(0),
+	}
+	return cmd
+}
+
 func PrintTokenCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "print-access-token",

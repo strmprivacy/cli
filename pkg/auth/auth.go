@@ -8,7 +8,11 @@ const (
 )
 
 func login() {
-	Auth.Login()
+	Auth.login()
+}
+
+func revoke() {
+	Auth.revoke()
 }
 
 func printAccessToken() {
