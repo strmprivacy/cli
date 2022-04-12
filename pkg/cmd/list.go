@@ -5,6 +5,7 @@ import (
 	"strmprivacy/strm/pkg/common"
 	"strmprivacy/strm/pkg/entity/batch_exporter"
 	"strmprivacy/strm/pkg/entity/batch_job"
+	"strmprivacy/strm/pkg/entity/data_connector"
 	"strmprivacy/strm/pkg/entity/event_contract"
 	"strmprivacy/strm/pkg/entity/installation"
 	"strmprivacy/strm/pkg/entity/kafka_cluster"
@@ -28,6 +29,7 @@ func init() {
 	ListCmd.AddCommand(batch_exporter.ListCmd())
 	ListCmd.AddCommand(batch_job.ListCmd())
 	ListCmd.AddCommand(sink.ListCmd())
+	ListCmd.AddCommand(data_connector.ListCmd())
 	ListCmd.AddCommand(kafka_cluster.ListCmd())
 	ListCmd.AddCommand(kafka_user.ListCmd())
 	ListCmd.AddCommand(key_stream.ListCmd())
