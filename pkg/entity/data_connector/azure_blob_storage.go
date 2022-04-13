@@ -11,13 +11,17 @@ const (
 	tenantIdFlag          = "tenant-id"
 	clientIdFlag          = "client-id"
 	clientSecretFlag      = "client-secret"
+	longDocBlobStorage = `Creates a data connector for an Azure Blob Storage container. Authentication is based on
+Client Secret Credentials, i.e. of an Application Principal.
+
+### Usage`
 )
 
 func createAzureBlobStorageCmd() *cobra.Command {
 	azureBlobStorage := &cobra.Command{
 		Use:               "azure-blob-storage [data-connector-name] [container-name]",
 		Short:             "Create a Data Connector for an Azure Blob Storage Container",
-		Long:              longDoc,
+		Long:              longDocBlobStorage,
 		DisableAutoGenTag: true,
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinterForType(cmd, cmd.Parent().Parent().Name())
