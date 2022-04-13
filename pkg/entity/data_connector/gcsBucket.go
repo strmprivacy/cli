@@ -12,7 +12,7 @@ func createGcsBucketCmd() *cobra.Command {
 		Long:              longDoc,
 		DisableAutoGenTag: true,
 		PreRun: func(cmd *cobra.Command, args []string) {
-			printer = configurePrinter(cmd)
+			printer = configurePrinterForType(cmd, cmd.Parent().Parent().Name())
 		},
 		Run: func(cmd *cobra.Command, args []string) {
 			credentials := readCredentialsFile(cmd.Flags())

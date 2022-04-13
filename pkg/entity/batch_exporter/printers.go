@@ -101,7 +101,7 @@ func printTable(batchExporters []*v1.BatchExporter) {
 		rows = append(rows, table.Row{
 			batchExporter.Ref.Name,
 			streamOrKeyStreamName,
-			batchExporter.SinkName,
+			batchExporter.DataConnectorRef.Name,
 			batchExporter.IncludeExistingEvents,
 			batchExporter.Interval,
 			batchExporter.PathPrefix,
@@ -112,7 +112,7 @@ func printTable(batchExporters []*v1.BatchExporter) {
 		table.Row{
 			"Batch Exporter",
 			"Stream",
-			"Sink",
+			"Data Connector",
 			"Include Existing Events",
 			"Interval",
 			"Path Prefix",

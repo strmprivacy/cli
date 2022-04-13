@@ -4,12 +4,12 @@ import (
 	"fmt"
 	"github.com/spf13/cobra"
 	"strmprivacy/strm/pkg/common"
-	"strmprivacy/strm/pkg/entity/sink"
+	"strmprivacy/strm/pkg/entity/data_connector"
 	"strmprivacy/strm/pkg/entity/stream"
 )
 
 const (
-	sinkFlag                  = "sink"
+	dataConnectorFlag         = "data-connector"
 	nameFlag                  = "name"
 	intervalFlag              = "interval"
 	pathPrefix                = "path-prefix"
@@ -18,14 +18,14 @@ const (
 )
 
 var longDoc = `
-A Batch Exporter listens to a stream and outputs all events to files in a Sink. This happens with a regular interval.
+A Batch Exporter listens to a stream and writes all events to files using a Data Connector. This happens with a regular interval.
 
 Each file follows the JSON Lines format, which is one full JSON document per line.
 
-A [sink](/cli-reference/` + fmt.Sprint(common.RootCommandName) + `/create/sink.md) is a configuration item that defines location
-(Gcloud, AWS, ..) bucket and associated credentials.
+A [Data Connector](/cli-reference/` + fmt.Sprint(common.RootCommandName) + `/create/data-connector.md) is a configuration
+entity that comprises location (GCS bucket, AWS S3 bucket, ...) and associated credentials.
 
-A sink needs to be created *before* you can create a batch exporter that uses it.
+A Data Connector needs to be created *before* you can create a batch exporter that uses it.
 
 ### Usage
 `
@@ -100,13 +100,13 @@ func CreateCmd() *cobra.Command {
 	}
 
 	flags := batchExporter.Flags()
-	flags.String(sinkFlag, "", "name of the sink. Optional if you have only one defined sink.")
+	flags.String(dataConnectorFlag, "", "name of the data connector - optional if you own only one data connector")
 	flags.String(nameFlag, "", "optional batch exporter name")
 	flags.String(pathPrefix, "", "path prefix on bucket")
 	flags.Int64(intervalFlag, 60, "Interval in seconds between batches")
 	flags.Bool(exportKeys, false, "Do we want to export the keys stream")
 	flags.Bool(includeExistingEventsFlag, false, "Do we want to include all existing events")
-	err := batchExporter.RegisterFlagCompletionFunc(sinkFlag, sink.NamesCompletion)
+	err := batchExporter.RegisterFlagCompletionFunc(dataConnectorFlag, data_connector.NamesCompletion)
 	common.CliExit(err)
 
 	return batchExporter

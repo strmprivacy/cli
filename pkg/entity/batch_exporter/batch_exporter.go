@@ -2,17 +2,18 @@ package batch_exporter
 
 import (
 	"context"
+	"github.com/spf13/pflag"
+	"github.com/strmprivacy/api-definitions-go/v2/api/data_connectors/v1"
 	"strings"
+	"strmprivacy/strm/pkg/entity/data_connector"
 
 	"github.com/golang/protobuf/ptypes/duration"
 	"github.com/spf13/cobra"
 	"github.com/strmprivacy/api-definitions-go/v2/api/batch_exporters/v1"
 	"github.com/strmprivacy/api-definitions-go/v2/api/entities/v1"
-	"github.com/strmprivacy/api-definitions-go/v2/api/sinks/v1"
 	"google.golang.org/grpc"
 	"strmprivacy/strm/pkg/auth"
 	"strmprivacy/strm/pkg/common"
-	"strmprivacy/strm/pkg/entity/sink"
 	"strmprivacy/strm/pkg/util"
 )
 
@@ -54,14 +55,7 @@ func create(streamName *string, cmd *cobra.Command) {
 	flags := cmd.Flags()
 	keyStream := util.GetBoolAndErr(flags, exportKeys)
 	includeExistingEvents := util.GetBoolAndErr(flags, includeExistingEventsFlag)
-	sinkName := util.GetStringAndErr(flags, sinkFlag)
-	sinkNames := getSinkNames()
-	if len(sinkName) == 0 && len(sinkNames) == 1 {
-		sinkName = sinkNames[0]
-	}
-	if len(sinkName) == 0 {
-		common.CliExit("You must provide a sink name when creating a batch exporter")
-	}
+	dataConnectorName := getDataConnectorName(flags)
 	// this exporterName might be empty, in which case the API will set it to
 	// the appropriate default
 	exporterName := util.GetStringAndErr(flags, nameFlag)
@@ -71,10 +65,13 @@ func create(streamName *string, cmd *cobra.Command) {
 	pathPrefix := util.GetStringAndErr(flags, pathPrefix)
 
 	exporter := &entities.BatchExporter{
-		SinkName: sinkName,
 		Ref: &entities.BatchExporterRef{
 			Name:      exporterName,
 			BillingId: auth.Auth.BillingId(),
+		},
+		DataConnectorRef: &entities.DataConnectorRef{
+			BillingId: auth.Auth.BillingId(),
+			Name:      dataConnectorName,
 		},
 		Interval:              &interval,
 		PathPrefix:            pathPrefix,
@@ -96,15 +93,35 @@ func create(streamName *string, cmd *cobra.Command) {
 	printer.Print(response)
 }
 
-func getSinkNames() []string {
-	req := &sinks.ListSinksRequest{BillingId: auth.Auth.BillingId()}
-	response, err := sink.Client.ListSinks(apiContext, req)
+func getDataConnectorName(flags *pflag.FlagSet) string {
+	dataConnectorName := util.GetStringAndErr(flags, dataConnectorFlag)
+	availableDataConnectorNames := getDataConnectorNames()
+
+	if len(dataConnectorName) == 0 && len(availableDataConnectorNames) == 1 {
+		dataConnectorName = availableDataConnectorNames[0]
+	}
+	dataConnectorExists := false
+	for _, name := range availableDataConnectorNames {
+		if name == dataConnectorName {
+			dataConnectorExists = true
+			break
+		}
+	}
+	if len(dataConnectorName) == 0 || !dataConnectorExists {
+		common.CliExit("You must provide a valid data connector name when creating a batch exporter")
+	}
+	return dataConnectorName
+}
+
+func getDataConnectorNames() []string {
+	req := &data_connectors.ListDataConnectorsRequest{BillingId: auth.Auth.BillingId()}
+	response, err := data_connector.Client.ListDataConnectors(apiContext, req)
 
 	common.CliExit(err)
 
-	names := make([]string, 0, len(response.Sinks))
-	for _, s := range response.Sinks {
-		names = append(names, s.Sink.Ref.Name)
+	names := make([]string, 0, len(response.DataConnectors))
+	for _, dataConnector := range response.DataConnectors {
+		names = append(names, dataConnector.Ref.Name)
 	}
 
 	return names
