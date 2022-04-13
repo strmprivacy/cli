@@ -2,6 +2,7 @@ package kafkaconsumer
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"github.com/Shopify/sarama"
 	"github.com/spf13/cobra"
@@ -36,7 +37,7 @@ func Run(cmd *cobra.Command, kafkaExporterName *string) {
 	topic := kafkaExporter.Target.Topic
 	groupId := util.GetStringAndErr(flags, GroupIdFlag)
 	if len(groupId) == 0 {
-		common.CliExit(fmt.Sprintf("Please set a Kafka Consumer group id with --%v", GroupIdFlag))
+		common.CliExit(errors.New(fmt.Sprintf("Please set a Kafka Consumer group id with --%v", GroupIdFlag)))
 	}
 
 	//sarama.Logger = log.New(os.Stdout, "[sarama] ", log.LstdFlags)
@@ -57,7 +58,7 @@ func Run(cmd *cobra.Command, kafkaExporterName *string) {
 	ctx, cancel := context.WithCancel(context.Background())
 	client, err := sarama.NewConsumerGroup(strings.Split(bootstrapBrokers, ","), groupId, config)
 	if err != nil {
-		common.CliExit(fmt.Sprintf("Error creating consumer group client: %v", err))
+		common.CliExit(errors.New(fmt.Sprintf("Error creating consumer group client: %v", err)))
 	}
 
 	wg := &sync.WaitGroup{}
@@ -69,7 +70,7 @@ func Run(cmd *cobra.Command, kafkaExporterName *string) {
 			// server-side rebalance happens, the consumer session will need to be
 			// recreated to get the new claims
 			if err := client.Consume(ctx, []string{topic}, &consumer); err != nil {
-				common.CliExit(fmt.Sprintf("Error from consumer: %v", err))
+				common.CliExit(errors.New(fmt.Sprintf("Error from consumer: %v", err)))
 			}
 			// check if context was cancelled, signaling that the consumer should stop
 			if ctx.Err() != nil {
@@ -92,7 +93,7 @@ func Run(cmd *cobra.Command, kafkaExporterName *string) {
 	cancel()
 	wg.Wait()
 	if err = client.Close(); err != nil {
-		common.CliExit(fmt.Sprintf("Error closing client: %v", err))
+		common.CliExit(errors.New(fmt.Sprintf("Error closing client: %v", err)))
 	}
 
 }

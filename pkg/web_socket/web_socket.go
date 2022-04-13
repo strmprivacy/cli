@@ -1,6 +1,7 @@
 package web_socket
 
 import (
+	"errors"
 	"fmt"
 	"github.com/gorilla/websocket"
 	"github.com/spf13/cobra"
@@ -27,8 +28,8 @@ func Run(cmd *cobra.Command, streamName *string) {
 		clientId := util.GetStringAndErr(flags, common.ClientIdFlag)
 		clientSecret := util.GetStringAndErr(flags, common.ClientSecretFlag)
 		if len(clientId) == 0 || len(clientSecret) == 0 {
-			common.CliExit(fmt.Sprintf("There's no saved stream for %s and clientId %s clientSecret %s are missing as options",
-				*streamName, clientId, clientSecret))
+			common.CliExit(errors.New(fmt.Sprintf("There's no saved stream for %s and clientId %s clientSecret %s are missing as options",
+				*streamName, clientId, clientSecret)))
 		}
 		s.Credentials = append(s.Credentials, &entities.Credentials{
 			ClientSecret: clientSecret, ClientId: clientId,

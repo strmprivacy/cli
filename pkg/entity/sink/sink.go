@@ -2,6 +2,7 @@ package sink
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"strings"
@@ -80,8 +81,8 @@ func parseSyncType(flags *pflag.FlagSet) entities.SinkType {
 	}
 	sinkType, ok := entities.SinkType_value[typeString]
 	if !ok {
-		common.CliExit(fmt.Sprintf("Can't convert %s to a known consent sink type, types are %v",
-			typeString, entities.SinkType_value))
+		common.CliExit(errors.New(fmt.Sprintf("Can't convert %s to a known consent sink type, types are %v",
+			typeString, entities.SinkType_value)))
 	}
 	return entities.SinkType(sinkType)
 }

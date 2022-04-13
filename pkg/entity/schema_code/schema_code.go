@@ -2,6 +2,7 @@ package schema_code
 
 import (
 	"context"
+	"errors"
 	"github.com/spf13/cobra"
 	"github.com/strmprivacy/api-definitions-go/v2/api/schemas/v1"
 	"google.golang.org/grpc"
@@ -49,7 +50,7 @@ func GetSchemaCode(cmd *cobra.Command, name *string) string {
 	if !overwrite {
 		_, err = os.Stat(outputFile)
 		if !os.IsNotExist(err) {
-			common.CliExit("Not overwriting " + outputFile)
+			common.CliExit(errors.New("Not overwriting " + outputFile))
 		}
 	}
 	saveFile(schemaCode, outputFile)

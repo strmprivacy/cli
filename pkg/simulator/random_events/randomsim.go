@@ -1,6 +1,7 @@
 package random_events
 
 import (
+	"errors"
 	"fmt"
 	"math/rand"
 	"net/http"
@@ -26,7 +27,7 @@ func run(cmd *cobra.Command, streamName *string) {
 		clientId := util.GetStringAndErr(flags, common.ClientIdFlag)
 		clientSecret := util.GetStringAndErr(flags, common.ClientSecretFlag)
 		if len(clientId) == 0 || len(clientSecret) == 0 {
-			common.CliExit(fmt.Sprintf("There are no credentials stored for stream '%s'", *streamName))
+			common.CliExit(errors.New(fmt.Sprintf("There are no credentials stored for stream '%s'", *streamName)))
 		}
 		s.Credentials = append(s.Credentials, &entities.Credentials{
 			ClientSecret: clientSecret, ClientId: clientId,
@@ -34,7 +35,7 @@ func run(cmd *cobra.Command, streamName *string) {
 	}
 	streamInfo := stream.Get(streamName, false)
 	if len(streamInfo.StreamTree.Stream.LinkedStream) != 0 {
-		common.CliExit("You can't run a simulator on a derived stream")
+		common.CliExit(errors.New("You can't run a simulator on a derived stream"))
 	}
 	interval := time.Duration(util.GetIntAndErr(flags, sim.IntervalFlag))
 	sessionRange := util.GetIntAndErr(flags, sim.SessionRangeFlag)
@@ -47,11 +48,11 @@ func run(cmd *cobra.Command, streamName *string) {
 	schema := util.GetStringAndErr(flags, sim.SchemaFlag)
 	f := EventGenerators[schema]
 	if f == nil {
-		common.CliExit(fmt.Sprintf("Can't simulate for schema %s", schema))
+		common.CliExit(errors.New(fmt.Sprintf("Can't simulate for schema %s", schema)))
 	}
 
 	if len(consentLevels) == 0 {
-		common.CliExit(fmt.Sprintf("%v is not a valid set of consent levels", consentLevels))
+		common.CliExit(errors.New(fmt.Sprintf("%v is not a valid set of consent levels", consentLevels)))
 	}
 
 	if !quiet {

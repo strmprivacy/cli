@@ -1,6 +1,7 @@
 package context
 
 import (
+	"errors"
 	"fmt"
 	"io/fs"
 	"io/ioutil"
@@ -61,7 +62,7 @@ func billingIdInfo() {
 	b, err := auth.GetBillingId()
 	if err != nil {
 		if fileError, ok := err.(*fs.PathError); ok {
-			common.CliExit(fmt.Sprintf("Can't %s %s", fileError.Op, fileError.Path))
+			common.CliExit(errors.New(fmt.Sprintf("Can't %s %s", fileError.Op, fileError.Path)))
 		}
 	}
 	common.CliExit(err)

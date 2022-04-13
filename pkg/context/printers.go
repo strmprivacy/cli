@@ -2,6 +2,7 @@ package context
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"github.com/jedib0t/go-pretty/v6/list"
 	"github.com/spf13/cobra"
@@ -30,7 +31,7 @@ func configurePrinter(command *cobra.Command) util.Printer {
 			allowedValues = common.ConfigOutputFormatFlagAllowedValuesText
 		}
 
-		common.CliExit(fmt.Sprintf("Output format '%v' is not supported for '%v'. Allowed values: %v", command.CommandPath(), outputFormat, allowedValues))
+		common.CliExit(errors.New(fmt.Sprintf("Output format '%v' is not supported for '%v'. Allowed values: %v", command.CommandPath(), outputFormat, allowedValues)))
 	}
 
 	return p

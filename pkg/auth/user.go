@@ -2,6 +2,7 @@ package auth
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/int128/oauth2cli"
@@ -70,7 +71,7 @@ func (authenticator *Authenticator) accessToken() *string {
 		tokens, err := authenticator.tokenSource.Token()
 		if err != nil {
 			authenticator.revoke()
-			common.CliExit(fmt.Sprintf("Your session has expired. Please re-login using: `%s auth login`", common.RootCommandName))
+			common.CliExit(errors.New(fmt.Sprintf("Your session has expired. Please re-login using: `%s auth login`", common.RootCommandName)))
 		}
 		if authenticator.storedToken.AccessToken != tokens.AccessToken {
 			authenticator.populateValues(oauthTokenToStoredToken(*tokens))
@@ -110,7 +111,7 @@ func (authenticator *Authenticator) login() {
 	eg.Go(authenticator.handleLogin(ctx, cfg))
 
 	if err := eg.Wait(); err != nil {
-		common.CliExit(fmt.Sprintf("Login failed, please check the logs for details at %v", common.LogFileName()))
+		common.CliExit(errors.New(fmt.Sprintf("Login failed, please check the logs for details at %v", common.LogFileName())))
 	}
 }
 
@@ -148,7 +149,7 @@ func startBrowserLoginFlow(ready chan string, ctx context.Context) func() error 
 				err := browser.OpenURL(localCallbackServerUrl)
 
 				if err != nil {
-					browserOpenError := fmt.Sprintf("Unable to open browser for authentication: %s", err)
+					browserOpenError := errors.New(fmt.Sprintf("Unable to open browser for authentication: %s", err))
 					log.Error(browserOpenError)
 					common.CliExit(browserOpenError)
 				}
@@ -188,7 +189,7 @@ func getEmailFromClaims(t oauth2.Token) string {
 func authorizationCodeFlowUrl(url string) string {
 	locationResponse, err := http.Get(url)
 	if err != nil {
-		common.CliExit("Could not retrieve authorization code flow URL. Please retry or contact STRM Privacy support if the problem persists.")
+		common.CliExit(errors.New("Could not retrieve authorization code flow URL. Please retry or contact STRM Privacy support if the problem persists."))
 	}
 
 	return locationResponse.Request.URL.String()
@@ -217,7 +218,7 @@ func findFreePort() int {
 		}
 
 		if !foundOpenPort {
-			common.CliExit("Unable to find free port in range 10000 <= port <= 10009. Please check your running applications and make sure that a port in this range is free.")
+			common.CliExit(errors.New("Unable to find free port in range 10000 <= port <= 10009. Please check your running applications and make sure that a port in this range is free."))
 		}
 
 		return port
