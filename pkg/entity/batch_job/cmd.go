@@ -7,18 +7,19 @@ import (
 )
 
 const (
-	batch_jobs_file_flag_name = "file"
+	batchJobsFileFlagName = "file"
 )
 
 var longDoc = `
-A Batch Job outputs all events in file all events to files in a Sink. This happens with a regular interval.
+A Batch Job reads all events from a Data Connector and writes them to one or more Data Connectors,
+applying our privacy algorithm as defined by the job's configuration file.
 
 Each file follows the JSON Lines format, which is one full JSON document per line.
 
-A [sink](/cli-reference/` + fmt.Sprint(common.RootCommandName) + `/create/sink.md) is a configuration item that defines location
-(Gcloud, AWS, ..) bucket and associated credentials.
+A [Data Connector](/cli-reference/` + fmt.Sprint(common.RootCommandName) + `/create/data-connector.md) is a configuration
+entity that comprises a location (GCS bucket, AWS S3 bucket, ...) and associated credentials.
 
-A sink needs to be created *before* you can create a batch job that uses it
+A Data Connector must be created *before* you can create a batch job that uses it.
 
 ### Usage
 `
@@ -93,9 +94,9 @@ func CreateCmd() *cobra.Command {
 
 	flags := batchJob.Flags()
 
-	flags.StringP(batch_jobs_file_flag_name, "F", "",
+	flags.StringP(batchJobsFileFlagName, "F", "",
 		`The path to the JSON file containing the batch job configuration`)
-	err := batchJob.MarkFlagRequired(batch_jobs_file_flag_name)
+	err := batchJob.MarkFlagRequired(batchJobsFileFlagName)
 	common.CliExit(err)
 
 	return batchJob

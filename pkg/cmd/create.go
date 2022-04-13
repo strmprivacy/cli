@@ -10,7 +10,6 @@ import (
 	"strmprivacy/strm/pkg/entity/kafka_exporter"
 	"strmprivacy/strm/pkg/entity/kafka_user"
 	"strmprivacy/strm/pkg/entity/schema"
-	"strmprivacy/strm/pkg/entity/sink"
 	"strmprivacy/strm/pkg/entity/stream"
 )
 
@@ -23,7 +22,6 @@ var CreateCmd = &cobra.Command{
 
 func init() {
 	CreateCmd.AddCommand(stream.CreateCmd())
-	CreateCmd.AddCommand(sink.CreateCmd())
 	CreateCmd.AddCommand(data_connector.CreateCmd())
 	CreateCmd.AddCommand(batch_exporter.CreateCmd())
 	CreateCmd.AddCommand(batch_job.CreateCmd())

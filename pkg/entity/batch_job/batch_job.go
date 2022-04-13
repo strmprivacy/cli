@@ -55,7 +55,7 @@ func del(id *string) {
 
 func create(cmd *cobra.Command) {
 	flags := cmd.Flags()
-	batchJobFile := util.GetStringAndErr(flags, batch_jobs_file_flag_name)
+	batchJobFile := util.GetStringAndErr(flags, batchJobsFileFlagName)
 
 	batchJobData, err := ioutil.ReadFile(batchJobFile)
 	if err != nil {

@@ -23,9 +23,9 @@ A Batch Exporter listens to a stream and writes all events to files using a Data
 Each file follows the JSON Lines format, which is one full JSON document per line.
 
 A [Data Connector](/cli-reference/` + fmt.Sprint(common.RootCommandName) + `/create/data-connector.md) is a configuration
-entity that comprises location (GCS bucket, AWS S3 bucket, ...) and associated credentials.
+entity that comprises a location (GCS bucket, AWS S3 bucket, ...) and associated credentials.
 
-A Data Connector needs to be created *before* you can create a batch exporter that uses it.
+A Data Connector must be created *before* you can create a batch exporter that uses it.
 
 ### Usage
 `

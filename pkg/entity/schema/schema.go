@@ -133,7 +133,7 @@ func create(cmd *cobra.Command, args *string) {
 	typeString := util.GetStringAndErr(flags, schemaTypeFlag)
 	schemaType, ok := entities.SchemaType_value[typeString]
 	if !ok {
-		common.CliExit(fmt.Sprintf("Can't convert %s to a known consent sink type, types are %v",
+		common.CliExit(fmt.Sprintf("Can't convert %s to a known consent schema type, types are %v",
 			typeString, entities.SchemaType_value))
 	}
 	definitionFilename := util.GetStringAndErr(flags, definitionFlag)
