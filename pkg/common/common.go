@@ -74,6 +74,8 @@ func CliExit(err error) {
 			switch (*st).Code() {
 			case codes.FailedPrecondition:
 				fmt.Fprintln(os.Stderr, "A precondition failed for this command:", (*st).Message())
+			default:
+				fmt.Fprintln(os.Stderr, st)
 			}
 		} else {
 			fmt.Fprintln(os.Stderr, err)
