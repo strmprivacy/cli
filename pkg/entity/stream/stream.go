@@ -2,6 +2,7 @@ package stream
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"strings"
 
@@ -43,7 +44,7 @@ func SetupClient(clientConnection *grpc.ClientConn, ctx context.Context) {
 
 func Get(streamName *string, recursive bool) *streams.GetStreamResponse {
 	if len(strings.TrimSpace(auth.Auth.BillingId())) == 0 {
-		common.CliExit(fmt.Sprintf("No login information found. Use: `%v auth login` first.", common.RootCommandName))
+		common.CliExit(errors.New(fmt.Sprintf("No login information found. Use: `%v auth login` first.", common.RootCommandName)))
 	}
 
 	req := &streams.GetStreamRequest{
@@ -90,13 +91,13 @@ func create(args []string, cmd *cobra.Command) {
 	if len(linkedStream) != 0 {
 		stream.ConsentLevels, err = flags.GetInt32Slice(consentLevelsFlag)
 		if len(stream.ConsentLevels) == 0 {
-			common.CliExit("You need consent levels when creating a derived stream")
+			common.CliExit(errors.New("You need consent levels when creating a derived stream"))
 		}
 		stream.ConsentLevelType, err = parseConsentLevelType(flags)
 		stream.LinkedStream = linkedStream
 	} else {
 		if len(stream.Ref.Name) == 0 {
-			common.CliExit("You must provide a name when creating a source stream")
+			common.CliExit(errors.New("You must provide a name when creating a source stream"))
 		}
 	}
 

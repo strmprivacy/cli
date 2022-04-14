@@ -1,6 +1,7 @@
 package data_connector
 
 import (
+	"errors"
 	"fmt"
 	"github.com/jedib0t/go-pretty/v6/table"
 	"github.com/spf13/cobra"
@@ -27,7 +28,7 @@ func configurePrinterForType(command *cobra.Command, commandType string) util.Pr
 	p := availablePrinters(recursive)[outputFormat+commandType]
 
 	if p == nil {
-		common.CliExit(fmt.Sprintf("Output format '%v' is not supported. Allowed values: %v", outputFormat, common.OutputFormatFlagAllowedValuesText))
+		common.CliExit(errors.New(fmt.Sprintf("Output format '%v' is not supported. Allowed values: %v", outputFormat, common.OutputFormatFlagAllowedValuesText)))
 	}
 
 	return p

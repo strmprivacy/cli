@@ -2,14 +2,18 @@ package common
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/metadata"
+	"google.golang.org/grpc/status"
 	"gopkg.in/natefinch/lumberjack.v2"
+	"os"
 	"runtime"
 	"strings"
 )
@@ -59,16 +63,30 @@ func LogFileName() string {
 	return ConfigPath + "/" + RootCommandName + ".log"
 }
 
-func CliExit(msg interface{}) {
-	if msg != nil {
+func CliExit(err error) {
+	if err != nil {
 		_, file, line, _ := runtime.Caller(1)
-		log.WithFields(log.Fields{"file": file, "line": line}).Error(msg)
-		cobra.CheckErr(msg)
+		log.WithFields(log.Fields{"file": file, "line": line}).Error(err)
+
+		st, ok := status.FromError(err)
+
+		if ok {
+			switch (*st).Code() {
+			case codes.FailedPrecondition:
+				fmt.Fprintln(os.Stderr, "A precondition failed for this command:", (*st).Message())
+			default:
+				fmt.Fprintln(os.Stderr, st)
+			}
+		} else {
+			fmt.Fprintln(os.Stderr, err)
+		}
+
+		os.Exit(1)
 	}
 }
 
 func MissingIdTokenError() {
-	CliExit(fmt.Sprintf("No login information found. Use: `%v auth login` first.", RootCommandName))
+	CliExit(errors.New(fmt.Sprintf("No login information found. Use: `%v auth login` first.", RootCommandName)))
 }
 
 func MissingBillingIdCompletionError(commandPath string) ([]string, cobra.ShellCompDirective) {

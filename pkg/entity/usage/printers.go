@@ -1,6 +1,7 @@
 package usage
 
 import (
+	"errors"
 	"fmt"
 	"github.com/bykof/gostradamus"
 	"github.com/jedib0t/go-pretty/v6/table"
@@ -20,7 +21,7 @@ func configurePrinter(command *cobra.Command) util.Printer {
 	p := availablePrinters()[outputFormat]
 
 	if p == nil {
-		common.CliExit(fmt.Sprintf("Output format '%v' is not supported for usage. Allowed values: %v", outputFormat, common.UsageOutputFormatFlagAllowedValuesText))
+		common.CliExit(errors.New(fmt.Sprintf("Output format '%v' is not supported for usage. Allowed values: %v", outputFormat, common.UsageOutputFormatFlagAllowedValuesText)))
 	}
 
 	return p

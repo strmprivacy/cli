@@ -2,6 +2,7 @@ package batch_exporter
 
 import (
 	"context"
+	"errors"
 	"github.com/spf13/pflag"
 	"github.com/strmprivacy/api-definitions-go/v2/api/data_connectors/v1"
 	"strings"
@@ -108,7 +109,7 @@ func getDataConnectorName(flags *pflag.FlagSet) string {
 		}
 	}
 	if len(dataConnectorName) == 0 || !dataConnectorExists {
-		common.CliExit("You must provide a valid data connector name when creating a batch exporter")
+		common.CliExit(errors.New("You must provide a valid data connector name when creating a batch exporter"))
 	}
 	return dataConnectorName
 }

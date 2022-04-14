@@ -2,6 +2,7 @@ package usage
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"github.com/bykof/gostradamus"
 	"github.com/golang/protobuf/ptypes/duration"
@@ -82,7 +83,7 @@ func interpretInterval(by string) int64 {
 		pat := regexp.MustCompilePOSIX(`^([0-9]+)([mshd])$`)
 		r := pat.FindAllStringSubmatch(strings.ToLower(by), -1)
 		if r == nil {
-			common.CliExit(fmt.Sprintf("%v not understood as interval format", by))
+			common.CliExit(errors.New(fmt.Sprintf("%v not understood as interval format", by)))
 		}
 		lookup := map[string]int64{
 			"m": 60,
@@ -92,7 +93,7 @@ func interpretInterval(by string) int64 {
 		}
 		v, ok := lookup[r[0][2]]
 		if !ok {
-			common.CliExit("Don't understand unit " + r[0][2])
+			common.CliExit(errors.New("Don't understand unit " + r[0][2]))
 		}
 		interval, err = strconv.ParseInt(r[0][1], 10, 64)
 		common.CliExit(err)
