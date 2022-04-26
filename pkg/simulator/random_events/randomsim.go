@@ -76,7 +76,7 @@ func run(cmd *cobra.Command, streamName *string) {
 		ct += 1
 		time.Sleep(interval * time.Millisecond)
 		if !quiet && time.Now().Sub(now) > 5*time.Second {
-			//println("Sent", ct, "events")
+			println("Sent", ct, "events")
 			now = time.Now()
 		}
 	}
