@@ -113,14 +113,14 @@ func printTable(dataConnectors []*entities.DataConnector, recursive bool) {
 
 		switch location := dataConnector.Location.(type) {
 		case *entities.DataConnector_S3Bucket:
-			locationType = "AWS S3"
+			locationType = "Amazon S3 Bucket"
 			locationName = location.S3Bucket.BucketName
 		case *entities.DataConnector_GoogleCloudStorageBucket:
-			locationType = "GCS"
+			locationType = "Google Cloud Storage Bucket"
 			locationName = location.GoogleCloudStorageBucket.BucketName
 		case *entities.DataConnector_AzureBlobStorageContainer:
-			locationType = "Azure Blob Storage"
-			locationName = location.AzureBlobStorageContainer.StorageAccountUri + "/" + location.AzureBlobStorageContainer.ContainerName
+			locationType = "Azure Blob Storage Container"
+			locationName = location.AzureBlobStorageContainer.ContainerName
 		}
 
 		var row table.Row
@@ -148,17 +148,17 @@ func printTable(dataConnectors []*entities.DataConnector, recursive bool) {
 
 	if recursive {
 		header = table.Row{
-			"Data Connector",
+			"Name",
 			"Type",
-			"Location Name",
+			"Target Name",
 			"# Batch Exporters",
 			"# Batch Jobs",
 		}
 	} else {
 		header = table.Row{
-			"Data Connector",
+			"Name",
 			"Type",
-			"Location Name",
+			"Target Name",
 		}
 	}
 
