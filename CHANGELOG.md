@@ -1,3 +1,10 @@
+## [2.0.2](https://github.com/strmprivacy/cli/compare/v2.0.1...v2.0.2) (2022-05-10)
+
+
+### Bug Fixes
+
+* remove glob expansion that leads to failing copy ([03c7c35](https://github.com/strmprivacy/cli/commit/03c7c3580ed506f7b362a34b9b7fcdbc34c080bd))
+
 ## [2.0.1](https://github.com/strmprivacy/cli/compare/v2.0.0...v2.0.1) (2022-05-10)
 
 
