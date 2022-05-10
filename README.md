@@ -58,14 +58,14 @@ Privacy [Configuration directory](#configuration-directory). If a flag is not pr
 *Note: The ordering is the same as specified above, so arguments take precedence over environment variables, which take
 precedence over the configuration file, which takes precedence over the default values.*
 
-| Flag  | Description |
-| ------------- | ------------- |
-| save  | indicates whether the output of create commands is saved to files in your STRM Privacy [Configuration directory](#configuration-directory). Useful in some situations, but be aware that this is sensitive information  |
-| events-auth-url  | used for retrieving/refreshing (JWT) authentication tokens for sending events (with the `simulate` command) |
-| events-api-url | where to send events to (with the `sim` command in the CLI) |
-| api-auth-url  | used for logging in and retrieving/refreshing ([JWT](https://jwt.io/)) authentication tokens  |
-| api-host | used for interacting with the API (e.g. managing streams, sinks, etc) |
-| web-socket-url | used to listen to events with the `listen web-socket` command |
+| Flag  | Description                                                                                                                                                                                                            |
+| ------------- |------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| save  | indicates whether the output of create commands is saved to files in your STRM Privacy [Configuration directory](#configuration-directory). Useful in some situations, but be aware that this is sensitive information |
+| events-auth-url  | used for retrieving/refreshing (JWT) authentication tokens for sending events (with the `simulate` command)                                                                                                            |
+| events-api-url | where to send events to (with the `sim` command in the CLI)                                                                                                                                                            |
+| api-auth-url  | used for logging in and retrieving/refreshing ([JWT](https://jwt.io/)) authentication tokens                                                                                                                           |
+| api-host | used for interacting with the API (e.g. managing streams, data connectors, etc)                                                                                                                                        |
+| web-socket-url | used to listen to events with the `listen web-socket` command                                                                                                                                                          |
 
 ### Default configuration values
 
@@ -95,7 +95,8 @@ manual editing.
 
 In this directory you can also find all entities that have been `save`d (see the [Save](#configuration) option). These
 entities are saved in the following files: `<config-dir>/<Entity>/<name>.json`, where `Entity` is the Entity name,
-i.e. "Stream" or "Sink" and the `name` is the unique name of the created entity, i.e. "MyImportantStream" or "s3-sink".
+i.e. "Stream" or "DataConnector" and the `name` is the unique name of the created entity, i.e. "MyImportantStream" or 
+"s3-data-connector".
 
 ## Getting help
 

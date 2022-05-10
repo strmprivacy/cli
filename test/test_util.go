@@ -120,21 +120,12 @@ func initializeStrmEntities(t *testing.T, tokenFileName string) {
 	// Remove all resources (ugly implementation until we have plain text output in the CLI)
 	nameMatcher := regexp.MustCompile(`"name":"([^"]+)"`)
 
-	sinksOut := ExecuteCliAndGetOutput(t, tokenFileName, "list", "sinks")
-	allSinkNames := nameMatcher.FindAllStringSubmatch(sinksOut, -1)
-	for i := 0; i < len(allSinkNames); i++ {
-		out := ExecuteCliAndGetOutput(t, tokenFileName, "delete", "sink", allSinkNames[i][1], "--recursive")
-		if !strings.HasPrefix(out, "{") {
-			t.Error("delete sink " + allSinkNames[i][1] + " failed with error: " + out)
-		}
-	}
-
 	streamsOut := ExecuteCliAndGetOutput(t, tokenFileName, "list", "streams")
 	allStreamNames := nameMatcher.FindAllStringSubmatch(streamsOut, -1)
 	for i := 0; i < len(allStreamNames); i++ {
 		out := ExecuteCliAndGetOutput(t, tokenFileName, "delete", "stream", allStreamNames[i][1], "--recursive")
 		if !strings.HasPrefix(out, "{") {
-			t.Error("delete stream " + allSinkNames[i][1] + " failed with error: " + out)
+			t.Error("delete stream " + allStreamNames[i][1] + " failed with error: " + out)
 		}
 	}
 }

@@ -2,6 +2,7 @@ package schema
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"strings"
@@ -33,7 +34,7 @@ func Ref(refString *string) *entities.SchemaRef {
 	parts := strings.Split(*refString, "/")
 
 	if len(parts) != 3 {
-		common.CliExit("Schema reference should consist of three parts: <handle>/<name>/<version>")
+		common.CliExit(errors.New("Schema reference should consist of three parts: <handle>/<name>/<version>"))
 	}
 
 	return &entities.SchemaRef{
@@ -133,8 +134,8 @@ func create(cmd *cobra.Command, args *string) {
 	typeString := util.GetStringAndErr(flags, schemaTypeFlag)
 	schemaType, ok := entities.SchemaType_value[typeString]
 	if !ok {
-		common.CliExit(fmt.Sprintf("Can't convert %s to a known consent sink type, types are %v",
-			typeString, entities.SchemaType_value))
+		common.CliExit(errors.New(fmt.Sprintf("Can't convert %s to a known consent schema type, types are %v",
+			typeString, entities.SchemaType_value)))
 	}
 	definitionFilename := util.GetStringAndErr(flags, definitionFlag)
 	definition, err := ioutil.ReadFile(definitionFilename)

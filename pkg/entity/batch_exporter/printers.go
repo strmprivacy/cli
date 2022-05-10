@@ -1,6 +1,7 @@
 package batch_exporter
 
 import (
+	"errors"
 	"fmt"
 	"github.com/jedib0t/go-pretty/v6/table"
 	"github.com/spf13/cobra"
@@ -18,7 +19,7 @@ func configurePrinter(command *cobra.Command) util.Printer {
 	p := availablePrinters()[outputFormat+command.Parent().Name()]
 
 	if p == nil {
-		common.CliExit(fmt.Sprintf("Output format '%v' is not supported. Allowed values: %v", outputFormat, common.OutputFormatFlagAllowedValuesText))
+		common.CliExit(errors.New(fmt.Sprintf("Output format '%v' is not supported. Allowed values: %v", outputFormat, common.OutputFormatFlagAllowedValuesText)))
 	}
 
 	return p
@@ -101,7 +102,7 @@ func printTable(batchExporters []*v1.BatchExporter) {
 		rows = append(rows, table.Row{
 			batchExporter.Ref.Name,
 			streamOrKeyStreamName,
-			batchExporter.SinkName,
+			batchExporter.DataConnectorRef.Name,
 			batchExporter.IncludeExistingEvents,
 			batchExporter.Interval,
 			batchExporter.PathPrefix,
@@ -112,7 +113,7 @@ func printTable(batchExporters []*v1.BatchExporter) {
 		table.Row{
 			"Batch Exporter",
 			"Stream",
-			"Sink",
+			"Data Connector",
 			"Include Existing Events",
 			"Interval",
 			"Path Prefix",

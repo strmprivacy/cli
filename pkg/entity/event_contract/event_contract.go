@@ -3,6 +3,7 @@ package event_contract
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"github.com/spf13/cobra"
 	entities "github.com/strmprivacy/api-definitions-go/v2/api/entities/v1"
@@ -32,7 +33,7 @@ func ref(refString *string) *entities.EventContractRef {
 	parts := strings.Split(*refString, "/")
 
 	if len(parts) != 3 {
-		common.CliExit("Event Contract reference should consist of three parts: <handle>/<name>/<version>")
+		common.CliExit(errors.New("Event Contract reference should consist of three parts: <handle>/<name>/<version>"))
 	}
 
 	return &entities.EventContractRef{
