@@ -15,16 +15,16 @@ then
   git clone git@github.com:strmprivacy/docs.git
   cd docs
   git checkout -b $tag_name
-  rm -rf ./docs/cli-reference/*
-  cp -rf ../generated_docs/* ./docs/cli-reference
+  rm -rf ./docs/cli-reference
+  cp -rf ../generated_docs ./docs/cli-reference
   git add .
   git commit -m "add generated docs (cli branch: ${tag_name})"
   git push -f origin $tag_name
 else
   git clone "https://git:${GITHUB_TOKEN}@github.com/strmprivacy/docs.git"
   cd docs
-  rm -rf ./docs/cli-reference/*
-  cp -rf ../generated_docs/* ./docs/cli-reference
+  rm -rf ./docs/cli-reference
+  cp -rf ../generated_docs ./docs/cli-reference
   git add .
   git commit -m "add generated docs (cli branch: ${tag_name})"
   git push
