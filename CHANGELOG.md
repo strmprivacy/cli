@@ -1,3 +1,19 @@
+# [2.0.0](https://github.com/strmprivacy/cli/compare/v1.24.1...v2.0.0) (2022-05-10)
+
+
+### Features
+
+* add default case for cliexit when err is a grpc status ([f6b715a](https://github.com/strmprivacy/cli/commit/f6b715abfcf5e6b75b57d143249928dac649785a))
+* better cli error handling ([ac3c84f](https://github.com/strmprivacy/cli/commit/ac3c84fbcd3218575fa446942e11f202196dd5a5))
+* **strm-764:** add data-connector commands ([23e07de](https://github.com/strmprivacy/cli/commit/23e07deb0b890a5ce5ca485ca98ea9e58fca76ab))
+* **strm-764:** remove sink commands ([779e0b7](https://github.com/strmprivacy/cli/commit/779e0b7ae75353088dae5407c4fb27943ffa8448))
+* **strm-764:** use data connector api instead of sinks for batch-exporter cmd ([aebb56e](https://github.com/strmprivacy/cli/commit/aebb56eff5f31c251d080476e00ca8d98bc71f11))
+
+
+### BREAKING CHANGES
+
+* **strm-764:** all sink commands have been removed, use the data-connector commands instead
+
 ## [1.24.1](https://github.com/strmprivacy/cli/compare/v1.24.0...v1.24.1) (2022-04-08)
 
 
