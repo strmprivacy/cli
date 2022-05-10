@@ -1,3 +1,10 @@
+## [2.0.1](https://github.com/strmprivacy/cli/compare/v2.0.0...v2.0.1) (2022-05-10)
+
+
+### Bug Fixes
+
+* generate docs before publishing them ([8887423](https://github.com/strmprivacy/cli/commit/88874234562f9fd753a66854a262b662a9458b82))
+
 # [2.0.0](https://github.com/strmprivacy/cli/compare/v1.24.1...v2.0.0) (2022-05-10)
 
 
