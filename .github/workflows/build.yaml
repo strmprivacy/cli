@@ -56,4 +56,5 @@ jobs:
           APIS_USERNAME: ${{secrets.APIS_USERNAME}}
           APIS_EMAIL: ${{secrets.APIS_EMAIL}}
         run: |
+          ./scripts/generate_docs.sh
           ./scripts/publish_docs.sh
