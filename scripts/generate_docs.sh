@@ -22,7 +22,7 @@ then
   make
   ./dist/strm --generate-docs > /dev/null 2>&1
 else
-  ./dist/strm_linux_amd64/strm --generate-docs > /dev/null 2>&1
+  ./dist/strm_linux_amd64_v1/strm --generate-docs > /dev/null 2>&1
 fi
 
 cd generated_docs

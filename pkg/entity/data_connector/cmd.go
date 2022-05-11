@@ -12,9 +12,9 @@ const (
 	credentialsFileFlag = "credentials-file"
 )
 
-var longDoc = `A Data Connector represents a location from and to which data can be read and written. For example, an AWS S3 bucket 
-or a Google Cloud Storage bucket. By itself, a Data Connector does nothing. A Data Connector with valid credentials is
-required when creating a Batch Exporter or Batch Job.
+var longDoc = `A Data Connector represents a location from which data can be read, or to which data can be written. 
+For example, an AWS S3 bucket or a Google Cloud Storage bucket. By itself, a Data Connector does nothing. 
+A Data Connector with valid credentials is required when creating a Batch Exporter or Batch Job.
 
 ### Usage`
 
