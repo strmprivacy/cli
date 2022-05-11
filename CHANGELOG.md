@@ -1,3 +1,10 @@
+## [2.0.3](https://github.com/strmprivacy/cli/compare/v2.0.2...v2.0.3) (2022-05-11)
+
+
+### Bug Fixes
+
+* use correct executable path in generate_docs.sh ([9f2965e](https://github.com/strmprivacy/cli/commit/9f2965e08111e73ef2e4da4b836bf7ac0f2e4535))
+
 ## [2.0.2](https://github.com/strmprivacy/cli/compare/v2.0.1...v2.0.2) (2022-05-10)
 
 
