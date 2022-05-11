@@ -1,3 +1,11 @@
+## [2.0.4](https://github.com/strmprivacy/cli/compare/v2.0.3...v2.0.4) (2022-05-11)
+
+
+### Bug Fixes
+
+* **strm-1003:** exit upon errors with simulating events ([9e2247a](https://github.com/strmprivacy/cli/commit/9e2247a4ce96cac6d7a3f8726a8978811f173c55))
+* **strm-1003:** print amount of events sent for simulator ([2243c71](https://github.com/strmprivacy/cli/commit/2243c71e3c6322ec62f920affebf47d8d8acaec6))
+
 ## [2.0.3](https://github.com/strmprivacy/cli/compare/v2.0.2...v2.0.3) (2022-05-11)
 
 
