@@ -8,13 +8,14 @@ import (
 	"strings"
 	"time"
 
-	"github.com/spf13/cobra"
-	"github.com/strmprivacy/api-definitions-go/v2/api/entities/v1"
 	"strmprivacy/strm/pkg/auth"
 	"strmprivacy/strm/pkg/common"
 	"strmprivacy/strm/pkg/entity/stream"
-	"strmprivacy/strm/pkg/simulator"
+	sim "strmprivacy/strm/pkg/simulator"
 	"strmprivacy/strm/pkg/util"
+
+	"github.com/spf13/cobra"
+	"github.com/strmprivacy/api-definitions-go/v2/api/entities/v1"
 )
 
 // start a random simulator
@@ -42,7 +43,7 @@ func run(cmd *cobra.Command, streamName *string) {
 	sessionPrefix := util.GetStringAndErr(flags, sim.SessionPrefixFlag)
 	gateway := util.GetStringAndErr(flags, sim.EventsApiUrlFlag)
 	quiet := util.GetBoolAndErr(flags, sim.QuietFlag)
-	consentLevels, err := flags.GetStringSlice(sim.ConsentLevelsFlag)
+	purposeLevels, err := flags.GetStringSlice(sim.PurposeLevelsFlag)
 	common.CliExit(err)
 
 	schema := util.GetStringAndErr(flags, sim.SchemaFlag)
@@ -51,8 +52,8 @@ func run(cmd *cobra.Command, streamName *string) {
 		common.CliExit(errors.New(fmt.Sprintf("Can't simulate for schema %s", schema)))
 	}
 
-	if len(consentLevels) == 0 {
-		common.CliExit(errors.New(fmt.Sprintf("%v is not a valid set of consent levels", consentLevels)))
+	if len(purposeLevels) == 0 {
+		common.CliExit(errors.New(fmt.Sprintf("%v is not a valid set of purpose levels", purposeLevels)))
 	}
 
 	if !quiet {
@@ -69,7 +70,7 @@ func run(cmd *cobra.Command, streamName *string) {
 	now := time.Now()
 	for {
 		sessionId := fmt.Sprintf("%s-%d", sessionPrefix, rand.Intn(sessionRange))
-		event := f(randomConsentLevels(consentLevels), sessionId)
+		event := f(randomConsentLevels(purposeLevels), sessionId)
 		token := auth.GetEventToken(s.Ref.BillingId, s.Credentials[0].ClientId, s.Credentials[0].ClientSecret)
 
 		go sender.Send(event, token)

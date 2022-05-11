@@ -1,10 +1,11 @@
 package random_events
 
 import (
-	"github.com/spf13/cobra"
 	"strmprivacy/strm/pkg/common"
 	"strmprivacy/strm/pkg/entity/stream"
-	"strmprivacy/strm/pkg/simulator"
+	sim "strmprivacy/strm/pkg/simulator"
+
+	"github.com/spf13/cobra"
 )
 
 var longDoc = `The global ` + "`simulate`" + ` command runs a simulation with random events against a given Source Stream, using the ClickStream
@@ -30,6 +31,6 @@ func RunCmd() (cmd *cobra.Command) {
 	flags.String(common.ClientIdFlag, "", "Client id to be used for sending data")
 	flags.String(common.ClientSecretFlag, "", "Client secret to be used for sending data")
 	flags.Bool(sim.QuietFlag, false, "don't spam stderr")
-	flags.StringSlice(sim.ConsentLevelsFlag, []string{"", "0", "0/1", "0/1/2", "0/1/2/3"}, "consent levels to be simulated")
+	flags.StringSlice(sim.PurposeLevelsFlag, []string{"", "0", "0/1", "0/1/2", "0/1/2/3"}, "purpose levels to be simulated (these used to be called consent levels)")
 	return simCmd
 }

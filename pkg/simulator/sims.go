@@ -14,7 +14,7 @@ const (
 	EventsApiUrlFlag  = "events-api-url"
 	SessionRangeFlag  = "session-range"
 	SessionPrefixFlag = "session-prefix"
-	ConsentLevelsFlag = "consent-levels"
+	PurposeLevelsFlag = "purpose-levels"
 	QuietFlag         = "quiet"
 	SchemaFlag        = "schema"
 )

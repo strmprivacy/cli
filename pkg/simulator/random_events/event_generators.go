@@ -7,11 +7,11 @@ import (
 	"strmprivacy/strm/pkg/simulator"
 )
 
-func createRandomDemoEvent(consentLevels []int32, sessionId string) sim.StrmPrivacyEvent {
+func createRandomDemoEvent(purposeLevels []int32, sessionId string) sim.StrmPrivacyEvent {
 	event := demoschema.NewDemoEvent()
 	const eventContractRef = "strmprivacy/example/1.3.0"
 	event.StrmMeta = &demoschema.StrmMeta{
-		ConsentLevels:    consentLevels,
+		ConsentLevels:    purposeLevels,
 		EventContractRef: eventContractRef,
 	}
 	event.ConsistentValue = sessionId

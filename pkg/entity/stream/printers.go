@@ -97,6 +97,7 @@ func printTable(streamTreeArray []*v1.StreamTree) {
 		} else {
 			consentLevelType = ""
 		}
+		consentLevelType = util.ReplaceConsent(consentLevelType)
 
 		rows = append(rows, table.Row{
 			stream.Stream.Ref.Name,
@@ -111,8 +112,8 @@ func printTable(streamTreeArray []*v1.StreamTree) {
 		table.Row{
 			"Stream",
 			"Derived",
-			"Consent Level Type",
-			"Consent Levels",
+			"Purpose Level Type",
+			"Purpose Levels",
 			"Enabled",
 		},
 		rows,

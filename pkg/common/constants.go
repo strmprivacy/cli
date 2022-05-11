@@ -18,11 +18,12 @@ const DefaultConfigFilename = "config"
 const DefaultConfigFileSuffix = ".yaml"
 
 var DefaultConfigFileContents = []byte(`# The following configuration options are reflected in the CLI's flags
-# save: true
+# save: false
 # events-auth-url: https://sts.strmprivacy.io
 # events-api-url: https://events.strmprivacy.io/event
 # api-auth-url: https://accounts.strmprivacy.io
 # api-host: api.strmprivacy.io:443
+# web-socket-url: wss://websocket.strmprivacy.io/ws
 # kafka-bootstrap-hosts: export-bootstrap.kafka.strmprivacy.io:9092
 `)
 

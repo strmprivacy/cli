@@ -9,6 +9,7 @@ import (
 	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/proto"
 	"os"
+	"strings"
 	"strmprivacy/strm/pkg/common"
 )
 
@@ -140,4 +141,7 @@ var noBordersStyle = table.Style{
 		TopSeparator:     " ",
 		UnfinishedRow:    "...",
 	},
+}
+func ReplaceConsent(consentLevelType string) string {
+	return strings.Replace(consentLevelType, "CONSENT", "PURPOSE", -1)
 }
