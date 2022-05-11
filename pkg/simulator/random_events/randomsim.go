@@ -13,7 +13,7 @@ import (
 	"strmprivacy/strm/pkg/auth"
 	"strmprivacy/strm/pkg/common"
 	"strmprivacy/strm/pkg/entity/stream"
-	sim "strmprivacy/strm/pkg/simulator"
+	"strmprivacy/strm/pkg/simulator"
 	"strmprivacy/strm/pkg/util"
 )
 
@@ -63,11 +63,7 @@ func run(cmd *cobra.Command, streamName *string) {
 
 	client := http.Client{}
 	var sender sim.Sender
-	if schema == "clickstream" {
-		sender = sim.LegacySender{Client: client, Gateway: gateway, Schema: schema}
-	} else {
-		sender = sim.ModernSender{Client: client, Gateway: gateway, Schema: schema}
-	}
+	sender = sim.ModernSender{Client: client, Gateway: gateway, Schema: schema}
 
 	var ct = 0
 	now := time.Now()
