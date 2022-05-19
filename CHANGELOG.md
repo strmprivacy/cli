@@ -1,3 +1,11 @@
+# [2.1.0](https://github.com/strmprivacy/cli/compare/v2.0.4...v2.1.0) (2022-05-19)
+
+
+### Features
+
+* api 2.35.0 ([85135b0](https://github.com/strmprivacy/cli/commit/85135b04139145da5e58864cc9b32aae6897e9e5))
+* show topics in plain text output ([2d28339](https://github.com/strmprivacy/cli/commit/2d283390c0c92bb71b3d73c53c0bc5c3abb859e6))
+
 ## [2.0.4](https://github.com/strmprivacy/cli/compare/v2.0.3...v2.0.4) (2022-05-11)
 
 
