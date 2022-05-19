@@ -2,7 +2,6 @@ package installation
 
 import (
 	"context"
-	"fmt"
 	"github.com/spf13/cobra"
 	"github.com/strmprivacy/api-definitions-go/v2/api/installations/v1"
 	"google.golang.org/grpc"
@@ -36,9 +35,11 @@ func namesCompletion(cmd *cobra.Command, args []string, complete string) ([]stri
 	if auth.Auth.BillingIdAbsent() {
 		return common.MissingBillingIdCompletionError(cmd.CommandPath())
 	}
+	if len(args) != 0 {
+		return nil, cobra.ShellCompDirectiveNoFileComp
+	}
 	req := &installations.ListInstallationsRequest{}
 	response, err := client.ListInstallations(apiContext, req)
-	fmt.Println(response)
 	if err != nil {
 		return common.GrpcRequestCompletionError(err)
 	}
