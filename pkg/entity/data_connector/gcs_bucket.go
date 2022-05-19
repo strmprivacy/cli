@@ -10,6 +10,7 @@ const (
 
 ### Usage`
 )
+
 func createGcsBucketCmd() *cobra.Command {
 	gcsBucket := &cobra.Command{
 		Use:               "gcs [data-connector-name] [bucket-name]",
@@ -28,8 +29,8 @@ func createGcsBucketCmd() *cobra.Command {
 				Ref: ref(dataConnectorName),
 				Location: &entities.DataConnector_GoogleCloudStorageBucket{
 					GoogleCloudStorageBucket: &entities.GoogleCloudStorageBucketLocation{
-						BucketName:    *bucketName,
-						Credentials:   credentials,
+						BucketName:  *bucketName,
+						Credentials: credentials,
 					},
 				},
 			}

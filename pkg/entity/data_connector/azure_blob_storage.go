@@ -11,7 +11,7 @@ const (
 	tenantIdFlag          = "tenant-id"
 	clientIdFlag          = "client-id"
 	clientSecretFlag      = "client-secret"
-	longDocBlobStorage = `Creates a data connector for an Azure Blob Storage container. Authentication is based on
+	longDocBlobStorage    = `Creates a data connector for an Azure Blob Storage container. Authentication is based on
 Client Secret Credentials, i.e. of an Application Principal.
 
 ### Usage`

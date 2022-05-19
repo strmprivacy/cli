@@ -88,6 +88,10 @@ func (p deletePrinter) Print(data interface{}) {
 
 func printTable(streamTreeArray []*v1.StreamTree) {
 	rows := make([]table.Row, 0, len(streamTreeArray))
+	// topics are only set for CCD installations. We don't yet have the installation
+	// id inside the StreamTree, so we have this workaround to only show a topic
+	// column if any of the shown streams has a topic
+	hasTopics := false
 
 	for _, stream := range streamTreeArray {
 		var consentLevelType string
@@ -98,25 +102,31 @@ func printTable(streamTreeArray []*v1.StreamTree) {
 			consentLevelType = ""
 		}
 
-		rows = append(rows, table.Row{
+		row := table.Row{
 			stream.Stream.Ref.Name,
 			len(stream.Stream.LinkedStream) != 0,
 			consentLevelType,
 			stream.Stream.ConsentLevels,
 			stream.Stream.Enabled,
-		})
+		}
+		if len(stream.Stream.KafkaTopic) != 0 {
+			row = append(row, stream.Stream.KafkaTopic)
+			hasTopics = true
+		}
+		rows = append(rows, row)
 	}
 
-	util.RenderTable(
-		table.Row{
-			"Stream",
-			"Derived",
-			"Consent Level Type",
-			"Consent Levels",
-			"Enabled",
-		},
-		rows,
-	)
+	headers := table.Row{
+		"Stream",
+		"Derived",
+		"Consent Level Type",
+		"Consent Levels",
+		"Enabled",
+	}
+	if hasTopics {
+		headers = append(headers, "Kafka Topic")
+	}
+	util.RenderTable(headers, rows)
 }
 
 func printPlain(streamTreeArray []*v1.StreamTree) {

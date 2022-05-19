@@ -8,7 +8,7 @@ import (
 
 const (
 	assumeRoleArnFlag = "assume-role-arn"
-	longDocS3 = `Creates a data connector for an AWS S3 bucket. An ARN can be specified in case a role should be assumed.
+	longDocS3         = `Creates a data connector for an AWS S3 bucket. An ARN can be specified in case a role should be assumed.
 
 ### Usage`
 )
