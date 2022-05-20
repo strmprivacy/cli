@@ -2,10 +2,9 @@ package context
 
 import (
 	"fmt"
+	"github.com/spf13/cobra"
 	"path"
 	"strmprivacy/strm/pkg/auth"
-
-	"github.com/spf13/cobra"
 	"strmprivacy/strm/pkg/common"
 )
 
@@ -13,6 +12,7 @@ const (
 	configCommandName        = "config"
 	entityInfoCommandName    = "info"
 	billingIdInfoCommandName = "billing-id"
+	accountCommandName       = "account"
 )
 
 func Configuration() *cobra.Command {
@@ -69,6 +69,32 @@ func BillingIdInfo() *cobra.Command {
 	common.CliExit(err)
 	return cmd
 }
+
+func Account() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:               accountCommandName,
+		Short:             "Show the handle of this account",
+		DisableAutoGenTag: true,
+		PreRun: func(cmd *cobra.Command, args []string) {
+			printer = configurePrinter(cmd)
+		},
+		Run: func(cmd *cobra.Command, args []string) {
+			getHandle()
+		},
+	}
+	cmd.Flags().StringP(
+		common.OutputFormatFlag,
+		common.OutputFormatFlagShort,
+		common.OutputFormatJsonRaw,
+		fmt.Sprintf("Configuration output format [%v]", common.AccountOutputFormatFlagAllowedValuesText),
+	)
+	err := cmd.RegisterFlagCompletionFunc(common.OutputFormatFlag, func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		return common.AccountOutputFormatFlagAllowedValues, cobra.ShellCompDirectiveNoFileComp
+	})
+	common.CliExit(err)
+	return cmd
+}
+
 
 func EntityInfo() *cobra.Command {
 	entityInfo := &cobra.Command{
