@@ -23,6 +23,7 @@ import (
 	"strmprivacy/strm/pkg/entity/schema_code"
 	"strmprivacy/strm/pkg/entity/stream"
 	"strmprivacy/strm/pkg/entity/usage"
+	"strmprivacy/strm/pkg/entity/account"
 	"strmprivacy/strm/pkg/util"
 )
 
@@ -63,6 +64,7 @@ func SetupServiceClients(accessToken *string) {
 	event_contract.SetupClient(clientConnection, ctx)
 	usage.SetupClient(clientConnection, ctx)
 	installation.SetupClient(clientConnection, ctx)
+	account.SetupClient(clientConnection, ctx)
 }
 
 func ConfigPath() string {

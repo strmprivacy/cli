@@ -4,12 +4,14 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/jedib0t/go-pretty/v6/list"
-	"github.com/spf13/cobra"
 	"os"
 	"strings"
 	"strmprivacy/strm/pkg/common"
 	"strmprivacy/strm/pkg/util"
+
+	"github.com/jedib0t/go-pretty/v6/list"
+	"github.com/spf13/cobra"
+	"github.com/strmprivacy/api-definitions-go/v2/api/account/v1"
 )
 
 var printer util.Printer
@@ -29,6 +31,8 @@ func configurePrinter(command *cobra.Command) util.Printer {
 			allowedValues = common.ConfigOutputFormatFlagAllowedValuesText
 		case billingIdInfoCommandName:
 			allowedValues = common.ConfigOutputFormatFlagAllowedValuesText
+		case accountCommandName:
+			allowedValues = common.ConfigOutputFormatFlagAllowedValuesText
 		}
 
 		common.CliExit(errors.New(fmt.Sprintf("Output format '%v' is not supported for '%v'. Allowed values: %v", command.CommandPath(), outputFormat, allowedValues)))
@@ -45,6 +49,8 @@ func availablePrinters() map[string]util.Printer {
 		common.OutputFormatPlain + configCommandName:        plainPrinter{},
 		common.OutputFormatJson + configCommandName:         configJsonPrinter{},
 		common.OutputFormatPlain + billingIdInfoCommandName: billingIdPrinter{},
+		common.OutputFormatJsonRaw + accountCommandName:     accountJsonPrinter{},
+		common.OutputFormatPlain + accountCommandName:       accountPlainPrinter{},
 	}
 }
 
@@ -52,6 +58,8 @@ type filepathPrinter struct{}
 type jsonRawPrinter struct{}
 type jsonPrettyPrinter struct{}
 type plainPrinter struct{}
+type accountJsonPrinter struct{}
+type accountPlainPrinter struct{}
 type configJsonPrinter struct{}
 type billingIdPrinter struct{}
 
@@ -71,6 +79,22 @@ func (p jsonPrettyPrinter) Print(data interface{}) {
 	entity, _ := (data).(savedEntity)
 	prettyJson := util.PrettifyJson(util.CompactJson(entity.Contents))
 	fmt.Println(string(prettyJson.Bytes()))
+}
+
+func (p accountJsonPrinter) Print(data interface{}) {
+	entity, _ := (data).(*account.GetAccountDetailsResponse)
+	b, _ := json.Marshal(entity)
+	rawJson := util.CompactJson(b)
+	fmt.Println(string(rawJson.Bytes()))
+}
+
+func (p accountPlainPrinter) Print(data interface{}) {
+	entity, _ := (data).(*account.GetAccountDetailsResponse)
+	fmt.Println(fmt.Sprintf("billing_id: %v", entity.BillingId))
+	fmt.Println(fmt.Sprintf("max_input_streams: %v", entity.MaxInputStreams))
+	fmt.Println(fmt.Sprintf("handle: %v", entity.Handle))
+	fmt.Println(fmt.Sprintf("subscription: %v", entity.Subscription))
+
 }
 
 func (p plainPrinter) Print(data interface{}) {

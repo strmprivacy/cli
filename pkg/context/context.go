@@ -9,6 +9,7 @@ import (
 	"strings"
 	"strmprivacy/strm/pkg/auth"
 	"strmprivacy/strm/pkg/common"
+	"strmprivacy/strm/pkg/entity/account"
 )
 
 type configuration struct {
@@ -58,6 +59,10 @@ func entityInfo(args []string) {
 	printer.Print(entity)
 }
 
+func getHandle() {
+	details := account.GetHandle()
+	printer.Print(details)
+}
 func billingIdInfo() {
 	b, err := auth.GetBillingId()
 	if err != nil {
