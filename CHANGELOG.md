@@ -1,3 +1,11 @@
+# [2.2.0](https://github.com/strmprivacy/cli/compare/v2.1.0...v2.2.0) (2022-05-24)
+
+
+### Features
+
+* strm context account ([4fec282](https://github.com/strmprivacy/cli/commit/4fec2824d8817eeb54dce922737c521a7da9f0b1))
+* type completion for rust ([5fc3eb1](https://github.com/strmprivacy/cli/commit/5fc3eb12ed810fc2ac6b3e6b4c4c6135eb8e274f))
+
 # [2.1.0](https://github.com/strmprivacy/cli/compare/v2.0.4...v2.1.0) (2022-05-19)
 
 
