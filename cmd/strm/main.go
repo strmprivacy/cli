@@ -11,6 +11,7 @@ import (
 	"strmprivacy/strm/pkg/auth"
 	"strmprivacy/strm/pkg/bootstrap"
 	"strmprivacy/strm/pkg/common"
+	"strmprivacy/strm/pkg/context"
 	"strmprivacy/strm/pkg/kafkaconsumer"
 	"strmprivacy/strm/pkg/util"
 	"strmprivacy/strm/pkg/web_socket"
@@ -87,6 +88,8 @@ func rootCmdPreRun() func(cmd *cobra.Command, args []string) error {
 			bootstrap.SetupServiceClients(auth.Auth.GetToken())
 		}
 
+		context.InitActiveProject(cmd.Flags())
+
 		return err
 	}
 }
@@ -103,6 +106,7 @@ func init() {
 		"Token file that contains an access token (default is $HOME/.config/strmprivacy/credentials-<api-auth-url>.json)")
 	persistentFlags.String(web_socket.WebSocketUrl, "wss://websocket.strmprivacy.io/ws", "Websocket to receive events from")
 	persistentFlags.String(kafkaconsumer.KafkaBootstrapHostFlag, "export-bootstrap.kafka.strmprivacy.io:9092", "Kafka bootstrap brokers, separated by comma")
+	persistentFlags.String(context.ProjectFlag, "", "Project to use (defaults to context-configured project)")
 	persistentFlags.StringP(common.OutputFormatFlag, common.OutputFormatFlagShort, common.OutputFormatTable, fmt.Sprintf("Output format [%v]", common.OutputFormatFlagAllowedValuesText))
 
 	err := RootCmd.RegisterFlagCompletionFunc(common.OutputFormatFlag, func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {

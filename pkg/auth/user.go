@@ -38,6 +38,7 @@ func oAuth2Config() oauth2.Config {
 	}
 }
 
+// Todo: remove (eventually, in STRM-1238), first add projectId from context to most places it's currently used
 func (authenticator *Authenticator) BillingId() string {
 	if authenticator.billingId == nil {
 		common.MissingIdTokenError()
@@ -168,6 +169,7 @@ func startBrowserLoginFlow(ready chan string, ctx context.Context) func() error 
 	}
 }
 
+// Todo: we can leave this for now for backwards compatibility, to be removed in STRM-1238
 func getLegacyBillingId(accessToken string) string {
 	clientConnection, ctx := common.SetupGrpc(common.ApiHost, &accessToken)
 	accountClient := account.NewAccountServiceClient(clientConnection)

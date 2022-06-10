@@ -4,7 +4,6 @@ import (
 	"context"
 	"github.com/strmprivacy/api-definitions-go/v2/api/account/v1"
 	"google.golang.org/grpc"
-	"strmprivacy/strm/pkg/auth"
 	"strmprivacy/strm/pkg/common"
 )
 
@@ -17,10 +16,8 @@ func SetupClient(clientConnection *grpc.ClientConn, ctx context.Context) {
 	client = account.NewAccountServiceClient(clientConnection)
 }
 
-func GetHandle() *account.GetAccountDetailsResponse {
-	req := &account.GetAccountDetailsRequest{
-		BillingId: auth.Auth.BillingId(),
-	}
+func GetAccountDetails() *account.GetAccountDetailsResponse {
+	req := &account.GetAccountDetailsRequest{}
 	details, err := client.GetAccountDetails(apiContext, req)
 	common.CliExit(err)
 	return details

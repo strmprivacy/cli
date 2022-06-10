@@ -10,6 +10,7 @@ import (
 	"strings"
 	"strmprivacy/strm/pkg/cmd"
 	"strmprivacy/strm/pkg/common"
+	"strmprivacy/strm/pkg/entity/account"
 	"strmprivacy/strm/pkg/entity/batch_exporter"
 	"strmprivacy/strm/pkg/entity/batch_job"
 	"strmprivacy/strm/pkg/entity/data_connector"
@@ -19,11 +20,11 @@ import (
 	"strmprivacy/strm/pkg/entity/kafka_exporter"
 	"strmprivacy/strm/pkg/entity/kafka_user"
 	"strmprivacy/strm/pkg/entity/key_stream"
+	"strmprivacy/strm/pkg/entity/project"
 	"strmprivacy/strm/pkg/entity/schema"
 	"strmprivacy/strm/pkg/entity/schema_code"
 	"strmprivacy/strm/pkg/entity/stream"
 	"strmprivacy/strm/pkg/entity/usage"
-	"strmprivacy/strm/pkg/entity/account"
 	"strmprivacy/strm/pkg/util"
 )
 
@@ -65,6 +66,7 @@ func SetupServiceClients(accessToken *string) {
 	usage.SetupClient(clientConnection, ctx)
 	installation.SetupClient(clientConnection, ctx)
 	account.SetupClient(clientConnection, ctx)
+	project.SetupClient(clientConnection, ctx)
 }
 
 func ConfigPath() string {
@@ -115,9 +117,8 @@ func InitializeConfig(cmd *cobra.Command) error {
 
 	// When we bind flags to environment variables expect that the
 	// environment variables are prefixed, e.g. a flag like --number
-	// binds to an environment variable STING_NUMBER. This helps
+	// binds to an environment variable STRM_NUMBER. This helps
 	// avoid conflicts.
-	// you could set STRM_BILLINGID for instance
 	viperConfig.SetEnvPrefix(common.EnvPrefix)
 
 	// Bind to environment variables
@@ -137,7 +138,7 @@ func InitializeConfig(cmd *cobra.Command) error {
 func bindFlags(cmd *cobra.Command, v *viper.Viper) {
 	cmd.Flags().VisitAll(func(f *pflag.Flag) {
 		// Environment variables can't have dashes in them, so bind them to their equivalent
-		// keys with underscores, e.g. --favorite-color to STING_FAVORITE_COLOR
+		// keys with underscores, e.g. --favorite-color to STRM_FAVORITE_COLOR
 		if strings.Contains(f.Name, "-") {
 			envVarSuffix := strings.ToUpper(strings.ReplaceAll(f.Name, "-", "_"))
 			err := v.BindEnv(f.Name, fmt.Sprintf("%s_%s", common.EnvPrefix, envVarSuffix))

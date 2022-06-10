@@ -24,6 +24,8 @@ var ApiAuthHost string
 var ApiHost string
 var EventAuthHost string
 
+var ProjectId string
+
 func SetupGrpc(host string, token *string) (*grpc.ClientConn, context.Context) {
 
 	var err error
