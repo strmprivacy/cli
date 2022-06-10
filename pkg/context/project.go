@@ -19,30 +19,31 @@ const defaultProjectFilename = "default_project"
 // a fallback to default project.
 func ResolveProject(f *pflag.FlagSet) {
 
-	activeProjectFilepath := path.Join(common.ConfigPath, defaultProjectFilename)
+	defaultProjectFilePath := path.Join(common.ConfigPath, defaultProjectFilename)
 	projectFlagValue, _ := f.GetString(ProjectFlag)
 
-	if _, err := os.Stat(activeProjectFilepath); (os.IsNotExist(err) || GetDefaultProject() == "") && projectFlagValue == "" {
+	if _, err := os.Stat(defaultProjectFilePath); (os.IsNotExist(err) || GetDefaultProject() == "") && projectFlagValue == "" {
 		initDefaultProject()
+		fmt.Println(fmt.Sprintf("Default project was not yet set, has been set to '%v'. You can set a project "+
+			"with 'strm context project <project-name>'\n", GetDefaultProject()))
 	}
 
 	if projectFlagValue != "" {
-		activeProject := project.GetProject(projectFlagValue)
-		if activeProject == nil {
+		resolvedProject := project.GetProject(projectFlagValue)
+		if resolvedProject == nil {
 			message := fmt.Sprintf("Specified project '%v' does not exist, or you do not have access to it.", projectFlagValue)
 			common.CliExit(errors.New(message))
 		}
-		common.ProjectId = activeProject.Id
+		common.ProjectId = resolvedProject.Id
 	} else {
-		activeProject := project.GetProject(GetDefaultProject())
-		if activeProject == nil {
-			message := fmt.Sprintf("Default project '%v' does not exist, or you do not have access to it. " +
-				"A new default we be set.", GetDefaultProject())
-			fmt.Println(message)
+		defaultProject := GetDefaultProject()
+		resolvedProject := project.GetProject(defaultProject)
+		if resolvedProject == nil {
 			initDefaultProject()
-			os.Exit(1)
+			common.CliExit(errors.New(fmt.Sprintf("Default project '%v' does not exist, or you do not have access " +
+				"to it. The following project has been set as default instead: %v", defaultProject, GetDefaultProject())))
 		}
-		common.ProjectId = activeProject.Id
+		common.ProjectId = resolvedProject.Id
 	}
 }
 
@@ -60,13 +61,13 @@ func SetDefaultProject(projectName string) {
 }
 
 func GetDefaultProject() string {
-	activeProjectFilepath := path.Join(common.ConfigPath, defaultProjectFilename)
+	defaultProjectFilePath := path.Join(common.ConfigPath, defaultProjectFilename)
 
-	bytes, err := ioutil.ReadFile(activeProjectFilepath)
+	bytes, err := ioutil.ReadFile(defaultProjectFilePath)
 	common.CliExit(err)
-	activeProject := string(bytes)
-	log.Infoln("Current default project is: " + activeProject)
-	return activeProject
+	defaultProject := string(bytes)
+	log.Infoln("Current default project is: " + defaultProject)
+	return defaultProject
 }
 
 func initDefaultProject() {
@@ -76,16 +77,13 @@ func initDefaultProject() {
 	}
 	firstProjectName := projects.Projects[0].Name
 	saveDefaultProject(firstProjectName)
-	message := fmt.Sprintf("Default project was not yet set, has been set to '%v'. You can set a project with 'strm context project <project-name>'\n", firstProjectName)
-	log.Infoln(message)
-	fmt.Println(message)
 }
 
 func saveDefaultProject(projectName string) {
-	activeProjectFilepath := path.Join(common.ConfigPath, defaultProjectFilename)
+	defaultProjectFilepath := path.Join(common.ConfigPath, defaultProjectFilename)
 
 	err := ioutil.WriteFile(
-		activeProjectFilepath,
+		defaultProjectFilepath,
 		[]byte(projectName),
 		0644,
 	)

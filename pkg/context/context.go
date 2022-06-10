@@ -114,6 +114,5 @@ func findConfigFile() string {
 }
 
 func showDefaultProject() {
-	activeProject := GetDefaultProject()
-	printer.Print("Default project: " + activeProject)
+	printer.Print("Default project: " + GetDefaultProject())
 }
