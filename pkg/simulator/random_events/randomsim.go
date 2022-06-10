@@ -19,7 +19,11 @@ import (
 
 // start a random simulator
 func run(cmd *cobra.Command, streamName *string) {
-	s := &entities.Stream{Ref: &entities.StreamRef{BillingId: auth.Auth.BillingId(), Name: *streamName}}
+	s := &entities.Stream{Ref: &entities.StreamRef{
+		BillingId: auth.Auth.BillingId(),
+		ProjectId: common.ProjectId,
+		Name: *streamName,
+	}}
 	flags := cmd.Flags()
 	// loads Stream definition from save version
 	if err := util.TryLoad(s, streamName); err != nil {

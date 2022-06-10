@@ -18,7 +18,11 @@ var client kafka_clusters.KafkaClustersServiceClient
 var apiContext context.Context
 
 func ref(n *string) *entities.KafkaClusterRef {
-	return &entities.KafkaClusterRef{BillingId: auth.Auth.BillingId(), Name: *n}
+	return &entities.KafkaClusterRef{
+		BillingId: auth.Auth.BillingId(),
+		ProjectId: common.ProjectId,
+		Name: *n,
+	}
 }
 
 func SetupClient(clientConnection *grpc.ClientConn, ctx context.Context) {
@@ -27,7 +31,10 @@ func SetupClient(clientConnection *grpc.ClientConn, ctx context.Context) {
 }
 
 func list() {
-	req := &kafka_clusters.ListKafkaClustersRequest{BillingId: auth.Auth.BillingId()}
+	req := &kafka_clusters.ListKafkaClustersRequest{
+		BillingId: auth.Auth.BillingId(),
+		ProjectId: common.ProjectId,
+	}
 	response, err := client.ListKafkaClusters(apiContext, req)
 	common.CliExit(err)
 	printer.Print(response)
@@ -50,7 +57,10 @@ func NamesCompletion(cmd *cobra.Command, args []string, complete string) ([]stri
 		return nil, cobra.ShellCompDirectiveNoFileComp
 	}
 
-	req := &kafka_clusters.ListKafkaClustersRequest{BillingId: auth.Auth.BillingId()}
+	req := &kafka_clusters.ListKafkaClustersRequest{
+		BillingId: auth.Auth.BillingId(),
+		ProjectId: common.ProjectId,
+	}
 	response, err := client.ListKafkaClusters(apiContext, req)
 
 	if err != nil {

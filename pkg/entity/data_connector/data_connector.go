@@ -23,6 +23,7 @@ func SetupClient(clientConnection *grpc.ClientConn, ctx context.Context) {
 func list(recursive bool) {
 	req := &data_connectors.ListDataConnectorsRequest{
 		BillingId:          auth.Auth.BillingId(),
+		ProjectId:          common.ProjectId,
 		Recursive:          recursive,
 		IncludeCredentials: false,
 	}
@@ -62,7 +63,11 @@ func create(dataConnector *entities.DataConnector) {
 }
 
 func ref(name *string) *entities.DataConnectorRef {
-	return &entities.DataConnectorRef{BillingId: auth.Auth.BillingId(), Name: *name}
+	return &entities.DataConnectorRef{
+		BillingId: auth.Auth.BillingId(),
+		ProjectId: common.ProjectId,
+		Name: *name,
+	}
 }
 
 func readCredentialsFile(flags *pflag.FlagSet) string {

@@ -88,7 +88,8 @@ func rootCmdPreRun() func(cmd *cobra.Command, args []string) error {
 			bootstrap.SetupServiceClients(auth.Auth.GetToken())
 		}
 
-		context.InitActiveProject(cmd.Flags())
+		context.ResolveProject(cmd.Flags())
+		log.Infoln("Resolved projectId: " + common.ProjectId)
 
 		return err
 	}

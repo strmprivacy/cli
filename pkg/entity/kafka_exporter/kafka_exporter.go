@@ -22,7 +22,11 @@ func SetupClient(clientConnection *grpc.ClientConn, ctx context.Context) {
 
 func Get(name *string) *kafka_exporters.GetKafkaExporterResponse {
 	req := &kafka_exporters.GetKafkaExporterRequest{
-		Ref: &entities.KafkaExporterRef{BillingId: auth.Auth.BillingId(), Name: *name},
+		Ref: &entities.KafkaExporterRef{
+			BillingId: auth.Auth.BillingId(),
+			ProjectId: common.ProjectId,
+			Name: *name,
+		},
 	}
 	exporter, err := client.GetKafkaExporter(apiContext, req)
 	common.CliExit(err)
@@ -31,7 +35,10 @@ func Get(name *string) *kafka_exporters.GetKafkaExporterResponse {
 
 func list(recursive bool) {
 	// TODO need api recursive addition
-	req := &kafka_exporters.ListKafkaExportersRequest{BillingId: auth.Auth.BillingId()}
+	req := &kafka_exporters.ListKafkaExportersRequest{
+		BillingId: auth.Auth.BillingId(),
+		ProjectId: common.ProjectId,
+	}
 	response, err := client.ListKafkaExporters(apiContext, req)
 	common.CliExit(err)
 	printer.Print(response)
@@ -43,7 +50,11 @@ func get(name *string, recursive bool) {
 }
 
 func del(name *string, recursive bool) {
-	exporterRef := &entities.KafkaExporterRef{BillingId: auth.Auth.BillingId(), Name: *name}
+	exporterRef := &entities.KafkaExporterRef{
+		BillingId: auth.Auth.BillingId(),
+		ProjectId: common.ProjectId,
+		Name: *name,
+	}
 	exporter := Get(name)
 
 	req := &kafka_exporters.DeleteKafkaExporterRequest{Ref: exporterRef, Recursive: recursive}
@@ -64,8 +75,15 @@ func create(name *string, cmd *cobra.Command) {
 
 	// key streams not yet supported in data model!
 	exporter := &entities.KafkaExporter{
-		StreamRef: &entities.StreamRef{BillingId: auth.Auth.BillingId(), Name: *name},
-		Ref:       &entities.KafkaExporterRef{BillingId: auth.Auth.BillingId()},
+		StreamRef: &entities.StreamRef{
+			BillingId: auth.Auth.BillingId(),
+			ProjectId: common.ProjectId,
+			Name: *name,
+		},
+		Ref:       &entities.KafkaExporterRef{
+			BillingId: auth.Auth.BillingId(),
+			ProjectId: common.ProjectId,
+		},
 	}
 
 	response, err := client.CreateKafkaExporter(
@@ -93,7 +111,10 @@ func NamesCompletion(cmd *cobra.Command, args []string, complete string) ([]stri
 		return nil, cobra.ShellCompDirectiveNoFileComp
 	}
 
-	req := &kafka_exporters.ListKafkaExportersRequest{BillingId: auth.Auth.BillingId()}
+	req := &kafka_exporters.ListKafkaExportersRequest{
+		BillingId: auth.Auth.BillingId(),
+		ProjectId: common.ProjectId,
+	}
 	response, err := client.ListKafkaExporters(apiContext, req)
 
 	if err != nil {

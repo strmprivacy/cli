@@ -19,7 +19,10 @@ func SetupClient(clientConnection *grpc.ClientConn, ctx context.Context) {
 }
 
 func list() {
-	req := &key_streams.ListKeyStreamsRequest{BillingId: auth.Auth.BillingId()}
+	req := &key_streams.ListKeyStreamsRequest{
+		BillingId: auth.Auth.BillingId(),
+		ProjectId: common.ProjectId,
+	}
 	response, err := client.ListKeyStreams(apiContext, req)
 	common.CliExit(err)
 	printer.Print(response)
@@ -33,7 +36,11 @@ func get(name *string) {
 }
 
 func ref(n *string) *entities.KeyStreamRef {
-	return &entities.KeyStreamRef{BillingId: auth.Auth.BillingId(), Name: *n}
+	return &entities.KeyStreamRef{
+		BillingId: auth.Auth.BillingId(),
+		ProjectId: common.ProjectId,
+		Name: *n,
+	}
 }
 
 func NamesCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
@@ -45,7 +52,10 @@ func NamesCompletion(cmd *cobra.Command, args []string, complete string) ([]stri
 		return nil, cobra.ShellCompDirectiveNoFileComp
 	}
 
-	req := &key_streams.ListKeyStreamsRequest{BillingId: auth.Auth.BillingId()}
+	req := &key_streams.ListKeyStreamsRequest{
+		BillingId: auth.Auth.BillingId(),
+		ProjectId: common.ProjectId,
+	}
 	response, err := client.ListKeyStreams(apiContext, req)
 
 	if err != nil {

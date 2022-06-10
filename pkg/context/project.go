@@ -14,10 +14,10 @@ import (
 
 const defaultProjectFilename = "default_project"
 
-// InitActiveProject sets the active project as a global variable under common, if it could be resolved.
+// ResolveProject resolves the project to use and makes its ID globally available.
 // The value passed through the flag takes precedence, then the value stored in the config dir, and finally
 // a fallback to default project.
-func InitActiveProject(f *pflag.FlagSet) {
+func ResolveProject(f *pflag.FlagSet) {
 
 	activeProjectFilepath := path.Join(common.ConfigPath, defaultProjectFilename)
 	projectFlagValue, _ := f.GetString(ProjectFlag)

@@ -53,7 +53,9 @@ func SetupClient(clientConnection *grpc.ClientConn, ctx context.Context) {
 }
 
 func list() {
-	req := &event_contracts.ListEventContractsRequest{BillingId: auth.Auth.BillingId()}
+	req := &event_contracts.ListEventContractsRequest{
+		BillingId: auth.Auth.BillingId(),
+	}
 	response, err := client.ListEventContracts(apiContext, req)
 	common.CliExit(err)
 	printer.Print(response)
@@ -62,6 +64,7 @@ func list() {
 func del(name *string) {
 	req := &event_contracts.DeleteEventContractRequest{
 		BillingId:        auth.Auth.BillingId(),
+		ProjectId:        common.ProjectId,
 		EventContractRef: ref(name)}
 	response, err := client.DeleteEventContract(apiContext, req)
 	common.CliExit(err)
@@ -72,6 +75,7 @@ func del(name *string) {
 func activate(name *string) {
 	req := &event_contracts.ActivateEventContractRequest{
 		BillingId:        auth.Auth.BillingId(),
+		ProjectId: common.ProjectId,
 		EventContractRef: ref(name)}
 	response, err := client.ActivateEventContract(apiContext, req)
 	common.CliExit(err)
@@ -82,6 +86,7 @@ func activate(name *string) {
 func archive(name *string) {
 	req := &event_contracts.ArchiveEventContractRequest{
 		BillingId:        auth.Auth.BillingId(),
+		ProjectId: common.ProjectId,
 		EventContractRef: ref(name)}
 	response, err := client.ArchiveEventContract(apiContext, req)
 	common.CliExit(err)
@@ -109,6 +114,7 @@ func create(cmd *cobra.Command, contractReference *string) {
 
 	req := &event_contracts.CreateEventContractRequest{
 		BillingId: auth.Auth.BillingId(),
+		ProjectId: common.ProjectId,
 		EventContract: &entities.EventContract{
 			Ref:         ref(contractReference),
 			SchemaRef:   schema.Ref(&schemaRef),

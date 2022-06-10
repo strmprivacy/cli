@@ -27,7 +27,10 @@ func SetupClient(clientConnection *grpc.ClientConn, ctx context.Context) {
 }
 
 func list() {
-	req := &batch_exporters.ListBatchExportersRequest{BillingId: auth.Auth.BillingId()}
+	req := &batch_exporters.ListBatchExportersRequest{
+		BillingId: auth.Auth.BillingId(),
+		ProjectId: common.ProjectId,
+	}
 	response, err := client.ListBatchExporters(apiContext, req)
 	common.CliExit(err)
 
@@ -36,7 +39,9 @@ func list() {
 
 func get(name *string, _ *cobra.Command) {
 	ref := &entities.BatchExporterRef{
-		Name: *name, BillingId: auth.Auth.BillingId(),
+		BillingId: auth.Auth.BillingId(),
+		ProjectId: common.ProjectId,
+		Name:      *name,
 	}
 	req := &batch_exporters.GetBatchExporterRequest{Ref: ref}
 	response, err := client.GetBatchExporter(apiContext, req)
@@ -46,7 +51,10 @@ func get(name *string, _ *cobra.Command) {
 
 func del(name *string) {
 	req := &batch_exporters.DeleteBatchExporterRequest{Ref: &entities.BatchExporterRef{
-		BillingId: auth.Auth.BillingId(), Name: *name}}
+		BillingId: auth.Auth.BillingId(),
+		ProjectId: common.ProjectId,
+		Name:      *name,
+	}}
 	response, err := client.DeleteBatchExporter(apiContext, req)
 	common.CliExit(err)
 	printer.Print(response)
@@ -67,11 +75,13 @@ func create(streamName *string, cmd *cobra.Command) {
 
 	exporter := &entities.BatchExporter{
 		Ref: &entities.BatchExporterRef{
-			Name:      exporterName,
 			BillingId: auth.Auth.BillingId(),
+			ProjectId: common.ProjectId,
+			Name:      exporterName,
 		},
 		DataConnectorRef: &entities.DataConnectorRef{
 			BillingId: auth.Auth.BillingId(),
+			ProjectId: common.ProjectId,
 			Name:      dataConnectorName,
 		},
 		Interval:              &interval,
@@ -81,11 +91,17 @@ func create(streamName *string, cmd *cobra.Command) {
 	if keyStream {
 		exporter.StreamOrKeyStreamRef = &entities.BatchExporter_KeyStreamRef{
 			KeyStreamRef: &entities.KeyStreamRef{
-				Name: *streamName, BillingId: auth.Auth.BillingId()}}
+				BillingId: auth.Auth.BillingId(),
+				ProjectId: common.ProjectId,
+				Name:      *streamName,
+			}}
 	} else {
 		exporter.StreamOrKeyStreamRef = &entities.BatchExporter_StreamRef{
 			StreamRef: &entities.StreamRef{
-				Name: *streamName, BillingId: auth.Auth.BillingId()}}
+				BillingId: auth.Auth.BillingId(),
+				ProjectId: common.ProjectId,
+				Name:      *streamName,
+			}}
 	}
 
 	response, err := client.CreateBatchExporter(apiContext,
@@ -115,7 +131,10 @@ func getDataConnectorName(flags *pflag.FlagSet) string {
 }
 
 func getDataConnectorNames() []string {
-	req := &data_connectors.ListDataConnectorsRequest{BillingId: auth.Auth.BillingId()}
+	req := &data_connectors.ListDataConnectorsRequest{
+		BillingId: auth.Auth.BillingId(),
+		ProjectId: common.ProjectId,
+	}
 	response, err := data_connector.Client.ListDataConnectors(apiContext, req)
 
 	common.CliExit(err)
@@ -136,7 +155,10 @@ func namesCompletion(cmd *cobra.Command, args []string, complete string) ([]stri
 	if auth.Auth.BillingIdAbsent() {
 		return common.MissingBillingIdCompletionError(cmd.CommandPath())
 	}
-	req := &batch_exporters.ListBatchExportersRequest{BillingId: auth.Auth.BillingId()}
+	req := &batch_exporters.ListBatchExportersRequest{
+		BillingId: auth.Auth.BillingId(),
+		ProjectId: common.ProjectId,
+	}
 	response, err := client.ListBatchExporters(apiContext, req)
 
 	if err != nil {

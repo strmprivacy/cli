@@ -17,7 +17,11 @@ var client kafka_users.KafkaUsersServiceClient
 var apiContext context.Context
 
 func ref(n *string) *entities.KafkaUserRef {
-	return &entities.KafkaUserRef{BillingId: auth.Auth.BillingId(), Name: *n}
+	return &entities.KafkaUserRef{
+		BillingId: auth.Auth.BillingId(),
+		ProjectId: common.ProjectId,
+		Name: *n,
+	}
 }
 
 func SetupClient(clientConnection *grpc.ClientConn, ctx context.Context) {
@@ -29,6 +33,7 @@ func list(exporterName *string) {
 	req := &kafka_users.ListKafkaUsersRequest{
 		Ref: &entities.KafkaExporterRef{
 			BillingId: auth.Auth.BillingId(),
+			ProjectId: common.ProjectId,
 			Name:      *exporterName,
 		},
 	}
@@ -61,6 +66,7 @@ func create(kafkaExporterName *string, cmd *cobra.Command) {
 	kafkaUser := &entities.KafkaUser{
 		Ref: &entities.KafkaUserRef{
 			BillingId: auth.Auth.BillingId(),
+			ProjectId: common.ProjectId,
 		},
 		KafkaExporterName: exporter.Ref.Name,
 	}
@@ -87,7 +93,10 @@ func namesCompletion(cmd *cobra.Command, args []string, complete string) ([]stri
 	}
 
 	req := &kafka_users.ListKafkaUsersRequest{
-		Ref: &entities.KafkaExporterRef{BillingId: auth.Auth.BillingId()},
+		Ref: &entities.KafkaExporterRef{
+			BillingId: auth.Auth.BillingId(),
+			ProjectId: common.ProjectId,
+		},
 	}
 	response, err := client.ListKafkaUsers(apiContext, req)
 
