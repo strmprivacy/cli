@@ -2,6 +2,8 @@ package project
 
 import (
 	"context"
+	"errors"
+	"fmt"
 	"github.com/strmprivacy/api-definitions-go/v2/api/entities/v1"
 	"github.com/strmprivacy/api-definitions-go/v2/api/projects/v1"
 	"google.golang.org/grpc"
@@ -17,6 +19,9 @@ func SetupClient(clientConnection *grpc.ClientConn, ctx context.Context) {
 }
 
 func ListProjects() *projects.ListProjectsResponse {
+	if apiContext == nil {
+		common.CliExit(errors.New(fmt.Sprint("No login information found. Use: `dstrm auth login` first.")))
+	}
 	req := &projects.ListProjectsRequest{}
 	response, err := client.ListProjects(apiContext, req)
 	common.CliExit(err)

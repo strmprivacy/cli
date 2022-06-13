@@ -49,10 +49,10 @@ func Get(streamName *string, recursive bool) *streams.GetStreamResponse {
 
 	req := &streams.GetStreamRequest{
 		Recursive: recursive,
-		Ref:       &entities.StreamRef{
+		Ref: &entities.StreamRef{
 			BillingId: auth.Auth.BillingId(),
 			ProjectId: common.ProjectId,
-			Name: *streamName,
+			Name:      *streamName,
 		},
 	}
 	stream, err := client.GetStream(apiContext, req)
@@ -82,7 +82,7 @@ func del(streamName *string, recursive bool) {
 		Recursive: recursive, Ref: &entities.StreamRef{
 			BillingId: auth.Auth.BillingId(),
 			ProjectId: common.ProjectId,
-			Name: *streamName,
+			Name:      *streamName,
 		},
 	}
 	_, err := client.DeleteStream(apiContext, req)

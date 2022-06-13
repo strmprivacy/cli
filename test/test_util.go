@@ -164,8 +164,8 @@ func performCliLogin(t *testing.T, tokenFileName string) {
 
 	eg.Go(func() error {
 		out := ExecuteCliAndGetOutput(t, tokenFileName, "auth", "login")
-		assert.Matches(t, out, ".*https://accounts\\.dev\\.strmprivacy\\.io/auth/realms/users/protocol/openid-connect/auth.*")
-		assert.Matches(t, out, ".*You are now logged in as \\[clitest-dev@strmprivacy\\.io\\]\\.")
+		assert.Matches(t, out, fmt.Sprintf(".*%v/auth/realms/users/protocol/openid-connect/auth.*", os.Getenv("STRM_API_AUTH_URL")))
+		assert.Matches(t, out, fmt.Sprintf(".*You are now logged in as \\[%v\\]\\.", os.Getenv("STRM_TEST_USER_EMAIL")))
 
 		return nil
 	})

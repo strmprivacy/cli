@@ -74,7 +74,6 @@ func rootCmdPreRun() func(cmd *cobra.Command, args []string) error {
 	return func(cmd *cobra.Command, args []string) error {
 		util.CreateConfigDirAndFileIfNotExists()
 		err := bootstrap.InitializeConfig(cmd)
-
 		log.Infoln(fmt.Sprintf("Executing command: %v", cmd.CommandPath()))
 		cmd.Flags().Visit(func(flag *pflag.Flag) {
 			log.Infoln(fmt.Sprintf("flag %v=%v", flag.Name, flag.Value))
@@ -86,10 +85,9 @@ func rootCmdPreRun() func(cmd *cobra.Command, args []string) error {
 
 		if auth.Auth.LoadLogin() == nil {
 			bootstrap.SetupServiceClients(auth.Auth.GetToken())
+			context.ResolveProject(cmd.Flags())
+			log.Infoln("Resolved projectId: " + common.ProjectId)
 		}
-
-		context.ResolveProject(cmd.Flags())
-		log.Infoln("Resolved projectId: " + common.ProjectId)
 
 		return err
 	}
