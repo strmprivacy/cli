@@ -130,7 +130,7 @@ func EntityInfo() *cobra.Command {
 func Project() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:               projectCommandName + " [name]",
-		Short:             "Show or set the default project",
+		Short:             "Show or set the active project",
 		Args:			   cobra.MinimumNArgs(0),
 		DisableAutoGenTag: true,
 		PreRun: func(cmd *cobra.Command, args []string) {
@@ -138,9 +138,9 @@ func Project() *cobra.Command {
 		},
 		Run: func(cmd *cobra.Command, args []string) {
 			if len(args) > 0 {
-				SetDefaultProject(args[0])
+				SetActiveProject(args[0])
 			} else {
-				showDefaultProject()
+				showActiveProject()
 			}
 		},
 	}

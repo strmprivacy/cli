@@ -113,6 +113,6 @@ func findConfigFile() string {
 	return configFilepath
 }
 
-func showDefaultProject() {
-	printer.Print("Default project: " + GetDefaultProject())
+func showActiveProject() {
+	printer.Print("Active project: " + GetActiveProject())
 }

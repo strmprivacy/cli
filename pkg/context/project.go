@@ -12,20 +12,20 @@ import (
 	"strmprivacy/strm/pkg/entity/project"
 )
 
-const defaultProjectFilename = "default_project"
+const activeProjectFilename = "active_project"
 
 // ResolveProject resolves the project to use and makes its ID globally available.
 // The value passed through the flag takes precedence, then the value stored in the config dir, and finally
 // a fallback to default project.
 func ResolveProject(f *pflag.FlagSet) {
 
-	defaultProjectFilePath := path.Join(common.ConfigPath, defaultProjectFilename)
+	activeProjectFilePath := path.Join(common.ConfigPath, activeProjectFilename)
 	projectFlagValue, _ := f.GetString(ProjectFlag)
 
-	if _, err := os.Stat(defaultProjectFilePath); (os.IsNotExist(err) || GetDefaultProject() == "") && projectFlagValue == "" {
-		initDefaultProject()
-		fmt.Println(fmt.Sprintf("Default project was not yet set, has been set to '%v'. You can set a project "+
-			"with 'strm context project <project-name>'\n", GetDefaultProject()))
+	if _, err := os.Stat(activeProjectFilePath); (os.IsNotExist(err) || GetActiveProject() == "") && projectFlagValue == "" {
+		initActiveProject()
+		fmt.Println(fmt.Sprintf("Active project was not yet set, has been set to '%v'. You can set a project "+
+			"with 'strm context project <project-name>'\n", GetActiveProject()))
 	}
 
 	if projectFlagValue != "" {
@@ -36,21 +36,21 @@ func ResolveProject(f *pflag.FlagSet) {
 		}
 		common.ProjectId = resolvedProject.Id
 	} else {
-		defaultProject := GetDefaultProject()
-		resolvedProject := project.GetProject(defaultProject)
+		activeProject := GetActiveProject()
+		resolvedProject := project.GetProject(activeProject)
 		if resolvedProject == nil {
-			initDefaultProject()
-			common.CliExit(errors.New(fmt.Sprintf("Default project '%v' does not exist, or you do not have access " +
-				"to it. The following project has been set as default instead: %v", defaultProject, GetDefaultProject())))
+			initActiveProject()
+			common.CliExit(errors.New(fmt.Sprintf("Active project '%v' does not exist, or you do not have access " +
+				"to it. The following project has been set instead: %v", activeProject, GetActiveProject())))
 		}
 		common.ProjectId = resolvedProject.Id
 	}
 }
 
-func SetDefaultProject(projectName string) {
+func SetActiveProject(projectName string) {
 	if project.GetProject(projectName) != nil {
-		saveDefaultProject(projectName)
-		message := "Default project set to: " + projectName
+		saveActiveProject(projectName)
+		message := "Active project set to: " + projectName
 		log.Infoln(message)
 		fmt.Println(message)
 	} else {
@@ -60,30 +60,30 @@ func SetDefaultProject(projectName string) {
 	}
 }
 
-func GetDefaultProject() string {
-	defaultProjectFilePath := path.Join(common.ConfigPath, defaultProjectFilename)
+func GetActiveProject() string {
+	activeProjectFilePath := path.Join(common.ConfigPath, activeProjectFilename)
 
-	bytes, err := ioutil.ReadFile(defaultProjectFilePath)
+	bytes, err := ioutil.ReadFile(activeProjectFilePath)
 	common.CliExit(err)
-	defaultProject := string(bytes)
-	log.Infoln("Current default project is: " + defaultProject)
-	return defaultProject
+	activeProject := string(bytes)
+	log.Infoln("Current active project is: " + activeProject)
+	return activeProject
 }
 
-func initDefaultProject() {
+func initActiveProject() {
 	projects := project.ListProjects()
 	if len(projects.Projects) == 0 {
 		common.CliExit(errors.New("you do not have access to any projects; create a project first, or ask to be granted access to one"))
 	}
 	firstProjectName := projects.Projects[0].Name
-	saveDefaultProject(firstProjectName)
+	saveActiveProject(firstProjectName)
 }
 
-func saveDefaultProject(projectName string) {
-	defaultProjectFilepath := path.Join(common.ConfigPath, defaultProjectFilename)
+func saveActiveProject(projectName string) {
+	activeProjectFilepath := path.Join(common.ConfigPath, activeProjectFilename)
 
 	err := ioutil.WriteFile(
-		defaultProjectFilepath,
+		activeProjectFilepath,
 		[]byte(projectName),
 		0644,
 	)
