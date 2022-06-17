@@ -24,7 +24,10 @@ func SetupClient(clientConnection *grpc.ClientConn, ctx context.Context) {
 }
 
 func list() {
-	req := &batch_jobs.ListBatchJobsRequest{BillingId: auth.Auth.BillingId()}
+	req := &batch_jobs.ListBatchJobsRequest{
+		BillingId: auth.Auth.BillingId(),
+		ProjectId: common.ProjectId,
+	}
 	response, err := client.ListBatchJobs(apiContext, req)
 	common.CliExit(err)
 
@@ -34,6 +37,7 @@ func list() {
 func get(id *string, _ *cobra.Command) {
 	ref := &entities.BatchJobRef{
 		BillingId: auth.Auth.BillingId(),
+		ProjectId: common.ProjectId,
 		Id:        *id,
 	}
 	req := &batch_jobs.GetBatchJobRequest{Ref: ref}
@@ -45,7 +49,9 @@ func get(id *string, _ *cobra.Command) {
 func del(id *string) {
 	req := &batch_jobs.DeleteBatchJobRequest{
 		Ref: &entities.BatchJobRef{
-			BillingId: auth.Auth.BillingId(), Id: *id,
+			BillingId: auth.Auth.BillingId(),
+			ProjectId: common.ProjectId,
+			Id: *id,
 		},
 	}
 	response, err := client.DeleteBatchJob(apiContext, req)
@@ -70,6 +76,7 @@ func create(cmd *cobra.Command) {
 
 	createBatchJobRequest := &batch_jobs.CreateBatchJobRequest{BatchJob: batchJob}
 	batchJob.Ref.BillingId = auth.Auth.BillingId()
+	batchJob.Ref.ProjectId = common.ProjectId
 
 	response, err := client.CreateBatchJob(apiContext, createBatchJobRequest)
 	common.CliExit(err)
@@ -85,7 +92,10 @@ func namesCompletion(cmd *cobra.Command, args []string, complete string) ([]stri
 	if auth.Auth.BillingIdAbsent() {
 		return common.MissingBillingIdCompletionError(cmd.CommandPath())
 	}
-	req := &batch_jobs.ListBatchJobsRequest{BillingId: auth.Auth.BillingId()}
+	req := &batch_jobs.ListBatchJobsRequest{
+		BillingId: auth.Auth.BillingId(),
+		ProjectId: common.ProjectId,
+	}
 	response, err := client.ListBatchJobs(apiContext, req)
 
 	if err != nil {

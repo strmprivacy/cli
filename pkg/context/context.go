@@ -12,6 +12,8 @@ import (
 	"strmprivacy/strm/pkg/entity/account"
 )
 
+const ProjectFlag = "project"
+
 type configuration struct {
 	ConfigPath     string
 	ConfigFilepath string
@@ -59,10 +61,11 @@ func entityInfo(args []string) {
 	printer.Print(entity)
 }
 
-func getHandle() {
-	details := account.GetHandle()
+func showAccountDetails() {
+	details := account.GetAccountDetails()
 	printer.Print(details)
 }
+
 func billingIdInfo() {
 	b, err := auth.GetBillingId()
 	if err != nil {
@@ -108,4 +111,8 @@ func findConfigFile() string {
 	}
 
 	return configFilepath
+}
+
+func showActiveProject() {
+	printer.Print("Active project: " + GetActiveProject())
 }

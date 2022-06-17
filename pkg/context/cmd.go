@@ -13,6 +13,7 @@ const (
 	entityInfoCommandName    = "info"
 	billingIdInfoCommandName = "billing-id"
 	accountCommandName       = "account"
+	projectCommandName 	     = "project"
 )
 
 func Configuration() *cobra.Command {
@@ -79,7 +80,7 @@ func Account() *cobra.Command {
 			printer = configurePrinter(cmd)
 		},
 		Run: func(cmd *cobra.Command, args []string) {
-			getHandle()
+			showAccountDetails()
 		},
 	}
 	cmd.Flags().StringP(
@@ -124,6 +125,37 @@ func EntityInfo() *cobra.Command {
 	common.CliExit(err)
 
 	return entityInfo
+}
+
+func Project() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:               projectCommandName + " [name]",
+		Short:             "Show or set the active project",
+		Args:			   cobra.MinimumNArgs(0),
+		DisableAutoGenTag: true,
+		PreRun: func(cmd *cobra.Command, args []string) {
+			printer = configurePrinter(cmd)
+		},
+		Run: func(cmd *cobra.Command, args []string) {
+			if len(args) > 0 {
+				SetActiveProject(args[0])
+			} else {
+				showActiveProject()
+			}
+		},
+	}
+	cmd.Flags().StringP(
+		common.OutputFormatFlag,
+		common.OutputFormatFlagShort,
+		common.OutputFormatPlain,
+		common.ProjectOutputFormatFlagAllowedValuesText,
+	)
+	err := cmd.RegisterFlagCompletionFunc(common.OutputFormatFlag, func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		return common.ProjectOutputFormatFlagAllowedValues, cobra.ShellCompDirectiveNoFileComp
+	})
+
+	common.CliExit(err)
+	return cmd
 }
 
 func savedEntitiesCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {

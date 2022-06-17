@@ -93,7 +93,10 @@ func NamesCompletion(cmd *cobra.Command, args []string, complete string) ([]stri
 		// this one means you don't get multiple completion suggestions for one stream if it's not a delete call
 		return nil, cobra.ShellCompDirectiveNoFileComp
 	}
-	req := &data_connectors.ListDataConnectorsRequest{BillingId: auth.Auth.BillingId()}
+	req := &data_connectors.ListDataConnectorsRequest{
+		BillingId: auth.Auth.BillingId(),
+		ProjectId: common.ProjectId,
+	}
 	response, err := Client.ListDataConnectors(apiContext, req)
 
 	if err != nil {

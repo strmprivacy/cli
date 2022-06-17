@@ -62,6 +62,7 @@ func get(cmd *cobra.Command, streamName *string) {
 
 	req := &usage.GetStreamEventUsageRequest{Ref: &entities.StreamRef{
 		BillingId: auth.Auth.BillingId(),
+		ProjectId: common.ProjectId,
 		Name:      *streamName,
 	},
 		StartTime: &timestamp.Timestamp{Seconds: startTime.UnixTimestamp()},

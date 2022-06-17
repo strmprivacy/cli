@@ -66,3 +66,6 @@ var BillingIdOutputFormatFlagAllowedValuesText = strings.Join(BillingIdOutputFor
 
 var AccountOutputFormatFlagAllowedValues = []string{OutputFormatPlain, OutputFormatJsonRaw}
 var AccountOutputFormatFlagAllowedValuesText = strings.Join(AccountOutputFormatFlagAllowedValues, ", ")
+
+var ProjectOutputFormatFlagAllowedValues = []string{OutputFormatPlain}
+var ProjectOutputFormatFlagAllowedValuesText = strings.Join(ProjectOutputFormatFlagAllowedValues, ", ")

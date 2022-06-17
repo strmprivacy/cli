@@ -33,6 +33,8 @@ func configurePrinter(command *cobra.Command) util.Printer {
 			allowedValues = common.ConfigOutputFormatFlagAllowedValuesText
 		case accountCommandName:
 			allowedValues = common.ConfigOutputFormatFlagAllowedValuesText
+		case projectCommandName:
+			allowedValues = common.ProjectOutputFormatFlagAllowedValuesText
 		}
 
 		common.CliExit(errors.New(fmt.Sprintf("Output format '%v' is not supported for '%v'. Allowed values: %v", command.CommandPath(), outputFormat, allowedValues)))
@@ -46,22 +48,24 @@ func availablePrinters() map[string]util.Printer {
 		common.OutputFormatJsonRaw + entityInfoCommandName:  jsonRawPrinter{},
 		common.OutputFormatJson + entityInfoCommandName:     jsonPrettyPrinter{},
 		common.OutputFormatFilepath + entityInfoCommandName: filepathPrinter{},
-		common.OutputFormatPlain + configCommandName:        plainPrinter{},
+		common.OutputFormatPlain + configCommandName:        configPlainPrinter{},
 		common.OutputFormatJson + configCommandName:         configJsonPrinter{},
 		common.OutputFormatPlain + billingIdInfoCommandName: billingIdPrinter{},
 		common.OutputFormatJsonRaw + accountCommandName:     accountJsonPrinter{},
 		common.OutputFormatPlain + accountCommandName:       accountPlainPrinter{},
+		common.OutputFormatPlain + projectCommandName:       projectPrinter{},
 	}
 }
 
 type filepathPrinter struct{}
 type jsonRawPrinter struct{}
 type jsonPrettyPrinter struct{}
-type plainPrinter struct{}
+type configPlainPrinter struct{}
 type accountJsonPrinter struct{}
 type accountPlainPrinter struct{}
 type configJsonPrinter struct{}
 type billingIdPrinter struct{}
+type projectPrinter struct{}
 
 func (p filepathPrinter) Print(data interface{}) {
 	entity, _ := (data).(savedEntity)
@@ -97,7 +101,7 @@ func (p accountPlainPrinter) Print(data interface{}) {
 
 }
 
-func (p plainPrinter) Print(data interface{}) {
+func (p configPlainPrinter) Print(data interface{}) {
 	config, _ := (data).(configuration)
 
 	fmt.Println(fmt.Sprintf("Configuration directory: %v", config.ConfigPath))
@@ -125,5 +129,9 @@ func (p configJsonPrinter) Print(data interface{}) {
 }
 
 func (p billingIdPrinter) Print(data interface{}) {
+	fmt.Println(data)
+}
+
+func (p projectPrinter) Print(data interface{}) {
 	fmt.Println(data)
 }

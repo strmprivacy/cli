@@ -64,6 +64,7 @@ func list() {
 func del(name *string) {
 	req := &schemas.DeleteSchemaRequest{
 		BillingId: auth.Auth.BillingId(),
+		ProjectId: common.ProjectId,
 		SchemaRef: Ref(name)}
 	response, err := client.DeleteSchema(apiContext, req)
 	common.CliExit(err)
@@ -74,6 +75,7 @@ func del(name *string) {
 func activate(name *string) {
 	req := &schemas.ActivateSchemaRequest{
 		BillingId: auth.Auth.BillingId(),
+		ProjectId: common.ProjectId,
 		SchemaRef: Ref(name)}
 	response, err := client.ActivateSchema(apiContext, req)
 	common.CliExit(err)
@@ -84,6 +86,7 @@ func activate(name *string) {
 func archive(name *string) {
 	req := &schemas.ArchiveSchemaRequest{
 		BillingId: auth.Auth.BillingId(),
+		ProjectId: common.ProjectId,
 		SchemaRef: Ref(name)}
 	response, err := client.ArchiveSchema(apiContext, req)
 	common.CliExit(err)
@@ -107,6 +110,8 @@ func getClusterRef(flags *pflag.FlagSet) (*entities.KafkaClusterRef, error) {
 		if len(parts) == 2 {
 			return &entities.KafkaClusterRef{
 				BillingId: parts[0],
+				// Todo: actual transition to different ref
+				ProjectId: common.ProjectId,
 				Name:      parts[1],
 			}, nil
 		} else {
@@ -145,6 +150,7 @@ func create(cmd *cobra.Command, args *string) {
 	ref.SchemaType = entities.SchemaType(schemaType)
 	req := &schemas.CreateSchemaRequest{
 		BillingId: auth.Auth.BillingId(),
+		ProjectId: common.ProjectId,
 		Schema: &entities.Schema{
 			Ref:      ref,
 			IsPublic: isPublic,

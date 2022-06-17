@@ -16,4 +16,5 @@ func init() {
 	ContextCommand.AddCommand(context.EntityInfo())
 	ContextCommand.AddCommand(context.BillingIdInfo())
 	ContextCommand.AddCommand(context.Account())
+	ContextCommand.AddCommand(context.Project())
 }
