@@ -1,3 +1,10 @@
+# [2.3.0](https://github.com/strmprivacy/cli/compare/v2.2.0...v2.3.0) (2022-06-17)
+
+
+### Features
+
+* **strm-1198:** implement context switching for projects and add projectId to requests ([f79d4fe](https://github.com/strmprivacy/cli/commit/f79d4febbf18eaa605abad9f2dbeb1f0bb29d71f))
+
 # [2.2.0](https://github.com/strmprivacy/cli/compare/v2.1.0...v2.2.0) (2022-05-24)
 
 
