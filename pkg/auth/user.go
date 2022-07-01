@@ -8,7 +8,6 @@ import (
 	"github.com/int128/oauth2cli"
 	"github.com/pkg/browser"
 	log "github.com/sirupsen/logrus"
-	"github.com/strmprivacy/api-definitions-go/v2/api/account/v1"
 	"golang.org/x/oauth2"
 	"golang.org/x/sync/errgroup"
 	"net"
@@ -23,7 +22,6 @@ var Auth = Authenticator{}
 type Authenticator struct {
 	storedToken storedToken
 	tokenSource oauth2.TokenSource
-	billingId   *string
 	Email       string
 }
 
@@ -38,21 +36,8 @@ func oAuth2Config() oauth2.Config {
 	}
 }
 
-// Todo: remove (eventually, in STRM-1238), first add projectId from context to most places it's currently used
-func (authenticator *Authenticator) BillingId() string {
-	if authenticator.billingId == nil {
-		common.MissingIdTokenError()
-	}
-
-	return *authenticator.billingId
-}
-
 func (authenticator *Authenticator) GetToken() *string {
 	return authenticator.accessToken()
-}
-
-func (authenticator *Authenticator) BillingIdAbsent() bool {
-	return authenticator.billingId == nil
 }
 
 func (authenticator *Authenticator) printAccessToken() {
@@ -135,7 +120,6 @@ func oauthTokenToStoredToken(t oauth2.Token) storedToken {
 		AccessToken:  t.AccessToken,
 		RefreshToken: t.RefreshToken,
 		ExpiresAt:    t.Expiry.Unix(),
-		BillingId:    getLegacyBillingId(t.AccessToken),
 		Email:        getEmailFromClaims(t),
 	}
 }
@@ -167,16 +151,6 @@ func startBrowserLoginFlow(ready chan string, ctx context.Context) func() error 
 			return nil
 		}
 	}
-}
-
-// Todo: we can leave this for now for backwards compatibility, to be removed in STRM-1238
-func getLegacyBillingId(accessToken string) string {
-	clientConnection, ctx := common.SetupGrpc(common.ApiHost, &accessToken)
-	accountClient := account.NewAccountServiceClient(clientConnection)
-
-	response, err := accountClient.GetLegacyBillingId(ctx, &account.GetLegacyBillingIdRequest{})
-	common.CliExit(err)
-	return response.BillingId
 }
 
 func getEmailFromClaims(t oauth2.Token) string {

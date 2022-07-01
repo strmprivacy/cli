@@ -20,7 +20,7 @@ import (
 )
 
 type TestConfig struct {
-	billingId         string
+	projectId         string
 	email             string
 	password          string
 	s3UserName        string
@@ -35,7 +35,7 @@ func testConfig() *TestConfig {
 		_ = godotenv.Load()
 
 		_testConfig = TestConfig{
-			billingId:         os.Getenv("STRM_TEST_USER_BILLING_ID"),
+			projectId:         os.Getenv("STRM_TEST_PROJECT_ID"),
 			email:             os.Getenv("STRM_TEST_USER_EMAIL"),
 			password:          os.Getenv("STRM_TEST_USER_PASSWORD"),
 			s3UserName:        os.Getenv("STRM_TEST_S3_USER_NAME"),
@@ -75,7 +75,6 @@ type TokenFile struct {
 	IdToken      string `json:"idToken"`
 	RefreshToken string `json:"refreshToken"`
 	ExpiresAt    int    `json:"expiresAt"`
-	BillingId    string `json:"billingId"`
 	Email        string `json:"email"`
 }
 
@@ -145,9 +144,6 @@ func replaceSecretsWithPropertyNames(out string) string {
 
 	s3SecretAccessKeyReplacer := regexp.MustCompile(`SecretAccessKey\\":\\"([^"]+)\\"`)
 	out = s3SecretAccessKeyReplacer.ReplaceAllString(out, `SecretAccessKey\":\"SecretAccessKey\"`)
-
-	testBillingIdReplacer := regexp.MustCompile("(" + testConfig().billingId + ")")
-	out = testBillingIdReplacer.ReplaceAllString(out, "testBillingId")
 
 	return out
 }

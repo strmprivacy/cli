@@ -25,7 +25,7 @@ jobs:
           make
       - name: Run CLI tests
         env:
-          STRM_TEST_USER_BILLING_ID: ${{ secrets.STRM_TEST_USER_BILLING_ID }}
+          STRM_TEST_PROJECT: ${{ secrets.STRM_TEST_PROJECT }}
           STRM_TEST_USER_EMAIL: ${{ secrets.STRM_TEST_USER_EMAIL }}
           STRM_TEST_USER_PASSWORD: ${{ secrets.STRM_TEST_USER_PASSWORD }}
           STRM_TEST_S3_USER_NAME: ${{ secrets.STRM_TEST_S3_USER_NAME }}

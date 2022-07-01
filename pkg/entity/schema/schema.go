@@ -15,7 +15,6 @@ import (
 	schemas "github.com/strmprivacy/api-definitions-go/v2/api/schemas/v1"
 	"google.golang.org/grpc"
 	"google.golang.org/protobuf/encoding/protojson"
-	"strmprivacy/strm/pkg/auth"
 	"strmprivacy/strm/pkg/common"
 	"strmprivacy/strm/pkg/util"
 )
@@ -54,7 +53,7 @@ func SetupClient(clientConnection *grpc.ClientConn, ctx context.Context) {
 }
 
 func list() {
-	req := &schemas.ListSchemasRequest{BillingId: auth.Auth.BillingId()}
+	req := &schemas.ListSchemasRequest{}
 	response, err := client.ListSchemas(apiContext, req)
 	common.CliExit(err)
 
@@ -63,7 +62,6 @@ func list() {
 
 func del(name *string) {
 	req := &schemas.DeleteSchemaRequest{
-		BillingId: auth.Auth.BillingId(),
 		ProjectId: common.ProjectId,
 		SchemaRef: Ref(name)}
 	response, err := client.DeleteSchema(apiContext, req)
@@ -74,7 +72,6 @@ func del(name *string) {
 
 func activate(name *string) {
 	req := &schemas.ActivateSchemaRequest{
-		BillingId: auth.Auth.BillingId(),
 		ProjectId: common.ProjectId,
 		SchemaRef: Ref(name)}
 	response, err := client.ActivateSchema(apiContext, req)
@@ -85,7 +82,6 @@ func activate(name *string) {
 
 func archive(name *string) {
 	req := &schemas.ArchiveSchemaRequest{
-		BillingId: auth.Auth.BillingId(),
 		ProjectId: common.ProjectId,
 		SchemaRef: Ref(name)}
 	response, err := client.ArchiveSchema(apiContext, req)
@@ -106,17 +102,11 @@ func get(name *string, cmd *cobra.Command) {
 func getClusterRef(flags *pflag.FlagSet) (*entities.KafkaClusterRef, error) {
 	flag := util.GetStringAndErr(flags, kafkaClusterFlag)
 	if len(flag) > 0 {
-		parts := strings.Split(flag, "/")
-		if len(parts) == 2 {
-			return &entities.KafkaClusterRef{
-				BillingId: parts[0],
-				// Todo: actual transition to different ref
-				ProjectId: common.ProjectId,
-				Name:      parts[1],
-			}, nil
-		} else {
-			return nil, fmt.Errorf("invalid %v. Should be formatted as 'billing_id/cluster_name'", kafkaClusterFlag)
-		}
+		return &entities.KafkaClusterRef{
+			// Todo: actual transition to different ref
+			ProjectId: common.ProjectId,
+			Name:      flag,
+		}, nil
 	} else {
 		return &entities.KafkaClusterRef{}, nil
 	}
@@ -124,7 +114,6 @@ func getClusterRef(flags *pflag.FlagSet) (*entities.KafkaClusterRef, error) {
 
 func GetSchema(name *string, clusterRef *entities.KafkaClusterRef) *schemas.GetSchemaResponse {
 	req := &schemas.GetSchemaRequest{
-		BillingId:  auth.Auth.BillingId(),
 		Ref:        Ref(name),
 		ClusterRef: clusterRef,
 	}
@@ -149,7 +138,6 @@ func create(cmd *cobra.Command, args *string) {
 	ref := Ref(args)
 	ref.SchemaType = entities.SchemaType(schemaType)
 	req := &schemas.CreateSchemaRequest{
-		BillingId: auth.Auth.BillingId(),
 		ProjectId: common.ProjectId,
 		Schema: &entities.Schema{
 			Ref:      ref,
@@ -177,11 +165,7 @@ func create(cmd *cobra.Command, args *string) {
 
 func RefsCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
 
-	if auth.Auth.BillingIdAbsent() {
-		return common.MissingBillingIdCompletionError(cmd.CommandPath())
-	}
-
-	req := &schemas.ListSchemasRequest{BillingId: auth.Auth.BillingId()}
+	req := &schemas.ListSchemasRequest{}
 	response, err := client.ListSchemas(apiContext, req)
 
 	if err != nil {

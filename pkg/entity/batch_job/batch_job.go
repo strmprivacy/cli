@@ -10,7 +10,6 @@ import (
 	"google.golang.org/grpc"
 	"io/ioutil"
 	"strings"
-	"strmprivacy/strm/pkg/auth"
 	"strmprivacy/strm/pkg/common"
 	"strmprivacy/strm/pkg/util"
 )
@@ -25,7 +24,6 @@ func SetupClient(clientConnection *grpc.ClientConn, ctx context.Context) {
 
 func list() {
 	req := &batch_jobs.ListBatchJobsRequest{
-		BillingId: auth.Auth.BillingId(),
 		ProjectId: common.ProjectId,
 	}
 	response, err := client.ListBatchJobs(apiContext, req)
@@ -36,7 +34,6 @@ func list() {
 
 func get(id *string, _ *cobra.Command) {
 	ref := &entities.BatchJobRef{
-		BillingId: auth.Auth.BillingId(),
 		ProjectId: common.ProjectId,
 		Id:        *id,
 	}
@@ -49,7 +46,6 @@ func get(id *string, _ *cobra.Command) {
 func del(id *string) {
 	req := &batch_jobs.DeleteBatchJobRequest{
 		Ref: &entities.BatchJobRef{
-			BillingId: auth.Auth.BillingId(),
 			ProjectId: common.ProjectId,
 			Id: *id,
 		},
@@ -75,7 +71,6 @@ func create(cmd *cobra.Command) {
 	}
 
 	createBatchJobRequest := &batch_jobs.CreateBatchJobRequest{BatchJob: batchJob}
-	batchJob.Ref.BillingId = auth.Auth.BillingId()
 	batchJob.Ref.ProjectId = common.ProjectId
 
 	response, err := client.CreateBatchJob(apiContext, createBatchJobRequest)
@@ -89,11 +84,7 @@ func namesCompletion(cmd *cobra.Command, args []string, complete string) ([]stri
 		// this one means you don't get multiple completion suggestions for one stream if it's not a delete call
 		return nil, cobra.ShellCompDirectiveNoFileComp
 	}
-	if auth.Auth.BillingIdAbsent() {
-		return common.MissingBillingIdCompletionError(cmd.CommandPath())
-	}
 	req := &batch_jobs.ListBatchJobsRequest{
-		BillingId: auth.Auth.BillingId(),
 		ProjectId: common.ProjectId,
 	}
 	response, err := client.ListBatchJobs(apiContext, req)

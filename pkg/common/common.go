@@ -91,13 +91,6 @@ func MissingIdTokenError() {
 	CliExit(errors.New(fmt.Sprintf("No login information found. Use: `%v auth login` first.", RootCommandName)))
 }
 
-func MissingBillingIdCompletionError(commandPath string) ([]string, cobra.ShellCompDirective) {
-	log.Infoln(fmt.Sprintf("Called '%v' without login info", commandPath))
-	cobra.CompErrorln(fmt.Sprintf("No login information found. Use: `%v auth login` first.", RootCommandName))
-
-	return nil, cobra.ShellCompDirectiveNoFileComp
-}
-
 func GrpcRequestCompletionError(err error) ([]string, cobra.ShellCompDirective) {
 	errorMessage := fmt.Sprintf("%v", err)
 	log.Errorln(errorMessage)

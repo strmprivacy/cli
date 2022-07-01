@@ -6,7 +6,6 @@ import (
 	"github.com/strmprivacy/api-definitions-go/v2/api/entities/v1"
 	"github.com/strmprivacy/api-definitions-go/v2/api/key_streams/v1"
 	"google.golang.org/grpc"
-	"strmprivacy/strm/pkg/auth"
 	"strmprivacy/strm/pkg/common"
 )
 
@@ -20,7 +19,6 @@ func SetupClient(clientConnection *grpc.ClientConn, ctx context.Context) {
 
 func list() {
 	req := &key_streams.ListKeyStreamsRequest{
-		BillingId: auth.Auth.BillingId(),
 		ProjectId: common.ProjectId,
 	}
 	response, err := client.ListKeyStreams(apiContext, req)
@@ -37,23 +35,18 @@ func get(name *string) {
 
 func ref(n *string) *entities.KeyStreamRef {
 	return &entities.KeyStreamRef{
-		BillingId: auth.Auth.BillingId(),
 		ProjectId: common.ProjectId,
 		Name: *n,
 	}
 }
 
 func NamesCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
-	if auth.Auth.BillingIdAbsent() {
-		return common.MissingBillingIdCompletionError(cmd.CommandPath())
-	}
 	if len(args) != 0 {
 		// this one means you don't get multiple completion suggestions for one stream
 		return nil, cobra.ShellCompDirectiveNoFileComp
 	}
 
 	req := &key_streams.ListKeyStreamsRequest{
-		BillingId: auth.Auth.BillingId(),
 		ProjectId: common.ProjectId,
 	}
 	response, err := client.ListKeyStreams(apiContext, req)

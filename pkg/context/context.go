@@ -1,9 +1,7 @@
 package context
 
 import (
-	"errors"
 	"fmt"
-	"io/fs"
 	"io/ioutil"
 	"path"
 	"strings"
@@ -64,17 +62,6 @@ func entityInfo(args []string) {
 func showAccountDetails() {
 	details := account.GetAccountDetails()
 	printer.Print(details)
-}
-
-func billingIdInfo() {
-	b, err := auth.GetBillingId()
-	if err != nil {
-		if fileError, ok := err.(*fs.PathError); ok {
-			common.CliExit(errors.New(fmt.Sprintf("Can't %s %s", fileError.Op, fileError.Path)))
-		}
-	}
-	common.CliExit(err)
-	printer.Print(b)
 }
 
 func listSavedEntities(p string) []string {

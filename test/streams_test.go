@@ -14,7 +14,7 @@ var streamWithTags, streamWithTagsWithoutSecret *entities.Stream
 
 func init() {
 	streamWithTags = &entities.Stream{
-		Ref:          &entities.StreamRef{BillingId: "testBillingId", Name: "clitest-with-tags", ProjectId: "4800b0ff-0f8c-4333-9b7d-b6d01cb6c9a6"},
+		Ref:          &entities.StreamRef{Name: "clitest-with-tags", ProjectId: testConfig().projectId},
 		Enabled:      true,
 		Limits:       limits,
 		Tags:         []string{"foo", "bar", "baz"},
@@ -42,7 +42,7 @@ func listStreamsTest(t *testing.T) {
 func createStreamTest1(t *testing.T) {
 	expected := &streams.CreateStreamResponse{
 		Stream: &entities.Stream{
-			Ref:          &entities.StreamRef{BillingId: "testBillingId", Name: "clitest", ProjectId: "4800b0ff-0f8c-4333-9b7d-b6d01cb6c9a6"},
+			Ref:          &entities.StreamRef{Name: "clitest", ProjectId: testConfig().projectId},
 			Enabled:      true,
 			Limits:       limits,
 			Credentials:  []*entities.Credentials{creds},
@@ -61,7 +61,7 @@ func createStreamTest2(t *testing.T) {
 func createDerivedStream1(t *testing.T) {
 	expected := &streams.CreateStreamResponse{
 		Stream: &entities.Stream{
-			Ref:              &entities.StreamRef{BillingId: "testBillingId", Name: "clitest-with-tags-2", ProjectId: "4800b0ff-0f8c-4333-9b7d-b6d01cb6c9a6"},
+			Ref:              &entities.StreamRef{Name: "clitest-with-tags-2", ProjectId: testConfig().projectId},
 			ConsentLevels:    []int32{2},
 			ConsentLevelType: entities.ConsentLevelType_CUMULATIVE,
 			Enabled:          true,

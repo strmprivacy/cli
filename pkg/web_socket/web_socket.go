@@ -19,7 +19,6 @@ const (
 func Run(cmd *cobra.Command, streamName *string) {
 	s := &entities.Stream{
 		Ref: &entities.StreamRef{
-			BillingId: auth.Auth.BillingId(),
 			ProjectId: common.ProjectId,
 			Name: *streamName,
 		},

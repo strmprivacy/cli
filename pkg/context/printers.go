@@ -29,8 +29,6 @@ func configurePrinter(command *cobra.Command) util.Printer {
 			allowedValues = common.ContextOutputFormatFlagAllowedValuesText
 		case configCommandName:
 			allowedValues = common.ConfigOutputFormatFlagAllowedValuesText
-		case billingIdInfoCommandName:
-			allowedValues = common.ConfigOutputFormatFlagAllowedValuesText
 		case accountCommandName:
 			allowedValues = common.ConfigOutputFormatFlagAllowedValuesText
 		case projectCommandName:
@@ -50,7 +48,6 @@ func availablePrinters() map[string]util.Printer {
 		common.OutputFormatFilepath + entityInfoCommandName: filepathPrinter{},
 		common.OutputFormatPlain + configCommandName:        configPlainPrinter{},
 		common.OutputFormatJson + configCommandName:         configJsonPrinter{},
-		common.OutputFormatPlain + billingIdInfoCommandName: billingIdPrinter{},
 		common.OutputFormatJsonRaw + accountCommandName:     accountJsonPrinter{},
 		common.OutputFormatPlain + accountCommandName:       accountPlainPrinter{},
 		common.OutputFormatPlain + projectCommandName:       projectPrinter{},
@@ -64,7 +61,6 @@ type configPlainPrinter struct{}
 type accountJsonPrinter struct{}
 type accountPlainPrinter struct{}
 type configJsonPrinter struct{}
-type billingIdPrinter struct{}
 type projectPrinter struct{}
 
 func (p filepathPrinter) Print(data interface{}) {
@@ -94,7 +90,6 @@ func (p accountJsonPrinter) Print(data interface{}) {
 
 func (p accountPlainPrinter) Print(data interface{}) {
 	entity, _ := (data).(*account.GetAccountDetailsResponse)
-	fmt.Println(fmt.Sprintf("billing_id: %v", entity.BillingId))
 	fmt.Println(fmt.Sprintf("max_input_streams: %v", entity.MaxInputStreams))
 	fmt.Println(fmt.Sprintf("handle: %v", entity.Handle))
 	fmt.Println(fmt.Sprintf("subscription: %v", entity.Subscription))
@@ -126,10 +121,6 @@ func (p configJsonPrinter) Print(data interface{}) {
 	b, _ := json.Marshal(entity)
 	rawJson := util.CompactJson(b)
 	fmt.Println(string(rawJson.Bytes()))
-}
-
-func (p billingIdPrinter) Print(data interface{}) {
-	fmt.Println(data)
 }
 
 func (p projectPrinter) Print(data interface{}) {

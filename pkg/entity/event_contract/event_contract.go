@@ -11,7 +11,6 @@ import (
 	"google.golang.org/grpc"
 	"io/ioutil"
 	"strings"
-	"strmprivacy/strm/pkg/auth"
 	"strmprivacy/strm/pkg/common"
 	"strmprivacy/strm/pkg/entity/schema"
 	"strmprivacy/strm/pkg/util"
@@ -53,9 +52,7 @@ func SetupClient(clientConnection *grpc.ClientConn, ctx context.Context) {
 }
 
 func list() {
-	req := &event_contracts.ListEventContractsRequest{
-		BillingId: auth.Auth.BillingId(),
-	}
+	req := &event_contracts.ListEventContractsRequest{}
 	response, err := client.ListEventContracts(apiContext, req)
 	common.CliExit(err)
 	printer.Print(response)
@@ -63,7 +60,6 @@ func list() {
 
 func del(name *string) {
 	req := &event_contracts.DeleteEventContractRequest{
-		BillingId:        auth.Auth.BillingId(),
 		ProjectId:        common.ProjectId,
 		EventContractRef: ref(name)}
 	response, err := client.DeleteEventContract(apiContext, req)
@@ -74,7 +70,6 @@ func del(name *string) {
 
 func activate(name *string) {
 	req := &event_contracts.ActivateEventContractRequest{
-		BillingId:        auth.Auth.BillingId(),
 		ProjectId: common.ProjectId,
 		EventContractRef: ref(name)}
 	response, err := client.ActivateEventContract(apiContext, req)
@@ -85,7 +80,6 @@ func activate(name *string) {
 
 func archive(name *string) {
 	req := &event_contracts.ArchiveEventContractRequest{
-		BillingId:        auth.Auth.BillingId(),
 		ProjectId: common.ProjectId,
 		EventContractRef: ref(name)}
 	response, err := client.ArchiveEventContract(apiContext, req)
@@ -96,7 +90,6 @@ func archive(name *string) {
 
 func get(name *string) {
 	req := &event_contracts.GetEventContractRequest{
-		BillingId: auth.Auth.BillingId(),
 		Ref:       ref(name)}
 	response, err := client.GetEventContract(apiContext, req)
 	common.CliExit(err)
@@ -113,7 +106,6 @@ func create(cmd *cobra.Command, contractReference *string) {
 	definition := readContractDefinition(&definitionFilename)
 
 	req := &event_contracts.CreateEventContractRequest{
-		BillingId: auth.Auth.BillingId(),
 		ProjectId: common.ProjectId,
 		EventContract: &entities.EventContract{
 			Ref:         ref(contractReference),
@@ -142,15 +134,12 @@ func readContractDefinition(filename *string) EventContractDefinition {
 }
 
 func RefsCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
-	if auth.Auth.BillingIdAbsent() {
-		return common.MissingBillingIdCompletionError(cmd.CommandPath())
-	}
 	if len(args) != 0 {
 		// this one means you don't get multiple completion suggestions for one stream
 		return nil, cobra.ShellCompDirectiveNoFileComp
 	}
 
-	req := &event_contracts.ListEventContractsRequest{BillingId: auth.Auth.BillingId()}
+	req := &event_contracts.ListEventContractsRequest{}
 	response, err := client.ListEventContracts(apiContext, req)
 
 	if err != nil {
