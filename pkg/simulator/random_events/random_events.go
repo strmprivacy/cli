@@ -97,7 +97,7 @@ func getStream(streamName *string) *entities.Stream {
 	s := stream.Get(streamName, false).StreamTree.Stream
 
 	if len(s.LinkedStream) != 0 {
-		common.CliExit(errors.New("simulators cannot be randomEvents on a derived s"))
+		common.CliExit(errors.New("simulators cannot be randomEvents on a derived stream"))
 	}
 
 	return s
