@@ -26,7 +26,7 @@ func run(cmd *cobra.Command, streamName *string) {
 	flags := cmd.Flags()
 	url := util.GetStringAndErr(flags, WebSocketUrl)
 
-	initializeTokenSource(s.Credentials[0])
+	tokenSource = initializeTokenSource(s.Credentials[0])
 
 	for {
 		header := http.Header{"authorization": []string{"Bearer " + getToken()}}
@@ -77,5 +77,5 @@ func getToken() string {
 
 	common.CliExit(err)
 
-	return tokens.AccessToken
+	return (*tokens).AccessToken
 }
