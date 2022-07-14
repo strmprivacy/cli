@@ -4,7 +4,6 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/strmprivacy/api-definitions-go/v2/api/data_connectors/v1"
 	"strings"
-	"strmprivacy/strm/pkg/auth"
 	"strmprivacy/strm/pkg/common"
 )
 
@@ -86,15 +85,11 @@ func CreateCmd() *cobra.Command {
 }
 
 func NamesCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
-	if auth.Auth.BillingIdAbsent() {
-		return common.MissingBillingIdCompletionError(cmd.CommandPath())
-	}
 	if len(args) != 0 && strings.Fields(cmd.Short)[0] != "Delete" {
 		// this one means you don't get multiple completion suggestions for one stream if it's not a delete call
 		return nil, cobra.ShellCompDirectiveNoFileComp
 	}
 	req := &data_connectors.ListDataConnectorsRequest{
-		BillingId: auth.Auth.BillingId(),
 		ProjectId: common.ProjectId,
 	}
 	response, err := Client.ListDataConnectors(apiContext, req)

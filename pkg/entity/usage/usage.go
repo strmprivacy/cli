@@ -14,7 +14,6 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
-	"strmprivacy/strm/pkg/auth"
 	"strmprivacy/strm/pkg/common"
 	"strmprivacy/strm/pkg/util"
 )
@@ -61,7 +60,6 @@ func get(cmd *cobra.Command, streamName *string) {
 	}
 
 	req := &usage.GetStreamEventUsageRequest{Ref: &entities.StreamRef{
-		BillingId: auth.Auth.BillingId(),
 		ProjectId: common.ProjectId,
 		Name:      *streamName,
 	},

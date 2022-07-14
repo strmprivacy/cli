@@ -25,12 +25,12 @@ jobs:
           make
       - name: Run CLI tests
         env:
-          STRM_TEST_USER_BILLING_ID: ${{ secrets.STRM_TEST_USER_BILLING_ID }}
           STRM_TEST_USER_EMAIL: ${{ secrets.STRM_TEST_USER_EMAIL }}
           STRM_TEST_USER_PASSWORD: ${{ secrets.STRM_TEST_USER_PASSWORD }}
           STRM_TEST_S3_USER_NAME: ${{ secrets.STRM_TEST_S3_USER_NAME }}
           STRM_TEST_S3_ACCESS_KEY_ID: ${{ secrets.STRM_TEST_S3_ACCESS_KEY_ID }}
           STRM_TEST_S3_SECRET_ACCESS_KEY: ${{ secrets.STRM_TEST_S3_SECRET_ACCESS_KEY }}
+          STRM_TEST_PROJECT_ID: ${{ secrets.STRM_TEST_PROJECT_ID }}
         run: |
           go test ./test -v
       - name: Run GoReleaser

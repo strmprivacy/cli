@@ -7,7 +7,6 @@ import (
 	"github.com/strmprivacy/api-definitions-go/v2/api/schemas/v1"
 	"google.golang.org/grpc"
 	"os"
-	"strmprivacy/strm/pkg/auth"
 	"strmprivacy/strm/pkg/common"
 	"strmprivacy/strm/pkg/entity/schema"
 	"strmprivacy/strm/pkg/util"
@@ -38,7 +37,6 @@ func GetSchemaCode(cmd *cobra.Command, name *string) string {
 	outputFile := util.GetStringAndErr(flags, filenameFlag)
 	overwrite := util.GetBoolAndErr(flags, overwriteFlag)
 	req := &schemas.GetSchemaCodeRequest{
-		BillingId: auth.Auth.BillingId(),
 		Language:  language,
 		Ref:       schema.Ref(name),
 	}

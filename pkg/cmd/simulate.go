@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
-	"strmprivacy/strm/pkg/simulator"
 	"strmprivacy/strm/pkg/simulator/random_events"
 )
 
@@ -14,8 +13,8 @@ var SimulateCmd = &cobra.Command{
 
 func init() {
 	flags := SimulateCmd.PersistentFlags()
-	flags.String(sim.SchemaFlag, "strmprivacy/demo/1.0.2", "Which schema to use for creating simulated events")
-	_ = SimulateCmd.RegisterFlagCompletionFunc(sim.SchemaFlag, schemaCompletion)
+	flags.String(random_events.SchemaFlag, "strmprivacy/demo/1.0.2", "Which schema to use for creating simulated events")
+	_ = SimulateCmd.RegisterFlagCompletionFunc(random_events.SchemaFlag, schemaCompletion)
 	SimulateCmd.AddCommand(random_events.RunCmd())
 }
 

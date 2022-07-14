@@ -7,7 +7,6 @@ import (
 	"github.com/strmprivacy/api-definitions-go/v2/api/kafka_exporters/v1"
 	"google.golang.org/grpc"
 	"strings"
-	"strmprivacy/strm/pkg/auth"
 	"strmprivacy/strm/pkg/common"
 	"strmprivacy/strm/pkg/util"
 )
@@ -23,7 +22,6 @@ func SetupClient(clientConnection *grpc.ClientConn, ctx context.Context) {
 func Get(name *string) *kafka_exporters.GetKafkaExporterResponse {
 	req := &kafka_exporters.GetKafkaExporterRequest{
 		Ref: &entities.KafkaExporterRef{
-			BillingId: auth.Auth.BillingId(),
 			ProjectId: common.ProjectId,
 			Name: *name,
 		},
@@ -36,7 +34,6 @@ func Get(name *string) *kafka_exporters.GetKafkaExporterResponse {
 func list(recursive bool) {
 	// TODO need api recursive addition
 	req := &kafka_exporters.ListKafkaExportersRequest{
-		BillingId: auth.Auth.BillingId(),
 		ProjectId: common.ProjectId,
 	}
 	response, err := client.ListKafkaExporters(apiContext, req)
@@ -51,7 +48,6 @@ func get(name *string, recursive bool) {
 
 func del(name *string, recursive bool) {
 	exporterRef := &entities.KafkaExporterRef{
-		BillingId: auth.Auth.BillingId(),
 		ProjectId: common.ProjectId,
 		Name: *name,
 	}
@@ -76,12 +72,10 @@ func create(name *string, cmd *cobra.Command) {
 	// key streams not yet supported in data model!
 	exporter := &entities.KafkaExporter{
 		StreamRef: &entities.StreamRef{
-			BillingId: auth.Auth.BillingId(),
 			ProjectId: common.ProjectId,
 			Name: *name,
 		},
 		Ref:       &entities.KafkaExporterRef{
-			BillingId: auth.Auth.BillingId(),
 			ProjectId: common.ProjectId,
 		},
 	}
@@ -103,16 +97,12 @@ func create(name *string, cmd *cobra.Command) {
 }
 
 func NamesCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
-	if auth.Auth.BillingIdAbsent() {
-		return common.MissingBillingIdCompletionError(cmd.CommandPath())
-	}
 	if len(args) != 0 && strings.Fields(cmd.Short)[0] != "Delete" {
 		// this one means you don't get multiple completion suggestions for one stream if it's not a delete call
 		return nil, cobra.ShellCompDirectiveNoFileComp
 	}
 
 	req := &kafka_exporters.ListKafkaExportersRequest{
-		BillingId: auth.Auth.BillingId(),
 		ProjectId: common.ProjectId,
 	}
 	response, err := client.ListKafkaExporters(apiContext, req)

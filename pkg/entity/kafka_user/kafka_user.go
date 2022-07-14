@@ -7,7 +7,6 @@ import (
 	"github.com/strmprivacy/api-definitions-go/v2/api/kafka_users/v1"
 	"google.golang.org/grpc"
 	"strings"
-	"strmprivacy/strm/pkg/auth"
 	"strmprivacy/strm/pkg/common"
 	"strmprivacy/strm/pkg/entity/kafka_exporter"
 	"strmprivacy/strm/pkg/util"
@@ -18,7 +17,6 @@ var apiContext context.Context
 
 func ref(n *string) *entities.KafkaUserRef {
 	return &entities.KafkaUserRef{
-		BillingId: auth.Auth.BillingId(),
 		ProjectId: common.ProjectId,
 		Name: *n,
 	}
@@ -32,7 +30,6 @@ func SetupClient(clientConnection *grpc.ClientConn, ctx context.Context) {
 func list(exporterName *string) {
 	req := &kafka_users.ListKafkaUsersRequest{
 		Ref: &entities.KafkaExporterRef{
-			BillingId: auth.Auth.BillingId(),
 			ProjectId: common.ProjectId,
 			Name:      *exporterName,
 		},
@@ -65,7 +62,6 @@ func create(kafkaExporterName *string, cmd *cobra.Command) {
 	exporter := kafka_exporter.Get(kafkaExporterName).KafkaExporter
 	kafkaUser := &entities.KafkaUser{
 		Ref: &entities.KafkaUserRef{
-			BillingId: auth.Auth.BillingId(),
 			ProjectId: common.ProjectId,
 		},
 		KafkaExporterName: exporter.Ref.Name,
@@ -84,9 +80,6 @@ func create(kafkaExporterName *string, cmd *cobra.Command) {
 }
 
 func namesCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
-	if auth.Auth.BillingIdAbsent() {
-		return common.MissingBillingIdCompletionError(cmd.CommandPath())
-	}
 	if len(args) != 0 && strings.Fields(cmd.Short)[0] != "Delete" {
 		// this one means you don't get multiple completion suggestions for one stream if it's not a delete call
 		return nil, cobra.ShellCompDirectiveNoFileComp
@@ -94,7 +87,6 @@ func namesCompletion(cmd *cobra.Command, args []string, complete string) ([]stri
 
 	req := &kafka_users.ListKafkaUsersRequest{
 		Ref: &entities.KafkaExporterRef{
-			BillingId: auth.Auth.BillingId(),
 			ProjectId: common.ProjectId,
 		},
 	}

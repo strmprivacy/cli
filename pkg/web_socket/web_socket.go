@@ -1,14 +1,16 @@
 package web_socket
 
 import (
-	"errors"
+	"context"
 	"fmt"
 	"github.com/gorilla/websocket"
 	"github.com/spf13/cobra"
 	"github.com/strmprivacy/api-definitions-go/v2/api/entities/v1"
+	"golang.org/x/oauth2"
+	"golang.org/x/oauth2/clientcredentials"
 	"net/http"
-	"strmprivacy/strm/pkg/auth"
 	"strmprivacy/strm/pkg/common"
+	"strmprivacy/strm/pkg/entity/stream"
 	"strmprivacy/strm/pkg/util"
 )
 
@@ -16,34 +18,19 @@ const (
 	WebSocketUrl = "web-socket-url"
 )
 
-func Run(cmd *cobra.Command, streamName *string) {
-	s := &entities.Stream{
-		Ref: &entities.StreamRef{
-			BillingId: auth.Auth.BillingId(),
-			ProjectId: common.ProjectId,
-			Name: *streamName,
-		},
-	}
-	flags := cmd.Flags()
-	u := util.GetStringAndErr(flags, WebSocketUrl)
-	// loads Stream definition from save version
-	if err := util.TryLoad(s, streamName); err != nil {
-		// there was no saved version, try to get credentials from the command options
-		clientId := util.GetStringAndErr(flags, common.ClientIdFlag)
-		clientSecret := util.GetStringAndErr(flags, common.ClientSecretFlag)
-		if len(clientId) == 0 || len(clientSecret) == 0 {
-			common.CliExit(errors.New(fmt.Sprintf("There's no saved stream for %s and clientId %s clientSecret %s are missing as options",
-				*streamName, clientId, clientSecret)))
-		}
-		s.Credentials = append(s.Credentials, &entities.Credentials{
-			ClientSecret: clientSecret, ClientId: clientId,
-		})
-	}
-	for {
+var tokenSource oauth2.TokenSource
 
-		token := auth.GetEventToken(s.Ref.BillingId, s.Credentials[0].ClientId, s.Credentials[0].ClientSecret)
-		header := http.Header{"authorization": []string{"Bearer " + token}}
-		ws, _, err := websocket.DefaultDialer.Dial(u, header)
+func run(cmd *cobra.Command, streamName *string) {
+	s := stream.Get(streamName, false).StreamTree.Stream
+
+	flags := cmd.Flags()
+	url := util.GetStringAndErr(flags, WebSocketUrl)
+
+	tokenSource = initializeTokenSource(s.Credentials[0])
+
+	for {
+		header := http.Header{"authorization": []string{"Bearer " + getToken()}}
+		ws, _, err := websocket.DefaultDialer.Dial(url, header)
 		common.CliExit(err)
 
 	innerLoop:
@@ -72,4 +59,23 @@ func Run(cmd *cobra.Command, streamName *string) {
 			}
 		}
 	}
+}
+
+func initializeTokenSource(credentials *entities.Credentials) oauth2.TokenSource {
+	config := clientcredentials.Config{
+		ClientID:     credentials.ClientId,
+		ClientSecret: credentials.ClientSecret,
+		TokenURL:     fmt.Sprintf("%v/auth/realms/streams/protocol/openid-connect/token", common.ApiAuthHost),
+		Scopes:       []string{"offline_access"},
+	}
+
+	return config.TokenSource(context.Background())
+}
+
+func getToken() string {
+	tokens, err := tokenSource.Token()
+
+	common.CliExit(err)
+
+	return (*tokens).AccessToken
 }

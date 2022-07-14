@@ -13,7 +13,6 @@ import (
 	"github.com/strmprivacy/api-definitions-go/v2/api/batch_exporters/v1"
 	"github.com/strmprivacy/api-definitions-go/v2/api/entities/v1"
 	"google.golang.org/grpc"
-	"strmprivacy/strm/pkg/auth"
 	"strmprivacy/strm/pkg/common"
 	"strmprivacy/strm/pkg/util"
 )
@@ -28,7 +27,6 @@ func SetupClient(clientConnection *grpc.ClientConn, ctx context.Context) {
 
 func list() {
 	req := &batch_exporters.ListBatchExportersRequest{
-		BillingId: auth.Auth.BillingId(),
 		ProjectId: common.ProjectId,
 	}
 	response, err := client.ListBatchExporters(apiContext, req)
@@ -39,7 +37,6 @@ func list() {
 
 func get(name *string, _ *cobra.Command) {
 	ref := &entities.BatchExporterRef{
-		BillingId: auth.Auth.BillingId(),
 		ProjectId: common.ProjectId,
 		Name:      *name,
 	}
@@ -51,7 +48,6 @@ func get(name *string, _ *cobra.Command) {
 
 func del(name *string) {
 	req := &batch_exporters.DeleteBatchExporterRequest{Ref: &entities.BatchExporterRef{
-		BillingId: auth.Auth.BillingId(),
 		ProjectId: common.ProjectId,
 		Name:      *name,
 	}}
@@ -75,12 +71,10 @@ func create(streamName *string, cmd *cobra.Command) {
 
 	exporter := &entities.BatchExporter{
 		Ref: &entities.BatchExporterRef{
-			BillingId: auth.Auth.BillingId(),
 			ProjectId: common.ProjectId,
 			Name:      exporterName,
 		},
 		DataConnectorRef: &entities.DataConnectorRef{
-			BillingId: auth.Auth.BillingId(),
 			ProjectId: common.ProjectId,
 			Name:      dataConnectorName,
 		},
@@ -91,14 +85,12 @@ func create(streamName *string, cmd *cobra.Command) {
 	if keyStream {
 		exporter.StreamOrKeyStreamRef = &entities.BatchExporter_KeyStreamRef{
 			KeyStreamRef: &entities.KeyStreamRef{
-				BillingId: auth.Auth.BillingId(),
 				ProjectId: common.ProjectId,
 				Name:      *streamName,
 			}}
 	} else {
 		exporter.StreamOrKeyStreamRef = &entities.BatchExporter_StreamRef{
 			StreamRef: &entities.StreamRef{
-				BillingId: auth.Auth.BillingId(),
 				ProjectId: common.ProjectId,
 				Name:      *streamName,
 			}}
@@ -132,7 +124,6 @@ func getDataConnectorName(flags *pflag.FlagSet) string {
 
 func getDataConnectorNames() []string {
 	req := &data_connectors.ListDataConnectorsRequest{
-		BillingId: auth.Auth.BillingId(),
 		ProjectId: common.ProjectId,
 	}
 	response, err := data_connector.Client.ListDataConnectors(apiContext, req)
@@ -152,11 +143,7 @@ func namesCompletion(cmd *cobra.Command, args []string, complete string) ([]stri
 		// this one means you don't get multiple completion suggestions for one stream if it's not a delete call
 		return nil, cobra.ShellCompDirectiveNoFileComp
 	}
-	if auth.Auth.BillingIdAbsent() {
-		return common.MissingBillingIdCompletionError(cmd.CommandPath())
-	}
 	req := &batch_exporters.ListBatchExportersRequest{
-		BillingId: auth.Auth.BillingId(),
 		ProjectId: common.ProjectId,
 	}
 	response, err := client.ListBatchExporters(apiContext, req)

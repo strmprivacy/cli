@@ -19,7 +19,7 @@ var WebSocketCmd = &cobra.Command{
 	DisableAutoGenTag: true,
 	Long:              longDoc,
 	Run: func(cmd *cobra.Command, args []string) {
-		Run(cmd, &args[0])
+		run(cmd, &args[0])
 	},
 	Args:              cobra.ExactArgs(1), // the stream name
 	ValidArgsFunction: stream.NamesCompletion,

@@ -1,4 +1,4 @@
-package sim
+package random_events
 
 import (
 	"bytes"
@@ -9,30 +9,13 @@ import (
 	"strmprivacy/strm/pkg/common"
 )
 
-const (
-	IntervalFlag      = "interval"
-	EventsApiUrlFlag  = "events-api-url"
-	SessionRangeFlag  = "session-range"
-	SessionPrefixFlag = "session-prefix"
-	ConsentLevelsFlag = "consent-levels"
-	QuietFlag         = "quiet"
-	SchemaFlag        = "schema"
-)
-
-type StrmPrivacyEvent interface {
-	Serialize(w io.Writer) error
+type Simulator struct {
+	Gateway string
+	Schema  string
+	Client  http.Client
 }
 
-type Sender interface {
-	Send(event StrmPrivacyEvent, token string)
-}
-
-type ModernSender struct {
-	Gateway, Schema string
-	Client          http.Client
-}
-
-func (s ModernSender) Send(event StrmPrivacyEvent, token string) {
+func (s Simulator) Send(event StrmPrivacyEvent) {
 	b := &bytes.Buffer{}
 	err := event.Serialize(b)
 	common.CliExit(err)
@@ -41,7 +24,6 @@ func (s ModernSender) Send(event StrmPrivacyEvent, token string) {
 	common.CliExit(err)
 
 	req.Header.Set("Strm-Schema-Ref", s.Schema)
-	req.Header.Set("Authorization", "Bearer "+token)
 
 	resp, err := s.Client.Do(req)
 

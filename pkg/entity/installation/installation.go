@@ -5,7 +5,6 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/strmprivacy/api-definitions-go/v2/api/installations/v1"
 	"google.golang.org/grpc"
-	"strmprivacy/strm/pkg/auth"
 	"strmprivacy/strm/pkg/common"
 )
 
@@ -32,9 +31,6 @@ func list() {
 }
 
 func namesCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
-	if auth.Auth.BillingIdAbsent() {
-		return common.MissingBillingIdCompletionError(cmd.CommandPath())
-	}
 	if len(args) != 0 {
 		return nil, cobra.ShellCompDirectiveNoFileComp
 	}

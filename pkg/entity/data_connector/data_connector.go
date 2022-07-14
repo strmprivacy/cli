@@ -7,7 +7,6 @@ import (
 	"github.com/strmprivacy/api-definitions-go/v2/api/entities/v1"
 	"google.golang.org/grpc"
 	"io/ioutil"
-	"strmprivacy/strm/pkg/auth"
 	"strmprivacy/strm/pkg/common"
 	"strmprivacy/strm/pkg/util"
 )
@@ -22,7 +21,6 @@ func SetupClient(clientConnection *grpc.ClientConn, ctx context.Context) {
 
 func list(recursive bool) {
 	req := &data_connectors.ListDataConnectorsRequest{
-		BillingId:          auth.Auth.BillingId(),
 		ProjectId:          common.ProjectId,
 		Recursive:          recursive,
 		IncludeCredentials: false,
@@ -64,7 +62,6 @@ func create(dataConnector *entities.DataConnector) {
 
 func ref(name *string) *entities.DataConnectorRef {
 	return &entities.DataConnectorRef{
-		BillingId: auth.Auth.BillingId(),
 		ProjectId: common.ProjectId,
 		Name: *name,
 	}

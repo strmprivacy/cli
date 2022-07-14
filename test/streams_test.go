@@ -10,19 +10,17 @@ import (
 
 var creds = &entities.Credentials{ClientId: "clientId", ClientSecret: "clientSecret"}
 var limits = &entities.Limits{EventRate: 10000, EventCount: 1000000}
-var streamWithTags, streamWithTagsWithoutSecret *entities.Stream
+var streamWithTags *entities.Stream
 
 func init() {
 	streamWithTags = &entities.Stream{
-		Ref:          &entities.StreamRef{BillingId: "testBillingId", Name: "clitest-with-tags", ProjectId: "4800b0ff-0f8c-4333-9b7d-b6d01cb6c9a6"},
+		Ref:          &entities.StreamRef{Name: "clitest-with-tags", ProjectId: testConfig().projectId},
 		Enabled:      true,
 		Limits:       limits,
 		Tags:         []string{"foo", "bar", "baz"},
 		Credentials:  []*entities.Credentials{creds},
 		MaskedFields: &entities.MaskedFields{Seed: "****"},
 	}
-	streamWithTagsWithoutSecret = (proto.Clone(streamWithTags)).(*entities.Stream)
-	streamWithTagsWithoutSecret.Credentials = []*entities.Credentials{{ClientId: "clientId"}}
 }
 
 func TestStreams(t *testing.T) {
@@ -42,7 +40,7 @@ func listStreamsTest(t *testing.T) {
 func createStreamTest1(t *testing.T) {
 	expected := &streams.CreateStreamResponse{
 		Stream: &entities.Stream{
-			Ref:          &entities.StreamRef{BillingId: "testBillingId", Name: "clitest", ProjectId: "4800b0ff-0f8c-4333-9b7d-b6d01cb6c9a6"},
+			Ref:          &entities.StreamRef{Name: "clitest", ProjectId: testConfig().projectId},
 			Enabled:      true,
 			Limits:       limits,
 			Credentials:  []*entities.Credentials{creds},
@@ -61,7 +59,7 @@ func createStreamTest2(t *testing.T) {
 func createDerivedStream1(t *testing.T) {
 	expected := &streams.CreateStreamResponse{
 		Stream: &entities.Stream{
-			Ref:              &entities.StreamRef{BillingId: "testBillingId", Name: "clitest-with-tags-2", ProjectId: "4800b0ff-0f8c-4333-9b7d-b6d01cb6c9a6"},
+			Ref:              &entities.StreamRef{Name: "clitest-with-tags-2", ProjectId: testConfig().projectId},
 			ConsentLevels:    []int32{2},
 			ConsentLevelType: entities.ConsentLevelType_CUMULATIVE,
 			Enabled:          true,
@@ -74,7 +72,7 @@ func createDerivedStream1(t *testing.T) {
 
 func getStream1(t *testing.T) {
 	ExecuteAndVerify(t,
-		&streams.GetStreamResponse{StreamTree: &entities.StreamTree{Stream: streamWithTagsWithoutSecret}},
+		&streams.GetStreamResponse{StreamTree: &entities.StreamTree{Stream: streamWithTags}},
 		"get", "stream", "clitest-with-tags")
 }
 

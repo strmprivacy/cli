@@ -7,7 +7,6 @@ import (
 	"github.com/strmprivacy/api-definitions-go/v2/api/entities/v1"
 	"github.com/strmprivacy/api-definitions-go/v2/api/kafka_clusters/v1"
 	"google.golang.org/grpc"
-	"strmprivacy/strm/pkg/auth"
 	"strmprivacy/strm/pkg/common"
 )
 
@@ -19,7 +18,6 @@ var apiContext context.Context
 
 func ref(n *string) *entities.KafkaClusterRef {
 	return &entities.KafkaClusterRef{
-		BillingId: auth.Auth.BillingId(),
 		ProjectId: common.ProjectId,
 		Name: *n,
 	}
@@ -32,7 +30,6 @@ func SetupClient(clientConnection *grpc.ClientConn, ctx context.Context) {
 
 func list() {
 	req := &kafka_clusters.ListKafkaClustersRequest{
-		BillingId: auth.Auth.BillingId(),
 		ProjectId: common.ProjectId,
 	}
 	response, err := client.ListKafkaClusters(apiContext, req)
@@ -49,16 +46,12 @@ func get(name *string) {
 }
 
 func NamesCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
-	if auth.Auth.BillingIdAbsent() {
-		return common.MissingBillingIdCompletionError(cmd.CommandPath())
-	}
 	if len(args) != 0 {
 		// this one means you don't get multiple completion suggestions for one stream
 		return nil, cobra.ShellCompDirectiveNoFileComp
 	}
 
 	req := &kafka_clusters.ListKafkaClustersRequest{
-		BillingId: auth.Auth.BillingId(),
 		ProjectId: common.ProjectId,
 	}
 	response, err := client.ListKafkaClusters(apiContext, req)
@@ -76,5 +69,5 @@ func NamesCompletion(cmd *cobra.Command, args []string, complete string) ([]stri
 }
 
 func RefToString(clusterRef *entities.KafkaClusterRef) string {
-	return fmt.Sprintf("%v/%v", clusterRef.BillingId, clusterRef.Name)
+	return fmt.Sprintf("%v", clusterRef.Name)
 }

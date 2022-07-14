@@ -2,17 +2,22 @@ package random_events
 
 import (
 	"fmt"
+	"io"
 	"math/rand"
 	"strmprivacy/strm/pkg/schemas/demoschema"
-	"strmprivacy/strm/pkg/simulator"
 )
 
-func createRandomDemoEvent(consentLevels []int32, sessionId string) sim.StrmPrivacyEvent {
+// StrmPrivacyEvent is an interface that is implemented by all generated code with actgardner/gogen-avro
+type StrmPrivacyEvent interface {
+	Serialize(w io.Writer) error
+}
+
+func createRandomDemoEvent(consentLevels []int32, sessionId string) StrmPrivacyEvent {
 	event := demoschema.NewDemoEvent()
-	const eventContractRef = "strmprivacy/example/1.3.0"
+
 	event.StrmMeta = &demoschema.StrmMeta{
 		ConsentLevels:    consentLevels,
-		EventContractRef: eventContractRef,
+		EventContractRef: "strmprivacy/example/1.3.0",
 	}
 	event.ConsistentValue = sessionId
 	event.UniqueIdentifier = createUnionString(fmt.Sprintf("unique-%d", rand.Intn(100)))
@@ -21,7 +26,7 @@ func createRandomDemoEvent(consentLevels []int32, sessionId string) sim.StrmPriv
 	return event
 }
 
-var EventGenerators = map[string]func([]int32, string) sim.StrmPrivacyEvent{
+var EventGenerators = map[string]func([]int32, string) StrmPrivacyEvent{
 	"strmprivacy/demo/1.0.2": createRandomDemoEvent,
 }
 
