@@ -10,7 +10,7 @@ import (
 
 var creds = &entities.Credentials{ClientId: "clientId", ClientSecret: "clientSecret"}
 var limits = &entities.Limits{EventRate: 10000, EventCount: 1000000}
-var streamWithTags, streamWithTagsWithoutSecret *entities.Stream
+var streamWithTags *entities.Stream
 
 func init() {
 	streamWithTags = &entities.Stream{
@@ -21,8 +21,6 @@ func init() {
 		Credentials:  []*entities.Credentials{creds},
 		MaskedFields: &entities.MaskedFields{Seed: "****"},
 	}
-	streamWithTagsWithoutSecret = (proto.Clone(streamWithTags)).(*entities.Stream)
-	streamWithTagsWithoutSecret.Credentials = []*entities.Credentials{{ClientId: "clientId"}}
 }
 
 func TestStreams(t *testing.T) {
@@ -74,7 +72,7 @@ func createDerivedStream1(t *testing.T) {
 
 func getStream1(t *testing.T) {
 	ExecuteAndVerify(t,
-		&streams.GetStreamResponse{StreamTree: &entities.StreamTree{Stream: streamWithTagsWithoutSecret}},
+		&streams.GetStreamResponse{StreamTree: &entities.StreamTree{Stream: streamWithTags}},
 		"get", "stream", "clitest-with-tags")
 }
 
