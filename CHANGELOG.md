@@ -1,3 +1,10 @@
+# [2.4.0](https://github.com/strmprivacy/cli/compare/v2.3.0...v2.4.0) (2022-07-14)
+
+
+### Features
+
+* **strm-1258 + strm-1238:** use client_credentials grant for simulator and websocket; remove billing id ([a6bad5b](https://github.com/strmprivacy/cli/commit/a6bad5b7c8155c237184e31856455114679289e3))
+
 # [2.3.0](https://github.com/strmprivacy/cli/compare/v2.2.0...v2.3.0) (2022-06-17)
 
 
