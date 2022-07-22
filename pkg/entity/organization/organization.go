@@ -33,10 +33,17 @@ func inviteUsers(args []string, cmd *cobra.Command) {
 	req := &organizations.InviteUsersRequest{
 		UserInvites: invites,
 	}
-	_, err := client.InviteUsers(apiContext, req)
+	response, err := client.InviteUsers(apiContext, req)
 	common.CliExit(err)
+	handleInviteResponse(response)
+}
 
-	fmt.Println(fmt.Sprintf("Invited %d users to your organization", len(invites)))
+func handleInviteResponse(response *organizations.InviteUsersResponse) {
+	fmt.Println(fmt.Sprintf("Invited %d users to your organization.", response.InviteCount))
+	if len(response.Issues) > 0 {
+		fmt.Println(fmt.Sprintf("There were %d invites with issues:\n", len(response.Issues)))
+		inviteIssuesPrinter{}.Print(response.Issues)
+	}
 }
 
 func getEmails(args []string, cmd *cobra.Command) []string {
