@@ -20,6 +20,7 @@ import (
 	"strmprivacy/strm/pkg/entity/kafka_exporter"
 	"strmprivacy/strm/pkg/entity/kafka_user"
 	"strmprivacy/strm/pkg/entity/key_stream"
+	"strmprivacy/strm/pkg/entity/organization"
 	"strmprivacy/strm/pkg/entity/project"
 	"strmprivacy/strm/pkg/entity/schema"
 	"strmprivacy/strm/pkg/entity/schema_code"
@@ -47,6 +48,7 @@ func SetupVerbs(rootCmd *cobra.Command) {
 	rootCmd.AddCommand(cmd.ContextCommand)
 	rootCmd.AddCommand(cmd.ActivateCmd)
 	rootCmd.AddCommand(cmd.ArchiveCmd)
+	rootCmd.AddCommand(cmd.InviteCmd)
 }
 
 func SetupServiceClients(accessToken *string) {
@@ -67,6 +69,7 @@ func SetupServiceClients(accessToken *string) {
 	installation.SetupClient(clientConnection, ctx)
 	account.SetupClient(clientConnection, ctx)
 	project.SetupClient(clientConnection, ctx)
+	organization.SetupClient(clientConnection, ctx)
 }
 
 func ConfigPath() string {
