@@ -1,3 +1,10 @@
+# [2.5.0](https://github.com/strmprivacy/cli/compare/v2.4.0...v2.5.0) (2022-07-26)
+
+
+### Features
+
+* **strm-1433:** implement invite users command ([#98](https://github.com/strmprivacy/cli/issues/98)) ([9b71b21](https://github.com/strmprivacy/cli/commit/9b71b214b8dab04fa325404c2ec2deecbc921339))
+
 # [2.4.0](https://github.com/strmprivacy/cli/compare/v2.3.0...v2.4.0) (2022-07-14)
 
 
