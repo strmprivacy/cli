@@ -1,3 +1,10 @@
+# [2.6.0](https://github.com/strmprivacy/cli/compare/v2.5.0...v2.6.0) (2022-08-09)
+
+
+### Features
+
+* **strm-1462:** add create project command ([#99](https://github.com/strmprivacy/cli/issues/99)) ([f6508b5](https://github.com/strmprivacy/cli/commit/f6508b5dc50cf978f70a933e7b6d8631814dacf6))
+
 # [2.5.0](https://github.com/strmprivacy/cli/compare/v2.4.0...v2.5.0) (2022-07-26)
 
 
