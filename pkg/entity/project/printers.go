@@ -29,23 +29,38 @@ func availablePrinters() map[string]util.Printer {
 	return util.MergePrinterMaps(
 		util.DefaultPrinters,
 		map[string]util.Printer{
-			common.OutputFormatTable + common.ListCommandName: listTablePrinter{},
-			common.OutputFormatPlain + common.ListCommandName: listPlainPrinter{},
+			common.OutputFormatTable + common.ListCommandName:   listTablePrinter{},
+			common.OutputFormatTable + common.CreateCommandName: createTablePrinter{},
+			common.OutputFormatPlain + common.ListCommandName:   listPlainPrinter{},
+			common.OutputFormatPlain + common.CreateCommandName: createPlainPrinter{},
 		},
 	)
 }
 
 type listPlainPrinter struct{}
+type createPlainPrinter struct{}
+
 type listTablePrinter struct{}
+type createTablePrinter struct{}
 
 func (p listTablePrinter) Print(data interface{}) {
 	listResponse, _ := (data).(*projects.ListProjectsResponse)
 	printTable(listResponse.Projects)
 }
 
+func (p createTablePrinter) Print(data interface{}) {
+	createResponse, _ := (data).(*projects.CreateProjectResponse)
+	printTable([]*v1.Project{createResponse.Project})
+}
+
 func (p listPlainPrinter) Print(data interface{}) {
 	listResponse, _ := (data).(*projects.ListProjectsResponse)
 	printPlain(listResponse.Projects)
+}
+
+func (p createPlainPrinter) Print(data interface{}) {
+	createResponse, _ := (data).(*projects.CreateProjectResponse)
+	printPlain([]*v1.Project{createResponse.Project})
 }
 
 func printTable(projects []*v1.Project) {

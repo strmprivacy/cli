@@ -9,6 +9,7 @@ import (
 	"strmprivacy/strm/pkg/entity/event_contract"
 	"strmprivacy/strm/pkg/entity/kafka_exporter"
 	"strmprivacy/strm/pkg/entity/kafka_user"
+	"strmprivacy/strm/pkg/entity/project"
 	"strmprivacy/strm/pkg/entity/schema"
 	"strmprivacy/strm/pkg/entity/stream"
 )
@@ -29,4 +30,5 @@ func init() {
 	CreateCmd.AddCommand(kafka_user.CreateCmd())
 	CreateCmd.AddCommand(schema.CreateCmd())
 	CreateCmd.AddCommand(event_contract.CreateCmd())
+	CreateCmd.AddCommand(project.CreateCmd())
 }
