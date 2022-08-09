@@ -8,10 +8,10 @@ import (
 )
 
 const (
-	configCommandName        = "config"
-	entityInfoCommandName    = "info"
-	accountCommandName       = "account"
-	projectCommandName 	     = "project"
+	configCommandName     = "config"
+	entityInfoCommandName = "info"
+	accountCommandName    = "account"
+	projectCommandName    = "project"
 )
 
 func Configuration() *cobra.Command {
@@ -67,7 +67,6 @@ func Account() *cobra.Command {
 	return cmd
 }
 
-
 func EntityInfo() *cobra.Command {
 	entityInfo := &cobra.Command{
 		Use:               entityInfoCommandName,
@@ -102,7 +101,7 @@ func Project() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:               projectCommandName + " [name]",
 		Short:             "Show or set the active project",
-		Args:			   cobra.MinimumNArgs(0),
+		Args:              cobra.MinimumNArgs(0),
 		DisableAutoGenTag: true,
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
