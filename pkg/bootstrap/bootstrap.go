@@ -21,6 +21,7 @@ import (
 	"strmprivacy/strm/pkg/entity/kafka_exporter"
 	"strmprivacy/strm/pkg/entity/kafka_user"
 	"strmprivacy/strm/pkg/entity/key_stream"
+	"strmprivacy/strm/pkg/entity/keylinks"
 	"strmprivacy/strm/pkg/entity/organization"
 	"strmprivacy/strm/pkg/entity/project"
 	"strmprivacy/strm/pkg/entity/schema"
@@ -72,6 +73,7 @@ func SetupServiceClients(accessToken *string) {
 	project.SetupClient(clientConnection, ctx)
 	organization.SetupClient(clientConnection, ctx)
 	datasubject.SetupClient(clientConnection, ctx)
+	keylinks.SetupClient(clientConnection, ctx)
 }
 
 func ConfigPath() string {
