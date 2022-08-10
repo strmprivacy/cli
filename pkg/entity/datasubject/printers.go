@@ -3,7 +3,6 @@ package datasubject
 import (
 	"errors"
 	"fmt"
-	"github.com/jedib0t/go-pretty/v6/table"
 	"github.com/spf13/cobra"
 	"github.com/strmprivacy/api-definitions-go/v2/api/data_subjects/v1"
 	"strmprivacy/strm/pkg/common"
@@ -28,7 +27,6 @@ func availablePrinters() map[string]util.Printer {
 	return util.MergePrinterMaps(
 		util.DefaultPrinters,
 		map[string]util.Printer{
-			common.OutputFormatTable + common.ListCommandName: listTablePrinter{},
 			common.OutputFormatPlain + common.ListCommandName: listPlainPrinter{},
 		},
 	)
@@ -36,45 +34,14 @@ func availablePrinters() map[string]util.Printer {
 
 type listPlainPrinter struct{}
 
-type listTablePrinter struct{}
-
-func (p listTablePrinter) Print(data interface{}) {
-	listResponse, _ := (data).(*data_subjects.ListDataSubjectsResponse)
-	printTable(listResponse.DataSubjects)
-}
-
 func (p listPlainPrinter) Print(data interface{}) {
 	listResponse, _ := (data).(*data_subjects.ListDataSubjectsResponse)
-	printPlain(listResponse.DataSubjects)
+	printPlain(listResponse)
 }
 
-func printTable(infos []*data_subjects.ListDataSubjectsResponse_DataSubjectInfo) {
-	rows := make([]table.Row, 0, len(infos))
-
-	for _, info := range infos {
-		rows = append(rows, table.Row{
-			info.DataSubjectId,
-		})
+func printPlain(response *data_subjects.ListDataSubjectsResponse) {
+	fmt.Println(response.NextPageToken)
+	for _, dataSubject := range response.DataSubjects {
+		fmt.Println(dataSubject.DataSubjectId)
 	}
-
-	util.RenderTable(
-		table.Row{
-			"DataSubject",
-		},
-		rows,
-	)
-}
-
-func printPlain(infos []*data_subjects.ListDataSubjectsResponse_DataSubjectInfo) {
-	var names string
-	lastIndex := len(infos) - 1
-
-	for index, info := range infos {
-		names = names + info.DataSubjectId
-
-		if index != lastIndex {
-			names = names + "\n"
-		}
-	}
-	util.RenderPlain(names)
 }
