@@ -8,6 +8,8 @@ import (
 	"github.com/strmprivacy/api-definitions-go/v2/api/entities/v1"
 	"github.com/strmprivacy/api-definitions-go/v2/api/projects/v1"
 	"google.golang.org/grpc"
+	"io/ioutil"
+	"path"
 	"strmprivacy/strm/pkg/common"
 	"strmprivacy/strm/pkg/util"
 )
@@ -16,7 +18,10 @@ var client projects.ProjectsServiceClient
 var apiContext context.Context
 
 const (
-	descriptionFlag = "description"
+	descriptionFlag       = "description"
+	addMemberFlag         = "add-member"
+	removeMemberFlag      = "remove-member"
+	activeProjectFilename = "active_project"
 )
 
 func SetupClient(clientConnection *grpc.ClientConn, ctx context.Context) {
@@ -55,4 +60,33 @@ func create(projectName *string, cmd *cobra.Command) *projects.CreateProjectResp
 	response, err := client.CreateProject(apiContext, req)
 	common.CliExit(err)
 	return response
+}
+
+func manage(cmd *cobra.Command) {
+	flags := cmd.Flags()
+	membersToAdd, err := flags.GetStringArray(addMemberFlag)
+	membersToRemove, err := flags.GetStringArray(removeMemberFlag)
+	activeProject := GetActiveProject()
+
+	addReq := &projects.AddProjectMembersRequest{
+		Emails:    membersToAdd,
+		ProjectId: activeProject,
+	}
+	removeReq := &projects.RemoveProjectMembersRequest{
+		Emails:    membersToRemove,
+		ProjectId: activeProject,
+	}
+
+	_, err = client.AddProjectMembers(apiContext, addReq)
+	common.CliExit(err)
+	_, err = client.RemoveProjectMembers(apiContext, removeReq)
+	common.CliExit(err)
+	return
+}
+
+func GetActiveProject() string {
+	activeProjectFilePath := path.Join(common.ConfigPath, activeProjectFilename)
+	bytes, err := ioutil.ReadFile(activeProjectFilePath)
+	common.CliExit(err)
+	return string(bytes)
 }

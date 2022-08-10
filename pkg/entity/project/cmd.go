@@ -33,3 +33,22 @@ func CreateCmd() *cobra.Command {
 	flags.String(descriptionFlag, "", "description of the project")
 	return project
 }
+
+func ManageCmd() *cobra.Command {
+	project := &cobra.Command{
+		Use:   "project",
+		Short: "Manage a project",
+		PreRun: func(cmd *cobra.Command, args []string) {
+			printer = configurePrinter(cmd)
+		},
+		DisableAutoGenTag: true,
+		Run: func(cmd *cobra.Command, args []string) {
+			manage(cmd)
+		},
+		Args: cobra.ExactArgs(0), //
+	}
+	flags := project.Flags()
+	flags.StringArray(addMemberFlag, []string{}, "[email1,email2,..]")
+	flags.StringArray(removeMemberFlag, []string{}, "[email1,email2,..]")
+	return project
+}
