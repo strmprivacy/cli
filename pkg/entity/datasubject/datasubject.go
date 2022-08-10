@@ -30,6 +30,5 @@ func list(cmd *cobra.Command) {
 	req.PageToken = util.GetStringAndErr(flags, pageTokenFlag)
 	response, err := client.ListDataSubjects(apiContext, req)
 	common.CliExit(err)
-
 	printer.Print(response)
 }

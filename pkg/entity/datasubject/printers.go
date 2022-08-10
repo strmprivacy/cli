@@ -27,21 +27,31 @@ func availablePrinters() map[string]util.Printer {
 	return util.MergePrinterMaps(
 		util.DefaultPrinters,
 		map[string]util.Printer{
-			common.OutputFormatPlain + common.ListCommandName: listPlainPrinter{},
+			common.OutputFormatPlain + common.ListCommandName:       listPlainPrinter{},
+			common.OutputFormatPlain + "0" + common.ListCommandName: listPlain0Printer{},
 		},
 	)
 }
 
 type listPlainPrinter struct{}
+type listPlain0Printer struct{}
 
 func (p listPlainPrinter) Print(data interface{}) {
 	listResponse, _ := (data).(*data_subjects.ListDataSubjectsResponse)
-	printPlain(listResponse)
+	printPlain(listResponse, false)
+}
+func (p listPlain0Printer) Print(data interface{}) {
+	listResponse, _ := (data).(*data_subjects.ListDataSubjectsResponse)
+	printPlain(listResponse, true)
 }
 
-func printPlain(response *data_subjects.ListDataSubjectsResponse) {
-	fmt.Println(response.NextPageToken)
+func printPlain(response *data_subjects.ListDataSubjectsResponse, print0 bool) {
+	var sep = '\n'
+	if print0 {
+		sep = '\000'
+	}
+	fmt.Printf("%s%c", response.NextPageToken, sep)
 	for _, dataSubject := range response.DataSubjects {
-		fmt.Println(dataSubject.DataSubjectId)
+		fmt.Printf("%s%c", dataSubject.DataSubjectId, sep)
 	}
 }

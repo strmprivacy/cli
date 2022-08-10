@@ -9,7 +9,8 @@ import (
 
 var longDoc = `### Usage`
 
-var outputFormatFlagAllowedValues = []string{common.OutputFormatPlain, common.OutputFormatJson, common.OutputFormatJsonRaw}
+var outputFormatFlagAllowedValues = []string{common.OutputFormatPlain, common.OutputFormatPlain + "0",
+	common.OutputFormatJson, common.OutputFormatJsonRaw}
 var outputFormatFlagAllowedValuesText = strings.Join(outputFormatFlagAllowedValues, ", ")
 
 func ListCmd() *cobra.Command {
