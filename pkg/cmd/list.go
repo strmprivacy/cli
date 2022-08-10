@@ -6,6 +6,7 @@ import (
 	"strmprivacy/strm/pkg/entity/batch_exporter"
 	"strmprivacy/strm/pkg/entity/batch_job"
 	"strmprivacy/strm/pkg/entity/data_connector"
+	"strmprivacy/strm/pkg/entity/datasubject"
 	"strmprivacy/strm/pkg/entity/event_contract"
 	"strmprivacy/strm/pkg/entity/installation"
 	"strmprivacy/strm/pkg/entity/kafka_cluster"
@@ -36,6 +37,7 @@ func init() {
 	ListCmd.AddCommand(event_contract.ListCmd())
 	ListCmd.AddCommand(installation.ListCmd())
 	ListCmd.AddCommand(project.ListCmd())
+	ListCmd.AddCommand(datasubject.ListCmd())
 
 	ListCmd.PersistentFlags().BoolP(common.RecursiveFlagName, common.RecursiveFlagShorthand, false, common.RecursiveFlagUsage)
 }
