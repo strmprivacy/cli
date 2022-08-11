@@ -1,4 +1,7 @@
 #!/bin/bash
+
+echo OBSOLETE, superseded by generate_docs.py
+exit 1
 if [[ "$OSTYPE" == "darwin"* ]]; then
     SED="gsed"
 else

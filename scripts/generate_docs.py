@@ -6,35 +6,20 @@ import re
 import sys
 import shutil
 
-pat = re.compile(r"^(([a-z]+)_)?(([a-z]+))_?(.*)$")
+os.makedirs("generated_docs", exist_ok=True)
 os.chdir("generated_docs")
+
 for f in glob.glob("*.md"):
-    m = pat.match(f)
-    if not m:
-        sys.exit(1)
+    comps = f.split('_')
+    path = "/".join(comps)
+    folder = os.path.dirname(path)
+    if folder:
+        os.makedirs(folder, exist_ok=True)
+        os.rename(f, path)
 
-    _, p1, _, p2, p3 = m.groups()
-    output_file = None
-    path = "strm"
-    if p1 and p2:
-        path = os.path.join(p1,p2)
-        output_file = p3
-    elif p1:
-        path=p1
+for f in glob.glob("**/*.md", recursive=True):
+    b,_ = os.path.splitext(f)
+    print(f, b)
+    if os.path.isdir(b):
+        os.rename(f, os.path.join(b, "index.md"))
 
-    if p3==".md":
-        output_file = "index.md"
-    if not output_file :
-        sys.exit(2)
-    path=os.path.join(path, output_file)
-    #print("%-50s %5s %10s %10s %s" % (f, p1, p2, p3, path))
-    print("%-50s %s" % (f, path))
-    os.makedirs(os.path.dirname(path), exist_ok=True)
-    os.rename(f, path)
-    if p3 == ".md":
-        b = os.path.basename(os.path.dirname(path))
-        try:
-            shutil.copyfile(path, os.path.join(os.path.dirname(path), "..", f"{b}.md"))
-        except Exception as e:
-            print(e)
-            pass
