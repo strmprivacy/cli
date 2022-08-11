@@ -9,7 +9,6 @@ import (
 	"github.com/strmprivacy/api-definitions-go/v2/api/projects/v1"
 	"google.golang.org/grpc"
 	"strmprivacy/strm/pkg/common"
-	strmContext "strmprivacy/strm/pkg/context"
 	"strmprivacy/strm/pkg/util"
 )
 
@@ -67,7 +66,7 @@ func manage(projectName *string, cmd *cobra.Command) {
 
 	activeProject := ""
 	if *projectName == "" {
-		activeProject = strmContext.GetActiveProject()
+		activeProject = common.GetActiveProject()
 	} else {
 		activeProject = *projectName
 	}
