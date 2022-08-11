@@ -20,6 +20,7 @@ import (
 	"strmprivacy/strm/pkg/entity/kafka_exporter"
 	"strmprivacy/strm/pkg/entity/kafka_user"
 	"strmprivacy/strm/pkg/entity/key_stream"
+	"strmprivacy/strm/pkg/entity/member"
 	"strmprivacy/strm/pkg/entity/organization"
 	"strmprivacy/strm/pkg/entity/project"
 	"strmprivacy/strm/pkg/entity/schema"
@@ -70,6 +71,7 @@ func SetupServiceClients(accessToken *string) {
 	installation.SetupClient(clientConnection, ctx)
 	account.SetupClient(clientConnection, ctx)
 	project.SetupClient(clientConnection, ctx)
+	member.SetupClient(clientConnection, ctx)
 	organization.SetupClient(clientConnection, ctx)
 }
 

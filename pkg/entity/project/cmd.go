@@ -43,7 +43,7 @@ func ManageCmd() *cobra.Command {
 		},
 		DisableAutoGenTag: true,
 		Run: func(cmd *cobra.Command, args []string) {
-			manage(&args[0], cmd)
+			manage(args[0], cmd)
 		},
 		Args: cobra.MaximumNArgs(1),
 	}
