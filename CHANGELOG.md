@@ -1,3 +1,10 @@
+# [2.7.0](https://github.com/strmprivacy/cli/compare/v2.6.0...v2.7.0) (2022-08-11)
+
+
+### Features
+
+* **strm-1230:** expose adding, removing and listing projects members ([#100](https://github.com/strmprivacy/cli/issues/100)) ([5a53520](https://github.com/strmprivacy/cli/commit/5a535200f8c9fac93fab87e13a9749703bf97904))
+
 # [2.6.0](https://github.com/strmprivacy/cli/compare/v2.5.0...v2.6.0) (2022-08-09)
 
 
