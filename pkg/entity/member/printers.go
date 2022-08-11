@@ -40,8 +40,8 @@ type listPlainPrinter struct{}
 type listTablePrinter struct{}
 
 func (p listTablePrinter) Print(data interface{}) {
-	listMembersResponse, _ := (data).(*projects.ListProjectMembersResponse)
-	printTable(listMembersResponse.ProjectMembers)
+	user, _ := (data).([]*v1.User)
+	printTable(user)
 }
 
 func (p listPlainPrinter) Print(data interface{}) {
