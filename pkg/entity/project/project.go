@@ -19,8 +19,8 @@ var apiContext context.Context
 
 const (
 	descriptionFlag       = "description"
-	addMemberFlag         = "add-member"
-	removeMemberFlag      = "remove-member"
+	addMembersFlag        = "add-member"
+	removeMembersFlag     = "remove-member"
 	activeProjectFilename = "active_project"
 )
 
@@ -62,25 +62,35 @@ func create(projectName *string, cmd *cobra.Command) *projects.CreateProjectResp
 	return response
 }
 
-func manage(cmd *cobra.Command) {
+func manage(projectName *string, cmd *cobra.Command) {
 	flags := cmd.Flags()
-	membersToAdd, err := flags.GetStringArray(addMemberFlag)
-	membersToRemove, err := flags.GetStringArray(removeMemberFlag)
-	activeProject := GetActiveProject()
+	membersToAdd, err := flags.GetStringArray(addMembersFlag)
+	membersToRemove, err := flags.GetStringArray(removeMembersFlag)
 
-	addReq := &projects.AddProjectMembersRequest{
-		Emails:    membersToAdd,
-		ProjectId: activeProject,
-	}
-	removeReq := &projects.RemoveProjectMembersRequest{
-		Emails:    membersToRemove,
-		ProjectId: activeProject,
+	activeProject := ""
+	if *projectName == "" {
+		activeProject = GetActiveProject()
+	} else {
+		activeProject = *projectName
 	}
 
-	_, err = client.AddProjectMembers(apiContext, addReq)
-	common.CliExit(err)
-	_, err = client.RemoveProjectMembers(apiContext, removeReq)
-	common.CliExit(err)
+	if len(membersToAdd) > 0 {
+		addReq := &projects.AddProjectMembersRequest{
+			Emails:    membersToAdd,
+			ProjectId: activeProject,
+		}
+		_, err = client.AddProjectMembers(apiContext, addReq)
+		common.CliExit(err)
+	}
+
+	if len(membersToRemove) > 0 {
+		removeReq := &projects.RemoveProjectMembersRequest{
+			Emails:    membersToRemove,
+			ProjectId: activeProject,
+		}
+		_, err = client.RemoveProjectMembers(apiContext, removeReq)
+		common.CliExit(err)
+	}
 	return
 }
 
