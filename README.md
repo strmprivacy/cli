@@ -14,7 +14,7 @@ the [releases page](https://github.com/strmprivacy/cli/releases/latest). Put the
 
 #### Shell Completion
 
-In order to set up command completion, please follow the instructions below:
+In order to set up command completion, please follow the instructions below: 
 
 - for `bash` users \
   add the following line to your `.bash_profile` or `.bashrc`:
