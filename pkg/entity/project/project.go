@@ -74,11 +74,15 @@ func GetProjectId(projectName string) string {
 	return resolvedProject.Id
 }
 
-func manage(projectName string, cmd *cobra.Command) {
+func manage(args []string, cmd *cobra.Command) {
 	flags := cmd.Flags()
 	membersToAdd, err := flags.GetStringArray(addMembersFlag)
 	membersToRemove, err := flags.GetStringArray(removeMembersFlag)
 
+	projectName := ""
+	if len(args) > 0 {
+		projectName = args[0]
+	}
 	projectId := GetProjectId(projectName)
 
 	if len(membersToAdd) > 0 {
