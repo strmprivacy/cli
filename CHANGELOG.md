@@ -1,3 +1,10 @@
+# [2.8.0](https://github.com/strmprivacy/cli/compare/v2.7.0...v2.8.0) (2022-08-11)
+
+
+### Features
+
+* **feat/dss:** dss ([#103](https://github.com/strmprivacy/cli/issues/103)) ([bd3f57b](https://github.com/strmprivacy/cli/commit/bd3f57b58dce0e441fee5ce836033660208c4a26))
+
 # [2.7.0](https://github.com/strmprivacy/cli/compare/v2.6.0...v2.7.0) (2022-08-11)
 
 
