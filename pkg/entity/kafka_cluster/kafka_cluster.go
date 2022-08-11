@@ -19,7 +19,7 @@ var apiContext context.Context
 func ref(n *string) *entities.KafkaClusterRef {
 	return &entities.KafkaClusterRef{
 		ProjectId: common.ProjectId,
-		Name: *n,
+		Name:      *n,
 	}
 }
 

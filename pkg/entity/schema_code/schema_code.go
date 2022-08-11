@@ -37,8 +37,8 @@ func GetSchemaCode(cmd *cobra.Command, name *string) string {
 	outputFile := util.GetStringAndErr(flags, filenameFlag)
 	overwrite := util.GetBoolAndErr(flags, overwriteFlag)
 	req := &schemas.GetSchemaCodeRequest{
-		Language:  language,
-		Ref:       schema.Ref(name),
+		Language: language,
+		Ref:      schema.Ref(name),
 	}
 	schemaCode, err := client.GetSchemaCode(apiContext, req)
 	common.CliExit(err)

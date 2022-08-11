@@ -122,8 +122,8 @@ func create(args []string, cmd *cobra.Command) {
 }
 
 /*
-		-M strmprivacy/example/1.3.0:sensitiveValue,anotherOne \
-   		-M dpg/nps_unified/v3:kiosk_v1,customer_id --masked_fields_file
+			-M strmprivacy/example/1.3.0:sensitiveValue,anotherOne \
+	   		-M dpg/nps_unified/v3:kiosk_v1,customer_id --masked_fields_file
 */
 func parseMaskedFields(flags *pflag.FlagSet) *entities.MaskedFields {
 	masked, err := flags.GetStringArray(maskedFieldsFlag)

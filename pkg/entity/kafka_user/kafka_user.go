@@ -18,7 +18,7 @@ var apiContext context.Context
 func ref(n *string) *entities.KafkaUserRef {
 	return &entities.KafkaUserRef{
 		ProjectId: common.ProjectId,
-		Name: *n,
+		Name:      *n,
 	}
 }
 
