@@ -22,10 +22,10 @@ func ResolveProject(f *pflag.FlagSet) {
 	activeProjectFilePath := path.Join(common.ConfigPath, activeProjectFilename)
 	projectFlagValue, _ := f.GetString(ProjectFlag)
 
-	if _, err := os.Stat(activeProjectFilePath); (os.IsNotExist(err) || GetActiveProject() == "") && projectFlagValue == "" {
+	if _, err := os.Stat(activeProjectFilePath); (os.IsNotExist(err) || common.GetActiveProject() == "") && projectFlagValue == "" {
 		initActiveProject()
 		fmt.Println(fmt.Sprintf("Active project was not yet set, has been set to '%v'. You can set a project "+
-			"with 'strm context project <project-name>'\n", GetActiveProject()))
+			"with 'strm context project <project-name>'\n", common.GetActiveProject()))
 	}
 
 	if projectFlagValue != "" {
@@ -36,12 +36,12 @@ func ResolveProject(f *pflag.FlagSet) {
 		}
 		common.ProjectId = resolvedProject.Id
 	} else {
-		activeProject := GetActiveProject()
+		activeProject := common.GetActiveProject()
 		resolvedProject := project.GetProject(activeProject)
 		if resolvedProject == nil {
 			initActiveProject()
 			common.CliExit(errors.New(fmt.Sprintf("Active project '%v' does not exist, or you do not have access "+
-				"to it. The following project has been set instead: %v", activeProject, GetActiveProject())))
+				"to it. The following project has been set instead: %v", activeProject, common.GetActiveProject())))
 		}
 		common.ProjectId = resolvedProject.Id
 	}
@@ -58,16 +58,6 @@ func SetActiveProject(projectName string) {
 		log.Warnln(message)
 		common.CliExit(errors.New(message))
 	}
-}
-
-func GetActiveProject() string {
-	activeProjectFilePath := path.Join(common.ConfigPath, activeProjectFilename)
-
-	bytes, err := ioutil.ReadFile(activeProjectFilePath)
-	common.CliExit(err)
-	activeProject := string(bytes)
-	log.Infoln("Current active project is: " + activeProject)
-	return activeProject
 }
 
 func initActiveProject() {

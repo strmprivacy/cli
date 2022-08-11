@@ -31,17 +31,21 @@ func availablePrinters() map[string]util.Printer {
 		map[string]util.Printer{
 			common.OutputFormatTable + common.ListCommandName:   listTablePrinter{},
 			common.OutputFormatTable + common.CreateCommandName: createTablePrinter{},
+			common.OutputFormatTable + common.ManageCommandName: manageTablePrinter{},
 			common.OutputFormatPlain + common.ListCommandName:   listPlainPrinter{},
 			common.OutputFormatPlain + common.CreateCommandName: createPlainPrinter{},
+			common.OutputFormatPlain + common.ManageCommandName: managePlainPrinter{},
 		},
 	)
 }
 
 type listPlainPrinter struct{}
 type createPlainPrinter struct{}
+type managePlainPrinter struct{}
 
 type listTablePrinter struct{}
 type createTablePrinter struct{}
+type manageTablePrinter struct{}
 
 func (p listTablePrinter) Print(data interface{}) {
 	listResponse, _ := (data).(*projects.ListProjectsResponse)
@@ -53,6 +57,10 @@ func (p createTablePrinter) Print(data interface{}) {
 	printTable([]*v1.Project{createResponse.Project})
 }
 
+func (p manageTablePrinter) Print(_ interface{}) {
+	printTable([]*v1.Project{})
+}
+
 func (p listPlainPrinter) Print(data interface{}) {
 	listResponse, _ := (data).(*projects.ListProjectsResponse)
 	printPlain(listResponse.Projects)
@@ -61,6 +69,10 @@ func (p listPlainPrinter) Print(data interface{}) {
 func (p createPlainPrinter) Print(data interface{}) {
 	createResponse, _ := (data).(*projects.CreateProjectResponse)
 	printPlain([]*v1.Project{createResponse.Project})
+}
+
+func (p managePlainPrinter) Print(_ interface{}) {
+	printPlain([]*v1.Project{})
 }
 
 func printTable(projects []*v1.Project) {

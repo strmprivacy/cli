@@ -29,6 +29,7 @@ func availablePrinters() map[string]util.Printer {
 		map[string]util.Printer{
 			common.OutputFormatPlain + common.ListCommandName:       listPlainPrinter{},
 			common.OutputFormatPlain + "0" + common.ListCommandName: listPlain0Printer{},
+			common.OutputFormatTable + common.ListCommandName:       listPlainPrinter{},
 			common.OutputFormatPlain + common.DeleteCommandName:     deletePlainPrinter{},
 		},
 	)

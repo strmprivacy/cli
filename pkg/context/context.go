@@ -101,5 +101,5 @@ func findConfigFile() string {
 }
 
 func showActiveProject() {
-	printer.Print("Active project: " + GetActiveProject())
+	printer.Print("Active project: " + common.GetActiveProject())
 }

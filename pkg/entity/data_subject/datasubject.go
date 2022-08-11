@@ -2,9 +2,11 @@ package data_subject
 
 import (
 	"context"
+	"fmt"
 	"github.com/spf13/cobra"
 	"github.com/strmprivacy/api-definitions-go/v2/api/data_subjects/v1"
 	"google.golang.org/grpc"
+	"os"
 	"strmprivacy/strm/pkg/common"
 	"strmprivacy/strm/pkg/util"
 )
@@ -34,6 +36,13 @@ func list(cmd *cobra.Command) {
 }
 
 func del(args []string, cmd *cobra.Command) {
+	if len(args) == 0 {
+
+		fmt.Fprintln(os.Stderr, `Call with at least one data-subject argument
+
+You can retrieve valid arguments via 'list data-subjects' `)
+		os.Exit(0)
+	}
 	req := &data_subjects.DeleteDataSubjectsRequest{DataSubjects: args}
 	response, err := client.DeleteDataSubjects(apiContext, req)
 	common.CliExit(err)

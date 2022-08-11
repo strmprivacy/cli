@@ -4,9 +4,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var longDoc = `### Keylinks for Data Subjects Service`
-
 func ListCmd() *cobra.Command {
+	longDoc := `Retrieve keylinks associated with data subjects`
 	command := &cobra.Command{
 		Use:               "data-subject-keylinks <data-subject-id>...",
 		Short:             "List data subjects keylinks",
