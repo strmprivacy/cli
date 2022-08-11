@@ -8,9 +8,8 @@ import (
 	"github.com/strmprivacy/api-definitions-go/v2/api/entities/v1"
 	"github.com/strmprivacy/api-definitions-go/v2/api/projects/v1"
 	"google.golang.org/grpc"
-	"io/ioutil"
-	"path"
 	"strmprivacy/strm/pkg/common"
+	strmContext "strmprivacy/strm/pkg/context"
 	"strmprivacy/strm/pkg/util"
 )
 
@@ -18,10 +17,9 @@ var client projects.ProjectsServiceClient
 var apiContext context.Context
 
 const (
-	descriptionFlag       = "description"
-	addMembersFlag        = "add-member"
-	removeMembersFlag     = "remove-member"
-	activeProjectFilename = "active_project"
+	descriptionFlag   = "description"
+	addMembersFlag    = "add-member"
+	removeMembersFlag = "remove-member"
 )
 
 func SetupClient(clientConnection *grpc.ClientConn, ctx context.Context) {
@@ -69,7 +67,7 @@ func manage(projectName *string, cmd *cobra.Command) {
 
 	activeProject := ""
 	if *projectName == "" {
-		activeProject = GetActiveProject()
+		activeProject = strmContext.GetActiveProject()
 	} else {
 		activeProject = *projectName
 	}
@@ -92,11 +90,4 @@ func manage(projectName *string, cmd *cobra.Command) {
 		common.CliExit(err)
 	}
 	return
-}
-
-func GetActiveProject() string {
-	activeProjectFilePath := path.Join(common.ConfigPath, activeProjectFilename)
-	bytes, err := ioutil.ReadFile(activeProjectFilePath)
-	common.CliExit(err)
-	return string(bytes)
 }
