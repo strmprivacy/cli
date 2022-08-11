@@ -1,5 +1,5 @@
 #!/bin/bash
-./scripts/generate_docs.sh
+./scripts/generate_docs.py
 
 if [[ $APIS_EMAIL != "" ]]
 then
