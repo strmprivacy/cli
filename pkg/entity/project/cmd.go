@@ -37,7 +37,7 @@ func CreateCmd() *cobra.Command {
 func ManageCmd() *cobra.Command {
 	project := &cobra.Command{
 		Use:   "project [project-name]",
-		Short: "Manage a project, add or remove members. Defaults to active project",
+		Short: "Manage a project: add or remove members. Defaults to active project",
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
 		},
