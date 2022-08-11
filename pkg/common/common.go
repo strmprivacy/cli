@@ -13,12 +13,16 @@ import (
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
 	"gopkg.in/natefinch/lumberjack.v2"
+	"io/ioutil"
 	"os"
+	"path"
 	"runtime"
 	"strings"
 )
 
 var RootCommandName = "strm"
+
+const activeProjectFilename = "active_project"
 
 var ApiAuthHost string
 var ApiHost string
@@ -108,4 +112,14 @@ func MarkRequiredFlags(cmd *cobra.Command, flagNames ...string) {
 		err := cmd.MarkFlagRequired(flag)
 		CliExit(err)
 	}
+}
+
+func GetActiveProject() string {
+	activeProjectFilePath := path.Join(ConfigPath, activeProjectFilename)
+
+	bytes, err := ioutil.ReadFile(activeProjectFilePath)
+	CliExit(err)
+	activeProject := string(bytes)
+	log.Infoln("Current active project is: " + activeProject)
+	return activeProject
 }

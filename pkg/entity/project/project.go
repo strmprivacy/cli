@@ -16,7 +16,9 @@ var client projects.ProjectsServiceClient
 var apiContext context.Context
 
 const (
-	descriptionFlag = "description"
+	descriptionFlag   = "description"
+	addMembersFlag    = "add-member"
+	removeMembersFlag = "remove-member"
 )
 
 func SetupClient(clientConnection *grpc.ClientConn, ctx context.Context) {
@@ -55,4 +57,36 @@ func create(projectName *string, cmd *cobra.Command) *projects.CreateProjectResp
 	response, err := client.CreateProject(apiContext, req)
 	common.CliExit(err)
 	return response
+}
+
+func manage(projectName *string, cmd *cobra.Command) {
+	flags := cmd.Flags()
+	membersToAdd, err := flags.GetStringArray(addMembersFlag)
+	membersToRemove, err := flags.GetStringArray(removeMembersFlag)
+
+	activeProject := ""
+	if *projectName == "" {
+		activeProject = common.GetActiveProject()
+	} else {
+		activeProject = *projectName
+	}
+
+	if len(membersToAdd) > 0 {
+		addReq := &projects.AddProjectMembersRequest{
+			Emails:    membersToAdd,
+			ProjectId: activeProject,
+		}
+		_, err = client.AddProjectMembers(apiContext, addReq)
+		common.CliExit(err)
+	}
+
+	if len(membersToRemove) > 0 {
+		removeReq := &projects.RemoveProjectMembersRequest{
+			Emails:    membersToRemove,
+			ProjectId: activeProject,
+		}
+		_, err = client.RemoveProjectMembers(apiContext, removeReq)
+		common.CliExit(err)
+	}
+	return
 }
