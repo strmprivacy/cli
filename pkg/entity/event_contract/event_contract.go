@@ -70,7 +70,7 @@ func del(name *string) {
 
 func activate(name *string) {
 	req := &event_contracts.ActivateEventContractRequest{
-		ProjectId: common.ProjectId,
+		ProjectId:        common.ProjectId,
 		EventContractRef: ref(name)}
 	response, err := client.ActivateEventContract(apiContext, req)
 	common.CliExit(err)
@@ -80,7 +80,7 @@ func activate(name *string) {
 
 func archive(name *string) {
 	req := &event_contracts.ArchiveEventContractRequest{
-		ProjectId: common.ProjectId,
+		ProjectId:        common.ProjectId,
 		EventContractRef: ref(name)}
 	response, err := client.ArchiveEventContract(apiContext, req)
 	common.CliExit(err)
@@ -90,7 +90,7 @@ func archive(name *string) {
 
 func get(name *string) {
 	req := &event_contracts.GetEventContractRequest{
-		Ref:       ref(name)}
+		Ref: ref(name)}
 	response, err := client.GetEventContract(apiContext, req)
 	common.CliExit(err)
 

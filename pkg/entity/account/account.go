@@ -7,7 +7,6 @@ import (
 	"strmprivacy/strm/pkg/common"
 )
 
-
 var client account.AccountServiceClient
 var apiContext context.Context
 

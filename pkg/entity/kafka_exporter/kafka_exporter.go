@@ -23,7 +23,7 @@ func Get(name *string) *kafka_exporters.GetKafkaExporterResponse {
 	req := &kafka_exporters.GetKafkaExporterRequest{
 		Ref: &entities.KafkaExporterRef{
 			ProjectId: common.ProjectId,
-			Name: *name,
+			Name:      *name,
 		},
 	}
 	exporter, err := client.GetKafkaExporter(apiContext, req)
@@ -49,7 +49,7 @@ func get(name *string, recursive bool) {
 func del(name *string, recursive bool) {
 	exporterRef := &entities.KafkaExporterRef{
 		ProjectId: common.ProjectId,
-		Name: *name,
+		Name:      *name,
 	}
 	exporter := Get(name)
 
@@ -73,9 +73,9 @@ func create(name *string, cmd *cobra.Command) {
 	exporter := &entities.KafkaExporter{
 		StreamRef: &entities.StreamRef{
 			ProjectId: common.ProjectId,
-			Name: *name,
+			Name:      *name,
 		},
-		Ref:       &entities.KafkaExporterRef{
+		Ref: &entities.KafkaExporterRef{
 			ProjectId: common.ProjectId,
 		},
 	}

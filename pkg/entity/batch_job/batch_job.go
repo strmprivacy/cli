@@ -47,7 +47,7 @@ func del(id *string) {
 	req := &batch_jobs.DeleteBatchJobRequest{
 		Ref: &entities.BatchJobRef{
 			ProjectId: common.ProjectId,
-			Id: *id,
+			Id:        *id,
 		},
 	}
 	response, err := client.DeleteBatchJob(apiContext, req)

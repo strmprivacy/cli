@@ -64,6 +64,12 @@ func GetInt64AndErr(f *pflag.FlagSet, k string) int64 {
 	common.CliExit(err)
 	return v
 }
+
+func GetInt32AndErr(f *pflag.FlagSet, k string) int32 {
+	v, err := f.GetInt32(k)
+	common.CliExit(err)
+	return v
+}
 func GetIntAndErr(f *pflag.FlagSet, k string) int {
 	v, err := f.GetInt(k)
 	common.CliExit(err)
