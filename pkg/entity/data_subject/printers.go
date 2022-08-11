@@ -1,4 +1,4 @@
-package datasubject
+package data_subject
 
 import (
 	"errors"
@@ -29,12 +29,14 @@ func availablePrinters() map[string]util.Printer {
 		map[string]util.Printer{
 			common.OutputFormatPlain + common.ListCommandName:       listPlainPrinter{},
 			common.OutputFormatPlain + "0" + common.ListCommandName: listPlain0Printer{},
+			common.OutputFormatPlain + common.DeleteCommandName:     deletePlainPrinter{},
 		},
 	)
 }
 
 type listPlainPrinter struct{}
 type listPlain0Printer struct{}
+type deletePlainPrinter struct{}
 
 func (p listPlainPrinter) Print(data interface{}) {
 	listResponse, _ := (data).(*data_subjects.ListDataSubjectsResponse)
@@ -54,4 +56,9 @@ func printPlain(response *data_subjects.ListDataSubjectsResponse, print0 bool) {
 	for _, dataSubject := range response.DataSubjects {
 		fmt.Printf("%s%c", dataSubject.DataSubjectId, sep)
 	}
+}
+
+func (p deletePlainPrinter) Print(data interface{}) {
+	response, _ := (data).(*data_subjects.DeleteDataSubjectsResponse)
+	fmt.Printf("%d\n", response.DeletedKeylinksCount)
 }

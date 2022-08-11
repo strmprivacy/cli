@@ -63,7 +63,7 @@ func create(dataConnector *entities.DataConnector) {
 func ref(name *string) *entities.DataConnectorRef {
 	return &entities.DataConnectorRef{
 		ProjectId: common.ProjectId,
-		Name: *name,
+		Name:      *name,
 	}
 }
 

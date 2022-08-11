@@ -36,7 +36,7 @@ func get(name *string) {
 func ref(n *string) *entities.KeyStreamRef {
 	return &entities.KeyStreamRef{
 		ProjectId: common.ProjectId,
-		Name: *n,
+		Name:      *n,
 	}
 }
 

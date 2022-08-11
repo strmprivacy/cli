@@ -40,7 +40,7 @@ func ResolveProject(f *pflag.FlagSet) {
 		resolvedProject := project.GetProject(activeProject)
 		if resolvedProject == nil {
 			initActiveProject()
-			common.CliExit(errors.New(fmt.Sprintf("Active project '%v' does not exist, or you do not have access " +
+			common.CliExit(errors.New(fmt.Sprintf("Active project '%v' does not exist, or you do not have access "+
 				"to it. The following project has been set instead: %v", activeProject, GetActiveProject())))
 		}
 		common.ProjectId = resolvedProject.Id

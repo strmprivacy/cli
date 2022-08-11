@@ -1,4 +1,4 @@
-package datasubject
+package data_subject
 
 import (
 	"context"
@@ -29,6 +29,13 @@ func list(cmd *cobra.Command) {
 	req.PageSize = util.GetInt32AndErr(flags, pageSizeFlag)
 	req.PageToken = util.GetStringAndErr(flags, pageTokenFlag)
 	response, err := client.ListDataSubjects(apiContext, req)
+	common.CliExit(err)
+	printer.Print(response)
+}
+
+func del(args []string, cmd *cobra.Command) {
+	req := &data_subjects.DeleteDataSubjectsRequest{DataSubjects: args}
+	response, err := client.DeleteDataSubjects(apiContext, req)
 	common.CliExit(err)
 	printer.Print(response)
 }

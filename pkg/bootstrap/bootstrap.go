@@ -14,7 +14,7 @@ import (
 	"strmprivacy/strm/pkg/entity/batch_exporter"
 	"strmprivacy/strm/pkg/entity/batch_job"
 	"strmprivacy/strm/pkg/entity/data_connector"
-	"strmprivacy/strm/pkg/entity/datasubject"
+	"strmprivacy/strm/pkg/entity/data_subject"
 	"strmprivacy/strm/pkg/entity/event_contract"
 	"strmprivacy/strm/pkg/entity/installation"
 	"strmprivacy/strm/pkg/entity/kafka_cluster"
@@ -31,7 +31,8 @@ import (
 	"strmprivacy/strm/pkg/util"
 )
 
-/**
+/*
+*
 these are the top level commands, i.e. the verbs.
 
 Each verb sits in its own package, and will have subcommands for all the entity types
@@ -72,7 +73,7 @@ func SetupServiceClients(accessToken *string) {
 	account.SetupClient(clientConnection, ctx)
 	project.SetupClient(clientConnection, ctx)
 	organization.SetupClient(clientConnection, ctx)
-	datasubject.SetupClient(clientConnection, ctx)
+	data_subject.SetupClient(clientConnection, ctx)
 	keylinks.SetupClient(clientConnection, ctx)
 }
 

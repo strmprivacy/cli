@@ -4,7 +4,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var longDoc = `### Usage`
+var longDoc = `### Keylinks for Data Subjects Service`
 
 func ListCmd() *cobra.Command {
 	command := &cobra.Command{
