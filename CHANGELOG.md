@@ -1,3 +1,10 @@
+# [2.10.0](https://github.com/strmprivacy/cli/compare/v2.9.0...v2.10.0) (2022-08-12)
+
+
+### Features
+
+* **strm-1231:** update user roles ([#106](https://github.com/strmprivacy/cli/issues/106)) ([9d2e911](https://github.com/strmprivacy/cli/commit/9d2e911642477e2c172c3d2e2b8cfef738598904))
+
 # [2.9.0](https://github.com/strmprivacy/cli/compare/v2.8.0...v2.9.0) (2022-08-11)
 
 
