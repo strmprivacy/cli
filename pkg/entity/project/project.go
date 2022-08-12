@@ -59,22 +59,36 @@ func create(projectName *string, cmd *cobra.Command) *projects.CreateProjectResp
 	return response
 }
 
-func manage(projectName *string, cmd *cobra.Command) {
+func GetProjectId(projectName string) string {
+	activeProject := ""
+	if projectName == "" {
+		activeProject = common.GetActiveProject()
+	} else {
+		activeProject = projectName
+	}
+	resolvedProject := GetProject(activeProject)
+	if resolvedProject == nil {
+		common.CliExit(errors.New(fmt.Sprintf("Project '%v' does not exist, or you do not have access "+
+			"to it.", activeProject)))
+	}
+	return resolvedProject.Id
+}
+
+func manage(args []string, cmd *cobra.Command) {
 	flags := cmd.Flags()
 	membersToAdd, err := flags.GetStringArray(addMembersFlag)
 	membersToRemove, err := flags.GetStringArray(removeMembersFlag)
 
-	activeProject := ""
-	if *projectName == "" {
-		activeProject = common.GetActiveProject()
-	} else {
-		activeProject = *projectName
+	projectName := ""
+	if len(args) > 0 {
+		projectName = args[0]
 	}
+	projectId := GetProjectId(projectName)
 
 	if len(membersToAdd) > 0 {
 		addReq := &projects.AddProjectMembersRequest{
 			Emails:    membersToAdd,
-			ProjectId: activeProject,
+			ProjectId: projectId,
 		}
 		_, err = client.AddProjectMembers(apiContext, addReq)
 		common.CliExit(err)
@@ -83,7 +97,7 @@ func manage(projectName *string, cmd *cobra.Command) {
 	if len(membersToRemove) > 0 {
 		removeReq := &projects.RemoveProjectMembersRequest{
 			Emails:    membersToRemove,
-			ProjectId: activeProject,
+			ProjectId: projectId,
 		}
 		_, err = client.RemoveProjectMembers(apiContext, removeReq)
 		common.CliExit(err)
