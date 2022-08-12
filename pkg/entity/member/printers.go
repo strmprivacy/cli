@@ -6,7 +6,6 @@ import (
 	"github.com/jedib0t/go-pretty/v6/table"
 	"github.com/spf13/cobra"
 	v1 "github.com/strmprivacy/api-definitions-go/v2/api/entities/v1"
-	"github.com/strmprivacy/api-definitions-go/v2/api/projects/v1"
 	"strmprivacy/strm/pkg/common"
 	"strmprivacy/strm/pkg/util"
 )
@@ -31,13 +30,17 @@ func availablePrinters() map[string]util.Printer {
 		map[string]util.Printer{
 			common.OutputFormatTable + common.ListCommandName: listTablePrinter{},
 			common.OutputFormatPlain + common.ListCommandName: listPlainPrinter{},
+			common.OutputFormatTable + common.GetCommandName:  getTablePrinter{},
+			common.OutputFormatPlain + common.GetCommandName:  getPlainPrinter{},
 		},
 	)
 }
 
 type listPlainPrinter struct{}
+type getPlainPrinter struct{}
 
 type listTablePrinter struct{}
+type getTablePrinter struct{}
 
 func (p listTablePrinter) Print(data interface{}) {
 	user, _ := (data).([]*v1.User)
@@ -45,8 +48,18 @@ func (p listTablePrinter) Print(data interface{}) {
 }
 
 func (p listPlainPrinter) Print(data interface{}) {
-	listMembersResponse, _ := (data).(*projects.ListProjectMembersResponse)
-	printPlain(listMembersResponse.ProjectMembers)
+	user, _ := (data).([]*v1.User)
+	printPlain(user)
+}
+
+func (p getTablePrinter) Print(data interface{}) {
+	user, _ := (data).(*v1.User)
+	printTable([]*v1.User{user})
+}
+
+func (p getPlainPrinter) Print(data interface{}) {
+	user, _ := (data).(*v1.User)
+	printPlain([]*v1.User{user})
 }
 
 func printTable(users []*v1.User) {
@@ -57,6 +70,7 @@ func printTable(users []*v1.User) {
 			user.Email,
 			user.FirstName,
 			user.LastName,
+			user.UserRoles,
 		})
 	}
 
@@ -65,6 +79,7 @@ func printTable(users []*v1.User) {
 			"Email",
 			"First Name",
 			"Last Name",
+			"User Roles",
 		},
 		rows,
 	)
