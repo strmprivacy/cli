@@ -1,3 +1,10 @@
+# [2.9.0](https://github.com/strmprivacy/cli/compare/v2.8.0...v2.9.0) (2022-08-11)
+
+
+### Features
+
+* **strm-1230:** force release ([baba358](https://github.com/strmprivacy/cli/commit/baba358af59d05c1f97e0758cb3dfe7f176bfe72))
+
 # [2.8.0](https://github.com/strmprivacy/cli/compare/v2.7.0...v2.8.0) (2022-08-11)
 
 
