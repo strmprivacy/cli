@@ -24,7 +24,7 @@ const (
 var (
 	userRolesMap = map[string]entities.UserRole{
 		"admin":         entities.UserRole_ADMIN,
-		"project_admin": entities.UserRole_PROJECT_ADMIN,
+		"project-admin": entities.UserRole_PROJECT_ADMIN,
 		"approver":      entities.UserRole_APPROVER,
 		"member":        entities.UserRole_MEMBER,
 	}
