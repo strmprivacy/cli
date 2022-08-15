@@ -5,8 +5,6 @@ import (
 	"fmt"
 	"github.com/jedib0t/go-pretty/v6/table"
 	"github.com/spf13/cobra"
-	v1 "github.com/strmprivacy/api-definitions-go/v2/api/entities/v1"
-	"github.com/strmprivacy/api-definitions-go/v2/api/projects/v1"
 	"strmprivacy/strm/pkg/common"
 	"strmprivacy/strm/pkg/util"
 )
@@ -48,39 +46,45 @@ type createTablePrinter struct{}
 type manageTablePrinter struct{}
 
 func (p listTablePrinter) Print(data interface{}) {
-	listResponse, _ := (data).(*projects.ListProjectsResponse)
-	printTable(listResponse.Projects)
+	listResponse, _ := (data).(ProjectsWithActive)
+	printTable(listResponse)
 }
 
 func (p createTablePrinter) Print(data interface{}) {
-	createResponse, _ := (data).(*projects.CreateProjectResponse)
-	printTable([]*v1.Project{createResponse.Project})
+	createResponse, _ := (data).(ProjectsWithActive)
+	printTable(createResponse)
 }
 
 func (p manageTablePrinter) Print(_ interface{}) {
-	printTable([]*v1.Project{})
+	printTable(ProjectsWithActive{})
 }
 
 func (p listPlainPrinter) Print(data interface{}) {
-	listResponse, _ := (data).(*projects.ListProjectsResponse)
-	printPlain(listResponse.Projects)
+	listResponse, _ := (data).(ProjectsWithActive)
+	printPlain(listResponse)
 }
 
 func (p createPlainPrinter) Print(data interface{}) {
-	createResponse, _ := (data).(*projects.CreateProjectResponse)
-	printPlain([]*v1.Project{createResponse.Project})
+	createResponse, _ := (data).(ProjectsWithActive)
+	printPlain(createResponse)
 }
 
 func (p managePlainPrinter) Print(_ interface{}) {
-	printPlain([]*v1.Project{})
+	printPlain(ProjectsWithActive{})
 }
 
-func printTable(projects []*v1.Project) {
-	rows := make([]table.Row, 0, len(projects))
+func printTable(projectsWithActive ProjectsWithActive) {
+	rows := make([]table.Row, 0, len(projectsWithActive.Projects))
 
-	for _, project := range projects {
+	for _, project := range projectsWithActive.Projects {
+		projectName := ""
+		if project.Name == projectsWithActive.activeProject {
+			projectName = project.Name + " (active)"
+		} else {
+			projectName = project.Name
+		}
 		rows = append(rows, table.Row{
-			project.Name,
+			projectName,
 			project.Description,
 		})
 	}
@@ -94,13 +98,16 @@ func printTable(projects []*v1.Project) {
 	)
 }
 
-func printPlain(projects []*v1.Project) {
+func printPlain(projectsWithActive ProjectsWithActive) {
 	var names string
-	lastIndex := len(projects) - 1
+	lastIndex := len(projectsWithActive.Projects) - 1
 
-	for index, project := range projects {
-		names = names + project.Name
-
+	for index, project := range projectsWithActive.Projects {
+		if project.Name == projectsWithActive.activeProject {
+			names = names + project.Name + " (active)"
+		} else {
+			names = names + project.Name
+		}
 		if index != lastIndex {
 			names = names + "\n"
 		}

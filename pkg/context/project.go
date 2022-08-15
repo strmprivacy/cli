@@ -30,25 +30,25 @@ func ResolveProject(f *pflag.FlagSet) {
 
 	if projectFlagValue != "" {
 		resolvedProject := project.GetProject(projectFlagValue)
-		if resolvedProject == nil {
+		if len(resolvedProject.Projects) == 0 {
 			message := fmt.Sprintf("Specified project '%v' does not exist, or you do not have access to it.", projectFlagValue)
 			common.CliExit(errors.New(message))
 		}
-		common.ProjectId = resolvedProject.Id
+		common.ProjectId = resolvedProject.Projects[0].Id
 	} else {
 		activeProject := common.GetActiveProject()
 		resolvedProject := project.GetProject(activeProject)
-		if resolvedProject == nil {
+		if len(resolvedProject.Projects) == 0 {
 			initActiveProject()
 			common.CliExit(errors.New(fmt.Sprintf("Active project '%v' does not exist, or you do not have access "+
 				"to it. The following project has been set instead: %v", activeProject, common.GetActiveProject())))
 		}
-		common.ProjectId = resolvedProject.Id
+		common.ProjectId = resolvedProject.Projects[0].Id
 	}
 }
 
 func SetActiveProject(projectName string) {
-	if project.GetProject(projectName) != nil {
+	if len(project.GetProject(projectName).Projects) != 0 {
 		saveActiveProject(projectName)
 		message := "Active project set to: " + projectName
 		log.Infoln(message)
