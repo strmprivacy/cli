@@ -33,7 +33,6 @@ var _testConfig TestConfig
 func testConfig() *TestConfig {
 	if (TestConfig{}) == _testConfig {
 		_ = godotenv.Load()
-
 		_testConfig = TestConfig{
 			projectId:         os.Getenv("STRM_TEST_PROJECT_ID"),
 			email:             os.Getenv("STRM_TEST_USER_EMAIL"),
@@ -67,7 +66,7 @@ func newConfigDir() string {
 	_ = os.Setenv("STRM_API_AUTH_URL", "https://accounts.dev.strmprivacy.io")
 	_ = os.Setenv("STRM_API_HOST", "api.dev.strmprivacy.io:443")
 	_ = os.Setenv("STRM_HEADLESS", "true")
-
+	_ = os.WriteFile(configDir+"/active_project", []byte("default"), 0644)
 	return configDir
 }
 
@@ -85,7 +84,6 @@ func ExecuteCliAndGetOutput(t *testing.T, tokenFile string, cmd ...string) strin
 	command := executeCli(t, tokenFile, cmd...)
 	out, _ := command.CombinedOutput()
 	s := string(out)
-
 	s = replaceSecretsWithPropertyNames(s)
 	return s
 }
@@ -118,7 +116,6 @@ func initializeStrmEntities(t *testing.T, tokenFileName string) {
 
 	// Remove all resources (ugly implementation until we have plain text output in the CLI)
 	nameMatcher := regexp.MustCompile(`"name":"([^"]+)"`)
-
 	streamsOut := ExecuteCliAndGetOutput(t, tokenFileName, "list", "streams")
 	allStreamNames := nameMatcher.FindAllStringSubmatch(streamsOut, -1)
 	for i := 0; i < len(allStreamNames); i++ {
