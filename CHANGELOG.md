@@ -1,3 +1,10 @@
+## [2.10.1](https://github.com/strmprivacy/cli/compare/v2.10.0...v2.10.1) (2022-08-15)
+
+
+### Bug Fixes
+
+* **fix/doc-scripts:** forgot to build docs first ([#107](https://github.com/strmprivacy/cli/issues/107)) ([f05f7db](https://github.com/strmprivacy/cli/commit/f05f7dbf9277616c1c6aa0f30678c57ad0693299))
+
 # [2.10.0](https://github.com/strmprivacy/cli/compare/v2.9.0...v2.10.0) (2022-08-12)
 
 
