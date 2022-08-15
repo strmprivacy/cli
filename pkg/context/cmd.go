@@ -5,6 +5,7 @@ import (
 	"github.com/spf13/cobra"
 	"path"
 	"strmprivacy/strm/pkg/common"
+	"strmprivacy/strm/pkg/entity/project"
 )
 
 const (
@@ -113,6 +114,7 @@ func Project() *cobra.Command {
 				showActiveProject()
 			}
 		},
+		ValidArgsFunction: project.NamesCompletion,
 	}
 	cmd.Flags().StringP(
 		common.OutputFormatFlag,

@@ -26,26 +26,34 @@ func SetupClient(clientConnection *grpc.ClientConn, ctx context.Context) {
 	client = projects.NewProjectsServiceClient(clientConnection)
 }
 
-func ListProjects() *projects.ListProjectsResponse {
+func ListProjects() ProjectsWithActive {
 	if apiContext == nil {
 		common.CliExit(errors.New(fmt.Sprint("No login information found. Use: `dstrm auth login` first.")))
 	}
+
 	req := &projects.ListProjectsRequest{}
 	response, err := client.ListProjects(apiContext, req)
 	common.CliExit(err)
-	return response
+	return ProjectsWithActive{
+		Projects:      response.Projects,
+		activeProject: common.GetActiveProject(),
+	}
+
 }
 
-func GetProject(projectName string) *entities.Project {
+func GetProject(projectName string) ProjectsWithActive {
 	for _, project := range ListProjects().Projects {
 		if project.Name == projectName {
-			return project
+			return ProjectsWithActive{
+				Projects:      []*entities.Project{project},
+				activeProject: common.GetActiveProject(),
+			}
 		}
 	}
-	return nil
+	return ProjectsWithActive{}
 }
 
-func create(projectName *string, cmd *cobra.Command) *projects.CreateProjectResponse {
+func create(projectName *string, cmd *cobra.Command) ProjectsWithActive {
 	flags := cmd.Flags()
 	description := util.GetStringAndErr(flags, descriptionFlag)
 	req := &projects.CreateProjectRequest{
@@ -56,7 +64,10 @@ func create(projectName *string, cmd *cobra.Command) *projects.CreateProjectResp
 	}
 	response, err := client.CreateProject(apiContext, req)
 	common.CliExit(err)
-	return response
+	return ProjectsWithActive{
+		Projects:      []*entities.Project{response.Project},
+		activeProject: common.GetActiveProject(),
+	}
 }
 
 func GetProjectId(projectName string) string {
@@ -67,11 +78,11 @@ func GetProjectId(projectName string) string {
 		activeProject = projectName
 	}
 	resolvedProject := GetProject(activeProject)
-	if resolvedProject == nil {
+	if len(resolvedProject.Projects) == 0 {
 		common.CliExit(errors.New(fmt.Sprintf("Project '%v' does not exist, or you do not have access "+
 			"to it.", activeProject)))
 	}
-	return resolvedProject.Id
+	return resolvedProject.Projects[0].Id
 }
 
 func manage(args []string, cmd *cobra.Command) {
@@ -103,4 +114,9 @@ func manage(args []string, cmd *cobra.Command) {
 		common.CliExit(err)
 	}
 	return
+}
+
+type ProjectsWithActive struct {
+	Projects      []*entities.Project
+	activeProject string
 }
