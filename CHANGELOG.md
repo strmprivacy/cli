@@ -1,3 +1,10 @@
+# [2.11.0](https://github.com/strmprivacy/cli/compare/v2.10.1...v2.11.0) (2022-08-16)
+
+
+### Features
+
+* documentation string ([41898b6](https://github.com/strmprivacy/cli/commit/41898b624a809856ba79eb9c4bbb8146dab3cf5d))
+
 ## [2.10.1](https://github.com/strmprivacy/cli/compare/v2.10.0...v2.10.1) (2022-08-15)
 
 
