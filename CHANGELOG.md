@@ -1,3 +1,10 @@
+# [2.12.0](https://github.com/strmprivacy/cli/compare/v2.11.1...v2.12.0) (2022-08-17)
+
+
+### Features
+
+* add auth show command to print login details ([#109](https://github.com/strmprivacy/cli/issues/109)) ([b03e18c](https://github.com/strmprivacy/cli/commit/b03e18c21884234cda8b38c991b2102574ba6019))
+
 ## [2.11.1](https://github.com/strmprivacy/cli/compare/v2.11.0...v2.11.1) (2022-08-17)
 
 

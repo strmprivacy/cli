@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"fmt"
 	"github.com/spf13/cobra"
 )
 
@@ -54,6 +55,19 @@ func PrintTokenCmd() *cobra.Command {
 		Long:  longDocPrintToken,
 		Run: func(cmd *cobra.Command, args []string) {
 			printAccessToken()
+		},
+		DisableAutoGenTag: true,
+	}
+	return cmd
+}
+
+func ShowCmd() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "show",
+		Short: "Show your current login credentials",
+		Long:  `Show the email address of your current login credentials`,
+		Run: func(cmd *cobra.Command, args []string) {
+			fmt.Println(fmt.Sprintf("Currently logged in as [%v]", Auth.Email))
 		},
 		DisableAutoGenTag: true,
 	}
