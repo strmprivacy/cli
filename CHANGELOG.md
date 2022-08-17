@@ -1,3 +1,10 @@
+## [2.12.1](https://github.com/strmprivacy/cli/compare/v2.12.0...v2.12.1) (2022-08-17)
+
+
+### Bug Fixes
+
+* trigger release ([317d28d](https://github.com/strmprivacy/cli/commit/317d28dbe04c82dbbc4893eff6870523ee6e0b31))
+
 # [2.12.0](https://github.com/strmprivacy/cli/compare/v2.11.1...v2.12.0) (2022-08-17)
 
 
