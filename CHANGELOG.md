@@ -1,3 +1,10 @@
+## [2.11.1](https://github.com/strmprivacy/cli/compare/v2.11.0...v2.11.1) (2022-08-17)
+
+
+### Bug Fixes
+
+* fix documentation url that breaks docs build ([2f0ff5b](https://github.com/strmprivacy/cli/commit/2f0ff5b18925d0ac20218ad66354e6e27845162d))
+
 # [2.11.0](https://github.com/strmprivacy/cli/compare/v2.10.1...v2.11.0) (2022-08-16)
 
 
