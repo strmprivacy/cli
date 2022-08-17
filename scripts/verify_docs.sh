@@ -10,7 +10,6 @@ make target=strm
 rm -rf docs
 git clone git@github.com:strmprivacy/docs.git
 cd docs
-git checkout -b verification
 rm -rf ./docs/cli-reference
 cp -rf ../generated_docs ./docs/cli-reference
 
