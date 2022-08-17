@@ -1,0 +1,6 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+echo "Generating and verifying docs before pushing \n"
+
+./scripts/verify_docs.sh

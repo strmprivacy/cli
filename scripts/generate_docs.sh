@@ -25,4 +25,5 @@ then
 else
   ./dist/strm_linux_amd64_v1/strm --generate-docs > /dev/null 2>&1
 fi
+
 ./scripts/generate_docs.py
