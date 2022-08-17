@@ -63,7 +63,7 @@ var ContextOutputFormatFlagAllowedValuesText = strings.Join(ContextOutputFormatF
 var ConfigOutputFormatFlagAllowedValues = []string{OutputFormatPlain, OutputFormatJson}
 var ConfigOutputFormatFlagAllowedValuesText = strings.Join(ConfigOutputFormatFlagAllowedValues, ", ")
 
-var AccountOutputFormatFlagAllowedValues = []string{OutputFormatPlain, OutputFormatJsonRaw}
+var AccountOutputFormatFlagAllowedValues = []string{OutputFormatPlain, OutputFormatJson, OutputFormatJsonRaw}
 var AccountOutputFormatFlagAllowedValuesText = strings.Join(AccountOutputFormatFlagAllowedValues, ", ")
 
 var ProjectOutputFormatFlagAllowedValues = []string{OutputFormatPlain}
