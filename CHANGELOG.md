@@ -1,3 +1,10 @@
+## [2.12.2](https://github.com/strmprivacy/cli/compare/v2.12.1...v2.12.2) (2022-08-18)
+
+
+### Bug Fixes
+
+* context printer is plain by default and missing json pretty ([#110](https://github.com/strmprivacy/cli/issues/110)) ([d69431c](https://github.com/strmprivacy/cli/commit/d69431c41a66855ed1d1390fc8c2da08dd3f82ee))
+
 ## [2.12.1](https://github.com/strmprivacy/cli/compare/v2.12.0...v2.12.1) (2022-08-17)
 
 

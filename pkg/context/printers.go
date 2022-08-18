@@ -48,7 +48,8 @@ func availablePrinters() map[string]util.Printer {
 		common.OutputFormatFilepath + entityInfoCommandName: filepathPrinter{},
 		common.OutputFormatPlain + configCommandName:        configPlainPrinter{},
 		common.OutputFormatJson + configCommandName:         configJsonPrinter{},
-		common.OutputFormatJsonRaw + accountCommandName:     accountJsonPrinter{},
+		common.OutputFormatJson + accountCommandName:        util.ProtoMessageJsonPrettyPrinter{},
+		common.OutputFormatJsonRaw + accountCommandName:     util.ProtoMessageJsonRawPrinter{},
 		common.OutputFormatPlain + accountCommandName:       accountPlainPrinter{},
 		common.OutputFormatPlain + projectCommandName:       projectPrinter{},
 	}
@@ -58,7 +59,6 @@ type filepathPrinter struct{}
 type jsonRawPrinter struct{}
 type jsonPrettyPrinter struct{}
 type configPlainPrinter struct{}
-type accountJsonPrinter struct{}
 type accountPlainPrinter struct{}
 type configJsonPrinter struct{}
 type projectPrinter struct{}
@@ -81,19 +81,11 @@ func (p jsonPrettyPrinter) Print(data interface{}) {
 	fmt.Println(string(prettyJson.Bytes()))
 }
 
-func (p accountJsonPrinter) Print(data interface{}) {
-	entity, _ := (data).(*account.GetAccountDetailsResponse)
-	b, _ := json.Marshal(entity)
-	rawJson := util.CompactJson(b)
-	fmt.Println(string(rawJson.Bytes()))
-}
-
 func (p accountPlainPrinter) Print(data interface{}) {
 	entity, _ := (data).(*account.GetAccountDetailsResponse)
-	fmt.Println(fmt.Sprintf("max_input_streams: %v", entity.MaxInputStreams))
-	fmt.Println(fmt.Sprintf("handle: %v", entity.Handle))
-	fmt.Println(fmt.Sprintf("subscription: %v", entity.Subscription))
-
+	fmt.Println(fmt.Sprintf("Max Input Streams: %v", entity.MaxInputStreams))
+	fmt.Println(fmt.Sprintf("Handle (used for contracts and schemas): %v", entity.Handle))
+	fmt.Println(fmt.Sprintf("Subscription type: %v", entity.Subscription))
 }
 
 func (p configPlainPrinter) Print(data interface{}) {

@@ -58,7 +58,7 @@ func Account() *cobra.Command {
 	cmd.Flags().StringP(
 		common.OutputFormatFlag,
 		common.OutputFormatFlagShort,
-		common.OutputFormatJsonRaw,
+		common.OutputFormatPlain,
 		fmt.Sprintf("Configuration output format [%v]", common.AccountOutputFormatFlagAllowedValuesText),
 	)
 	err := cmd.RegisterFlagCompletionFunc(common.OutputFormatFlag, func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
