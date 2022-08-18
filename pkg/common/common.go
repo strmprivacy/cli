@@ -7,7 +7,6 @@ import (
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/metadata"
@@ -77,8 +76,8 @@ func CliExit(err error) {
 		st, ok := status.FromError(err)
 
 		if ok {
-			grpcCallError := GrpcCallError{code: (*st).Code(), message: (*st).Message()}
-			grpcCallError.print()
+			fmt.Fprintln(os.Stderr, fmt.Sprintf(`Error code = %s
+Details = %s`, (*st).Code(), (*st).Message()))
 		} else {
 			fmt.Fprintln(os.Stderr, err)
 		}
@@ -118,53 +117,4 @@ func GetActiveProject() string {
 	activeProject := string(bytes)
 	log.Infoln("Current active project is: " + activeProject)
 	return activeProject
-}
-
-type GrpcCallError struct {
-	code    codes.Code
-	message string
-}
-
-func (e GrpcCallError) print() {
-	var errorCode string
-
-	switch e.code {
-	case codes.Canceled:
-		errorCode = "CANCELLED"
-	case codes.Unknown:
-		errorCode = "UNKNOWN"
-	case codes.InvalidArgument:
-		errorCode = "INVALID_ARGUMENT"
-	case codes.DeadlineExceeded:
-		errorCode = "DEADLINE_EXCEEDED"
-	case codes.NotFound:
-		errorCode = "NOT_FOUND"
-	case codes.AlreadyExists:
-		errorCode = "ALREADY_EXISTS"
-	case codes.PermissionDenied:
-		errorCode = "PERMISSION_DENIED"
-	case codes.ResourceExhausted:
-		errorCode = "RESOURCE_EXHAUSTED"
-	case codes.FailedPrecondition:
-		errorCode = "FAILED_PRECONDITION"
-	case codes.Aborted:
-		errorCode = "ABORTED"
-	case codes.OutOfRange:
-		errorCode = "OUT_OF_RANGE"
-	case codes.Unimplemented:
-		errorCode = "UNIMPLEMENTED"
-	case codes.Internal:
-		errorCode = "INTERNAL"
-	case codes.Unavailable:
-		errorCode = "UNAVAILABLE"
-	case codes.DataLoss:
-		errorCode = "DATA_LOSS"
-	case codes.Unauthenticated:
-		errorCode = "UNAUTHENTICATED"
-	}
-
-	fullErrorMessage := fmt.Sprintf(`Error code = %v
-Details = %v`, errorCode, e.message)
-
-	fmt.Fprintln(os.Stderr, fullErrorMessage)
 }
