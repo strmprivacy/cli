@@ -7,7 +7,6 @@ import (
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/metadata"
@@ -77,12 +76,8 @@ func CliExit(err error) {
 		st, ok := status.FromError(err)
 
 		if ok {
-			switch (*st).Code() {
-			case codes.FailedPrecondition:
-				fmt.Fprintln(os.Stderr, "A precondition failed for this command:", (*st).Message())
-			default:
-				fmt.Fprintln(os.Stderr, st)
-			}
+			fmt.Fprintln(os.Stderr, fmt.Sprintf(`Error code = %s
+Details = %s`, (*st).Code(), (*st).Message()))
 		} else {
 			fmt.Fprintln(os.Stderr, err)
 		}

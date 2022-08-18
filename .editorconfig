@@ -10,3 +10,6 @@ tab_width = 4
 [*.md]
 indent_size = 2
 tab_width = 2
+
+[*.go]
+indent_style = tab
