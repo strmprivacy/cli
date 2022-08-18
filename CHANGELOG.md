@@ -1,3 +1,10 @@
+# [2.13.0](https://github.com/strmprivacy/cli/compare/v2.12.2...v2.13.0) (2022-08-18)
+
+
+### Features
+
+* standardized format for grpc errors ([950db28](https://github.com/strmprivacy/cli/commit/950db28771bac928f4953dc065019264477d6363))
+
 ## [2.12.2](https://github.com/strmprivacy/cli/compare/v2.12.1...v2.12.2) (2022-08-18)
 
 
