@@ -1,3 +1,10 @@
+# [2.14.0](https://github.com/strmprivacy/cli/compare/v2.13.0...v2.14.0) (2022-08-19)
+
+
+### Features
+
+* **strm-1524:** show error details for failed batch jobs ([#113](https://github.com/strmprivacy/cli/issues/113)) ([84e6dc3](https://github.com/strmprivacy/cli/commit/84e6dc394070a854d54a08a3495064c0f46964ef))
+
 # [2.13.0](https://github.com/strmprivacy/cli/compare/v2.12.2...v2.13.0) (2022-08-18)
 
 
