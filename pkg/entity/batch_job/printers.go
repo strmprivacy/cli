@@ -96,18 +96,27 @@ func printTable(batchJobs []*entities.BatchJob) {
 			return states[j].StateTime.AsTime().Before(states[i].StateTime.AsTime())
 		})
 
+		batchJobState := states[0]
+
+		var message = ""
+		if batchJobState.State == entities.BatchJobStateType_ERROR {
+			message = batchJobState.Message
+		}
+
 		rows = append(rows, table.Row{
 			batchJob.Ref.Id,
-			states[0].State.String(),
-			states[0].StateTime.AsTime(),
+			batchJobState.StateTime.AsTime(),
+			batchJobState.State.String(),
+			message,
 		})
 	}
 
 	util.RenderTable(
 		table.Row{
 			"Batch Job id",
-			"State",
 			"Timestamp",
+			"State",
+			"Details",
 		},
 		rows,
 	)
