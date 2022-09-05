@@ -66,31 +66,29 @@ hide_title: true
 var RootCmd = &cobra.Command{
 	Use:               common.RootCommandName,
 	Short:             fmt.Sprintf("STRM Privacy CLI %s", common.Version),
-	PersistentPreRunE: rootCmdPreRun(),
+	PersistentPreRunE: rootCmdPreRun,
 	DisableAutoGenTag: true,
 }
 
-func rootCmdPreRun() func(cmd *cobra.Command, args []string) error {
-	return func(cmd *cobra.Command, args []string) error {
-		util.CreateConfigDirAndFileIfNotExists()
-		err := bootstrap.InitializeConfig(cmd)
-		log.Infoln(fmt.Sprintf("Executing command: %v", cmd.CommandPath()))
-		cmd.Flags().Visit(func(flag *pflag.Flag) {
-			log.Infoln(fmt.Sprintf("flag %v=%v", flag.Name, flag.Value))
-		})
+func rootCmdPreRun(cmd *cobra.Command, args []string) error {
+	util.CreateConfigDirAndFileIfNotExists()
+	err := bootstrap.InitializeConfig(cmd)
+	log.Infoln(fmt.Sprintf("Executing command: %v", cmd.CommandPath()))
+	cmd.Flags().Visit(func(flag *pflag.Flag) {
+		log.Infoln(fmt.Sprintf("flag %v=%v", flag.Name, flag.Value))
+	})
 
-		common.ApiHost = util.GetStringAndErr(cmd.Flags(), apiHostFlag)
-		common.ApiAuthHost = util.GetStringAndErr(cmd.Flags(), auth.ApiAuthUrlFlag)
-		common.EventAuthHost = util.GetStringAndErr(cmd.Flags(), auth.EventsAuthUrlFlag)
+	common.ApiHost = util.GetStringAndErr(cmd.Flags(), apiHostFlag)
+	common.ApiAuthHost = util.GetStringAndErr(cmd.Flags(), auth.ApiAuthUrlFlag)
+	common.EventAuthHost = util.GetStringAndErr(cmd.Flags(), auth.EventsAuthUrlFlag)
 
-		if auth.Auth.LoadLogin() == nil {
-			bootstrap.SetupServiceClients(auth.Auth.GetToken())
-			context.ResolveProject(cmd.Flags())
-			log.Infoln("Resolved projectId: " + common.ProjectId)
-		}
-
-		return err
+	if auth.Auth.LoadLogin() == nil {
+		bootstrap.SetupServiceClients(auth.Auth.GetToken())
+		context.ResolveProject(cmd.Flags())
+		log.Infoln("Resolved projectId: " + common.ProjectId)
 	}
+
+	return err
 }
 
 func init() {

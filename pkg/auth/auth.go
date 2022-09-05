@@ -1,5 +1,10 @@
 package auth
 
+import (
+	"github.com/spf13/cobra"
+	"strmprivacy/strm/pkg/common"
+)
+
 var TokenFile string
 
 const (
@@ -17,4 +22,13 @@ func revoke() {
 
 func printAccessToken() {
 	Auth.printAccessToken()
+}
+
+func RequireAuthenticationPreRun(cmd *cobra.Command, args []string) {
+	cmd.Root().PersistentPreRunE(cmd, args)
+	accessToken := Auth.GetToken()
+
+	if accessToken == nil {
+		common.UnauthenticatedErrorWithExit()
+	}
 }

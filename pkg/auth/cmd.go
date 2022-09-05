@@ -3,6 +3,7 @@ package auth
 import (
 	"fmt"
 	"github.com/spf13/cobra"
+	"strmprivacy/strm/pkg/common"
 )
 
 var longDocPrintToken = `
@@ -67,7 +68,11 @@ func ShowCmd() *cobra.Command {
 		Short: "Show your current login credentials",
 		Long:  `Show the email address of your current login credentials`,
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println(fmt.Sprintf("Currently logged in as [%v]", Auth.Email))
+			if Auth.Email != "" {
+				fmt.Println(fmt.Sprintf("Currently logged in as [%v]", Auth.Email))
+			} else {
+				common.UnauthenticatedErrorWithExit()
+			}
 		},
 		DisableAutoGenTag: true,
 	}

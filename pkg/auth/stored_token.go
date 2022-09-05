@@ -3,7 +3,9 @@ package auth
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
+	log "github.com/sirupsen/logrus"
 	"golang.org/x/oauth2"
 	"io/ioutil"
 	"net/url"
@@ -36,10 +38,13 @@ func (authenticator *Authenticator) LoadLogin() error {
 	filename := authenticator.getSaveFilename()
 	b, err := ioutil.ReadFile(filename)
 
-	if err != nil {
-		return err
+	if errors.Is(err, os.ErrNotExist) {
+		return common.UnauthenticatedError()
 	} else if len(b) == 0 {
 		return &EmptyTokenError{}
+	} else if err != nil {
+		log.Errorln(fmt.Sprintf("Unexpected exception occurred while trying to read file %v", filename), err)
+		return err
 	} else {
 		storedToken := unmarshalStoredToken(err, b)
 		authenticator.populateValues(storedToken)
