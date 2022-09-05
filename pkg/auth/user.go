@@ -46,7 +46,7 @@ func (authenticator *Authenticator) printAccessToken() {
 	if accessToken != nil {
 		fmt.Println(*accessToken)
 	} else {
-		common.MissingIdTokenError()
+		common.UnauthenticatedErrorWithExit()
 	}
 }
 

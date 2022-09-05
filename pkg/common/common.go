@@ -86,8 +86,12 @@ Details = %s`, (*st).Code(), (*st).Message()))
 	}
 }
 
-func MissingIdTokenError() {
-	CliExit(errors.New(fmt.Sprintf("No login information found. Use: `%v auth login` first.", RootCommandName)))
+func UnauthenticatedError() error {
+	return errors.New(fmt.Sprintf("No login information found. Use: `%v auth login` first.", RootCommandName))
+}
+
+func UnauthenticatedErrorWithExit() {
+	CliExit(UnauthenticatedError())
 }
 
 func GrpcRequestCompletionError(err error) ([]string, cobra.ShellCompDirective) {
