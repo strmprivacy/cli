@@ -1,3 +1,10 @@
+## [2.14.2](https://github.com/strmprivacy/cli/compare/v2.14.1...v2.14.2) (2022-09-05)
+
+
+### Bug Fixes
+
+* **strm-1588:** require authentication for authenticated commands ([#116](https://github.com/strmprivacy/cli/issues/116)) ([1977996](https://github.com/strmprivacy/cli/commit/1977996438da61b6f2863d15846a37334891d232))
+
 ## [2.14.1](https://github.com/strmprivacy/cli/compare/v2.14.0...v2.14.1) (2022-09-02)
 
 
