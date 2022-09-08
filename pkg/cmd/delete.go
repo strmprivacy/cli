@@ -6,6 +6,7 @@ import (
 	"strmprivacy/strm/pkg/entity/batch_exporter"
 	"strmprivacy/strm/pkg/entity/batch_job"
 	"strmprivacy/strm/pkg/entity/data_connector"
+	"strmprivacy/strm/pkg/entity/data_contract"
 	"strmprivacy/strm/pkg/entity/data_subject"
 	"strmprivacy/strm/pkg/entity/event_contract"
 	"strmprivacy/strm/pkg/entity/kafka_exporter"
@@ -31,6 +32,7 @@ func init() {
 	DeleteCmd.AddCommand(event_contract.DeleteCmd())
 	DeleteCmd.AddCommand(schema.DeleteCmd())
 	DeleteCmd.AddCommand(data_subject.DeleteCmd())
+	DeleteCmd.AddCommand(data_contract.DeleteCmd())
 
 	DeleteCmd.PersistentFlags().BoolP(common.RecursiveFlagName, common.RecursiveFlagShorthand, false, common.RecursiveFlagUsage)
 }

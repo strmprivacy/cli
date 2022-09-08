@@ -14,6 +14,7 @@ import (
 	"strmprivacy/strm/pkg/entity/batch_exporter"
 	"strmprivacy/strm/pkg/entity/batch_job"
 	"strmprivacy/strm/pkg/entity/data_connector"
+	"strmprivacy/strm/pkg/entity/data_contract"
 	"strmprivacy/strm/pkg/entity/data_subject"
 	"strmprivacy/strm/pkg/entity/event_contract"
 	"strmprivacy/strm/pkg/entity/installation"
@@ -78,6 +79,7 @@ func SetupServiceClients(accessToken *string) {
 	organization.SetupClient(clientConnection, ctx)
 	data_subject.SetupClient(clientConnection, ctx)
 	keylinks.SetupClient(clientConnection, ctx)
+	data_contract.SetupClient(clientConnection, ctx)
 }
 
 func ConfigPath() string {

@@ -6,6 +6,7 @@ import (
 	"strmprivacy/strm/pkg/entity/batch_exporter"
 	"strmprivacy/strm/pkg/entity/batch_job"
 	"strmprivacy/strm/pkg/entity/data_connector"
+	"strmprivacy/strm/pkg/entity/data_contract"
 	"strmprivacy/strm/pkg/entity/data_subject"
 	"strmprivacy/strm/pkg/entity/event_contract"
 	"strmprivacy/strm/pkg/entity/installation"
@@ -42,6 +43,7 @@ func init() {
 	ListCmd.AddCommand(member.ListCmd())
 	ListCmd.AddCommand(data_subject.ListCmd())
 	ListCmd.AddCommand(keylinks.ListCmd())
+	ListCmd.AddCommand(data_contract.ListCmd())
 
 	ListCmd.PersistentFlags().BoolP(common.RecursiveFlagName, common.RecursiveFlagShorthand, false, common.RecursiveFlagUsage)
 }

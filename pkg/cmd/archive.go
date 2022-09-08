@@ -3,6 +3,7 @@ package cmd
 import (
 	"github.com/spf13/cobra"
 	"strmprivacy/strm/pkg/common"
+	"strmprivacy/strm/pkg/entity/data_contract"
 	"strmprivacy/strm/pkg/entity/event_contract"
 	"strmprivacy/strm/pkg/entity/schema"
 )
@@ -16,4 +17,5 @@ var ArchiveCmd = &cobra.Command{
 func init() {
 	ArchiveCmd.AddCommand(event_contract.ArchiveCmd())
 	ArchiveCmd.AddCommand(schema.ArchiveCmd())
+	ArchiveCmd.AddCommand(data_contract.ArchiveCmd())
 }
