@@ -1,3 +1,10 @@
+# [2.15.0](https://github.com/strmprivacy/cli/compare/v2.14.2...v2.15.0) (2022-09-08)
+
+
+### Features
+
+* **strm-1597:** added common project-id while creating batch job ([#117](https://github.com/strmprivacy/cli/issues/117)) ([b8615e6](https://github.com/strmprivacy/cli/commit/b8615e607ce5e6fbc412e6e891a09a52fd0a7ba5))
+
 ## [2.14.2](https://github.com/strmprivacy/cli/compare/v2.14.1...v2.14.2) (2022-09-05)
 
 
