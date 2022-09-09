@@ -1,3 +1,10 @@
+## [2.15.1](https://github.com/strmprivacy/cli/compare/v2.15.0...v2.15.1) (2022-09-09)
+
+
+### Bug Fixes
+
+* **strm-1601:** fill in empty ref field in batch config ([#118](https://github.com/strmprivacy/cli/issues/118)) ([2d74b0b](https://github.com/strmprivacy/cli/commit/2d74b0bcc7cf3df7d5ab73481f783917d51ed858))
+
 # [2.15.0](https://github.com/strmprivacy/cli/compare/v2.14.2...v2.15.0) (2022-09-08)
 
 
