@@ -78,6 +78,10 @@ func create(cmd *cobra.Command) {
 }
 
 func setCommonProjectIds(batchJob *entities.BatchJob) {
+	if batchJob.Ref == nil {
+		// normal situation where the whole ref attribute in the json is absent.
+		batchJob.Ref = &entities.BatchJobRef{}
+	}
 	batchJob.Ref.ProjectId = common.ProjectId
 	batchJob.SourceData.DataConnectorRef.ProjectId = common.ProjectId
 	batchJob.EncryptedData.Target.DataConnectorRef.ProjectId = common.ProjectId
