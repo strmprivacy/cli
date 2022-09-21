@@ -14,7 +14,7 @@ source_files := $(shell find . -name "*.go")
 
 targetVar := strmprivacy/strm/pkg/common.RootCommandName
 
-target := dstrm
+target := strm
 
 ldflags := -X '${targetVar}=${target}' -X strmprivacy/strm/pkg/cmd.Version=local -X strmprivacy/strm/pkg/common.GitSha=local -X strmprivacy/strm/pkg/common.BuiltOn=local
 

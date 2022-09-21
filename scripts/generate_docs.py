@@ -29,7 +29,7 @@ for f in glob.glob("**/*.md", recursive=True):
 
 # build the regular expression
 directories = "|".join(directories)
-directories = f"(/cli-reference/({directories}))(?:\.md)"
+directories = f"(/04-reference/01-cli-reference/({directories}))(?:\.md)"
 pattern = re.compile(directories)
 
 for f in glob.glob("**/*.md", recursive=True):

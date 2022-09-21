@@ -1,11 +1,5 @@
 #!/bin/bash
 
-if [[ "$OSTYPE" == "darwin"* ]]; then
-    SED="gsed"
-else
-    SED="sed"
-fi
-
 if [[ $APIS_EMAIL != "" ]]
 then
   git config --global user.email "${APIS_EMAIL}"
