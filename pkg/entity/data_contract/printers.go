@@ -36,6 +36,8 @@ func availablePrinters() map[string]util.Printer {
 			common.OutputFormatPlain + common.ListCommandName:   listPlainPrinter{},
 			common.OutputFormatTable + common.GetCommandName:    getTablePrinter{},
 			common.OutputFormatPlain + common.GetCommandName:    getPlainPrinter{},
+			common.OutputFormatTable + common.DeleteCommandName: util.ProtoMessageJsonPrettyPrinter{},
+			common.OutputFormatPlain + common.DeleteCommandName: util.ProtoMessageJsonPrettyPrinter{},
 		},
 	)
 }

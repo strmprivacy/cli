@@ -4,13 +4,12 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"github.com/spf13/cobra"
 	"github.com/strmprivacy/api-definitions-go/v2/api/data_contracts/v1"
 	"github.com/strmprivacy/api-definitions-go/v2/api/entities/v1"
 	"google.golang.org/grpc"
 	"google.golang.org/protobuf/encoding/protojson"
-	"io/ioutil"
+	"os"
 	"sigs.k8s.io/yaml"
 	"strings"
 	"strmprivacy/strm/pkg/common"
@@ -20,7 +19,6 @@ import (
 const (
 	schemaDefinitionFlag   = "schema-definition"
 	publicFlag             = "public"
-	schemaTypeFlag         = "type"
 	contractDefinitionFlag = "contract-definition"
 )
 
@@ -40,7 +38,7 @@ type DataContractDefinition struct {
 }
 
 func readContractDefinition(filename *string) DataContractDefinition {
-	file, _ := ioutil.ReadFile(*filename)
+	file, _ := os.ReadFile(*filename)
 
 	contractDefinition := DataContractDefinition{}
 	err := json.Unmarshal(file, &contractDefinition)
@@ -50,53 +48,48 @@ func readContractDefinition(filename *string) DataContractDefinition {
 	return contractDefinition
 }
 
-func getSchemaDefinition(filename string, ref *entities.DataContractRef, schemaType int32, isPublic bool) entities.Schema {
-	// try yaml
-	definition, err := ioutil.ReadFile(filename)
-
-	convertedToJson, err := yaml.YAMLToJSON(definition)
-	if err == nil {
-		definition = convertedToJson
-	}
-	simple := &entities.Schema_SimpleSchemaDefinition{}
-
-	// try json
-	err = protojson.Unmarshal(definition, simple)
+func getSchemaDefinition(filename string, ref *entities.DataContractRef, isPublic bool) *entities.Schema {
 	schema := entities.Schema{
 		Ref: &entities.SchemaRef{
 			Name:       ref.Name,
 			Handle:     ref.Handle,
 			Version:    ref.Version,
-			SchemaType: entities.SchemaType(schemaType),
 		},
 		IsPublic: isPublic,
 		Metadata: &entities.SchemaMetadata{},
 	}
 
+	definition, err := os.ReadFile(filename)
+
+	// Try to convert YAML to JSON
+	convertedToJson, err := yaml.YAMLToJSON(definition)
 	if err == nil {
-		// it's a simple schema
+		definition = convertedToJson
+	}
+
+	// Try to unmarshal the JSON as Simple Schema
+	simple := &entities.Schema_SimpleSchemaDefinition{}
+	err = protojson.Unmarshal(definition, simple)
+	if err == nil {
+		// It's a Simple Schema
 		schema.SimpleSchema = simple
 	} else {
+		// It's an Avro or JsonSchema definition
 		schema.Definition = string(definition)
 	}
-	return schema
+	return &schema
 }
 
 func create(cmd *cobra.Command, args *string) {
 	flags := cmd.Flags()
-	typeString := util.GetStringAndErr(flags, schemaTypeFlag)
-	schemaType, ok := entities.SchemaType_value[typeString]
-	if !ok {
-		common.CliExit(errors.New(fmt.Sprintf("Can't convert %s to a known consent schema type, types are %v",
-			typeString, entities.SchemaType_value)))
-	}
+
 	schemaDefinitionFilename := util.GetStringAndErr(flags, schemaDefinitionFlag)
 	isPublic := util.GetBoolAndErr(flags, publicFlag)
 	contractDefinitionFilename := util.GetStringAndErr(flags, contractDefinitionFlag)
 	contractDefinition := readContractDefinition(&contractDefinitionFilename)
 
 	ref := ref(args)
-	schema := getSchemaDefinition(schemaDefinitionFilename, ref, schemaType, isPublic)
+	schema := getSchemaDefinition(schemaDefinitionFilename, ref, isPublic)
 
 	req := &data_contracts.CreateDataContractRequest{
 		ProjectId: common.ProjectId,
@@ -105,14 +98,13 @@ func create(cmd *cobra.Command, args *string) {
 			IsPublic:         isPublic,
 			ProjectId:        common.ProjectId,
 			DataSubjectField: contractDefinition.DataSubjectField,
-			Schema:           &schema,
+			Schema:           schema,
 			Ref:              ref,
 			PiiFields:        contractDefinition.PiiFields,
 			Validations:      contractDefinition.Validations,
 			Metadata:         &entities.DataContractMetadata{},
 		},
 	}
-	fmt.Println(req)
 	response, err := client.CreateDataContract(apiContext, req)
 	common.CliExit(err)
 	printer.Print(response)
@@ -131,15 +123,16 @@ func list() {
 
 func del(refString *string) {
 	req := &data_contracts.DeleteDataContractRequest{
+		ProjectId: common.ProjectId,
 		DataContractRef: ref(refString),
 	}
 	_, err := client.DeleteDataContract(apiContext, req)
 	common.CliExit(err)
 }
 
-func get(name *string) {
+func get(refString *string) {
 	req := &data_contracts.GetDataContractRequest{
-		Ref: ref(name),
+		Ref: ref(refString),
 	}
 	response, err := client.GetDataContract(apiContext, req)
 	common.CliExit(err)
