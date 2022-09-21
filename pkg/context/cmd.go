@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/spf13/cobra"
 	"path"
+	"strmprivacy/strm/pkg/auth"
 	"strmprivacy/strm/pkg/common"
 	"strmprivacy/strm/pkg/entity/project"
 )
@@ -48,6 +49,7 @@ func Account() *cobra.Command {
 		Use:               accountCommandName,
 		Short:             "Show the handle of this account",
 		DisableAutoGenTag: true,
+		PersistentPreRun:  auth.RequireAuthenticationPreRun,
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
 		},
@@ -104,6 +106,7 @@ func Project() *cobra.Command {
 		Short:             "Show or set the active project",
 		Args:              cobra.MinimumNArgs(0),
 		DisableAutoGenTag: true,
+		PersistentPreRun:  auth.RequireAuthenticationPreRun,
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
 		},

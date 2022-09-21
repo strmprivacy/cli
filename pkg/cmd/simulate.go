@@ -2,11 +2,13 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
+	"strmprivacy/strm/pkg/auth"
 	"strmprivacy/strm/pkg/simulator/random_events"
 )
 
 var SimulateCmd = &cobra.Command{
 	Use:               "simulate",
+	PersistentPreRun:  auth.RequireAuthenticationPreRun,
 	DisableAutoGenTag: true,
 	Short:             "Send simulated events with a predefined demo schema (not for production purposes)",
 }

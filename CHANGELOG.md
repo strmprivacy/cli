@@ -1,3 +1,31 @@
+## [2.15.1](https://github.com/strmprivacy/cli/compare/v2.15.0...v2.15.1) (2022-09-09)
+
+
+### Bug Fixes
+
+* **strm-1601:** fill in empty ref field in batch config ([#118](https://github.com/strmprivacy/cli/issues/118)) ([2d74b0b](https://github.com/strmprivacy/cli/commit/2d74b0bcc7cf3df7d5ab73481f783917d51ed858))
+
+# [2.15.0](https://github.com/strmprivacy/cli/compare/v2.14.2...v2.15.0) (2022-09-08)
+
+
+### Features
+
+* **strm-1597:** added common project-id while creating batch job ([#117](https://github.com/strmprivacy/cli/issues/117)) ([b8615e6](https://github.com/strmprivacy/cli/commit/b8615e607ce5e6fbc412e6e891a09a52fd0a7ba5))
+
+## [2.14.2](https://github.com/strmprivacy/cli/compare/v2.14.1...v2.14.2) (2022-09-05)
+
+
+### Bug Fixes
+
+* **strm-1588:** require authentication for authenticated commands ([#116](https://github.com/strmprivacy/cli/issues/116)) ([1977996](https://github.com/strmprivacy/cli/commit/1977996438da61b6f2863d15846a37334891d232))
+
+## [2.14.1](https://github.com/strmprivacy/cli/compare/v2.14.0...v2.14.1) (2022-09-02)
+
+
+### Bug Fixes
+
+* set data subject field in the create event contract request ([#115](https://github.com/strmprivacy/cli/issues/115)) ([0c5a2d8](https://github.com/strmprivacy/cli/commit/0c5a2d87a72f5a51bf6d9c707151f5cef1ecef08))
+
 # [2.14.0](https://github.com/strmprivacy/cli/compare/v2.13.0...v2.14.0) (2022-08-19)
 
 

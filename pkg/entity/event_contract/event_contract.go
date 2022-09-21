@@ -23,9 +23,10 @@ var client event_contracts.EventContractsServiceClient
 var apiContext context.Context
 
 type EventContractDefinition struct {
-	KeyField    string                 `json:"keyField"`
-	PiiFields   map[string]int32       `json:"piiFields"`
-	Validations []*entities.Validation `json:"validations"`
+	KeyField         string                 `json:"keyField"`
+	PiiFields        map[string]int32       `json:"piiFields"`
+	Validations      []*entities.Validation `json:"validations"`
+	DataSubjectField string                 `json:"dataSubjectField"`
 }
 
 func ref(refString *string) *entities.EventContractRef {
@@ -108,12 +109,13 @@ func create(cmd *cobra.Command, contractReference *string) {
 	req := &event_contracts.CreateEventContractRequest{
 		ProjectId: common.ProjectId,
 		EventContract: &entities.EventContract{
-			Ref:         ref(contractReference),
-			SchemaRef:   schema.Ref(&schemaRef),
-			IsPublic:    isPublic,
-			KeyField:    definition.KeyField,
-			PiiFields:   definition.PiiFields,
-			Validations: definition.Validations,
+			Ref:              ref(contractReference),
+			SchemaRef:        schema.Ref(&schemaRef),
+			IsPublic:         isPublic,
+			KeyField:         definition.KeyField,
+			PiiFields:        definition.PiiFields,
+			Validations:      definition.Validations,
+			DataSubjectField: definition.DataSubjectField,
 		},
 	}
 

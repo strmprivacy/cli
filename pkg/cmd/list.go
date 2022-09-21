@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
+	"strmprivacy/strm/pkg/auth"
 	"strmprivacy/strm/pkg/common"
 	"strmprivacy/strm/pkg/entity/batch_exporter"
 	"strmprivacy/strm/pkg/entity/batch_job"
@@ -23,6 +24,7 @@ import (
 
 var ListCmd = &cobra.Command{
 	Use:               common.ListCommandName,
+	PersistentPreRun:  auth.RequireAuthenticationPreRun,
 	DisableAutoGenTag: true,
 	Short:             "List entities",
 }

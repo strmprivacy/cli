@@ -69,14 +69,27 @@ func create(cmd *cobra.Command) {
 	if err != nil {
 		common.CliExit(err)
 	}
-
+	setCommonProjectIds(batchJob)
 	createBatchJobRequest := &batch_jobs.CreateBatchJobRequest{BatchJob: batchJob}
-	batchJob.Ref.ProjectId = common.ProjectId
-
 	response, err := client.CreateBatchJob(apiContext, createBatchJobRequest)
 	common.CliExit(err)
 
 	printer.Print(response)
+}
+
+func setCommonProjectIds(batchJob *entities.BatchJob) {
+	if batchJob.Ref == nil {
+		// normal situation where the whole ref attribute in the json is absent.
+		batchJob.Ref = &entities.BatchJobRef{}
+	}
+	batchJob.Ref.ProjectId = common.ProjectId
+	batchJob.SourceData.DataConnectorRef.ProjectId = common.ProjectId
+	batchJob.EncryptedData.Target.DataConnectorRef.ProjectId = common.ProjectId
+	batchJob.EncryptionKeysData.Target.DataConnectorRef.ProjectId = common.ProjectId
+	for _, d := range batchJob.DerivedData {
+		d.Target.DataConnectorRef.ProjectId = common.ProjectId
+	}
+
 }
 
 func namesCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {

@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
+	"strmprivacy/strm/pkg/auth"
 	"strmprivacy/strm/pkg/common"
 	"strmprivacy/strm/pkg/entity/data_contract"
 	"strmprivacy/strm/pkg/entity/event_contract"
@@ -10,6 +11,7 @@ import (
 
 var ArchiveCmd = &cobra.Command{
 	Use:               common.ArchiveCommandName,
+	PersistentPreRun:  auth.RequireAuthenticationPreRun,
 	DisableAutoGenTag: true,
 	Short:             "Set the state of an entity to ARCHIVED",
 }
