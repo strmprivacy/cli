@@ -43,7 +43,7 @@ hide_title: true
 `
 
 	linkHandler := func(name string) string {
-		return "/04-reference/01-cli-reference/" + strings.Replace(name, "_", "/", -1)
+		return "docs/04-reference/01-cli-reference/" + strings.Replace(name, "_", "/", -1)
 	}
 
 	filePrepender := func(filename string) string {
