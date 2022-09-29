@@ -1,3 +1,10 @@
+## [2.17.2](https://github.com/strmprivacy/cli/compare/v2.17.1...v2.17.2) (2022-09-29)
+
+
+### Bug Fixes
+
+* allow empty commit for docs changes ([6a3541e](https://github.com/strmprivacy/cli/commit/6a3541ebb402b78c44e7835c2ecbbd44a0579dd1))
+
 ## [2.17.1](https://github.com/strmprivacy/cli/compare/v2.17.0...v2.17.1) (2022-09-29)
 
 
