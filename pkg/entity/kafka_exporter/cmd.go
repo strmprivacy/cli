@@ -20,7 +20,7 @@ After creation, the CLI exposes the authentication information that is needed to
 Consumer.
 
 In case your data are Avro encoded, the Kafka exporter provides a *json format* conversion of your data for easier
-downstream processing. See the [exporting Kafka](quickstart/streaming/exporting-kafka.md) page for how to consume from the
+downstream processing. See the [exporting Kafka](docs/03-quickstart/01-streaming/04-receiving-data/03-exporting-kafka.md) page for how to consume from the
 exporter.
 
 If a kafka-exporter has dependents (like Kafka users), you can use
