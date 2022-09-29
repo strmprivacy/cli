@@ -28,10 +28,7 @@ then
   copy_cli_reference
 else
   git clone "https://git:${GITHUB_TOKEN}@github.com/strmprivacy/docs.git"
-  ls -al
-  ls -al generated_docs
   cd docs
-  ls -al
   copy_cli_reference
 fi
 

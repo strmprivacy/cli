@@ -12,7 +12,7 @@ then
   ./dist/strm --generate-docs > /dev/null 2>&1
 else
   echo "Generating docs in CI"
-  ./dist/strm_linux_amd64_v1/strm --generate-docs
+  ./dist/strm_linux_amd64_v1/strm --generate-docs > /dev/null 2>&1
 fi
 
 echo "Rearranging docs"

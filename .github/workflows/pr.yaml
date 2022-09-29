@@ -33,6 +33,12 @@ jobs:
           STRM_TEST_PROJECT_ID: ${{ secrets.STRM_TEST_PROJECT_ID }}
         run: |
           go test ./test -v
+      - name: Run GoReleaser
+        uses: goreleaser/goreleaser-action@v2
+        with:
+            distribution: goreleaser
+            version: latest
+            args: --snapshot --skip-publish --rm-dist
       - name: Verify Docs
         env:
             GITHUB_TOKEN: ${{secrets.GH_TOKEN}}
@@ -40,9 +46,4 @@ jobs:
             APIS_EMAIL: ${{secrets.APIS_EMAIL}}
         run: |
             ./scripts/verify_docs.sh
-      - name: Run GoReleaser
-        uses: goreleaser/goreleaser-action@v2
-        with:
-          distribution: goreleaser
-          version: latest
-          args: --snapshot --skip-publish --rm-dist
+
