@@ -26,7 +26,7 @@ func SetupClient(clientConnection *grpc.ClientConn, ctx context.Context) {
 	client = projects.NewProjectsServiceClient(clientConnection)
 }
 
-func ListProjects() ProjectsWithActive {
+func ListProjects() []*entities.Project {
 	if apiContext == nil {
 		common.CliExit(errors.New(fmt.Sprint("No login information found. Use: `dstrm auth login` first.")))
 	}
@@ -34,15 +34,18 @@ func ListProjects() ProjectsWithActive {
 	req := &projects.ListProjectsRequest{}
 	response, err := client.ListProjects(apiContext, req)
 	common.CliExit(err)
+	return response.Projects
+}
+
+func ListProjectsWithActive() ProjectsWithActive {
 	return ProjectsWithActive{
-		Projects:      response.Projects,
+		Projects:      ListProjects(),
 		activeProject: common.GetActiveProject(),
 	}
-
 }
 
 func GetProject(projectName string) ProjectsWithActive {
-	for _, project := range ListProjects().Projects {
+	for _, project := range ListProjectsWithActive().Projects {
 		if project.Name == projectName {
 			return ProjectsWithActive{
 				Projects:      []*entities.Project{project},

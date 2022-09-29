@@ -15,7 +15,7 @@ func ListCmd() *cobra.Command {
         },
         DisableAutoGenTag: true,
         Run: func(cmd *cobra.Command, args []string) {
-            printer.Print(ListProjects())
+            printer.Print(ListProjectsWithActive())
         },
     }
 }
