@@ -3,12 +3,15 @@
 
 if [[ $APIS_EMAIL != "" ]]
 then
+  echo "Setting git config"
   git config --global user.email "${APIS_EMAIL}"
   git config --global user.name "${APIS_USERNAME}"
   tag_name="${GITHUB_REF##*/}"
 else
   tag_name="local"
 fi
+
+echo "Tag = ${tag_name}"
 
 function copy_cli_reference() {
   CLI_REF_PATH="./docs/04-reference/01-cli-reference"
@@ -25,7 +28,9 @@ then
   copy_cli_reference
 else
   git clone "https://git:${GITHUB_TOKEN}@github.com/strmprivacy/docs.git"
+  ls -al
   cd docs
+  ls -al
   copy_cli_reference
 fi
 
