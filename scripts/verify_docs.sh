@@ -1,8 +1,7 @@
 #!/bin/bash
 
 # This script makes sure the docs can be built successfully after auto-generation.
-# We call publish docs, but since the APIS_EMAIL locally is not set, we don't publish
-./scripts/publish_docs.sh
+./scripts/copy_generated_to_docs.sh
 
 cd docs
 npm i
