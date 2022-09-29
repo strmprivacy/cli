@@ -1,3 +1,10 @@
+## [2.17.3](https://github.com/strmprivacy/cli/compare/v2.17.2...v2.17.3) (2022-09-29)
+
+
+### Bug Fixes
+
+* publish docs ([e13606e](https://github.com/strmprivacy/cli/commit/e13606ecfd84f8b99cb609d1dac0b3fe8f2a9c10))
+
 ## [2.17.2](https://github.com/strmprivacy/cli/compare/v2.17.1...v2.17.2) (2022-09-29)
 
 
