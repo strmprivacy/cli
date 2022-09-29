@@ -1,3 +1,10 @@
+## [2.17.1](https://github.com/strmprivacy/cli/compare/v2.17.0...v2.17.1) (2022-09-29)
+
+
+### Bug Fixes
+
+* **strm-1763:** fix active project initialization ([ef4c9b3](https://github.com/strmprivacy/cli/commit/ef4c9b3e1d36120c0c57a2f9c603ae5c0fa15f74))
+
 # [2.17.0](https://github.com/strmprivacy/cli/compare/v2.16.0...v2.17.0) (2022-09-29)
 
 
