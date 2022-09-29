@@ -13,11 +13,11 @@ fi
 if [[ $GITHUB_TOKEN == "" ]]
 then
   git add -A
-  git commit -m "update generated CLI reference docs (CLI version: ${tag_name})"
+  git commit -m "update generated CLI reference docs (CLI version: ${tag_name})" --allow-empty
   git push -f origin $tag_name
 else
   git add -A
-  git commit -m "update generated CLI reference docs (CLI version: ${tag_name})"
+  git commit -m "update generated CLI reference docs (CLI version: ${tag_name})" --allow-empty
   git push
 fi
 
