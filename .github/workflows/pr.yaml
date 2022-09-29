@@ -33,7 +33,7 @@ jobs:
           STRM_TEST_PROJECT_ID: ${{ secrets.STRM_TEST_PROJECT_ID }}
         run: |
           go test ./test -v
-      - name: Publish Docs
+      - name: Verify Docs
         env:
             GITHUB_TOKEN: ${{secrets.GH_TOKEN}}
             APIS_USERNAME: ${{secrets.APIS_USERNAME}}
