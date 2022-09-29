@@ -1,3 +1,10 @@
+# [2.17.0](https://github.com/strmprivacy/cli/compare/v2.16.0...v2.17.0) (2022-09-29)
+
+
+### Features
+
+* **strm-1568:** new docs paths ([#120](https://github.com/strmprivacy/cli/issues/120)) ([433378a](https://github.com/strmprivacy/cli/commit/433378aa4240c99e8c02597aea9a1dfa955d7b98))
+
 # [2.16.0](https://github.com/strmprivacy/cli/compare/v2.15.1...v2.16.0) (2022-09-22)
 
 

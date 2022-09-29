@@ -7,11 +7,13 @@
 make target=strm
 ./scripts/generate_docs.sh
 
+CLI_REF_PATH="./docs/04-reference/01-cli-reference"
+
 rm -rf docs
 git clone git@github.com:strmprivacy/docs.git
 cd docs
-rm -rf ./docs/cli-reference
-cp -rf ../generated_docs ./docs/cli-reference
+rm -rf "$CLI_REF_PATH/strm"
+cp -rf ../generated_docs/strm "$CLI_REF_PATH/strm"
 
 npm i
 npm run build
