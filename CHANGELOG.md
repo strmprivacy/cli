@@ -1,3 +1,10 @@
+## [2.17.4](https://github.com/strmprivacy/cli/compare/v2.17.3...v2.17.4) (2022-09-29)
+
+
+### Bug Fixes
+
+* copy generated docs ([aba5e98](https://github.com/strmprivacy/cli/commit/aba5e9844fe4f086a980b21ab06ba4e459703dc1))
+
 ## [2.17.3](https://github.com/strmprivacy/cli/compare/v2.17.2...v2.17.3) (2022-09-29)
 
 
