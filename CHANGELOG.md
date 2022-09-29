@@ -1,3 +1,10 @@
+# [2.16.0](https://github.com/strmprivacy/cli/compare/v2.15.1...v2.16.0) (2022-09-22)
+
+
+### Features
+
+* **strm-1538:** implement data-contracts api in cli ([#119](https://github.com/strmprivacy/cli/issues/119)) ([ff50a8b](https://github.com/strmprivacy/cli/commit/ff50a8b2c3859ebeeb355b69d40f2e086aa4d8de))
+
 ## [2.15.1](https://github.com/strmprivacy/cli/compare/v2.15.0...v2.15.1) (2022-09-09)
 
 
