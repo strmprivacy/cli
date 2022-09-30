@@ -1,3 +1,10 @@
+## [2.17.5](https://github.com/strmprivacy/cli/compare/v2.17.4...v2.17.5) (2022-09-30)
+
+
+### Bug Fixes
+
+* typo in data contract printer ([ec4ba05](https://github.com/strmprivacy/cli/commit/ec4ba0571892cfd0872806da17b681a677d5904a))
+
 ## [2.17.4](https://github.com/strmprivacy/cli/compare/v2.17.3...v2.17.4) (2022-09-29)
 
 
