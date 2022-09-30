@@ -99,7 +99,7 @@ func printTable(contracts []*v1.DataContract) {
 
 	util.RenderTable(
 		table.Row{
-			"Event Contract",
+			"Data Contract",
 			"State",
 			"Public",
 			"Key Field",
