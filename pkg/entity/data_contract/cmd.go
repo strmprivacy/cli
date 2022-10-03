@@ -24,6 +24,7 @@ func CreateCmd() *cobra.Command {
 	flags := dataContract.Flags()
 	flags.String(schemaDefinitionFlag, "", "filename of the schema definition (yaml or json) - either a Simple Schema, Avro Schema or Json Schema")
 	flags.Bool(publicFlag, false, "whether the data contract should be made public (accessible to other STRM Privacy customers)")
+	flags.String(projectName, "", `Project name to create resource in`)
 	flags.String(contractDefinitionFlag, "",
 		`The path to the file with the keyField, and possibly piiFields and validations. Example JSON definition file:
 {

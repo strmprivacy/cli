@@ -10,6 +10,7 @@ import (
 const (
 	clusterFlag = "cluster"
 	saveFlag    = "save"
+	projectName = "project"
 )
 
 var longDoc = `A Kafka Exporter, like a Batch Exporter, can be used to export events from Stream Machine to somewhere outside of STRM
@@ -102,6 +103,8 @@ func CreateCmd() *cobra.Command {
 	flags := kafkaExporter.Flags()
 	flags.String(clusterFlag, "", "name of the kafka cluster")
 	flags.Bool(saveFlag, false, "save the result in the config directory")
+	flags.String(projectName, "", `Project name to create resource in`)
+
 	// not yet handling the external cluster flags
 
 	err := kafkaExporter.RegisterFlagCompletionFunc(clusterFlag, kafka_cluster.NamesCompletion)

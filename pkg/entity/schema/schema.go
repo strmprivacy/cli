@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"strings"
+	"strmprivacy/strm/pkg/entity/project"
 
 	"sigs.k8s.io/yaml"
 
@@ -24,6 +25,7 @@ const (
 	definitionFlag   = "definition"
 	publicFlag       = "public"
 	schemaTypeFlag   = "type"
+	projectName      = "project"
 )
 
 var client schemas.SchemasServiceClient
@@ -124,7 +126,13 @@ func GetSchema(name *string, clusterRef *entities.KafkaClusterRef) *schemas.GetS
 
 func create(cmd *cobra.Command, args *string) {
 	flags := cmd.Flags()
-
+	projectName := util.GetStringAndErr(flags, projectName)
+	var projectId string
+	if len(projectName) > 0 {
+		projectId = project.GetProjectId(projectName)
+	} else {
+		projectId = common.ProjectId
+	}
 	typeString := util.GetStringAndErr(flags, schemaTypeFlag)
 	schemaType, ok := entities.SchemaType_value[typeString]
 	if !ok {
@@ -138,7 +146,7 @@ func create(cmd *cobra.Command, args *string) {
 	ref := Ref(args)
 	ref.SchemaType = entities.SchemaType(schemaType)
 	req := &schemas.CreateSchemaRequest{
-		ProjectId: common.ProjectId,
+		ProjectId: projectId,
 		Schema: &entities.Schema{
 			Ref:      ref,
 			IsPublic: isPublic,

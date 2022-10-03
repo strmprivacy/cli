@@ -11,6 +11,7 @@ import (
 	"io/ioutil"
 	"strings"
 	"strmprivacy/strm/pkg/common"
+	"strmprivacy/strm/pkg/entity/project"
 	"strmprivacy/strm/pkg/util"
 )
 
@@ -69,7 +70,16 @@ func create(cmd *cobra.Command) {
 	if err != nil {
 		common.CliExit(err)
 	}
-	setCommonProjectIds(batchJob)
+	projectName := util.GetStringAndErr(flags, projectName)
+
+	var projectId string
+	if len(projectName) > 0 {
+		projectId = project.GetProjectId(projectName)
+	} else {
+		projectId = common.ProjectId
+	}
+
+	setCommonProjectIds(batchJob, projectId)
 	createBatchJobRequest := &batch_jobs.CreateBatchJobRequest{BatchJob: batchJob}
 	response, err := client.CreateBatchJob(apiContext, createBatchJobRequest)
 	common.CliExit(err)
@@ -77,17 +87,17 @@ func create(cmd *cobra.Command) {
 	printer.Print(response)
 }
 
-func setCommonProjectIds(batchJob *entities.BatchJob) {
+func setCommonProjectIds(batchJob *entities.BatchJob, projectId string) {
 	if batchJob.Ref == nil {
 		// normal situation where the whole ref attribute in the json is absent.
 		batchJob.Ref = &entities.BatchJobRef{}
 	}
-	batchJob.Ref.ProjectId = common.ProjectId
-	batchJob.SourceData.DataConnectorRef.ProjectId = common.ProjectId
-	batchJob.EncryptedData.Target.DataConnectorRef.ProjectId = common.ProjectId
-	batchJob.EncryptionKeysData.Target.DataConnectorRef.ProjectId = common.ProjectId
+	batchJob.Ref.ProjectId = projectId
+	batchJob.SourceData.DataConnectorRef.ProjectId = projectId
+	batchJob.EncryptedData.Target.DataConnectorRef.ProjectId = projectId
+	batchJob.EncryptionKeysData.Target.DataConnectorRef.ProjectId = projectId
 	for _, d := range batchJob.DerivedData {
-		d.Target.DataConnectorRef.ProjectId = common.ProjectId
+		d.Target.DataConnectorRef.ProjectId = projectId
 	}
 
 }

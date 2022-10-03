@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"strings"
+	"strmprivacy/strm/pkg/entity/project"
 
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
@@ -25,6 +26,7 @@ const (
 	saveFlag             = "save"
 	maskedFieldsFlag     = "masked-fields"
 	maskedFieldsSeed     = "mask-seed"
+	projectName          = "project"
 	maskedFieldHelp      = `-M strmprivacy/example/1.3.0:sensitiveValue,consistentValue \
 -M strmprivacy/clickstream/1.0.0:sessionId
 
@@ -86,8 +88,15 @@ func create(args []string, cmd *cobra.Command) {
 	var err error
 	flags := cmd.Flags()
 	linkedStream := util.GetStringAndErr(flags, linkedStreamFlag)
+	projectName := util.GetStringAndErr(flags, projectName)
+	var projectId string
+	if len(projectName) > 0 {
+		projectId = project.GetProjectId(projectName)
+	} else {
+		projectId = common.ProjectId
+	}
 	stream := &entities.Stream{Ref: &entities.StreamRef{
-		ProjectId: common.ProjectId,
+		ProjectId: projectId,
 	}}
 	if len(args) > 0 {
 		stream.Ref.Name = args[0]

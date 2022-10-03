@@ -8,6 +8,7 @@ import (
 
 const (
 	batchJobsFileFlagName = "file"
+	projectName           = "project"
 )
 
 var longDoc = `
@@ -94,6 +95,7 @@ func CreateCmd() *cobra.Command {
 
 	flags.StringP(batchJobsFileFlagName, "F", "",
 		`The path to the JSON file containing the batch job configuration`)
+	flags.String(projectName, "", `Project name to create resource in`)
 	err := batchJob.MarkFlagRequired(batchJobsFileFlagName)
 	common.CliExit(err)
 

@@ -52,6 +52,7 @@ func CreateCmd() *cobra.Command {
 	flags.Bool(saveFlag, true, "if true, save the result in the config directory (~/.config/strmprivacy/saved-entities). (default is true)")
 	flags.StringArrayP(maskedFieldsFlag, "M", []string{}, maskedFieldHelp)
 	flags.String(maskedFieldsSeed, "", `A seed used for masking`)
+	flags.String(projectName, "", `Project name to create resource in`)
 
 	err := stream.RegisterFlagCompletionFunc(linkedStreamFlag, SourceNamesCompletion)
 	err = stream.RegisterFlagCompletionFunc(maskedFieldsFlag, completion)

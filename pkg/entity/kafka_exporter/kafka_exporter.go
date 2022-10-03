@@ -8,6 +8,7 @@ import (
 	"google.golang.org/grpc"
 	"strings"
 	"strmprivacy/strm/pkg/common"
+	"strmprivacy/strm/pkg/entity/project"
 	"strmprivacy/strm/pkg/util"
 )
 
@@ -69,14 +70,22 @@ func create(name *string, cmd *cobra.Command) {
 	_, err := flags.GetString(clusterFlag) // TODO at the moment, the cluster flag is ignored
 	common.CliExit(err)
 
+	projectName := util.GetStringAndErr(flags, projectName)
+	var projectId string
+	if len(projectName) > 0 {
+		projectId = project.GetProjectId(projectName)
+	} else {
+		projectId = common.ProjectId
+	}
+
 	// key streams not yet supported in data model!
 	exporter := &entities.KafkaExporter{
 		StreamRef: &entities.StreamRef{
-			ProjectId: common.ProjectId,
+			ProjectId: projectId,
 			Name:      *name,
 		},
 		Ref: &entities.KafkaExporterRef{
-			ProjectId: common.ProjectId,
+			ProjectId: projectId,
 		},
 	}
 

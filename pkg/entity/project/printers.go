@@ -30,9 +30,13 @@ func availablePrinters() map[string]util.Printer {
 			common.OutputFormatTable + common.ListCommandName:   listTablePrinter{},
 			common.OutputFormatTable + common.CreateCommandName: createTablePrinter{},
 			common.OutputFormatTable + common.ManageCommandName: manageTablePrinter{},
+			common.OutputFormatTable + common.GetCommandName:    getTablePrinter{},
+			common.OutputFormatTable + common.DeleteCommandName: deleteTablePrinter{},
 			common.OutputFormatPlain + common.ListCommandName:   listPlainPrinter{},
 			common.OutputFormatPlain + common.CreateCommandName: createPlainPrinter{},
 			common.OutputFormatPlain + common.ManageCommandName: managePlainPrinter{},
+			common.OutputFormatPlain + common.GetCommandName:    getPlainPrinter{},
+			common.OutputFormatPlain + common.DeleteCommandName: deletePlainPrinter{},
 		},
 	)
 }
@@ -40,10 +44,14 @@ func availablePrinters() map[string]util.Printer {
 type listPlainPrinter struct{}
 type createPlainPrinter struct{}
 type managePlainPrinter struct{}
+type getPlainPrinter struct{}
+type deletePlainPrinter struct{}
 
 type listTablePrinter struct{}
 type createTablePrinter struct{}
 type manageTablePrinter struct{}
+type getTablePrinter struct{}
+type deleteTablePrinter struct{}
 
 func (p listTablePrinter) Print(data interface{}) {
 	listResponse, _ := (data).(ProjectsWithActive)
@@ -59,6 +67,15 @@ func (p manageTablePrinter) Print(_ interface{}) {
 	printTable(ProjectsWithActive{})
 }
 
+func (p getTablePrinter) Print(data interface{}) {
+	getResponse, _ := (data).(ProjectsWithActive)
+	printTable(getResponse)
+}
+
+func (p deleteTablePrinter) Print(data interface{}) {
+	printTable(ProjectsWithActive{})
+}
+
 func (p listPlainPrinter) Print(data interface{}) {
 	listResponse, _ := (data).(ProjectsWithActive)
 	printPlain(listResponse)
@@ -70,6 +87,15 @@ func (p createPlainPrinter) Print(data interface{}) {
 }
 
 func (p managePlainPrinter) Print(_ interface{}) {
+	printPlain(ProjectsWithActive{})
+}
+
+func (p getPlainPrinter) Print(data interface{}) {
+	getResponse, _ := (data).(ProjectsWithActive)
+	printPlain(getResponse)
+}
+
+func (p deletePlainPrinter) Print(_ interface{}) {
 	printPlain(ProjectsWithActive{})
 }
 

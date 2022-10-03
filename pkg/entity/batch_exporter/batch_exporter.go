@@ -7,6 +7,7 @@ import (
 	"github.com/strmprivacy/api-definitions-go/v2/api/data_connectors/v1"
 	"strings"
 	"strmprivacy/strm/pkg/entity/data_connector"
+	"strmprivacy/strm/pkg/entity/project"
 
 	"github.com/golang/protobuf/ptypes/duration"
 	"github.com/spf13/cobra"
@@ -69,13 +70,21 @@ func create(streamName *string, cmd *cobra.Command) {
 
 	pathPrefix := util.GetStringAndErr(flags, pathPrefix)
 
+	projectName := util.GetStringAndErr(flags, projectName)
+	var projectId string
+	if len(projectName) > 0 {
+		projectId = project.GetProjectId(projectName)
+	} else {
+		projectId = common.ProjectId
+	}
+
 	exporter := &entities.BatchExporter{
 		Ref: &entities.BatchExporterRef{
-			ProjectId: common.ProjectId,
+			ProjectId: projectId,
 			Name:      exporterName,
 		},
 		DataConnectorRef: &entities.DataConnectorRef{
-			ProjectId: common.ProjectId,
+			ProjectId: projectId,
 			Name:      dataConnectorName,
 		},
 		Interval:              &interval,
@@ -85,13 +94,13 @@ func create(streamName *string, cmd *cobra.Command) {
 	if keyStream {
 		exporter.StreamOrKeyStreamRef = &entities.BatchExporter_KeyStreamRef{
 			KeyStreamRef: &entities.KeyStreamRef{
-				ProjectId: common.ProjectId,
+				ProjectId: projectId,
 				Name:      *streamName,
 			}}
 	} else {
 		exporter.StreamOrKeyStreamRef = &entities.BatchExporter_StreamRef{
 			StreamRef: &entities.StreamRef{
-				ProjectId: common.ProjectId,
+				ProjectId: projectId,
 				Name:      *streamName,
 			}}
 	}

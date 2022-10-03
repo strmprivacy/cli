@@ -15,6 +15,7 @@ const (
 Client Secret Credentials, i.e. of an Application Principal.
 
 ### Usage`
+	projectName = "project"
 )
 
 func createAzureBlobStorageCmd() *cobra.Command {
@@ -44,7 +45,7 @@ func createAzureBlobStorageCmd() *cobra.Command {
 					},
 				},
 			}
-			create(dataConnector)
+			create(dataConnector, nil)
 		},
 		Args: cobra.ExactArgs(2),
 	}
@@ -54,6 +55,7 @@ func createAzureBlobStorageCmd() *cobra.Command {
 	flags.String(tenantIdFlag, "", "tenant ID of the application principal's client secret credentials")
 	flags.String(clientIdFlag, "", "client ID of the application principal's client secret credentials")
 	flags.String(clientSecretFlag, "", "client secret of the application principal's client secret credentials")
+	flags.String(projectName, "", `Project name to create resource in`)
 	_ = azureBlobStorage.MarkFlagRequired(storageAccountUriFlag)
 	_ = azureBlobStorage.MarkFlagRequired(tenantIdFlag)
 	_ = azureBlobStorage.MarkFlagRequired(clientIdFlag)

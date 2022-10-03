@@ -9,6 +9,7 @@ import (
 	"strings"
 	"strmprivacy/strm/pkg/common"
 	"strmprivacy/strm/pkg/entity/kafka_exporter"
+	"strmprivacy/strm/pkg/entity/project"
 	"strmprivacy/strm/pkg/util"
 )
 
@@ -57,12 +58,19 @@ func del(name *string) {
 }
 
 func create(kafkaExporterName *string, cmd *cobra.Command) {
-
 	flags := cmd.Flags()
 	exporter := kafka_exporter.Get(kafkaExporterName).KafkaExporter
+
+	projectName := util.GetStringAndErr(flags, projectName)
+	var projectId string
+	if len(projectName) > 0 {
+		projectId = project.GetProjectId(projectName)
+	} else {
+		projectId = common.ProjectId
+	}
 	kafkaUser := &entities.KafkaUser{
 		Ref: &entities.KafkaUserRef{
-			ProjectId: common.ProjectId,
+			ProjectId: projectId,
 		},
 		KafkaExporterName: exporter.Ref.Name,
 	}

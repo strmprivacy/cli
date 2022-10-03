@@ -117,5 +117,6 @@ func CreateCmd() *cobra.Command {
 	_ = createCmd.MarkFlagRequired(definitionFlag)
 	flags.String(schemaTypeFlag, "AVRO", "type of schema")
 	flags.Bool(publicFlag, false, "should the schema become public")
+	flags.String(projectName, "", `Project name to create resource in`)
 	return createCmd
 }

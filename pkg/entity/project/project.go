@@ -28,7 +28,7 @@ func SetupClient(clientConnection *grpc.ClientConn, ctx context.Context) {
 
 func ListProjects() []*entities.Project {
 	if apiContext == nil {
-		common.CliExit(errors.New(fmt.Sprint("No login information found. Use: `dstrm auth login` first.")))
+		common.CliExit(errors.New(fmt.Sprint("No login information found. Use: `strm auth login` first.")))
 	}
 
 	req := &projects.ListProjectsRequest{}
@@ -116,6 +116,29 @@ func manage(args []string, cmd *cobra.Command) {
 		_, err = client.RemoveProjectMembers(apiContext, removeReq)
 		common.CliExit(err)
 	}
+	return
+}
+
+func get(projectName string) ProjectsWithActive {
+	projectId := GetProjectId(projectName)
+	req := &projects.GetProjectRequest{ProjectId: projectId}
+
+	response, err := client.GetProject(apiContext, req)
+	common.CliExit(err)
+
+	return ProjectsWithActive{
+		Projects:      []*entities.Project{response.Project},
+		activeProject: common.GetActiveProject(),
+	}
+}
+
+func del(projectName string) {
+	projectId := GetProjectId(projectName)
+	req := &projects.DeleteProjectRequest{
+		ProjectId: projectId,
+	}
+	_, err := client.DeleteProject(apiContext, req)
+	common.CliExit(err)
 	return
 }
 

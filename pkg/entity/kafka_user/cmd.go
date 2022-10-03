@@ -6,8 +6,8 @@ import (
 )
 
 const (
-	nameFlag = "name"
-	saveFlag = "save"
+	saveFlag    = "save"
+	projectName = "project"
 )
 
 var longDoc = `A Kafka User is a user on a Kafka Exporter, that can be used for authentication when connecting to a Kafka Exporter. By
@@ -83,13 +83,13 @@ func CreateCmd() *cobra.Command {
 		Run: func(cmd *cobra.Command, args []string) {
 			streamName := &args[0]
 			create(streamName, cmd)
-
 		},
 		Args:              cobra.ExactArgs(1), // the kafka-exporter name
 		ValidArgsFunction: kafka_exporter.NamesCompletion,
 	}
 	flags := kafkaUser.Flags()
 	flags.Bool(saveFlag, false, "save the result in the config directory")
+	flags.String(projectName, "", `Project name to create resource in`)
 
 	return kafkaUser
 }

@@ -12,6 +12,7 @@ import (
 	"io/ioutil"
 	"strings"
 	"strmprivacy/strm/pkg/common"
+	"strmprivacy/strm/pkg/entity/project"
 	"strmprivacy/strm/pkg/entity/schema"
 	"strmprivacy/strm/pkg/util"
 )
@@ -105,9 +106,15 @@ func create(cmd *cobra.Command, contractReference *string) {
 	schemaRef := util.GetStringAndErr(flags, schemaRefFlag)
 	definitionFilename := util.GetStringAndErr(flags, definitionFile)
 	definition := readContractDefinition(&definitionFilename)
-
+	projectName := util.GetStringAndErr(flags, projectName)
+	var projectId string
+	if len(projectName) > 0 {
+		projectId = project.GetProjectId(projectName)
+	} else {
+		projectId = common.ProjectId
+	}
 	req := &event_contracts.CreateEventContractRequest{
-		ProjectId: common.ProjectId,
+		ProjectId: projectId,
 		EventContract: &entities.EventContract{
 			Ref:              ref(contractReference),
 			SchemaRef:        schema.Ref(&schemaRef),
