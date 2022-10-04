@@ -10,8 +10,6 @@ import (
 	"strmprivacy/strm/pkg/entity/account"
 )
 
-const ProjectFlag = "project"
-
 type configuration struct {
 	ConfigPath     string
 	ConfigFilepath string
