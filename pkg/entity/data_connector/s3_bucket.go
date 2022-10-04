@@ -45,7 +45,6 @@ func createS3BucketCmd() *cobra.Command {
 	flags := s3Bucket.Flags()
 	flags.String(credentialsFileFlag, "", "file with JSON AWS Access Key Credentials")
 	flags.String(assumeRoleArnFlag, "", "ARN of the role to assume")
-	flags.String(projectName, "", `Project name to create resource in`)
 	_ = s3Bucket.MarkFlagRequired(credentialsFileFlag)
 	_ = s3Bucket.MarkFlagFilename(credentialsFileFlag, "json")
 	return s3Bucket

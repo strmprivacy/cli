@@ -34,14 +34,13 @@ func createGcsBucketCmd() *cobra.Command {
 					},
 				},
 			}
-			create(dataConnector, nil)
+			create(dataConnector, cmd)
 		},
 		Args: cobra.ExactArgs(2),
 	}
 
 	flags := gcsBucket.Flags()
 	flags.String(credentialsFileFlag, "", "file with service account JSON key credentials")
-	flags.String(projectName, "", `Project name to create resource in`)
 	_ = gcsBucket.MarkFlagRequired(credentialsFileFlag)
 	_ = gcsBucket.MarkFlagFilename(credentialsFileFlag, "json")
 	return gcsBucket

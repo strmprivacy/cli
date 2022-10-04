@@ -54,14 +54,7 @@ func del(name *string, recursive bool) {
 }
 
 func create(dataConnector *entities.DataConnector, cmd *cobra.Command) {
-	flags := cmd.Flags()
-	projectName := util.GetStringAndErr(flags, projectName)
-	var projectId string
-	if len(projectName) > 0 {
-		projectId = project.GetProjectId(projectName)
-	} else {
-		projectId = common.ProjectId
-	}
+	projectId := project.GetProjectId(cmd)
 	dataConnector.Ref.ProjectId = projectId
 	req := &data_connectors.CreateDataConnectorRequest{
 		DataConnector: dataConnector,

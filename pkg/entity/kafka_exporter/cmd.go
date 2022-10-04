@@ -10,7 +10,6 @@ import (
 const (
 	clusterFlag = "cluster"
 	saveFlag    = "save"
-	projectName = "project"
 )
 
 var longDoc = `A Kafka Exporter, like a Batch Exporter, can be used to export events from Stream Machine to somewhere outside of STRM
@@ -41,7 +40,7 @@ func DeleteCmd() *cobra.Command {
 		},
 		Run: func(cmd *cobra.Command, args []string) {
 			recursive, _ := cmd.Flags().GetBool(common.RecursiveFlagName)
-			del(&args[0], recursive)
+			del(&args[0], recursive, cmd)
 		},
 		Args:              cobra.ExactArgs(1), // the stream name
 		ValidArgsFunction: NamesCompletion,
@@ -58,8 +57,7 @@ func GetCmd() *cobra.Command {
 			printer = configurePrinter(cmd)
 		},
 		Run: func(cmd *cobra.Command, args []string) {
-			recursive, _ := cmd.Flags().GetBool(common.RecursiveFlagName)
-			get(&args[0], recursive)
+			get(&args[0], cmd)
 		},
 		Args:              cobra.ExactArgs(1), // the stream name
 		ValidArgsFunction: NamesCompletion,
@@ -77,7 +75,7 @@ func ListCmd() *cobra.Command {
 		},
 		Run: func(cmd *cobra.Command, args []string) {
 			flag, _ := cmd.Root().PersistentFlags().GetBool(common.RecursiveFlagName)
-			list(flag)
+			list(flag, cmd)
 		},
 	}
 }
@@ -94,7 +92,6 @@ func CreateCmd() *cobra.Command {
 		Run: func(cmd *cobra.Command, args []string) {
 			streamName := &args[0]
 			create(streamName, cmd)
-
 		},
 		Args:              cobra.ExactArgs(1), // the stream name
 		ValidArgsFunction: stream.NamesCompletion,
@@ -103,7 +100,6 @@ func CreateCmd() *cobra.Command {
 	flags := kafkaExporter.Flags()
 	flags.String(clusterFlag, "", "name of the kafka cluster")
 	flags.Bool(saveFlag, false, "save the result in the config directory")
-	flags.String(projectName, "", `Project name to create resource in`)
 
 	// not yet handling the external cluster flags
 

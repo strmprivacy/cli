@@ -24,7 +24,6 @@ func CreateCmd() *cobra.Command {
 	flags := dataContract.Flags()
 	flags.String(schemaDefinitionFlag, "", "filename of the schema definition (yaml or json) - either a Simple Schema, Avro Schema or Json Schema")
 	flags.Bool(publicFlag, false, "whether the data contract should be made public (accessible to other STRM Privacy customers)")
-	flags.String(projectName, "", `Project name to create resource in`)
 	flags.String(contractDefinitionFlag, "",
 		`The path to the file with the keyField, and possibly piiFields and validations. Example JSON definition file:
 {
@@ -55,7 +54,7 @@ func ListCmd() *cobra.Command {
 			printer = configurePrinter(cmd)
 		},
 		Run: func(cmd *cobra.Command, args []string) {
-			list()
+			list(cmd)
 		},
 	}
 }
@@ -118,7 +117,7 @@ func DeleteCmd() *cobra.Command {
 			printer = configurePrinter(cmd)
 		},
 		Run: func(cmd *cobra.Command, args []string) {
-			del(&args[0])
+			del(&args[0], cmd)
 		},
 		Args:              cobra.ExactArgs(1), // the contract reference
 		DisableAutoGenTag: true,

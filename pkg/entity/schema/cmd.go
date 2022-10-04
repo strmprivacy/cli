@@ -15,7 +15,7 @@ func DeleteCmd() *cobra.Command {
 			printer = configurePrinter(cmd)
 		},
 		Run: func(cmd *cobra.Command, args []string) {
-			del(&args[0])
+			del(&args[0], cmd)
 		},
 		Args:              cobra.ExactArgs(1), // the schema reference
 		DisableAutoGenTag: true,
@@ -34,7 +34,7 @@ func ActivateCmd() *cobra.Command {
 			printer = configurePrinter(cmd)
 		},
 		Run: func(cmd *cobra.Command, args []string) {
-			activate(&args[0])
+			activate(&args[0], cmd)
 		},
 		Args:              cobra.ExactArgs(1), // the schema reference
 		DisableAutoGenTag: true,
@@ -53,7 +53,7 @@ func ArchiveCmd() *cobra.Command {
 			printer = configurePrinter(cmd)
 		},
 		Run: func(cmd *cobra.Command, args []string) {
-			archive(&args[0])
+			archive(&args[0], cmd)
 		},
 		Args:              cobra.ExactArgs(1), // the schema reference
 		DisableAutoGenTag: true,
@@ -117,6 +117,5 @@ func CreateCmd() *cobra.Command {
 	_ = createCmd.MarkFlagRequired(definitionFlag)
 	flags.String(schemaTypeFlag, "AVRO", "type of schema")
 	flags.Bool(publicFlag, false, "should the schema become public")
-	flags.String(projectName, "", `Project name to create resource in`)
 	return createCmd
 }

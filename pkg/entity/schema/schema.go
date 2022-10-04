@@ -5,13 +5,11 @@ import (
 	"errors"
 	"fmt"
 	"io/ioutil"
+	"sigs.k8s.io/yaml"
 	"strings"
 	"strmprivacy/strm/pkg/entity/project"
 
-	"sigs.k8s.io/yaml"
-
 	"github.com/spf13/cobra"
-	"github.com/spf13/pflag"
 	entities "github.com/strmprivacy/api-definitions-go/v2/api/entities/v1"
 	schemas "github.com/strmprivacy/api-definitions-go/v2/api/schemas/v1"
 	"google.golang.org/grpc"
@@ -25,7 +23,6 @@ const (
 	definitionFlag   = "definition"
 	publicFlag       = "public"
 	schemaTypeFlag   = "type"
-	projectName      = "project"
 )
 
 var client schemas.SchemasServiceClient
@@ -62,9 +59,9 @@ func list() {
 	printer.Print(response)
 }
 
-func del(name *string) {
+func del(name *string, cmd *cobra.Command) {
 	req := &schemas.DeleteSchemaRequest{
-		ProjectId: common.ProjectId,
+		ProjectId: project.GetProjectId(cmd),
 		SchemaRef: Ref(name)}
 	response, err := client.DeleteSchema(apiContext, req)
 	common.CliExit(err)
@@ -72,9 +69,9 @@ func del(name *string) {
 	printer.Print(response)
 }
 
-func activate(name *string) {
+func activate(name *string, cmd *cobra.Command) {
 	req := &schemas.ActivateSchemaRequest{
-		ProjectId: common.ProjectId,
+		ProjectId: project.GetProjectId(cmd),
 		SchemaRef: Ref(name)}
 	response, err := client.ActivateSchema(apiContext, req)
 	common.CliExit(err)
@@ -82,9 +79,9 @@ func activate(name *string) {
 	printer.Print(response)
 }
 
-func archive(name *string) {
+func archive(name *string, cmd *cobra.Command) {
 	req := &schemas.ArchiveSchemaRequest{
-		ProjectId: common.ProjectId,
+		ProjectId: project.GetProjectId(cmd),
 		SchemaRef: Ref(name)}
 	response, err := client.ArchiveSchema(apiContext, req)
 	common.CliExit(err)
@@ -93,20 +90,20 @@ func archive(name *string) {
 }
 
 func get(name *string, cmd *cobra.Command) {
-	flags := cmd.Flags()
-	clusterRef, err := getClusterRef(flags)
+	clusterRef, err := getClusterRef(cmd)
 	common.CliExit(err)
 
 	response := GetSchema(name, clusterRef)
 	printer.Print(response)
 }
 
-func getClusterRef(flags *pflag.FlagSet) (*entities.KafkaClusterRef, error) {
+func getClusterRef(cmd *cobra.Command) (*entities.KafkaClusterRef, error) {
+	flags := cmd.Flags()
 	flag := util.GetStringAndErr(flags, kafkaClusterFlag)
 	if len(flag) > 0 {
 		return &entities.KafkaClusterRef{
 			// Todo: actual transition to different ref
-			ProjectId: common.ProjectId,
+			ProjectId: project.GetProjectId(cmd),
 			Name:      flag,
 		}, nil
 	} else {
@@ -126,13 +123,7 @@ func GetSchema(name *string, clusterRef *entities.KafkaClusterRef) *schemas.GetS
 
 func create(cmd *cobra.Command, args *string) {
 	flags := cmd.Flags()
-	projectName := util.GetStringAndErr(flags, projectName)
-	var projectId string
-	if len(projectName) > 0 {
-		projectId = project.GetProjectId(projectName)
-	} else {
-		projectId = common.ProjectId
-	}
+	projectId := project.GetProjectId(cmd)
 	typeString := util.GetStringAndErr(flags, schemaTypeFlag)
 	schemaType, ok := entities.SchemaType_value[typeString]
 	if !ok {

@@ -15,7 +15,6 @@ const (
 	pathPrefix                = "path-prefix"
 	exportKeys                = "export-keys"
 	includeExistingEventsFlag = "include-existing-events"
-	projectName               = "project"
 )
 
 var longDoc = `
@@ -40,8 +39,8 @@ func DeleteCmd() *cobra.Command {
 			printer = configurePrinter(cmd)
 		},
 		Run: func(cmd *cobra.Command, args []string) {
-			for i, _ := range args {
-				del(&args[i])
+			for i := range args {
+				del(&args[i], cmd)
 			}
 		},
 		Args:              cobra.MinimumNArgs(1), // the stream names
@@ -79,7 +78,7 @@ func ListCmd() *cobra.Command {
 		},
 		DisableAutoGenTag: true,
 		Run: func(cmd *cobra.Command, args []string) {
-			list()
+			list(cmd)
 		},
 	}
 }
@@ -107,7 +106,6 @@ func CreateCmd() *cobra.Command {
 	flags.Int64(intervalFlag, 60, "Interval in seconds between batches")
 	flags.Bool(exportKeys, false, "Do we want to export the keys stream")
 	flags.Bool(includeExistingEventsFlag, false, "Do we want to include all existing events")
-	flags.String(projectName, "", `Project name to create resource in`)
 	err := batchExporter.RegisterFlagCompletionFunc(dataConnectorFlag, data_connector.NamesCompletion)
 	common.CliExit(err)
 

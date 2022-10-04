@@ -57,7 +57,7 @@ func list(cmd *cobra.Command) []*entities.User {
 }
 
 func listProjectMembers() []*entities.User {
-	projectId := project.GetProjectId(common.GetActiveProject())
+	projectId := project.GetProjectIdFromName(common.GetActiveProject())
 	req := &projects.ListProjectMembersRequest{
 		ProjectId: projectId,
 	}

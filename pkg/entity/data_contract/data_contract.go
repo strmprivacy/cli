@@ -21,7 +21,6 @@ const (
 	schemaDefinitionFlag   = "schema-definition"
 	publicFlag             = "public"
 	contractDefinitionFlag = "contract-definition"
-	projectName            = "project"
 )
 
 var client data_contracts.DataContractsServiceClient
@@ -90,13 +89,7 @@ func create(cmd *cobra.Command, args *string) {
 	contractDefinitionFilename := util.GetStringAndErr(flags, contractDefinitionFlag)
 	contractDefinition := readContractDefinition(&contractDefinitionFilename)
 
-	projectName := util.GetStringAndErr(flags, projectName)
-	var projectId string
-	if len(projectName) > 0 {
-		projectId = project.GetProjectId(projectName)
-	} else {
-		projectId = common.ProjectId
-	}
+	projectId := project.GetProjectId(cmd)
 	ref := ref(args)
 	schema := getSchemaDefinition(schemaDefinitionFilename, ref, isPublic)
 
@@ -119,9 +112,9 @@ func create(cmd *cobra.Command, args *string) {
 	printer.Print(response)
 }
 
-func list() {
+func list(cmd *cobra.Command) {
 	req := &data_contracts.ListDataContractsRequest{
-		ProjectId: common.ProjectId,
+		ProjectId: project.GetProjectId(cmd),
 	}
 
 	response, err := client.ListDataContracts(apiContext, req)
@@ -130,9 +123,9 @@ func list() {
 	printer.Print(response)
 }
 
-func del(refString *string) {
+func del(refString *string, cmd *cobra.Command) {
 	req := &data_contracts.DeleteDataContractRequest{
-		ProjectId:       common.ProjectId,
+		ProjectId:       project.GetProjectId(cmd),
 		DataContractRef: ref(refString),
 	}
 	_, err := client.DeleteDataContract(apiContext, req)

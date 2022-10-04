@@ -8,7 +8,6 @@ import (
 
 const (
 	batchJobsFileFlagName = "file"
-	projectName           = "project"
 )
 
 var longDoc = `
@@ -33,8 +32,8 @@ func DeleteCmd() *cobra.Command {
 			printer = configurePrinter(cmd)
 		},
 		Run: func(cmd *cobra.Command, args []string) {
-			for i, _ := range args {
-				del(&args[i])
+			for i := range args {
+				del(&args[i], cmd)
 			}
 		},
 		Args:              cobra.MinimumNArgs(1),
@@ -71,7 +70,7 @@ func ListCmd() *cobra.Command {
 			printer = configurePrinter(cmd)
 		},
 		Run: func(cmd *cobra.Command, args []string) {
-			list()
+			list(cmd)
 		},
 	}
 }
@@ -95,7 +94,6 @@ func CreateCmd() *cobra.Command {
 
 	flags.StringP(batchJobsFileFlagName, "F", "",
 		`The path to the JSON file containing the batch job configuration`)
-	flags.String(projectName, "", `Project name to create resource in`)
 	err := batchJob.MarkFlagRequired(batchJobsFileFlagName)
 	common.CliExit(err)
 

@@ -10,7 +10,6 @@ const (
 	schemaRefFlag  = "schema-ref"
 	isPublicFlag   = "public"
 	definitionFile = "definition-file"
-	projectName    = "project"
 )
 
 var longDoc = `An Event Contract defines the rules that are to be applied to events.
@@ -52,7 +51,7 @@ func DeleteCmd() *cobra.Command {
 			printer = configurePrinter(cmd)
 		},
 		Run: func(cmd *cobra.Command, args []string) {
-			del(&args[0])
+			del(&args[0], cmd)
 		},
 		Args:              cobra.ExactArgs(1), // the contract reference
 		DisableAutoGenTag: true,
@@ -71,7 +70,7 @@ func ActivateCmd() *cobra.Command {
 			printer = configurePrinter(cmd)
 		},
 		Run: func(cmd *cobra.Command, args []string) {
-			activate(&args[0])
+			activate(&args[0], cmd)
 		},
 		Args:              cobra.ExactArgs(1), // the contract reference
 		DisableAutoGenTag: true,
@@ -90,7 +89,7 @@ func ArchiveCmd() *cobra.Command {
 			printer = configurePrinter(cmd)
 		},
 		Run: func(cmd *cobra.Command, args []string) {
-			archive(&args[0])
+			archive(&args[0], cmd)
 		},
 		Args:              cobra.ExactArgs(1), // the contract reference
 		DisableAutoGenTag: true,
@@ -150,7 +149,6 @@ func CreateCmd() *cobra.Command {
 	flags := contract.Flags()
 	flags.StringP(schemaRefFlag, "S", "", "The Serialization Schema to which this Event Contract is linked")
 	flags.BoolP(isPublicFlag, "P", false, "Public visibility of the Event Contract (allow others to use this contract)")
-	flags.String(projectName, "", `Project name to create resource in`)
 	flags.StringP(definitionFile, "F", "",
 		`The path to the file with the keyField, and possibly piiFields and validations. Example JSON definition file:
 {

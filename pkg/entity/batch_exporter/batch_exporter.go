@@ -3,18 +3,17 @@ package batch_exporter
 import (
 	"context"
 	"errors"
-	"github.com/spf13/pflag"
-	"github.com/strmprivacy/api-definitions-go/v2/api/data_connectors/v1"
-	"strings"
-	"strmprivacy/strm/pkg/entity/data_connector"
-	"strmprivacy/strm/pkg/entity/project"
-
 	"github.com/golang/protobuf/ptypes/duration"
 	"github.com/spf13/cobra"
+	"github.com/spf13/pflag"
 	"github.com/strmprivacy/api-definitions-go/v2/api/batch_exporters/v1"
+	"github.com/strmprivacy/api-definitions-go/v2/api/data_connectors/v1"
 	"github.com/strmprivacy/api-definitions-go/v2/api/entities/v1"
 	"google.golang.org/grpc"
+	"strings"
 	"strmprivacy/strm/pkg/common"
+	"strmprivacy/strm/pkg/entity/data_connector"
+	"strmprivacy/strm/pkg/entity/project"
 	"strmprivacy/strm/pkg/util"
 )
 
@@ -26,9 +25,9 @@ func SetupClient(clientConnection *grpc.ClientConn, ctx context.Context) {
 	client = batch_exporters.NewBatchExportersServiceClient(clientConnection)
 }
 
-func list() {
+func list(cmd *cobra.Command) {
 	req := &batch_exporters.ListBatchExportersRequest{
-		ProjectId: common.ProjectId,
+		ProjectId: project.GetProjectId(cmd),
 	}
 	response, err := client.ListBatchExporters(apiContext, req)
 	common.CliExit(err)
@@ -36,9 +35,9 @@ func list() {
 	printer.Print(response)
 }
 
-func get(name *string, _ *cobra.Command) {
+func get(name *string, cmd *cobra.Command) {
 	ref := &entities.BatchExporterRef{
-		ProjectId: common.ProjectId,
+		ProjectId: project.GetProjectId(cmd),
 		Name:      *name,
 	}
 	req := &batch_exporters.GetBatchExporterRequest{Ref: ref}
@@ -47,9 +46,9 @@ func get(name *string, _ *cobra.Command) {
 	printer.Print(response)
 }
 
-func del(name *string) {
+func del(name *string, cmd *cobra.Command) {
 	req := &batch_exporters.DeleteBatchExporterRequest{Ref: &entities.BatchExporterRef{
-		ProjectId: common.ProjectId,
+		ProjectId: project.GetProjectId(cmd),
 		Name:      *name,
 	}}
 	response, err := client.DeleteBatchExporter(apiContext, req)
@@ -69,15 +68,7 @@ func create(streamName *string, cmd *cobra.Command) {
 	interval := duration.Duration{Seconds: i}
 
 	pathPrefix := util.GetStringAndErr(flags, pathPrefix)
-
-	projectName := util.GetStringAndErr(flags, projectName)
-	var projectId string
-	if len(projectName) > 0 {
-		projectId = project.GetProjectId(projectName)
-	} else {
-		projectId = common.ProjectId
-	}
-
+	projectId := project.GetProjectId(cmd)
 	exporter := &entities.BatchExporter{
 		Ref: &entities.BatchExporterRef{
 			ProjectId: projectId,

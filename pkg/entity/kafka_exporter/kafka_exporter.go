@@ -20,10 +20,10 @@ func SetupClient(clientConnection *grpc.ClientConn, ctx context.Context) {
 	client = kafka_exporters.NewKafkaExportersServiceClient(clientConnection)
 }
 
-func Get(name *string) *kafka_exporters.GetKafkaExporterResponse {
+func Get(name *string, cmd *cobra.Command) *kafka_exporters.GetKafkaExporterResponse {
 	req := &kafka_exporters.GetKafkaExporterRequest{
 		Ref: &entities.KafkaExporterRef{
-			ProjectId: common.ProjectId,
+			ProjectId: project.GetProjectId(cmd),
 			Name:      *name,
 		},
 	}
@@ -32,27 +32,27 @@ func Get(name *string) *kafka_exporters.GetKafkaExporterResponse {
 	return exporter
 }
 
-func list(recursive bool) {
+func list(recursive bool, cmd *cobra.Command) {
 	// TODO need api recursive addition
 	req := &kafka_exporters.ListKafkaExportersRequest{
-		ProjectId: common.ProjectId,
+		ProjectId: project.GetProjectId(cmd),
 	}
 	response, err := client.ListKafkaExporters(apiContext, req)
 	common.CliExit(err)
 	printer.Print(response)
 }
 
-func get(name *string, recursive bool) {
-	response := Get(name)
+func get(name *string, cmd *cobra.Command) {
+	response := Get(name, cmd)
 	printer.Print(response)
 }
 
-func del(name *string, recursive bool) {
+func del(name *string, recursive bool, cmd *cobra.Command) {
 	exporterRef := &entities.KafkaExporterRef{
-		ProjectId: common.ProjectId,
+		ProjectId: project.GetProjectId(cmd),
 		Name:      *name,
 	}
-	exporter := Get(name)
+	exporter := Get(name, cmd)
 
 	req := &kafka_exporters.DeleteKafkaExporterRequest{Ref: exporterRef, Recursive: recursive}
 	response, err := client.DeleteKafkaExporter(apiContext, req)
@@ -70,14 +70,7 @@ func create(name *string, cmd *cobra.Command) {
 	_, err := flags.GetString(clusterFlag) // TODO at the moment, the cluster flag is ignored
 	common.CliExit(err)
 
-	projectName := util.GetStringAndErr(flags, projectName)
-	var projectId string
-	if len(projectName) > 0 {
-		projectId = project.GetProjectId(projectName)
-	} else {
-		projectId = common.ProjectId
-	}
-
+	projectId := project.GetProjectId(cmd)
 	// key streams not yet supported in data model!
 	exporter := &entities.KafkaExporter{
 		StreamRef: &entities.StreamRef{

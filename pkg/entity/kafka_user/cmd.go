@@ -6,8 +6,7 @@ import (
 )
 
 const (
-	saveFlag    = "save"
-	projectName = "project"
+	saveFlag = "save"
 )
 
 var longDoc = `A Kafka User is a user on a Kafka Exporter, that can be used for authentication when connecting to a Kafka Exporter. By
@@ -28,8 +27,8 @@ func DeleteCmd() *cobra.Command {
 			printer = configurePrinter(cmd)
 		},
 		Run: func(cmd *cobra.Command, args []string) {
-			for i, _ := range args {
-				del(&args[i])
+			for i := range args {
+				del(&args[i], cmd)
 			}
 		},
 		Args:              cobra.MinimumNArgs(1),
@@ -47,7 +46,7 @@ func GetCmd() *cobra.Command {
 			printer = configurePrinter(cmd)
 		},
 		Run: func(cmd *cobra.Command, args []string) {
-			get(&args[0])
+			get(&args[0], cmd)
 		},
 		Args:              cobra.ExactArgs(1), // the stream name
 		ValidArgsFunction: namesCompletion,
@@ -64,7 +63,7 @@ func ListCmd() *cobra.Command {
 			printer = configurePrinter(cmd)
 		},
 		Run: func(cmd *cobra.Command, args []string) {
-			list(&args[0])
+			list(&args[0], cmd)
 		},
 		Args:              cobra.ExactArgs(1), // the kafka exporter name
 		ValidArgsFunction: kafka_exporter.NamesCompletion,
@@ -89,7 +88,6 @@ func CreateCmd() *cobra.Command {
 	}
 	flags := kafkaUser.Flags()
 	flags.Bool(saveFlag, false, "save the result in the config directory")
-	flags.String(projectName, "", `Project name to create resource in`)
 
 	return kafkaUser
 }

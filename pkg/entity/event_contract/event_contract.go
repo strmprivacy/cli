@@ -60,9 +60,9 @@ func list() {
 	printer.Print(response)
 }
 
-func del(name *string) {
+func del(name *string, cmd *cobra.Command) {
 	req := &event_contracts.DeleteEventContractRequest{
-		ProjectId:        common.ProjectId,
+		ProjectId:        project.GetProjectId(cmd),
 		EventContractRef: ref(name)}
 	response, err := client.DeleteEventContract(apiContext, req)
 	common.CliExit(err)
@@ -70,9 +70,9 @@ func del(name *string) {
 	printer.Print(response)
 }
 
-func activate(name *string) {
+func activate(name *string, cmd *cobra.Command) {
 	req := &event_contracts.ActivateEventContractRequest{
-		ProjectId:        common.ProjectId,
+		ProjectId:        project.GetProjectId(cmd),
 		EventContractRef: ref(name)}
 	response, err := client.ActivateEventContract(apiContext, req)
 	common.CliExit(err)
@@ -80,9 +80,9 @@ func activate(name *string) {
 	printer.Print(response)
 }
 
-func archive(name *string) {
+func archive(name *string, cmd *cobra.Command) {
 	req := &event_contracts.ArchiveEventContractRequest{
-		ProjectId:        common.ProjectId,
+		ProjectId:        project.GetProjectId(cmd),
 		EventContractRef: ref(name)}
 	response, err := client.ArchiveEventContract(apiContext, req)
 	common.CliExit(err)
@@ -106,15 +106,8 @@ func create(cmd *cobra.Command, contractReference *string) {
 	schemaRef := util.GetStringAndErr(flags, schemaRefFlag)
 	definitionFilename := util.GetStringAndErr(flags, definitionFile)
 	definition := readContractDefinition(&definitionFilename)
-	projectName := util.GetStringAndErr(flags, projectName)
-	var projectId string
-	if len(projectName) > 0 {
-		projectId = project.GetProjectId(projectName)
-	} else {
-		projectId = common.ProjectId
-	}
 	req := &event_contracts.CreateEventContractRequest{
-		ProjectId: projectId,
+		ProjectId: project.GetProjectId(cmd),
 		EventContract: &entities.EventContract{
 			Ref:              ref(contractReference),
 			SchemaRef:        schema.Ref(&schemaRef),

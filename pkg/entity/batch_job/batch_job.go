@@ -23,9 +23,9 @@ func SetupClient(clientConnection *grpc.ClientConn, ctx context.Context) {
 	client = batch_jobs.NewBatchJobsServiceClient(clientConnection)
 }
 
-func list() {
+func list(cmd *cobra.Command) {
 	req := &batch_jobs.ListBatchJobsRequest{
-		ProjectId: common.ProjectId,
+		ProjectId: project.GetProjectId(cmd),
 	}
 	response, err := client.ListBatchJobs(apiContext, req)
 	common.CliExit(err)
@@ -33,9 +33,9 @@ func list() {
 	printer.Print(response)
 }
 
-func get(id *string, _ *cobra.Command) {
+func get(id *string, cmd *cobra.Command) {
 	ref := &entities.BatchJobRef{
-		ProjectId: common.ProjectId,
+		ProjectId: project.GetProjectId(cmd),
 		Id:        *id,
 	}
 	req := &batch_jobs.GetBatchJobRequest{Ref: ref}
@@ -44,10 +44,10 @@ func get(id *string, _ *cobra.Command) {
 	printer.Print(response)
 }
 
-func del(id *string) {
+func del(id *string, cmd *cobra.Command) {
 	req := &batch_jobs.DeleteBatchJobRequest{
 		Ref: &entities.BatchJobRef{
-			ProjectId: common.ProjectId,
+			ProjectId: project.GetProjectId(cmd),
 			Id:        *id,
 		},
 	}
@@ -70,14 +70,7 @@ func create(cmd *cobra.Command) {
 	if err != nil {
 		common.CliExit(err)
 	}
-	projectName := util.GetStringAndErr(flags, projectName)
-
-	var projectId string
-	if len(projectName) > 0 {
-		projectId = project.GetProjectId(projectName)
-	} else {
-		projectId = common.ProjectId
-	}
+	projectId := project.GetProjectId(cmd)
 
 	setCommonProjectIds(batchJob, projectId)
 	createBatchJobRequest := &batch_jobs.CreateBatchJobRequest{BatchJob: batchJob}
