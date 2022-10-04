@@ -77,8 +77,8 @@ func DeleteCmd() *cobra.Command {
 		},
 		Run: func(cmd *cobra.Command, args []string) {
 			recursive, _ := cmd.Flags().GetBool(common.RecursiveFlagName)
-			for i := range args {
-				del(&args[i], recursive, cmd)
+			for _, arg := range args {
+				del(&arg, recursive, cmd)
 			}
 		},
 		Args:              cobra.MinimumNArgs(1),

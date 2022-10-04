@@ -57,7 +57,8 @@ func GetCmd() *cobra.Command {
 			printer = configurePrinter(cmd)
 		},
 		Run: func(cmd *cobra.Command, args []string) {
-			get(&args[0], cmd)
+			recursive, _ := cmd.Flags().GetBool(common.RecursiveFlagName)
+			get(&args[0], cmd, recursive)
 		},
 		Args:              cobra.ExactArgs(1), // the stream name
 		ValidArgsFunction: NamesCompletion,

@@ -42,7 +42,7 @@ func list(recursive bool, cmd *cobra.Command) {
 	printer.Print(response)
 }
 
-func get(name *string, cmd *cobra.Command) {
+func get(name *string, cmd *cobra.Command, recursive bool) {
 	response := Get(name, cmd)
 	printer.Print(response)
 }

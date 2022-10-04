@@ -27,8 +27,8 @@ func DeleteCmd() *cobra.Command {
 			printer = configurePrinter(cmd)
 		},
 		Run: func(cmd *cobra.Command, args []string) {
-			for i := range args {
-				del(&args[i], cmd)
+			for _, arg := range args {
+				del(&arg, cmd)
 			}
 		},
 		Args:              cobra.MinimumNArgs(1),

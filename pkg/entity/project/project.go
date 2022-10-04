@@ -37,26 +37,26 @@ func ListProjects() []*entities.Project {
 	return response.Projects
 }
 
-func ListProjectsWithActive() ProjectsWithActive {
-	return ProjectsWithActive{
+func ListProjectsWithActive() ProjectsAndActiveProject {
+	return ProjectsAndActiveProject{
 		Projects:      ListProjects(),
 		activeProject: common.GetActiveProject(),
 	}
 }
 
-func GetProject(projectName string) ProjectsWithActive {
+func GetProject(projectName string) ProjectsAndActiveProject {
 	for _, project := range ListProjectsWithActive().Projects {
 		if project.Name == projectName {
-			return ProjectsWithActive{
+			return ProjectsAndActiveProject{
 				Projects:      []*entities.Project{project},
 				activeProject: common.GetActiveProject(),
 			}
 		}
 	}
-	return ProjectsWithActive{}
+	return ProjectsAndActiveProject{}
 }
 
-func create(projectName *string, cmd *cobra.Command) ProjectsWithActive {
+func create(projectName *string, cmd *cobra.Command) ProjectsAndActiveProject {
 	flags := cmd.Flags()
 	description := util.GetStringAndErr(flags, descriptionFlag)
 	req := &projects.CreateProjectRequest{
@@ -67,7 +67,7 @@ func create(projectName *string, cmd *cobra.Command) ProjectsWithActive {
 	}
 	response, err := client.CreateProject(apiContext, req)
 	common.CliExit(err)
-	return ProjectsWithActive{
+	return ProjectsAndActiveProject{
 		Projects:      []*entities.Project{response.Project},
 		activeProject: common.GetActiveProject(),
 	}
@@ -132,14 +132,14 @@ func manage(args []string, cmd *cobra.Command) {
 	return
 }
 
-func get(projectName string) ProjectsWithActive {
+func get(projectName string) ProjectsAndActiveProject {
 	projectId := GetProjectIdFromName(projectName)
 	req := &projects.GetProjectRequest{ProjectId: projectId}
 
 	response, err := client.GetProject(apiContext, req)
 	common.CliExit(err)
 
-	return ProjectsWithActive{
+	return ProjectsAndActiveProject{
 		Projects:      []*entities.Project{response.Project},
 		activeProject: common.GetActiveProject(),
 	}
@@ -155,7 +155,7 @@ func del(projectName string) {
 	return
 }
 
-type ProjectsWithActive struct {
+type ProjectsAndActiveProject struct {
 	Projects      []*entities.Project
 	activeProject string
 }

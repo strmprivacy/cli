@@ -86,9 +86,6 @@ func DeleteCmd() *cobra.Command {
 		},
 		Args: cobra.ExactArgs(1),
 	}
-	flags := project.Flags()
-	flags.StringArray(addMembersFlag, []string{}, "[email1,email2,..]")
-	flags.StringArray(removeMembersFlag, []string{}, "[email1,email2,..]")
 	return project
 }
 
