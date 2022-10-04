@@ -1,3 +1,10 @@
+# [2.18.0](https://github.com/strmprivacy/cli/compare/v2.17.5...v2.18.0) (2022-10-04)
+
+
+### Features
+
+* **strm-1766:** create resources in other project than active one;  ([#122](https://github.com/strmprivacy/cli/issues/122)) ([54f95b9](https://github.com/strmprivacy/cli/commit/54f95b9c8c41f4401811b43ebfb9c3fb9565cb74))
+
 ## [2.17.5](https://github.com/strmprivacy/cli/compare/v2.17.4...v2.17.5) (2022-09-30)
 
 
