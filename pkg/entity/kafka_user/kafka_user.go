@@ -9,15 +9,16 @@ import (
 	"strings"
 	"strmprivacy/strm/pkg/common"
 	"strmprivacy/strm/pkg/entity/kafka_exporter"
+	"strmprivacy/strm/pkg/entity/project"
 	"strmprivacy/strm/pkg/util"
 )
 
 var client kafka_users.KafkaUsersServiceClient
 var apiContext context.Context
 
-func ref(n *string) *entities.KafkaUserRef {
+func ref(n *string, cmd *cobra.Command) *entities.KafkaUserRef {
 	return &entities.KafkaUserRef{
-		ProjectId: common.ProjectId,
+		ProjectId: project.GetProjectId(cmd),
 		Name:      *n,
 	}
 }
@@ -27,10 +28,10 @@ func SetupClient(clientConnection *grpc.ClientConn, ctx context.Context) {
 	client = kafka_users.NewKafkaUsersServiceClient(clientConnection)
 }
 
-func list(exporterName *string) {
+func list(exporterName *string, cmd *cobra.Command) {
 	req := &kafka_users.ListKafkaUsersRequest{
 		Ref: &entities.KafkaExporterRef{
-			ProjectId: common.ProjectId,
+			ProjectId: project.GetProjectId(cmd),
 			Name:      *exporterName,
 		},
 	}
@@ -39,16 +40,16 @@ func list(exporterName *string) {
 	printer.Print(response)
 }
 
-func get(name *string) {
+func get(name *string, cmd *cobra.Command) {
 	// TODO need api recursive addition
-	req := &kafka_users.GetKafkaUserRequest{Ref: ref(name)}
+	req := &kafka_users.GetKafkaUserRequest{Ref: ref(name, cmd)}
 	response, err := client.GetKafkaUser(apiContext, req)
 	common.CliExit(err)
 	printer.Print(response)
 }
 
-func del(name *string) {
-	response := ref(name)
+func del(name *string, cmd *cobra.Command) {
+	response := ref(name, cmd)
 	req := &kafka_users.DeleteKafkaUserRequest{Ref: response}
 	_, err := client.DeleteKafkaUser(apiContext, req)
 	common.CliExit(err)
@@ -57,12 +58,12 @@ func del(name *string) {
 }
 
 func create(kafkaExporterName *string, cmd *cobra.Command) {
-
 	flags := cmd.Flags()
-	exporter := kafka_exporter.Get(kafkaExporterName).KafkaExporter
+	exporter := kafka_exporter.Get(kafkaExporterName, cmd).KafkaExporter
+
 	kafkaUser := &entities.KafkaUser{
 		Ref: &entities.KafkaUserRef{
-			ProjectId: common.ProjectId,
+			ProjectId: project.GetProjectId(cmd),
 		},
 		KafkaExporterName: exporter.Ref.Name,
 	}

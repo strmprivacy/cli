@@ -54,7 +54,7 @@ func ListCmd() *cobra.Command {
 			printer = configurePrinter(cmd)
 		},
 		Run: func(cmd *cobra.Command, args []string) {
-			list()
+			list(cmd)
 		},
 	}
 }
@@ -117,7 +117,7 @@ func DeleteCmd() *cobra.Command {
 			printer = configurePrinter(cmd)
 		},
 		Run: func(cmd *cobra.Command, args []string) {
-			del(&args[0])
+			del(&args[0], cmd)
 		},
 		Args:              cobra.ExactArgs(1), // the contract reference
 		DisableAutoGenTag: true,

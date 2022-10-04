@@ -51,6 +51,9 @@ const OutputFormatFilepath = "path"
 const OutputFormatFlag = "output"
 const OutputFormatFlagShort = "o"
 
+const ProjectNameFlag = "project"
+const ProjectNameFlagShort = "p"
+
 var OutputFormatFlagAllowedValues = []string{OutputFormatJson, OutputFormatJsonRaw, OutputFormatTable, OutputFormatPlain}
 var OutputFormatFlagAllowedValuesText = strings.Join(OutputFormatFlagAllowedValues, ", ")
 

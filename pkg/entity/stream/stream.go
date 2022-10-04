@@ -3,15 +3,15 @@ package stream
 import (
 	"context"
 	"errors"
-	"strings"
-
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 	"github.com/strmprivacy/api-definitions-go/v2/api/entities/v1"
 	"github.com/strmprivacy/api-definitions-go/v2/api/streams/v1"
 	"google.golang.org/grpc"
+	"strings"
 	"strmprivacy/strm/pkg/common"
+	"strmprivacy/strm/pkg/entity/project"
 	"strmprivacy/strm/pkg/util"
 )
 
@@ -40,11 +40,11 @@ func SetupClient(clientConnection *grpc.ClientConn, ctx context.Context) {
 	client = streams.NewStreamsServiceClient(clientConnection)
 }
 
-func Get(streamName *string, recursive bool) *streams.GetStreamResponse {
+func Get(streamName *string, recursive bool, cmd *cobra.Command) *streams.GetStreamResponse {
 	req := &streams.GetStreamRequest{
 		Recursive: recursive,
 		Ref: &entities.StreamRef{
-			ProjectId: common.ProjectId,
+			ProjectId: project.GetProjectId(cmd),
 			Name:      *streamName,
 		},
 	}
@@ -53,9 +53,9 @@ func Get(streamName *string, recursive bool) *streams.GetStreamResponse {
 	return stream
 }
 
-func list(recursive bool) {
+func list(recursive bool, cmd *cobra.Command) {
 	req := &streams.ListStreamsRequest{
-		ProjectId: common.ProjectId,
+		ProjectId: project.GetProjectId(cmd),
 		Recursive: recursive,
 	}
 	response, err := client.ListStreams(apiContext, req)
@@ -63,16 +63,16 @@ func list(recursive bool) {
 	printer.Print(response)
 }
 
-func get(streamName *string, recursive bool) {
-	response := Get(streamName, recursive)
+func get(streamName *string, recursive bool, cmd *cobra.Command) {
+	response := Get(streamName, recursive, cmd)
 	printer.Print(response)
 }
 
-func del(streamName *string, recursive bool) {
-	response := Get(streamName, recursive)
+func del(streamName *string, recursive bool, cmd *cobra.Command) {
+	response := Get(streamName, recursive, cmd)
 	req := &streams.DeleteStreamRequest{
 		Recursive: recursive, Ref: &entities.StreamRef{
-			ProjectId: common.ProjectId,
+			ProjectId: project.GetProjectId(cmd),
 			Name:      *streamName,
 		},
 	}
@@ -87,7 +87,7 @@ func create(args []string, cmd *cobra.Command) {
 	flags := cmd.Flags()
 	linkedStream := util.GetStringAndErr(flags, linkedStreamFlag)
 	stream := &entities.Stream{Ref: &entities.StreamRef{
-		ProjectId: common.ProjectId,
+		ProjectId: project.GetProjectId(cmd),
 	}}
 	if len(args) > 0 {
 		stream.Ref.Name = args[0]

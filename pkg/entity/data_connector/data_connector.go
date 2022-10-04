@@ -2,12 +2,14 @@ package data_connector
 
 import (
 	"context"
+	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 	"github.com/strmprivacy/api-definitions-go/v2/api/data_connectors/v1"
 	"github.com/strmprivacy/api-definitions-go/v2/api/entities/v1"
 	"google.golang.org/grpc"
 	"io/ioutil"
 	"strmprivacy/strm/pkg/common"
+	"strmprivacy/strm/pkg/entity/project"
 	"strmprivacy/strm/pkg/util"
 )
 
@@ -51,7 +53,9 @@ func del(name *string, recursive bool) {
 	printer.Print(response)
 }
 
-func create(dataConnector *entities.DataConnector) {
+func create(dataConnector *entities.DataConnector, cmd *cobra.Command) {
+	projectId := project.GetProjectId(cmd)
+	dataConnector.Ref.ProjectId = projectId
 	req := &data_connectors.CreateDataConnectorRequest{
 		DataConnector: dataConnector,
 	}

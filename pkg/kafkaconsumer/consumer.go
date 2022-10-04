@@ -28,7 +28,7 @@ func Run(cmd *cobra.Command, kafkaExporterName *string) {
 	clientId := util.GetStringAndErr(flags, common.ClientIdFlag)
 	clientSecret := util.GetStringAndErr(flags, common.ClientSecretFlag)
 	bootstrapBrokers := util.GetStringAndErr(flags, KafkaBootstrapHostFlag)
-	kafkaExporter := kafka_exporter.Get(kafkaExporterName).KafkaExporter
+	kafkaExporter := kafka_exporter.Get(kafkaExporterName, cmd).KafkaExporter
 
 	// TODO this needs to be changed. The client secret shouldn't even be
 	// TODO visible on the Kafka exporters. Part of the Authorization revamp.

@@ -21,7 +21,7 @@ const (
 var tokenSource oauth2.TokenSource
 
 func run(cmd *cobra.Command, streamName *string) {
-	s := stream.Get(streamName, false).StreamTree.Stream
+	s := stream.Get(streamName, false, cmd).StreamTree.Stream
 
 	flags := cmd.Flags()
 	url := util.GetStringAndErr(flags, WebSocketUrl)

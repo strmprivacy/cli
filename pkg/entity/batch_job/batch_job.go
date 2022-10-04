@@ -11,6 +11,7 @@ import (
 	"io/ioutil"
 	"strings"
 	"strmprivacy/strm/pkg/common"
+	"strmprivacy/strm/pkg/entity/project"
 	"strmprivacy/strm/pkg/util"
 )
 
@@ -22,9 +23,9 @@ func SetupClient(clientConnection *grpc.ClientConn, ctx context.Context) {
 	client = batch_jobs.NewBatchJobsServiceClient(clientConnection)
 }
 
-func list() {
+func list(cmd *cobra.Command) {
 	req := &batch_jobs.ListBatchJobsRequest{
-		ProjectId: common.ProjectId,
+		ProjectId: project.GetProjectId(cmd),
 	}
 	response, err := client.ListBatchJobs(apiContext, req)
 	common.CliExit(err)
@@ -32,9 +33,9 @@ func list() {
 	printer.Print(response)
 }
 
-func get(id *string, _ *cobra.Command) {
+func get(id *string, cmd *cobra.Command) {
 	ref := &entities.BatchJobRef{
-		ProjectId: common.ProjectId,
+		ProjectId: project.GetProjectId(cmd),
 		Id:        *id,
 	}
 	req := &batch_jobs.GetBatchJobRequest{Ref: ref}
@@ -43,10 +44,10 @@ func get(id *string, _ *cobra.Command) {
 	printer.Print(response)
 }
 
-func del(id *string) {
+func del(id *string, cmd *cobra.Command) {
 	req := &batch_jobs.DeleteBatchJobRequest{
 		Ref: &entities.BatchJobRef{
-			ProjectId: common.ProjectId,
+			ProjectId: project.GetProjectId(cmd),
 			Id:        *id,
 		},
 	}
@@ -69,7 +70,9 @@ func create(cmd *cobra.Command) {
 	if err != nil {
 		common.CliExit(err)
 	}
-	setCommonProjectIds(batchJob)
+	projectId := project.GetProjectId(cmd)
+
+	setCommonProjectIds(batchJob, projectId)
 	createBatchJobRequest := &batch_jobs.CreateBatchJobRequest{BatchJob: batchJob}
 	response, err := client.CreateBatchJob(apiContext, createBatchJobRequest)
 	common.CliExit(err)
@@ -77,17 +80,17 @@ func create(cmd *cobra.Command) {
 	printer.Print(response)
 }
 
-func setCommonProjectIds(batchJob *entities.BatchJob) {
+func setCommonProjectIds(batchJob *entities.BatchJob, projectId string) {
 	if batchJob.Ref == nil {
 		// normal situation where the whole ref attribute in the json is absent.
 		batchJob.Ref = &entities.BatchJobRef{}
 	}
-	batchJob.Ref.ProjectId = common.ProjectId
-	batchJob.SourceData.DataConnectorRef.ProjectId = common.ProjectId
-	batchJob.EncryptedData.Target.DataConnectorRef.ProjectId = common.ProjectId
-	batchJob.EncryptionKeysData.Target.DataConnectorRef.ProjectId = common.ProjectId
+	batchJob.Ref.ProjectId = projectId
+	batchJob.SourceData.DataConnectorRef.ProjectId = projectId
+	batchJob.EncryptedData.Target.DataConnectorRef.ProjectId = projectId
+	batchJob.EncryptionKeysData.Target.DataConnectorRef.ProjectId = projectId
 	for _, d := range batchJob.DerivedData {
-		d.Target.DataConnectorRef.ProjectId = common.ProjectId
+		d.Target.DataConnectorRef.ProjectId = projectId
 	}
 
 }

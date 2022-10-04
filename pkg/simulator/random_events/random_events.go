@@ -29,7 +29,7 @@ const (
 
 // start a random simulator
 func randomEvents(cmd *cobra.Command, streamName *string) {
-	s := getStream(streamName)
+	s := getStream(streamName, cmd)
 
 	flags := cmd.Flags()
 	interval := time.Duration(util.GetIntAndErr(flags, IntervalFlag))
@@ -93,8 +93,8 @@ func randomConsentLevels(levels []string) []int32 {
 	return util.StringsArrayToInt32(l)
 }
 
-func getStream(streamName *string) *entities.Stream {
-	s := stream.Get(streamName, false).StreamTree.Stream
+func getStream(streamName *string, cmd *cobra.Command) *entities.Stream {
+	s := stream.Get(streamName, false, cmd).StreamTree.Stream
 
 	if len(s.LinkedStream) != 0 {
 		common.CliExit(errors.New("simulators cannot be randomEvents on a derived stream"))

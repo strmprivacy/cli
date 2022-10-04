@@ -44,7 +44,7 @@ func createAzureBlobStorageCmd() *cobra.Command {
 					},
 				},
 			}
-			create(dataConnector)
+			create(dataConnector, cmd)
 		},
 		Args: cobra.ExactArgs(2),
 	}

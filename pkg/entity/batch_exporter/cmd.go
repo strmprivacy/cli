@@ -39,8 +39,8 @@ func DeleteCmd() *cobra.Command {
 			printer = configurePrinter(cmd)
 		},
 		Run: func(cmd *cobra.Command, args []string) {
-			for i, _ := range args {
-				del(&args[i])
+			for _, arg := range args {
+				del(&arg, cmd)
 			}
 		},
 		Args:              cobra.MinimumNArgs(1), // the stream names
@@ -78,7 +78,7 @@ func ListCmd() *cobra.Command {
 		},
 		DisableAutoGenTag: true,
 		Run: func(cmd *cobra.Command, args []string) {
-			list()
+			list(cmd)
 		},
 	}
 }

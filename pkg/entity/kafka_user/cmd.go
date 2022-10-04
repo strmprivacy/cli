@@ -6,7 +6,6 @@ import (
 )
 
 const (
-	nameFlag = "name"
 	saveFlag = "save"
 )
 
@@ -28,8 +27,8 @@ func DeleteCmd() *cobra.Command {
 			printer = configurePrinter(cmd)
 		},
 		Run: func(cmd *cobra.Command, args []string) {
-			for i, _ := range args {
-				del(&args[i])
+			for _, arg := range args {
+				del(&arg, cmd)
 			}
 		},
 		Args:              cobra.MinimumNArgs(1),
@@ -47,7 +46,7 @@ func GetCmd() *cobra.Command {
 			printer = configurePrinter(cmd)
 		},
 		Run: func(cmd *cobra.Command, args []string) {
-			get(&args[0])
+			get(&args[0], cmd)
 		},
 		Args:              cobra.ExactArgs(1), // the stream name
 		ValidArgsFunction: namesCompletion,
@@ -64,7 +63,7 @@ func ListCmd() *cobra.Command {
 			printer = configurePrinter(cmd)
 		},
 		Run: func(cmd *cobra.Command, args []string) {
-			list(&args[0])
+			list(&args[0], cmd)
 		},
 		Args:              cobra.ExactArgs(1), // the kafka exporter name
 		ValidArgsFunction: kafka_exporter.NamesCompletion,
@@ -83,7 +82,6 @@ func CreateCmd() *cobra.Command {
 		Run: func(cmd *cobra.Command, args []string) {
 			streamName := &args[0]
 			create(streamName, cmd)
-
 		},
 		Args:              cobra.ExactArgs(1), // the kafka-exporter name
 		ValidArgsFunction: kafka_exporter.NamesCompletion,

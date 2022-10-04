@@ -77,8 +77,8 @@ func DeleteCmd() *cobra.Command {
 		},
 		Run: func(cmd *cobra.Command, args []string) {
 			recursive, _ := cmd.Flags().GetBool(common.RecursiveFlagName)
-			for i, _ := range args {
-				del(&args[i], recursive)
+			for _, arg := range args {
+				del(&arg, recursive, cmd)
 			}
 		},
 		Args:              cobra.MinimumNArgs(1),
@@ -99,7 +99,7 @@ func GetCmd() *cobra.Command {
 		},
 		Run: func(cmd *cobra.Command, args []string) {
 			recursive, _ := cmd.Flags().GetBool(common.RecursiveFlagName)
-			get(&args[0], recursive)
+			get(&args[0], recursive, cmd)
 		},
 		Args:              cobra.ExactArgs(1), // the stream name
 		ValidArgsFunction: NamesCompletion,
@@ -116,7 +116,7 @@ func ListCmd() *cobra.Command {
 		},
 		Run: func(cmd *cobra.Command, args []string) {
 			recursive, _ := cmd.Flags().GetBool(common.RecursiveFlagName)
-			list(recursive)
+			list(recursive, cmd)
 		},
 		ValidArgsFunction: common.NoFilesEmptyCompletion,
 	}

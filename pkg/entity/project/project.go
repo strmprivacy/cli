@@ -28,7 +28,7 @@ func SetupClient(clientConnection *grpc.ClientConn, ctx context.Context) {
 
 func ListProjects() []*entities.Project {
 	if apiContext == nil {
-		common.CliExit(errors.New(fmt.Sprint("No login information found. Use: `dstrm auth login` first.")))
+		common.CliExit(errors.New(fmt.Sprint("No login information found. Use: `" + common.RootCommandName + " auth login` first.")))
 	}
 
 	req := &projects.ListProjectsRequest{}
@@ -37,26 +37,26 @@ func ListProjects() []*entities.Project {
 	return response.Projects
 }
 
-func ListProjectsWithActive() ProjectsWithActive {
-	return ProjectsWithActive{
+func ListProjectsWithActive() ProjectsAndActiveProject {
+	return ProjectsAndActiveProject{
 		Projects:      ListProjects(),
 		activeProject: common.GetActiveProject(),
 	}
 }
 
-func GetProject(projectName string) ProjectsWithActive {
+func GetProject(projectName string) ProjectsAndActiveProject {
 	for _, project := range ListProjectsWithActive().Projects {
 		if project.Name == projectName {
-			return ProjectsWithActive{
+			return ProjectsAndActiveProject{
 				Projects:      []*entities.Project{project},
 				activeProject: common.GetActiveProject(),
 			}
 		}
 	}
-	return ProjectsWithActive{}
+	return ProjectsAndActiveProject{}
 }
 
-func create(projectName *string, cmd *cobra.Command) ProjectsWithActive {
+func create(projectName *string, cmd *cobra.Command) ProjectsAndActiveProject {
 	flags := cmd.Flags()
 	description := util.GetStringAndErr(flags, descriptionFlag)
 	req := &projects.CreateProjectRequest{
@@ -67,13 +67,13 @@ func create(projectName *string, cmd *cobra.Command) ProjectsWithActive {
 	}
 	response, err := client.CreateProject(apiContext, req)
 	common.CliExit(err)
-	return ProjectsWithActive{
+	return ProjectsAndActiveProject{
 		Projects:      []*entities.Project{response.Project},
 		activeProject: common.GetActiveProject(),
 	}
 }
 
-func GetProjectId(projectName string) string {
+func GetProjectIdFromName(projectName string) string {
 	activeProject := ""
 	if projectName == "" {
 		activeProject = common.GetActiveProject()
@@ -88,6 +88,18 @@ func GetProjectId(projectName string) string {
 	return resolvedProject.Projects[0].Id
 }
 
+func GetProjectId(cmd *cobra.Command) string {
+	flags := cmd.PersistentFlags()
+	projectName, _ := flags.GetString(common.ProjectNameFlag)
+	var projectId string
+	if len(projectName) > 0 {
+		projectId = GetProjectIdFromName(projectName)
+	} else {
+		projectId = GetProjectIdFromName(common.GetActiveProject())
+	}
+	return projectId
+}
+
 func manage(args []string, cmd *cobra.Command) {
 	flags := cmd.Flags()
 	membersToAdd, err := flags.GetStringArray(addMembersFlag)
@@ -97,7 +109,7 @@ func manage(args []string, cmd *cobra.Command) {
 	if len(args) > 0 {
 		projectName = args[0]
 	}
-	projectId := GetProjectId(projectName)
+	projectId := GetProjectIdFromName(projectName)
 
 	if len(membersToAdd) > 0 {
 		addReq := &projects.AddProjectMembersRequest{
@@ -119,7 +131,30 @@ func manage(args []string, cmd *cobra.Command) {
 	return
 }
 
-type ProjectsWithActive struct {
+func get(projectName string) ProjectsAndActiveProject {
+	projectId := GetProjectIdFromName(projectName)
+	req := &projects.GetProjectRequest{ProjectId: projectId}
+
+	response, err := client.GetProject(apiContext, req)
+	common.CliExit(err)
+
+	return ProjectsAndActiveProject{
+		Projects:      []*entities.Project{response.Project},
+		activeProject: common.GetActiveProject(),
+	}
+}
+
+func del(projectName string) {
+	projectId := GetProjectIdFromName(projectName)
+	req := &projects.DeleteProjectRequest{
+		ProjectId: projectId,
+	}
+	_, err := client.DeleteProject(apiContext, req)
+	common.CliExit(err)
+	return
+}
+
+type ProjectsAndActiveProject struct {
 	Projects      []*entities.Project
 	activeProject string
 }

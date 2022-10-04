@@ -30,9 +30,13 @@ func availablePrinters() map[string]util.Printer {
 			common.OutputFormatTable + common.ListCommandName:   listTablePrinter{},
 			common.OutputFormatTable + common.CreateCommandName: createTablePrinter{},
 			common.OutputFormatTable + common.ManageCommandName: manageTablePrinter{},
+			common.OutputFormatTable + common.GetCommandName:    getTablePrinter{},
+			common.OutputFormatTable + common.DeleteCommandName: deleteTablePrinter{},
 			common.OutputFormatPlain + common.ListCommandName:   listPlainPrinter{},
 			common.OutputFormatPlain + common.CreateCommandName: createPlainPrinter{},
 			common.OutputFormatPlain + common.ManageCommandName: managePlainPrinter{},
+			common.OutputFormatPlain + common.GetCommandName:    getPlainPrinter{},
+			common.OutputFormatPlain + common.DeleteCommandName: deletePlainPrinter{},
 		},
 	)
 }
@@ -40,40 +44,62 @@ func availablePrinters() map[string]util.Printer {
 type listPlainPrinter struct{}
 type createPlainPrinter struct{}
 type managePlainPrinter struct{}
+type getPlainPrinter struct{}
+type deletePlainPrinter struct{}
 
 type listTablePrinter struct{}
 type createTablePrinter struct{}
 type manageTablePrinter struct{}
+type getTablePrinter struct{}
+type deleteTablePrinter struct{}
 
 func (p listTablePrinter) Print(data interface{}) {
-	listResponse, _ := (data).(ProjectsWithActive)
+	listResponse, _ := (data).(ProjectsAndActiveProject)
 	printTable(listResponse)
 }
 
 func (p createTablePrinter) Print(data interface{}) {
-	createResponse, _ := (data).(ProjectsWithActive)
+	createResponse, _ := (data).(ProjectsAndActiveProject)
 	printTable(createResponse)
 }
 
 func (p manageTablePrinter) Print(_ interface{}) {
-	printTable(ProjectsWithActive{})
+	printTable(ProjectsAndActiveProject{})
+}
+
+func (p getTablePrinter) Print(data interface{}) {
+	getResponse, _ := (data).(ProjectsAndActiveProject)
+	printTable(getResponse)
+}
+
+func (p deleteTablePrinter) Print(data interface{}) {
+	printTable(ProjectsAndActiveProject{})
 }
 
 func (p listPlainPrinter) Print(data interface{}) {
-	listResponse, _ := (data).(ProjectsWithActive)
+	listResponse, _ := (data).(ProjectsAndActiveProject)
 	printPlain(listResponse)
 }
 
 func (p createPlainPrinter) Print(data interface{}) {
-	createResponse, _ := (data).(ProjectsWithActive)
+	createResponse, _ := (data).(ProjectsAndActiveProject)
 	printPlain(createResponse)
 }
 
 func (p managePlainPrinter) Print(_ interface{}) {
-	printPlain(ProjectsWithActive{})
+	printPlain(ProjectsAndActiveProject{})
 }
 
-func printTable(projectsWithActive ProjectsWithActive) {
+func (p getPlainPrinter) Print(data interface{}) {
+	getResponse, _ := (data).(ProjectsAndActiveProject)
+	printPlain(getResponse)
+}
+
+func (p deletePlainPrinter) Print(_ interface{}) {
+	printPlain(ProjectsAndActiveProject{})
+}
+
+func printTable(projectsWithActive ProjectsAndActiveProject) {
 	rows := make([]table.Row, 0, len(projectsWithActive.Projects))
 
 	for _, project := range projectsWithActive.Projects {
@@ -98,7 +124,7 @@ func printTable(projectsWithActive ProjectsWithActive) {
 	)
 }
 
-func printPlain(projectsWithActive ProjectsWithActive) {
+func printPlain(projectsWithActive ProjectsAndActiveProject) {
 	var names string
 	lastIndex := len(projectsWithActive.Projects) - 1
 

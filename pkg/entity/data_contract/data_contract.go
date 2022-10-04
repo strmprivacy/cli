@@ -13,6 +13,7 @@ import (
 	"sigs.k8s.io/yaml"
 	"strings"
 	"strmprivacy/strm/pkg/common"
+	"strmprivacy/strm/pkg/entity/project"
 	"strmprivacy/strm/pkg/util"
 )
 
@@ -51,9 +52,9 @@ func readContractDefinition(filename *string) DataContractDefinition {
 func getSchemaDefinition(filename string, ref *entities.DataContractRef, isPublic bool) *entities.Schema {
 	schema := entities.Schema{
 		Ref: &entities.SchemaRef{
-			Name:       ref.Name,
-			Handle:     ref.Handle,
-			Version:    ref.Version,
+			Name:    ref.Name,
+			Handle:  ref.Handle,
+			Version: ref.Version,
 		},
 		IsPublic: isPublic,
 		Metadata: &entities.SchemaMetadata{},
@@ -88,15 +89,16 @@ func create(cmd *cobra.Command, args *string) {
 	contractDefinitionFilename := util.GetStringAndErr(flags, contractDefinitionFlag)
 	contractDefinition := readContractDefinition(&contractDefinitionFilename)
 
+	projectId := project.GetProjectId(cmd)
 	ref := ref(args)
 	schema := getSchemaDefinition(schemaDefinitionFilename, ref, isPublic)
 
 	req := &data_contracts.CreateDataContractRequest{
-		ProjectId: common.ProjectId,
+		ProjectId: projectId,
 		DataContract: &entities.DataContract{
 			KeyField:         contractDefinition.KeyField,
 			IsPublic:         isPublic,
-			ProjectId:        common.ProjectId,
+			ProjectId:        projectId,
 			DataSubjectField: contractDefinition.DataSubjectField,
 			Schema:           schema,
 			Ref:              ref,
@@ -110,9 +112,9 @@ func create(cmd *cobra.Command, args *string) {
 	printer.Print(response)
 }
 
-func list() {
+func list(cmd *cobra.Command) {
 	req := &data_contracts.ListDataContractsRequest{
-		ProjectId: common.ProjectId,
+		ProjectId: project.GetProjectId(cmd),
 	}
 
 	response, err := client.ListDataContracts(apiContext, req)
@@ -121,9 +123,9 @@ func list() {
 	printer.Print(response)
 }
 
-func del(refString *string) {
+func del(refString *string, cmd *cobra.Command) {
 	req := &data_contracts.DeleteDataContractRequest{
-		ProjectId: common.ProjectId,
+		ProjectId:       project.GetProjectId(cmd),
 		DataContractRef: ref(refString),
 	}
 	_, err := client.DeleteDataContract(apiContext, req)
