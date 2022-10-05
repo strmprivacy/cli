@@ -14,6 +14,7 @@ require (
 	github.com/jedib0t/go-pretty/v6 v6.2.4
 	github.com/joho/godotenv v1.3.0
 	github.com/magiconair/properties v1.8.5
+	github.com/manifoldco/promptui v0.9.0
 	github.com/pkg/browser v0.0.0-20210911075715-681adbf594b8
 	github.com/sirupsen/logrus v1.8.1
 	github.com/spf13/cobra v1.3.0
@@ -29,6 +30,7 @@ require (
 )
 
 require (
+	github.com/chzyer/readline v0.0.0-20180603132655-2972be24d48e // indirect
 	github.com/cpuguy83/go-md2man/v2 v2.0.1 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/eapache/go-resiliency v1.2.0 // indirect

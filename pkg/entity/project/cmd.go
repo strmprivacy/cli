@@ -1,6 +1,7 @@
 package project
 
 import (
+	"github.com/manifoldco/promptui"
 	"github.com/spf13/cobra"
 	"github.com/strmprivacy/api-definitions-go/v2/api/projects/v1"
 	"strmprivacy/strm/pkg/common"
@@ -82,11 +83,21 @@ func DeleteCmd() *cobra.Command {
 		},
 		DisableAutoGenTag: true,
 		Run: func(cmd *cobra.Command, args []string) {
-			del(args[0])
+			if deleteConfirmation(args[0]) {
+				del(args[0])
+			}
 		},
 		Args: cobra.ExactArgs(1),
 	}
 	return project
+}
+
+func deleteConfirmation(projectName string) bool {
+	prompt := promptui.Prompt{
+		Label: "Confirm you want to delete `" + projectName + "` by entering the project name",
+	}
+	result, _ := prompt.Run()
+	return result == projectName
 }
 
 func NamesCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
