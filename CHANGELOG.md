@@ -1,3 +1,10 @@
+## [2.18.1](https://github.com/strmprivacy/cli/compare/v2.18.0...v2.18.1) (2022-10-05)
+
+
+### Bug Fixes
+
+* bug fix in flags ([864b6ae](https://github.com/strmprivacy/cli/commit/864b6ae1d64972570661dce9da9bfee5663e8f38))
+
 # [2.18.0](https://github.com/strmprivacy/cli/compare/v2.17.5...v2.18.0) (2022-10-04)
 
 
