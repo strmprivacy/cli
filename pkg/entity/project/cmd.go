@@ -1,6 +1,7 @@
 package project
 
 import (
+	"fmt"
 	"github.com/manifoldco/promptui"
 	"github.com/spf13/cobra"
 	"github.com/strmprivacy/api-definitions-go/v2/api/projects/v1"
@@ -85,6 +86,9 @@ func DeleteCmd() *cobra.Command {
 		Run: func(cmd *cobra.Command, args []string) {
 			if deleteConfirmation(args[0]) {
 				del(args[0])
+				fmt.Println("Project " + args[0] + " deleted")
+			} else {
+				fmt.Println("Project deletion cancelled")
 			}
 		},
 		Args: cobra.ExactArgs(1),
