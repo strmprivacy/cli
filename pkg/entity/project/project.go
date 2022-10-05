@@ -89,7 +89,7 @@ func GetProjectIdFromName(projectName string) string {
 }
 
 func GetProjectId(cmd *cobra.Command) string {
-	flags := cmd.PersistentFlags()
+	flags := cmd.Flags()
 	projectName, _ := flags.GetString(common.ProjectNameFlag)
 	var projectId string
 	if len(projectName) > 0 {
