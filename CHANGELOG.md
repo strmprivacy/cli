@@ -1,3 +1,10 @@
+# [2.19.0](https://github.com/strmprivacy/cli/compare/v2.18.1...v2.19.0) (2022-10-11)
+
+
+### Features
+
+* **strm-1819:** api 2.55.0 ([#125](https://github.com/strmprivacy/cli/issues/125)) ([7df351c](https://github.com/strmprivacy/cli/commit/7df351cc572a6cc19d5768470120ca733f34f29e))
+
 ## [2.18.1](https://github.com/strmprivacy/cli/compare/v2.18.0...v2.18.1) (2022-10-05)
 
 
