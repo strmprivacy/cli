@@ -2,6 +2,7 @@ package util
 
 import (
 	"fmt"
+	"github.com/samber/lo"
 	"github.com/spf13/pflag"
 	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/proto"
@@ -22,31 +23,13 @@ func atoi32(s string) int32 {
 	return int32(atoi(s))
 }
 
-func MapStringsToInt32(vs []string, f func(string) int32) []int32 {
-	if len(vs) == 0 {
-		return []int32{}
-
-	}
-	vsm := make([]int32, len(vs))
-	for i, v := range vs {
-		vsm[i] = f(v)
-	}
-	return vsm
-}
-
-func MapStrings(vs []string, f func(string) string) []string {
-	if len(vs) == 0 {
-		return []string{}
-
-	}
-	vsm := make([]string, len(vs))
-	for i, v := range vs {
-		vsm[i] = f(v)
-	}
-	return vsm
+func MapStrings[T any](vs []string, f func(string) T) []T {
+	return lo.Map[string, T](vs, func(s string, _ int) T {
+		return f(s)
+	})
 }
 func StringsArrayToInt32(vs []string) []int32 {
-	return MapStringsToInt32(vs, atoi32)
+	return MapStrings[int32](vs, atoi32)
 }
 
 func GetStringAndErr(f *pflag.FlagSet, k string) string {

@@ -33,6 +33,8 @@ func availablePrinters() map[string]util.Printer {
 			common.OutputFormatTable + common.ListCommandName:   listTablePrinter{},
 			common.OutputFormatPlain + common.GetCommandName:    getPlainPrinter{},
 			common.OutputFormatPlain + common.CreateCommandName: createPlainPrinter{},
+			common.OutputFormatPlain + common.UpdateCommandName: updatePlainPrinter{},
+			common.OutputFormatPlain + common.DeleteCommandName: deletePlainPrinter{},
 		},
 	)
 }
@@ -40,12 +42,15 @@ func availablePrinters() map[string]util.Printer {
 type listPlainPrinter struct{}
 type listTablePrinter struct{}
 type getPlainPrinter struct{}
+type deletePlainPrinter struct{}
 type createPlainPrinter struct{}
+type updatePlainPrinter struct{}
 
 func (p listPlainPrinter) Print(data interface{}) {
 	listResponse, _ := (data).(*policies.ListPoliciesResponse)
 	for _, policy := range listResponse.Policies {
 		print1plain(policy)
+		println()
 	}
 }
 
@@ -59,13 +64,24 @@ func (p getPlainPrinter) Print(data interface{}) {
 	print1plain(policy)
 }
 
+func (p deletePlainPrinter) Print(data interface{}) {
+	response, _ := (data).(*policies.DeletePolicyResponse)
+	fmt.Println(response)
+}
+
 func (p createPlainPrinter) Print(data interface{}) {
+	policy, _ := (data).(*v1.Policy)
+	print1plain(policy)
+}
+
+func (p updatePlainPrinter) Print(data interface{}) {
 	policy, _ := (data).(*v1.Policy)
 	print1plain(policy)
 }
 
 func print1plain(policy *v1.Policy) {
 	fmt.Println("Name:", policy.Name)
+	fmt.Println("Id:", policy.Id)
 	fmt.Println("Description:", policy.Description)
 	fmt.Println("Retention(days):", policy.RetentionDays)
 	fmt.Println("Legal Grounds:", policy.LegalGrounds)
@@ -74,7 +90,6 @@ func print1plain(policy *v1.Policy) {
 
 func printTable(policies []*v1.Policy) {
 	rows := make([]table.Row, 0, len(policies))
-
 	for _, policy := range policies {
 		rows = append(rows, table.Row{
 			policy.Name,

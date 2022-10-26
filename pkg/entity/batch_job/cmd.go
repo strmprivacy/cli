@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/spf13/cobra"
 	"strmprivacy/strm/pkg/common"
+	"strmprivacy/strm/pkg/entity/policy"
 )
 
 const (
@@ -94,6 +95,7 @@ func CreateCmd() *cobra.Command {
 
 	flags.StringP(batchJobsFileFlagName, "F", "",
 		`The path to the JSON file containing the batch job configuration`)
+	policy.SetupFlags(batchJob, flags)
 	err := batchJob.MarkFlagRequired(batchJobsFileFlagName)
 	common.CliExit(err)
 

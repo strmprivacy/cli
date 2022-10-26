@@ -11,6 +11,7 @@ import (
 	"io/ioutil"
 	"strings"
 	"strmprivacy/strm/pkg/common"
+	"strmprivacy/strm/pkg/entity/policy"
 	"strmprivacy/strm/pkg/entity/project"
 	"strmprivacy/strm/pkg/util"
 )
@@ -71,7 +72,7 @@ func create(cmd *cobra.Command) {
 		common.CliExit(err)
 	}
 	projectId := project.GetProjectId(cmd)
-
+	batchJob.PolicyId = policy.GetPolicyFromFlags(flags)
 	setCommonProjectIds(batchJob, projectId)
 	createBatchJobRequest := &batch_jobs.CreateBatchJobRequest{BatchJob: batchJob}
 	response, err := client.CreateBatchJob(apiContext, createBatchJobRequest)

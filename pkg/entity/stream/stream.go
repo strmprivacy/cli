@@ -11,6 +11,7 @@ import (
 	"google.golang.org/grpc"
 	"strings"
 	"strmprivacy/strm/pkg/common"
+	"strmprivacy/strm/pkg/entity/policy"
 	"strmprivacy/strm/pkg/entity/project"
 	"strmprivacy/strm/pkg/util"
 )
@@ -109,7 +110,9 @@ func create(args []string, cmd *cobra.Command) {
 	stream.Description = util.GetStringAndErr(flags, descriptionFlag)
 	stream.Tags, err = flags.GetStringSlice(tagsFlag)
 	stream.MaskedFields = parseMaskedFields(flags)
+	stream.PolicyId = policy.GetPolicyFromFlags(flags)
 	common.CliExit(err)
+
 	req := &streams.CreateStreamRequest{Stream: stream}
 	response, err := client.CreateStream(apiContext, req)
 	common.CliExit(err)

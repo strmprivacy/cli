@@ -25,7 +25,7 @@ func printAccessToken() {
 }
 
 func RequireAuthenticationPreRun(cmd *cobra.Command, args []string) {
-	cmd.Root().PersistentPreRunE(cmd, args)
+	_ = cmd.Root().PersistentPreRunE(cmd, args)
 	accessToken := Auth.GetToken()
 
 	if accessToken == nil {
