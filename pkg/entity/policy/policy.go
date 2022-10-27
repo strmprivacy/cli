@@ -19,15 +19,16 @@ import (
 )
 
 const (
-	idFlag           = "id"
-	nameFlag         = "name"
-	descriptionFlag  = "description"
-	legalGroundsFlag = "legal-grounds"
-	stateFlag        = "state"
-	retentionFlag    = "retention"
-	policyNameFlag   = "policy-name" // used by stream and batch-job
-	policyIdFlag     = "policy-id"   // used by stream and batch-job
-	updateMaskFlag   = "update-mask"
+	idFlag            = "id"
+	nameFlag          = "name"
+	descriptionFlag   = "description"
+	legalGroundsFlag  = "legal-grounds"
+	stateFlag         = "state"
+	retentionFlag     = "retention"
+	policyNameFlag    = "policy-name" // used by stream and batch-job
+	policyIdFlag      = "policy-id"   // used by stream and batch-job
+	updateMaskFlag    = "update-mask"
+	defaultPolicyFlag = "get-default-policy"
 )
 
 var client policiesApi.PoliciesServiceClient
@@ -245,6 +246,9 @@ func GetPolicyFromFlags(flags *pflag.FlagSet) string {
 // getPolicyIdFromArgumentsOrIdFlag get a policy id from either an
 // option or as the first string in args
 func getPolicyIdFromArgumentsOrIdFlag(flags *pflag.FlagSet, args []string) string {
+	if flags.Lookup(defaultPolicyFlag).Changed {
+		return ""
+	}
 	id := util.GetStringAndErr(flags, idFlag)
 	if len(id) == 0 {
 		if len(args) == 0 {

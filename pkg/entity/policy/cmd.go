@@ -54,6 +54,7 @@ func GetCmd() *cobra.Command {
 	flags.StringP(common.OutputFormatFlag, common.OutputFormatFlagShort, common.OutputFormatPlain,
 		fmt.Sprintf("output format [%v]", outputFormatFlagAllowedValuesText))
 	flags.String(idFlag, "", "policy id")
+	flags.Bool(defaultPolicyFlag, false, "get the no-name/no-id default policy")
 	_ = command.RegisterFlagCompletionFunc(idFlag, idsCompletion)
 	return command
 }
