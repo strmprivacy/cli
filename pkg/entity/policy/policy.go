@@ -54,7 +54,7 @@ func get(cmd *cobra.Command, args []string) {
 	printer.Print(response.Policy)
 }
 
-// del a policy by name (args[0]) or id option
+// del delete a policy by name (args[0]) or id option
 func del(cmd *cobra.Command, args []string) {
 	id := getPolicyIdFromArgumentsOrIdFlag(cmd.Flags(), args)
 	response, err := client.DeletePolicy(apiContext, &policiesApi.DeletePolicyRequest{PolicyId: id})
@@ -62,6 +62,7 @@ func del(cmd *cobra.Command, args []string) {
 	printer.Print(response)
 }
 
+// create a policy from
 func create(cmd *cobra.Command) {
 	flags := cmd.Flags()
 	name := util.GetStringAndErr(flags, nameFlag)
