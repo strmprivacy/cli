@@ -9,7 +9,6 @@ import (
 	"strmprivacy/strm/pkg/entity/data_connector"
 	"strmprivacy/strm/pkg/entity/data_contract"
 	"strmprivacy/strm/pkg/entity/data_subject"
-	"strmprivacy/strm/pkg/entity/event_contract"
 	"strmprivacy/strm/pkg/entity/installation"
 	"strmprivacy/strm/pkg/entity/kafka_cluster"
 	"strmprivacy/strm/pkg/entity/kafka_exporter"
@@ -18,7 +17,6 @@ import (
 	"strmprivacy/strm/pkg/entity/keylinks"
 	"strmprivacy/strm/pkg/entity/member"
 	"strmprivacy/strm/pkg/entity/project"
-	"strmprivacy/strm/pkg/entity/schema"
 	"strmprivacy/strm/pkg/entity/stream"
 )
 
@@ -38,8 +36,6 @@ func init() {
 	ListCmd.AddCommand(kafka_cluster.ListCmd())
 	ListCmd.AddCommand(kafka_user.ListCmd())
 	ListCmd.AddCommand(key_stream.ListCmd())
-	ListCmd.AddCommand(schema.ListCmd())
-	ListCmd.AddCommand(event_contract.ListCmd())
 	ListCmd.AddCommand(installation.ListCmd())
 	ListCmd.AddCommand(project.ListCmd())
 	ListCmd.AddCommand(member.ListCmd())

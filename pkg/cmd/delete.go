@@ -9,11 +9,9 @@ import (
 	"strmprivacy/strm/pkg/entity/data_connector"
 	"strmprivacy/strm/pkg/entity/data_contract"
 	"strmprivacy/strm/pkg/entity/data_subject"
-	"strmprivacy/strm/pkg/entity/event_contract"
 	"strmprivacy/strm/pkg/entity/kafka_exporter"
 	"strmprivacy/strm/pkg/entity/kafka_user"
 	"strmprivacy/strm/pkg/entity/project"
-	"strmprivacy/strm/pkg/entity/schema"
 	"strmprivacy/strm/pkg/entity/stream"
 )
 
@@ -32,8 +30,6 @@ func init() {
 	DeleteCmd.AddCommand(batch_job.DeleteCmd())
 	DeleteCmd.AddCommand(data_connector.DeleteCmd())
 	DeleteCmd.AddCommand(kafka_user.DeleteCmd())
-	DeleteCmd.AddCommand(event_contract.DeleteCmd())
-	DeleteCmd.AddCommand(schema.DeleteCmd())
 	DeleteCmd.AddCommand(data_subject.DeleteCmd())
 	DeleteCmd.AddCommand(data_contract.DeleteCmd())
 	DeleteCmd.AddCommand(project.DeleteCmd())

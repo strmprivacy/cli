@@ -16,7 +16,6 @@ import (
 	"strmprivacy/strm/pkg/entity/data_connector"
 	"strmprivacy/strm/pkg/entity/data_contract"
 	"strmprivacy/strm/pkg/entity/data_subject"
-	"strmprivacy/strm/pkg/entity/event_contract"
 	"strmprivacy/strm/pkg/entity/installation"
 	"strmprivacy/strm/pkg/entity/kafka_cluster"
 	"strmprivacy/strm/pkg/entity/kafka_exporter"
@@ -26,7 +25,6 @@ import (
 	"strmprivacy/strm/pkg/entity/member"
 	"strmprivacy/strm/pkg/entity/organization"
 	"strmprivacy/strm/pkg/entity/project"
-	"strmprivacy/strm/pkg/entity/schema"
 	"strmprivacy/strm/pkg/entity/schema_code"
 	"strmprivacy/strm/pkg/entity/stream"
 	"strmprivacy/strm/pkg/entity/usage"
@@ -68,9 +66,7 @@ func SetupServiceClients(accessToken *string) {
 	kafka_cluster.SetupClient(clientConnection, ctx)
 	kafka_user.SetupClient(clientConnection, ctx)
 	key_stream.SetupClient(clientConnection, ctx)
-	schema.SetupClient(clientConnection, ctx)
 	schema_code.SetupClient(clientConnection, ctx)
-	event_contract.SetupClient(clientConnection, ctx)
 	usage.SetupClient(clientConnection, ctx)
 	installation.SetupClient(clientConnection, ctx)
 	account.SetupClient(clientConnection, ctx)

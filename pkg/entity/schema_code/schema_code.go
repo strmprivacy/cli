@@ -4,11 +4,12 @@ import (
 	"context"
 	"errors"
 	"github.com/spf13/cobra"
+	"github.com/strmprivacy/api-definitions-go/v2/api/entities/v1"
 	"github.com/strmprivacy/api-definitions-go/v2/api/schemas/v1"
 	"google.golang.org/grpc"
 	"os"
+	"strings"
 	"strmprivacy/strm/pkg/common"
-	"strmprivacy/strm/pkg/entity/schema"
 	"strmprivacy/strm/pkg/util"
 )
 
@@ -38,7 +39,7 @@ func GetSchemaCode(cmd *cobra.Command, name *string) string {
 	overwrite := util.GetBoolAndErr(flags, overwriteFlag)
 	req := &schemas.GetSchemaCodeRequest{
 		Language: language,
-		Ref:      schema.Ref(name),
+		Ref:      schemaRef(name),
 	}
 	schemaCode, err := client.GetSchemaCode(apiContext, req)
 	common.CliExit(err)
@@ -58,4 +59,18 @@ func GetSchemaCode(cmd *cobra.Command, name *string) string {
 func saveFile(code *schemas.GetSchemaCodeResponse, file string) {
 	err := os.WriteFile(file, code.Data, 0666)
 	common.CliExit(err)
+}
+
+func schemaRef(refString *string) *entities.SchemaRef {
+	parts := strings.Split(*refString, "/")
+
+	if len(parts) != 3 {
+		common.CliExit(errors.New("Data contract reference should consist of three parts: <handle>/<name>/<version>"))
+	}
+
+	return &entities.SchemaRef{
+		Handle:  parts[0],
+		Name:    parts[1],
+		Version: parts[2],
+	}
 }
