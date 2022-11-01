@@ -27,12 +27,14 @@ func availablePrinters() map[string]util.Printer {
 	return util.MergePrinterMaps(
 		util.DefaultPrinters,
 		map[string]util.Printer{
-			common.OutputFormatPlain + common.ListCommandName:   listPlainPrinter{},
-			common.OutputFormatTable + common.ListCommandName:   listTablePrinter{},
-			common.OutputFormatPlain + common.GetCommandName:    getPlainPrinter{},
-			common.OutputFormatPlain + common.CreateCommandName: createPlainPrinter{},
-			common.OutputFormatPlain + common.UpdateCommandName: updatePlainPrinter{},
-			common.OutputFormatPlain + common.DeleteCommandName: deletePlainPrinter{},
+			common.OutputFormatPlain + common.ListCommandName:     listPlainPrinter{},
+			common.OutputFormatTable + common.ListCommandName:     listTablePrinter{},
+			common.OutputFormatPlain + common.GetCommandName:      getPlainPrinter{},
+			common.OutputFormatPlain + common.ActivateCommandName: activatePlainPrinter{},
+			common.OutputFormatPlain + common.ArchiveCommandName:  archivePlainPrinter{},
+			common.OutputFormatPlain + common.CreateCommandName:   createPlainPrinter{},
+			common.OutputFormatPlain + common.UpdateCommandName:   updatePlainPrinter{},
+			common.OutputFormatPlain + common.DeleteCommandName:   deletePlainPrinter{},
 		},
 	)
 }
@@ -40,6 +42,8 @@ func availablePrinters() map[string]util.Printer {
 type listPlainPrinter struct{}
 type listTablePrinter struct{}
 type getPlainPrinter struct{}
+type activatePlainPrinter struct{}
+type archivePlainPrinter struct{}
 type deletePlainPrinter struct{}
 type createPlainPrinter struct{}
 type updatePlainPrinter struct{}
@@ -58,6 +62,14 @@ func (p listTablePrinter) Print(data interface{}) {
 }
 
 func (p getPlainPrinter) Print(data interface{}) {
+	policy, _ := (data).(*v1.Policy)
+	print1plain(policy)
+}
+func (p activatePlainPrinter) Print(data interface{}) {
+	policy, _ := (data).(*v1.Policy)
+	print1plain(policy)
+}
+func (p archivePlainPrinter) Print(data interface{}) {
 	policy, _ := (data).(*v1.Policy)
 	print1plain(policy)
 }

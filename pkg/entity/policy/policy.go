@@ -10,10 +10,8 @@ import (
 	"github.com/spf13/pflag"
 	"github.com/strmprivacy/api-definitions-go/v2/api/entities/v1"
 	policiesApi "github.com/strmprivacy/api-definitions-go/v2/api/policies/v1"
-	"golang.org/x/exp/maps"
 	"google.golang.org/grpc"
 	"google.golang.org/protobuf/types/known/fieldmaskpb"
-	"strings"
 	"strmprivacy/strm/pkg/common"
 	"strmprivacy/strm/pkg/util"
 )
@@ -23,11 +21,9 @@ const (
 	nameFlag          = "name"
 	descriptionFlag   = "description"
 	legalGroundsFlag  = "legal-grounds"
-	stateFlag         = "state"
 	retentionFlag     = "retention"
 	policyNameFlag    = "policy-name" // used by stream and batch-job
 	policyIdFlag      = "policy-id"   // used by stream and batch-job
-	updateMaskFlag    = "update-mask"
 	defaultPolicyFlag = "get-default-policy"
 )
 
@@ -55,6 +51,39 @@ func get(cmd *cobra.Command, args []string) {
 	printer.Print(response.Policy)
 }
 
+func activate(cmd *cobra.Command, args []string) {
+	response, err := changeState(cmd, args, entities.Policy_STATE_ACTIVE)
+	common.CliExit(err)
+	printer.Print(response.Policy)
+}
+
+func archive(cmd *cobra.Command, args []string) {
+	response, err := changeState(cmd, args, entities.Policy_STATE_ARCHIVED)
+	common.CliExit(err)
+	printer.Print(response.Policy)
+}
+
+func changeState(cmd *cobra.Command, args []string, state entities.Policy_State) (*policiesApi.UpdatePolicyResponse, error) {
+	id := getPolicyIdFromArgumentsOrIdFlag(cmd.Flags(), args)
+	if len(id) == 0 {
+		// we don't allow updating the default policy state!
+		if len(args) == 0 {
+			// we tried to identify the policy by id
+			common.Abort("No policy id %s found", util.GetStringAndErr(cmd.Flags(), idFlag))
+		} else {
+			common.Abort("No policy named %s found", args[0])
+		}
+	}
+	request := &policiesApi.UpdatePolicyRequest{
+		Policy: &entities.Policy{
+			Id:    id,
+			State: state,
+		},
+		UpdateMask: &fieldmaskpb.FieldMask{Paths: []string{"state"}},
+	}
+	return client.UpdatePolicy(apiContext, request)
+}
+
 // del delete a policy by name (args[0]) or id option
 func del(cmd *cobra.Command, args []string) {
 	id := getPolicyIdFromArgumentsOrIdFlag(cmd.Flags(), args)
@@ -71,13 +100,9 @@ func create(cmd *cobra.Command) {
 	legalGrounds := util.GetStringAndErr(flags, legalGroundsFlag)
 	retention := util.GetInt32AndErr(flags, retentionFlag)
 	randomUuid, _ := uuid.GenerateUUID()
-	state := stateEnum(flags)
-	if state == entities.Policy_STATE_UNSPECIFIED {
-		state = entities.Policy_STATE_DRAFT
-	}
 	policy := &entities.Policy{
 		Id:            randomUuid,
-		State:         state,
+		State:         entities.Policy_STATE_DRAFT,
 		Name:          name,
 		RetentionDays: retention,
 		LegalGrounds:  legalGrounds,
@@ -93,36 +118,24 @@ func create(cmd *cobra.Command) {
 func update(cmd *cobra.Command, id string) {
 	flags := cmd.Flags()
 	updateMask := make([]string, 0)
-	name := util.GetStringAndErr(flags, nameFlag)
-	if len(name) != 0 {
-		updateMask = append(updateMask, "name")
+	// utility to check is a command flag was set and if so add it to the updateMask
+	getOption := func(flagName string, updateName string) string {
+		lookup := flags.Lookup(flagName)
+		if lookup.Changed {
+			updateMask = append(updateMask, updateName)
+		}
+		return lookup.Value.String()
 	}
-	description := util.GetStringAndErr(flags, descriptionFlag)
-	if len(description) != 0 {
-		updateMask = append(updateMask, "description")
-	}
-	legalGrounds := util.GetStringAndErr(flags, legalGroundsFlag)
-	if len(legalGrounds) != 0 {
-		updateMask = append(updateMask, "legal_grounds")
-	}
+	name := getOption(nameFlag, "name")
+	description := getOption(descriptionFlag, "description")
+	legalGrounds := getOption(legalGroundsFlag, "legal_grounds")
 	retention := util.GetInt32AndErr(flags, retentionFlag)
 	if retention != 0 {
 		updateMask = append(updateMask, "retention_days")
 	}
-	state := stateEnum(flags)
-	if state != entities.Policy_STATE_UNSPECIFIED {
-		updateMask = append(updateMask, "state")
-	}
-	// this is for the rare case where you want to clear a value (say description)
-	// `--description "" --update-mask description
-	m, err := flags.GetStringSlice(updateMaskFlag)
-	updateMask = append(updateMask, m...)
-	common.CliExit(err)
-
 	request := &policiesApi.UpdatePolicyRequest{
 		Policy: &entities.Policy{
 			Id:            id,
-			State:         state,
 			Name:          name,
 			RetentionDays: retention,
 			LegalGrounds:  legalGrounds,
@@ -133,24 +146,6 @@ func update(cmd *cobra.Command, id string) {
 	response, err := client.UpdatePolicy(apiContext, request)
 	common.CliExit(err)
 	printer.Print(response.Policy)
-}
-
-// stateEnum converts a cli option flag value to a Policy_State
-// it will automatically uppercase and add a 'STATE_' prefix
-func stateEnum(flags *pflag.FlagSet) entities.Policy_State {
-	flagValue := strings.ToUpper(util.GetStringAndErr(flags, stateFlag))
-	if len(flagValue) == 0 {
-		return entities.Policy_STATE_UNSPECIFIED
-	}
-	if !strings.HasPrefix(flagValue, "STATE_") {
-		flagValue = "STATE_" + flagValue
-	}
-	if val, ok := entities.Policy_State_value[flagValue]; ok {
-		return entities.Policy_State(val)
-	} else {
-		common.Abort("State %s is not one of %s", flagValue, maps.Keys(entities.Policy_State_value))
-		return 0
-	}
 }
 
 var cachedPolicies *[]*entities.Policy
@@ -197,7 +192,7 @@ func namesCompletion(_ *cobra.Command, args []string, _ string) ([]string, cobra
 	return names, cobra.ShellCompDirectiveNoFileComp
 }
 
-func idsCompletion(_ *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
+func idsCompletion(_ *cobra.Command, args []string, _ string) ([]string, cobra.ShellCompDirective) {
 	if len(args) != 0 {
 		// this one means you don't get multiple completion suggestions for one policy
 		return nil, cobra.ShellCompDirectiveNoFileComp
@@ -246,7 +241,8 @@ func GetPolicyFromFlags(flags *pflag.FlagSet) string {
 // getPolicyIdFromArgumentsOrIdFlag get a policy id from either an
 // option or as the first string in args
 func getPolicyIdFromArgumentsOrIdFlag(flags *pflag.FlagSet, args []string) string {
-	if flags.Lookup(defaultPolicyFlag).Changed {
+	defaultPolicy := flags.Lookup(defaultPolicyFlag)
+	if defaultPolicy != nil && defaultPolicy.Changed {
 		return ""
 	}
 	id := util.GetStringAndErr(flags, idFlag)
