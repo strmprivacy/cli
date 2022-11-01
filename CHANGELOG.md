@@ -1,3 +1,15 @@
+# [3.0.0](https://github.com/strmprivacy/cli/compare/v2.19.0...v3.0.0) (2022-11-01)
+
+
+### Features
+
+* **strm-1809:** remove event_contract and schema commands ([#127](https://github.com/strmprivacy/cli/issues/127)) ([3ebf63c](https://github.com/strmprivacy/cli/commit/3ebf63c8636405611eb78b7074ae7dd9e2839db8))
+
+
+### BREAKING CHANGES
+
+* **strm-1809:** event_contract and schema commands removed
+
 # [2.19.0](https://github.com/strmprivacy/cli/compare/v2.18.1...v2.19.0) (2022-10-11)
 
 
