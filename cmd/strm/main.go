@@ -25,7 +25,7 @@ const (
 func main() {
 	flags := RootCmd.Flags()
 	flags.Bool(generateDocsFlag, false, "generate docs")
-	err := flags.MarkHidden("generate-docs")
+	err := flags.MarkHidden(generateDocsFlag)
 
 	if err != nil {
 		return
@@ -57,9 +57,7 @@ hide_title: true
 
 	if util.GetBoolAndErr(flags, generateDocsFlag) {
 		err := doc.GenMarkdownTreeCustom(RootCmd, "./generated_docs", filePrepender, linkHandler)
-		if err != nil {
-			common.CliExit(err)
-		}
+		common.CliExit(err)
 	}
 }
 

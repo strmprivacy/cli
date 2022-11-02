@@ -76,13 +76,21 @@ func CliExit(err error) {
 		st, ok := status.FromError(err)
 
 		if ok {
-			fmt.Fprintln(os.Stderr, fmt.Sprintf(`Error code = %s
+			_, _ = fmt.Fprintln(os.Stderr, fmt.Sprintf(`Error code = %s
 Details = %s`, (*st).Code(), (*st).Message()))
 		} else {
-			fmt.Fprintln(os.Stderr, err)
+			_, _ = fmt.Fprintln(os.Stderr, err)
 		}
 
 		os.Exit(1)
+	}
+}
+
+func Abort(format string, args ...interface{}) {
+	if len(args) == 0 {
+		CliExit(errors.New(format))
+	} else {
+		CliExit(errors.New(fmt.Sprintf(format, args...)))
 	}
 }
 

@@ -5,6 +5,7 @@ import (
 	"strmprivacy/strm/pkg/auth"
 	"strmprivacy/strm/pkg/common"
 	"strmprivacy/strm/pkg/entity/data_contract"
+	"strmprivacy/strm/pkg/entity/policy"
 )
 
 var ArchiveCmd = &cobra.Command{
@@ -16,4 +17,5 @@ var ArchiveCmd = &cobra.Command{
 
 func init() {
 	ArchiveCmd.AddCommand(data_contract.ArchiveCmd())
+	ArchiveCmd.AddCommand(policy.ArchiveCmd())
 }

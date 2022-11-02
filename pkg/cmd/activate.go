@@ -5,6 +5,7 @@ import (
 	"strmprivacy/strm/pkg/auth"
 	"strmprivacy/strm/pkg/common"
 	"strmprivacy/strm/pkg/entity/data_contract"
+	"strmprivacy/strm/pkg/entity/policy"
 )
 
 var ActivateCmd = &cobra.Command{
@@ -16,4 +17,5 @@ var ActivateCmd = &cobra.Command{
 
 func init() {
 	ActivateCmd.AddCommand(data_contract.ActivateCmd())
+	ActivateCmd.AddCommand(policy.ActivateCmd())
 }

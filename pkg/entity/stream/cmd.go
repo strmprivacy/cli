@@ -4,6 +4,7 @@ import (
 	"github.com/spf13/cobra"
 	"strmprivacy/strm/pkg/common"
 	"strmprivacy/strm/pkg/entity/data_contract"
+	"strmprivacy/strm/pkg/entity/policy"
 	"strmprivacy/strm/pkg/util"
 )
 
@@ -52,7 +53,7 @@ func CreateCmd() *cobra.Command {
 	flags.Bool(saveFlag, true, "if true, save the result in the config directory (~/.config/strmprivacy/saved-entities). (default is true)")
 	flags.StringArrayP(maskedFieldsFlag, "M", []string{}, maskedFieldHelp)
 	flags.String(maskedFieldsSeed, "", `A seed used for masking`)
-
+	policy.SetupFlags(stream, flags)
 	err := stream.RegisterFlagCompletionFunc(linkedStreamFlag, SourceNamesCompletion)
 	err = stream.RegisterFlagCompletionFunc(maskedFieldsFlag, completion)
 	common.CliExit(err)

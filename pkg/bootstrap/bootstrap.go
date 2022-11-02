@@ -24,6 +24,7 @@ import (
 	"strmprivacy/strm/pkg/entity/keylinks"
 	"strmprivacy/strm/pkg/entity/member"
 	"strmprivacy/strm/pkg/entity/organization"
+	"strmprivacy/strm/pkg/entity/policy"
 	"strmprivacy/strm/pkg/entity/project"
 	"strmprivacy/strm/pkg/entity/schema_code"
 	"strmprivacy/strm/pkg/entity/stream"
@@ -53,6 +54,7 @@ func SetupVerbs(rootCmd *cobra.Command) {
 	rootCmd.AddCommand(cmd.ArchiveCmd)
 	rootCmd.AddCommand(cmd.InviteCmd)
 	rootCmd.AddCommand(cmd.ManageCmd)
+	rootCmd.AddCommand(cmd.UpdateCmd)
 }
 
 func SetupServiceClients(accessToken *string) {
@@ -76,6 +78,7 @@ func SetupServiceClients(accessToken *string) {
 	data_subject.SetupClient(clientConnection, ctx)
 	keylinks.SetupClient(clientConnection, ctx)
 	data_contract.SetupClient(clientConnection, ctx)
+	policy.SetupClient(clientConnection, ctx)
 }
 
 func ConfigPath() string {

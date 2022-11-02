@@ -36,6 +36,7 @@ const ActivateCommandName = "activate"
 const ArchiveCommandName = "archive"
 const InviteCommandName = "invite"
 const ManageCommandName = "manage"
+const UpdateCommandName = "update"
 
 const RecursiveFlagName = "recursive"
 const RecursiveFlagUsage = "Retrieve entities and their dependents"

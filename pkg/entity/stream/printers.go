@@ -9,6 +9,7 @@ import (
 	v1 "github.com/strmprivacy/api-definitions-go/v2/api/entities/v1"
 	"github.com/strmprivacy/api-definitions-go/v2/api/streams/v1"
 	"strmprivacy/strm/pkg/common"
+	"strmprivacy/strm/pkg/entity/policy"
 	"strmprivacy/strm/pkg/util"
 )
 
@@ -92,6 +93,7 @@ func printTable(streamTreeArray []*v1.StreamTree) {
 	// id inside the StreamTree, so we have this workaround to only show a topic
 	// column if any of the shown streams has a topic
 	hasTopics := false
+	_, m := policy.PoliciesNameIdMap()
 
 	for _, stream := range streamTreeArray {
 		var consentLevelType string
@@ -108,6 +110,7 @@ func printTable(streamTreeArray []*v1.StreamTree) {
 			consentLevelType,
 			stream.Stream.ConsentLevels,
 			stream.Stream.Enabled,
+			m[stream.Stream.PolicyId],
 		}
 		if len(stream.Stream.KafkaTopic) != 0 {
 			row = append(row, stream.Stream.KafkaTopic)
@@ -122,6 +125,7 @@ func printTable(streamTreeArray []*v1.StreamTree) {
 		"Consent Level Type",
 		"Consent Levels",
 		"Enabled",
+		"Policy Name",
 	}
 	if hasTopics {
 		headers = append(headers, "Kafka Topic")

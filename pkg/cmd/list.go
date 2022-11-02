@@ -16,6 +16,7 @@ import (
 	"strmprivacy/strm/pkg/entity/key_stream"
 	"strmprivacy/strm/pkg/entity/keylinks"
 	"strmprivacy/strm/pkg/entity/member"
+	"strmprivacy/strm/pkg/entity/policy"
 	"strmprivacy/strm/pkg/entity/project"
 	"strmprivacy/strm/pkg/entity/stream"
 )
@@ -42,6 +43,7 @@ func init() {
 	ListCmd.AddCommand(data_subject.ListCmd())
 	ListCmd.AddCommand(keylinks.ListCmd())
 	ListCmd.AddCommand(data_contract.ListCmd())
+	ListCmd.AddCommand(policy.ListCmd())
 
 	ListCmd.PersistentFlags().BoolP(common.RecursiveFlagName, common.RecursiveFlagShorthand, false, common.RecursiveFlagUsage)
 }

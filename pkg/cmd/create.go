@@ -10,6 +10,7 @@ import (
 	"strmprivacy/strm/pkg/entity/data_contract"
 	"strmprivacy/strm/pkg/entity/kafka_exporter"
 	"strmprivacy/strm/pkg/entity/kafka_user"
+	"strmprivacy/strm/pkg/entity/policy"
 	"strmprivacy/strm/pkg/entity/project"
 	"strmprivacy/strm/pkg/entity/stream"
 )
@@ -31,4 +32,5 @@ func init() {
 	CreateCmd.AddCommand(kafka_exporter.CreateCmd())
 	CreateCmd.AddCommand(kafka_user.CreateCmd())
 	CreateCmd.AddCommand(project.CreateCmd())
+	CreateCmd.AddCommand(policy.CreateCmd())
 }

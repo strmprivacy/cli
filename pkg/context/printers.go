@@ -93,7 +93,7 @@ func (p configPlainPrinter) Print(data interface{}) {
 
 	fmt.Println(fmt.Sprintf("Configuration directory: %v", config.ConfigPath))
 	fmt.Println(fmt.Sprintf("Configuration file: %v", config.ConfigFilepath))
-	fmt.Println(fmt.Sprintf("Configuration file contents: \n\n    %v", strings.ReplaceAll(string(config.Contents), "\n", "\n    ")))
+	fmt.Println(fmt.Sprintf("Configuration file contents: \n\n    %v", strings.ReplaceAll(config.Contents, "\n", "\n    ")))
 
 	if len(config.SavedEntities) > 0 {
 		l := list.NewWriter()

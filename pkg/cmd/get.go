@@ -14,6 +14,7 @@ import (
 	"strmprivacy/strm/pkg/entity/kafka_user"
 	"strmprivacy/strm/pkg/entity/key_stream"
 	"strmprivacy/strm/pkg/entity/member"
+	"strmprivacy/strm/pkg/entity/policy"
 	"strmprivacy/strm/pkg/entity/project"
 	"strmprivacy/strm/pkg/entity/schema_code"
 	"strmprivacy/strm/pkg/entity/stream"
@@ -42,6 +43,7 @@ func init() {
 	GetCmd.AddCommand(member.GetCmd())
 	GetCmd.AddCommand(data_contract.GetCmd())
 	GetCmd.AddCommand(project.GetCmd())
+	GetCmd.AddCommand(policy.GetCmd())
 
 	GetCmd.PersistentFlags().BoolP(common.RecursiveFlagName, common.RecursiveFlagShorthand, false, common.RecursiveFlagUsage)
 }
