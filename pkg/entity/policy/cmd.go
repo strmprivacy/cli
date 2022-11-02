@@ -8,7 +8,7 @@ import (
 )
 
 func ListCmd() *cobra.Command {
-	longDoc := `Ask Privacy Metadata Service for a list of policies owned by this organization`
+	longDoc := `List the policies owned by this organization`
 	outputFormatFlagAllowedValues := []string{common.OutputFormatPlain, common.OutputFormatTable,
 		common.OutputFormatJson, common.OutputFormatJsonRaw}
 	outputFormatFlagAllowedValuesText := strings.Join(outputFormatFlagAllowedValues, ", ")
@@ -186,7 +186,7 @@ func UpdateCmd() *cobra.Command {
 	command := &cobra.Command{
 		Use:     "policy policy-id",
 		Short:   "Update a Policy",
-		Example: `strm update policy 34c4709e-b8bc-4b45-aa5a-883f471869e3 --state active --legal-grounds "all your base are belong to us"`,
+		Example: `strm update policy 34c4709e-b8bc-4b45-aa5a-883f471869e3 --legal-grounds "EU law x.y.z"`,
 		Long: `Update the attributes of a policy
 
 Policies can only be updated while in draft state!
