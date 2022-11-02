@@ -1,7 +1,7 @@
 package schema_code
 
 import (
-	"strmprivacy/strm/pkg/entity/schema"
+	"strmprivacy/strm/pkg/entity/data_contract"
 
 	"github.com/spf13/cobra"
 )
@@ -20,15 +20,15 @@ A Schema MUST have the state ACTIVE to be used for processing events.
 
 func GetCmd() *cobra.Command {
 	getCommand := &cobra.Command{
-		Use:               "schema-code (schema-ref)",
-		Short:             "Get schema code archive by schema-ref",
+		Use:               "schema-code (data-contract-ref)",
+		Short:             "Get schema code archive by data-contract-ref",
 		Long:              longDoc,
 		DisableAutoGenTag: true,
 		Run: func(cmd *cobra.Command, args []string) {
 			get(cmd, &args[0])
 		},
 		Args:              cobra.ExactArgs(1), // the schema ref
-		ValidArgsFunction: schema.RefsCompletion,
+		ValidArgsFunction: data_contract.RefsCompletion,
 	}
 	flags := getCommand.Flags()
 	flags.String(languageFlag, "", "which programming language")

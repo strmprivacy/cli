@@ -3,7 +3,7 @@ package stream
 import (
 	"github.com/spf13/cobra"
 	"strmprivacy/strm/pkg/common"
-	"strmprivacy/strm/pkg/entity/event_contract"
+	"strmprivacy/strm/pkg/entity/data_contract"
 	"strmprivacy/strm/pkg/entity/policy"
 	"strmprivacy/strm/pkg/util"
 )
@@ -61,7 +61,7 @@ func CreateCmd() *cobra.Command {
 }
 
 func completion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
-	s, c := event_contract.RefsCompletion(cmd, args, complete)
+	s, c := data_contract.RefsCompletion(cmd, args, complete)
 	s = util.MapStrings(s, func(j string) string { return j + ":" })
 	return s, c
 
