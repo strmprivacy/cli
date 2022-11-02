@@ -1,3 +1,10 @@
+# [3.1.0](https://github.com/strmprivacy/cli/compare/v3.0.0...v3.1.0) (2022-11-02)
+
+
+### Features
+
+* **strm-1837:** implement policy commands ([#126](https://github.com/strmprivacy/cli/issues/126)) ([a4ef10d](https://github.com/strmprivacy/cli/commit/a4ef10d63b169c6f984106b1cff0567d13eebf85))
+
 # [3.0.0](https://github.com/strmprivacy/cli/compare/v2.19.0...v3.0.0) (2022-11-01)
 
 
