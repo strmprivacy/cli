@@ -54,43 +54,43 @@ type deletePrinter struct{}
 
 func (p listTablePrinter) Print(data interface{}) {
 	listResponse, _ := (data).(*batch_jobs.ListBatchJobsResponse)
-	printTable(listResponse.BatchJobs)
+	printTable(listResponse.Jobs)
 }
 
 func (p getTablePrinter) Print(data interface{}) {
 	getResponse, _ := (data).(*batch_jobs.GetBatchJobResponse)
-	printTable([]*entities.BatchJob{getResponse.BatchJob})
+	printTable([]*entities.BatchJobWrapper{getResponse.Job})
 }
 
 func (p createTablePrinter) Print(data interface{}) {
 	createResponse, _ := (data).(*batch_jobs.CreateBatchJobResponse)
-	printTable([]*entities.BatchJob{createResponse.BatchJob})
+	printTable([]*entities.BatchJobWrapper{createResponse.Job})
 }
 
 func (p listPlainPrinter) Print(data interface{}) {
 	listResponse, _ := (data).(*batch_jobs.ListBatchJobsResponse)
-	printPlain(listResponse.BatchJobs)
+	printPlain(listResponse.Jobs)
 }
 
 func (p getPlainPrinter) Print(data interface{}) {
 	getResponse, _ := (data).(*batch_jobs.GetBatchJobResponse)
-	printPlain([]*entities.BatchJob{getResponse.BatchJob})
+	printPlain([]*entities.BatchJobWrapper{getResponse.Job})
 }
 
 func (p createPlainPrinter) Print(data interface{}) {
 	createResponse, _ := (data).(*batch_jobs.CreateBatchJobResponse)
-	printPlain([]*entities.BatchJob{createResponse.BatchJob})
+	printPlain([]*entities.BatchJobWrapper{createResponse.Job})
 }
 
 func (p deletePrinter) Print(data interface{}) {
 	fmt.Println("Batch Job has been deleted")
 }
 
-func printTable(batchJobs []*entities.BatchJob) {
+func printTable(batchJobs []*entities.BatchJobWrapper) {
 	rows := make([]table.Row, 0, len(batchJobs))
 	for _, batchJob := range batchJobs {
-
-		states := batchJob.States[:]
+		batchJobRefWithStates := toRefWithStates(batchJob)
+		states := batchJobRefWithStates.states[:]
 		sort.Slice(states, func(i, j int) bool {
 			// Reverse sort, j > i
 			return states[j].StateTime.AsTime().Before(states[i].StateTime.AsTime())
@@ -104,7 +104,7 @@ func printTable(batchJobs []*entities.BatchJob) {
 		}
 
 		rows = append(rows, table.Row{
-			batchJob.Ref.Id,
+			batchJobRefWithStates.ref.Id,
 			batchJobState.StateTime.AsTime(),
 			batchJobState.State.String(),
 			message,
@@ -122,12 +122,12 @@ func printTable(batchJobs []*entities.BatchJob) {
 	)
 }
 
-func printPlain(batchJobs []*entities.BatchJob) {
+func printPlain(batchJobs []*entities.BatchJobWrapper) {
 	var ids string
 	lastIndex := len(batchJobs) - 1
 
 	for index, batchJob := range batchJobs {
-		ids = ids + batchJob.Ref.Id
+		ids = ids + toRefWithStates(batchJob).ref.Id
 
 		if index != lastIndex {
 			ids = ids + "\n"

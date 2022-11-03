@@ -8,17 +8,23 @@ import (
 )
 
 const (
-	batchJobsFileFlagName = "file"
+	batchJobFileFlagName = "file"
+	batchJobTypeFlagName = "type"
+	encryptionType = "encryption"
+	microAggregationType = "micro-aggregation"
 )
 
+// Todo: point to detailed docs/quickstarts on Batch Jobs
 var longDoc = `
 A Batch Job reads all events from a Data Connector and writes them to one or more Data Connectors,
-applying our privacy algorithm as defined by the job's configuration file.
+applying one of our privacy algorithms as defined by the job's configuration file. An encryption batch job
+encrypts sensitive data, while a micro-aggregation batch job applies k-member clustering and replaces
+the values of quasi identifier fields with an aggregated value (e.g. mean value of a cluster). 
 
 A [Data Connector](docs/04-reference/01-cli-reference/` + fmt.Sprint(common.RootCommandName) + `/create/data-connector.md) is a configuration
 entity that comprises a location (GCS bucket, AWS S3 bucket, ...) and associated credentials.
 
-A Data Connector must be created *before* you can create a batch job that uses it.
+A Data Connector must be created in the same project *before* you can create a batch job that uses it.
 
 ### Usage
 `
@@ -82,6 +88,7 @@ func CreateCmd() *cobra.Command {
 		Short:             "Create a Batch Job",
 		Long:              longDoc,
 		DisableAutoGenTag: true,
+		Example: "strm create batch-job --type encryption --file my_config.json",
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
 		},
@@ -93,11 +100,13 @@ func CreateCmd() *cobra.Command {
 
 	flags := batchJob.Flags()
 
-	flags.StringP(batchJobsFileFlagName, "F", "",
+	flags.StringP(batchJobFileFlagName, "F", "",
 		`The path to the JSON file containing the batch job configuration`)
+	flags.StringP(batchJobTypeFlagName, "T", "encryption",
+		`The type of batch job (encryption, micro-aggregation), defaults to encryption`)
 	policy.SetupFlags(batchJob, flags)
-	err := batchJob.MarkFlagRequired(batchJobsFileFlagName)
-	common.CliExit(err)
+	_ = batchJob.MarkFlagRequired(batchJobFileFlagName)
+	_ = batchJob.MarkFlagRequired(batchJobTypeFlagName)
 
 	return batchJob
 }
