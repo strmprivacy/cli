@@ -106,7 +106,6 @@ func CreateCmd() *cobra.Command {
 		`The type of batch job (encryption, micro-aggregation), defaults to encryption`)
 	policy.SetupFlags(batchJob, flags)
 	_ = batchJob.MarkFlagRequired(batchJobFileFlagName)
-	_ = batchJob.MarkFlagRequired(batchJobTypeFlagName)
 
 	return batchJob
 }
