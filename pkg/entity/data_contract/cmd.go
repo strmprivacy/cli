@@ -12,6 +12,7 @@ func CreateCmd() *cobra.Command {
 		Use:               "data-contract (handle/name/version)",
 		Short:             "create a data contract",
 		Long:              longDoc,
+		Example:           "strm create data-contract my-handle/my-contract/1.0.0 --contract-definition my-def.json",
 		DisableAutoGenTag: true,
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
@@ -27,19 +28,40 @@ func CreateCmd() *cobra.Command {
 	flags.String(contractDefinitionFlag, "",
 		`The path to the file with the keyField, and possibly piiFields and validations. Example JSON definition file:
 {
-    "keyField": "sessionId",
-    "piiFields": {
-        "sessionId": 2,
-        "referrerUrl": 1
+  "keyField": "sessionId",
+  "fieldMetadata": [
+    {
+      "fieldName": "userName",
+      "personalDataConfig": {
+        "isPii": true,
+        "isQuasiId": false,
+        "purposeLevel": 1
+      }
     },
-    "validations": [
-        {
-            "field": "referrerUrl",
-            "type": "regex",
-            "value": "^.*strmprivacy.*$"
-        }
-    ]
-}`)
+    {
+      "fieldName": "userAgeGroup",
+      "personalDataConfig": {
+        "isPii": false,
+        "isQuasiId": true
+      },
+      "statisticalDataType": "ORDINAL",
+      "ordinalValues": ["child","teenager","adult","senior"],
+      "nullHandlingConfig": {
+        "type": "DEFAULT_VALUE",
+        "defaultValue": "adult"
+      }
+    }
+  ],
+  "validations": [
+    {
+      "field": "referrerUrl",
+      "type": "regex",
+      "value": "^.*strmprivacy.*$"
+    }
+  ],
+  "dataSubjectField": "userId"
+}
+`)
 	common.MarkRequiredFlags(dataContract, schemaDefinitionFlag, contractDefinitionFlag)
 	return dataContract
 }

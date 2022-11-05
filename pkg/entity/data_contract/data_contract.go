@@ -2,7 +2,6 @@ package data_contract
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 	"github.com/spf13/cobra"
 	"github.com/strmprivacy/api-definitions-go/v2/api/data_contracts/v1"
@@ -31,25 +30,18 @@ func SetupClient(clientConnection *grpc.ClientConn, ctx context.Context) {
 	client = data_contracts.NewDataContractsServiceClient(clientConnection)
 }
 
-type DataContractDefinition struct {
-	KeyField         string                 `json:"keyField"`
-	PiiFields        map[string]int32       `json:"piiFields"`
-	Validations      []*entities.Validation `json:"validations"`
-	DataSubjectField string                 `json:"dataSubjectField"`
-}
-
-func readContractDefinition(filename *string) DataContractDefinition {
+func readContractDefinition(filename *string) *entities.DataContract {
 	file, _ := os.ReadFile(*filename)
 
-	contractDefinition := DataContractDefinition{}
-	err := json.Unmarshal(file, &contractDefinition)
+	contractDefinition := &entities.DataContract{}
+	err := protojson.Unmarshal(file, contractDefinition)
 
 	common.CliExit(err)
 
 	return contractDefinition
 }
 
-func getSchemaDefinition(filename string, ref *entities.DataContractRef, isPublic bool) *entities.Schema {
+func readSchemaDefinition(filename string, ref *entities.DataContractRef, isPublic bool) *entities.Schema {
 	schema := entities.Schema{
 		Ref: &entities.SchemaRef{
 			Name:    ref.Name,
@@ -87,26 +79,24 @@ func create(cmd *cobra.Command, args *string) {
 	schemaDefinitionFilename := util.GetStringAndErr(flags, schemaDefinitionFlag)
 	isPublic := util.GetBoolAndErr(flags, publicFlag)
 	contractDefinitionFilename := util.GetStringAndErr(flags, contractDefinitionFlag)
-	contractDefinition := readContractDefinition(&contractDefinitionFilename)
+	dataContract := readContractDefinition(&contractDefinitionFilename)
 
 	projectId := project.GetProjectId(cmd)
 	ref := ref(args)
-	schema := getSchemaDefinition(schemaDefinitionFilename, ref, isPublic)
+	schema := readSchemaDefinition(schemaDefinitionFilename, ref, isPublic)
+
+	// Set the fields which are not part of the contract definition file
+	dataContract.Ref = ref
+	dataContract.IsPublic = isPublic
+	dataContract.ProjectId = projectId
+	dataContract.Schema = schema
+	dataContract.Metadata = &entities.DataContractMetadata{}
 
 	req := &data_contracts.CreateDataContractRequest{
 		ProjectId: projectId,
-		DataContract: &entities.DataContract{
-			KeyField:         contractDefinition.KeyField,
-			IsPublic:         isPublic,
-			ProjectId:        projectId,
-			DataSubjectField: contractDefinition.DataSubjectField,
-			Schema:           schema,
-			Ref:              ref,
-			PiiFields:        contractDefinition.PiiFields,
-			Validations:      contractDefinition.Validations,
-			Metadata:         &entities.DataContractMetadata{},
-		},
+		DataContract: dataContract,
 	}
+	util.ProtoMessageJsonPrettyPrinter{}.Print(req)
 	response, err := client.CreateDataContract(apiContext, req)
 	common.CliExit(err)
 	printer.Print(response)
