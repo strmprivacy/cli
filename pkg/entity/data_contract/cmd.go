@@ -23,10 +23,10 @@ func CreateCmd() *cobra.Command {
 		Args: cobra.ExactArgs(1),
 	}
 	flags := dataContract.Flags()
-	flags.String(schemaDefinitionFlag, "", "filename of the schema definition (yaml or json) - either a Simple Schema, Avro Schema or Json Schema")
+	flags.String(schemaDefinitionFlag, "", "filename of the schema definition (yaml or JSON) - either a Simple Schema, Avro Schema or JSON Schema")
 	flags.Bool(publicFlag, false, "whether the data contract should be made public (accessible to other STRM Privacy customers)")
 	flags.String(contractDefinitionFlag, "",
-		`filename of the contract definition, containing the keyField, and possibly field metadata, validations and data subject field. Example JSON definition file:
+		`filename of the JSON contract definition, containing the keyField, and possibly field metadata, validations and data subject field. Example JSON definition file:
 {
   "keyField": "sessionId",
   "fieldMetadata": [

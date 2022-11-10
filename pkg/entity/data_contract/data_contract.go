@@ -96,7 +96,6 @@ func create(cmd *cobra.Command, args *string) {
 		ProjectId: projectId,
 		DataContract: dataContract,
 	}
-	util.ProtoMessageJsonPrettyPrinter{}.Print(req)
 	response, err := client.CreateDataContract(apiContext, req)
 	common.CliExit(err)
 	printer.Print(response)
