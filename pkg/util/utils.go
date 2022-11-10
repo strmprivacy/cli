@@ -6,7 +6,6 @@ import (
 	"github.com/spf13/pflag"
 	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/proto"
-	"io/ioutil"
 	"os"
 	"path"
 	"path/filepath"
@@ -61,7 +60,7 @@ func GetIntAndErr(f *pflag.FlagSet, k string) int {
 
 func TryLoad(m proto.Message, name *string) error {
 	filename := getSaveFilename(m, name)
-	bytes, err := ioutil.ReadFile(filename)
+	bytes, err := os.ReadFile(filename)
 	if err != nil {
 		return err
 	}
@@ -75,7 +74,7 @@ func Save(m proto.Message, name *string) {
 	common.CliExit(err)
 	jsonData, err := protojson.Marshal(m)
 	common.CliExit(err)
-	err = ioutil.WriteFile(filename, jsonData, 0644)
+	err = os.WriteFile(filename, jsonData, 0644)
 	common.CliExit(err)
 }
 
@@ -96,7 +95,7 @@ func CreateConfigDirAndFileIfNotExists() {
 	configFilepath := path.Join(common.ConfigPath, common.DefaultConfigFilename+common.DefaultConfigFileSuffix)
 
 	if _, err := os.Stat(configFilepath); os.IsNotExist(err) {
-		writeFileError := ioutil.WriteFile(
+		writeFileError := os.WriteFile(
 			configFilepath,
 			common.DefaultConfigFileContents,
 			0644,

@@ -7,7 +7,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/strmprivacy/api-definitions-go/v2/api/organizations/v1"
 	"google.golang.org/grpc"
-	"io/ioutil"
+	"os"
 	"strings"
 	"strmprivacy/strm/pkg/common"
 	"strmprivacy/strm/pkg/util"
@@ -61,7 +61,7 @@ func getEmails(args []string, cmd *cobra.Command) []string {
 }
 
 func read(emailsFile string) []string {
-	buf, err := ioutil.ReadFile(emailsFile)
+	buf, err := os.ReadFile(emailsFile)
 	common.CliExit(err)
 	splitFn := func(c rune) bool {
 		return c == '\n'

@@ -5,7 +5,6 @@ import (
 	"fmt"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/pflag"
-	"io/ioutil"
 	"os"
 	"path"
 	"strmprivacy/strm/pkg/common"
@@ -72,7 +71,7 @@ func initActiveProject() {
 func saveActiveProject(projectName string) {
 	activeProjectFilepath := path.Join(common.ConfigPath, activeProjectFilename)
 
-	err := ioutil.WriteFile(
+	err := os.WriteFile(
 		activeProjectFilepath,
 		[]byte(projectName),
 		0644,

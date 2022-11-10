@@ -7,7 +7,7 @@ import (
 	"github.com/strmprivacy/api-definitions-go/v2/api/data_connectors/v1"
 	"github.com/strmprivacy/api-definitions-go/v2/api/entities/v1"
 	"google.golang.org/grpc"
-	"io/ioutil"
+	"os"
 	"strmprivacy/strm/pkg/common"
 	"strmprivacy/strm/pkg/entity/project"
 	"strmprivacy/strm/pkg/util"
@@ -73,7 +73,7 @@ func ref(name *string) *entities.DataConnectorRef {
 
 func readCredentialsFile(flags *pflag.FlagSet) string {
 	fn := util.GetStringAndErr(flags, credentialsFileFlag)
-	buf, err := ioutil.ReadFile(fn)
+	buf, err := os.ReadFile(fn)
 	common.CliExit(err)
 	return string(buf)
 }
