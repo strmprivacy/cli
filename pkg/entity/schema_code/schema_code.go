@@ -4,8 +4,8 @@ import (
 	"context"
 	"errors"
 	"github.com/spf13/cobra"
+	"github.com/strmprivacy/api-definitions-go/v2/api/data_contracts/v1"
 	"github.com/strmprivacy/api-definitions-go/v2/api/entities/v1"
-	"github.com/strmprivacy/api-definitions-go/v2/api/schemas/v1"
 	"google.golang.org/grpc"
 	"os"
 	"strings"
@@ -19,12 +19,12 @@ const (
 	overwriteFlag = "overwrite"
 )
 
-var client schemas.SchemasServiceClient
+var client data_contracts.DataContractsServiceClient
 var apiContext context.Context
 
 func SetupClient(clientConnection *grpc.ClientConn, ctx context.Context) {
 	apiContext = ctx
-	client = schemas.NewSchemasServiceClient(clientConnection)
+	client = data_contracts.NewDataContractsServiceClient(clientConnection)
 }
 
 func get(cmd *cobra.Command, schemaRef *string) {
@@ -37,11 +37,11 @@ func GetSchemaCode(cmd *cobra.Command, name *string) string {
 	language := util.GetStringAndErr(flags, languageFlag)
 	outputFile := util.GetStringAndErr(flags, filenameFlag)
 	overwrite := util.GetBoolAndErr(flags, overwriteFlag)
-	req := &schemas.GetSchemaCodeRequest{
-		Language: language,
-		Ref:      schemaRef(name),
+	req := &data_contracts.GetDataContractSchemaCodeRequest{
+		Language:        language,
+		DataContractRef: dataContractRef(name),
 	}
-	schemaCode, err := client.GetSchemaCode(apiContext, req)
+	schemaCode, err := client.GetDataContractSchemaCode(apiContext, req)
 	common.CliExit(err)
 	if len(outputFile) == 0 {
 		outputFile = schemaCode.Filename
@@ -56,19 +56,19 @@ func GetSchemaCode(cmd *cobra.Command, name *string) string {
 	return outputFile
 }
 
-func saveFile(code *schemas.GetSchemaCodeResponse, file string) {
+func saveFile(code *data_contracts.GetDataContractSchemaCodeResponse, file string) {
 	err := os.WriteFile(file, code.Data, 0666)
 	common.CliExit(err)
 }
 
-func schemaRef(refString *string) *entities.SchemaRef {
+func dataContractRef(refString *string) *entities.DataContractRef {
 	parts := strings.Split(*refString, "/")
 
 	if len(parts) != 3 {
 		common.CliExit(errors.New("Data contract reference should consist of three parts: <handle>/<name>/<version>"))
 	}
 
-	return &entities.SchemaRef{
+	return &entities.DataContractRef{
 		Handle:  parts[0],
 		Name:    parts[1],
 		Version: parts[2],
