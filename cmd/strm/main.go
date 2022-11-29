@@ -79,6 +79,7 @@ func rootCmdPreRun(cmd *cobra.Command, args []string) error {
 	common.ApiHost = util.GetStringAndErr(cmd.Flags(), apiHostFlag)
 	common.ApiAuthHost = util.GetStringAndErr(cmd.Flags(), auth.ApiAuthUrlFlag)
 	common.EventAuthHost = util.GetStringAndErr(cmd.Flags(), auth.EventsAuthUrlFlag)
+
 	if auth.Auth.LoadLogin() == nil {
 		bootstrap.SetupServiceClients(auth.Auth.GetToken())
 		if !(strings.Split(cmd.CommandPath(), " ")[1] == "auth") {
