@@ -82,8 +82,11 @@ func rootCmdPreRun(cmd *cobra.Command, args []string) error {
 
 	if auth.Auth.LoadLogin() == nil {
 		bootstrap.SetupServiceClients(auth.Auth.GetToken())
-		context.ResolveProject(cmd.Flags())
-		log.Infoln("Resolved projectId: " + common.ProjectId)
+		splitCommand := strings.Split(cmd.CommandPath(), " ")
+		if splitCommand[1] != "auth" && !(splitCommand[1] == "create" && splitCommand[2] == "project") {
+			context.ResolveProject(cmd.Flags())
+			log.Infoln("Resolved projectId: " + common.ProjectId)
+		}
 	}
 
 	return err
