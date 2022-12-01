@@ -19,7 +19,8 @@ var Cmd = &cobra.Command{
 
 func init() {
 	flags := Cmd.Flags()
-	flags.String(common.ClientIdFlag, "", "Client id to be used for receiving data")
-	flags.String(common.ClientSecretFlag, "", "Client secret to be used for receiving data")
-	flags.String(GroupIdFlag, "", "Kafka consumer group id. Uses a random value when not set")
+	flags.String(common.ClientIdFlag, "", "client id to be used for receiving data")
+	flags.String(common.ClientSecretFlag, "", "client secret to be used for receiving data")
+	flags.String(GroupIdFlag, "", "kafka consumer group id. Uses a random value when not set")
+	flags.String(KafkaBootstrapHostFlag, "export-bootstrap.kafka.strmprivacy.io:9092", "Kafka bootstrap brokers, separated by comma")
 }

@@ -3,25 +3,28 @@ package kafka_user
 import (
 	"github.com/spf13/cobra"
 	"strmprivacy/strm/pkg/entity/kafka_exporter"
+	"strmprivacy/strm/pkg/util"
 )
 
 const (
 	saveFlag = "save"
 )
 
-var longDoc = `A Kafka User is a user on a Kafka Exporter, that can be used for authentication when connecting to a Kafka Exporter. By
+var longDoc = util.LongDocsUsage(`
+A Kafka User is a user on a Kafka Exporter, that can be used for authentication when connecting to a Kafka Exporter. By
 default, every Kafka Exporter gets one Kafka User upon creation, but these can be added/removed later.
 
-In the current data model, the user does not have a assignable name; it is assigned upon creation. It’s still very low
-level. See the end of this page for an example.
-
-### Usage`
+In the current data model, the user does not have a assignable name; it is assigned upon creation.
+`)
 
 func DeleteCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:               "kafka-user [name ...]",
-		Short:             "Delete one or more Kafka users",
-		Long:              longDoc,
+		Use:   "kafka-user (name ...)",
+		Short: "Delete one or more Kafka Users",
+		Long: util.DedentTrim(`
+			Delete one or more Kafka Users by 'name'
+			Names are randomly assigned during creation and cannot be chosen.
+		`),
 		DisableAutoGenTag: true,
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
@@ -38,8 +41,8 @@ func DeleteCmd() *cobra.Command {
 
 func GetCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:               "kafka-user [name]",
-		Short:             "Get Kafka user",
+		Use:               "kafka-user (name)",
+		Short:             "Get Kafka User",
 		Long:              longDoc,
 		DisableAutoGenTag: true,
 		PreRun: func(cmd *cobra.Command, args []string) {
@@ -55,8 +58,8 @@ func GetCmd() *cobra.Command {
 
 func ListCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:               "kafka-users [kafka-exporter-name]",
-		Short:             "List Kafka users",
+		Use:               "kafka-users (kafka-exporter-name)",
+		Short:             "List Kafka Users",
 		Long:              longDoc,
 		DisableAutoGenTag: true,
 		PreRun: func(cmd *cobra.Command, args []string) {
@@ -72,8 +75,8 @@ func ListCmd() *cobra.Command {
 
 func CreateCmd() *cobra.Command {
 	kafkaUser := &cobra.Command{
-		Use:               "kafka-user [exporter-name]",
-		Short:             "Create a Kafka user on a Kafka exporter",
+		Use:               "kafka-user (exporter-name)",
+		Short:             "Create a Kafka User on a Kafka Exporter",
 		Long:              longDoc,
 		DisableAutoGenTag: true,
 		PreRun: func(cmd *cobra.Command, args []string) {

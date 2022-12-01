@@ -2,6 +2,7 @@ package util
 
 import (
 	"fmt"
+	"github.com/lithammer/dedent"
 	"github.com/samber/lo"
 	"github.com/spf13/pflag"
 	"google.golang.org/protobuf/encoding/protojson"
@@ -11,6 +12,7 @@ import (
 	"path"
 	"path/filepath"
 	"strconv"
+	"strings"
 	"strmprivacy/strm/pkg/common"
 )
 
@@ -104,4 +106,20 @@ func CreateConfigDirAndFileIfNotExists() {
 
 		common.CliExit(writeFileError)
 	}
+}
+
+// LongDocs dedents, trims surrounding whitespace, changes !strm for the command Name and changes ° for `
+func LongDocs(s string) string {
+	s2 := DedentTrim(strings.Replace(
+		strings.Replace(s, "!strm", common.RootCommandName, -1), "°", "`", -1))
+	return s2
+}
+
+func LongDocsUsage(s string) string {
+	return LongDocs(s) + "\n\n### Usage"
+}
+
+func DedentTrim(s string) string {
+	return strings.TrimSpace(dedent.Dedent(s))
+
 }

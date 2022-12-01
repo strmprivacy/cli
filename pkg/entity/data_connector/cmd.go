@@ -5,23 +5,23 @@ import (
 	"github.com/strmprivacy/api-definitions-go/v2/api/data_connectors/v1"
 	"strings"
 	"strmprivacy/strm/pkg/common"
+	"strmprivacy/strm/pkg/util"
 )
 
 const (
 	credentialsFileFlag = "credentials-file"
 )
 
-var longDoc = `A Data Connector represents a location from which data can be read, or to which data can be written. 
-For example, an AWS S3 bucket or a Google Cloud Storage bucket. By itself, a Data Connector does nothing. 
-A Data Connector with valid credentials is required when creating a Batch Exporter or Batch Job.
-
-### Usage`
+var longDoc = util.LongDocsUsage(`
+A Data Connector represents a location from which data can be read, or to which data can be written.  For
+example, an AWS S3 bucket or a Google Cloud Storage bucket. By itself, a Data Connector does nothing.  A Data Connector
+with valid credentials is required when creating a Batch Exporter or Batch Job.
+`)
 
 func GetCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:               "data-connector [name]",
+		Use:               "data-connector (name)",
 		Short:             "Get Data Connector by name",
-		Long:              longDoc,
 		DisableAutoGenTag: true,
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
@@ -39,7 +39,6 @@ func ListCmd() *cobra.Command {
 	return &cobra.Command{
 		Use:               "data-connectors",
 		Short:             "List Data Connectors",
-		Long:              longDoc,
 		DisableAutoGenTag: true,
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
@@ -53,16 +52,15 @@ func ListCmd() *cobra.Command {
 
 func DeleteCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:               "data-connector [name ...]",
-		Short:             "Delete Data Connectors",
-		Long:              longDoc,
+		Use:               "data-connector (name ...)",
+		Short:             "Delete one or more Data Connectors by name",
 		DisableAutoGenTag: true,
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
 		},
 		Run: func(cmd *cobra.Command, args []string) {
 			recursive, _ := cmd.Flags().GetBool(common.RecursiveFlagName)
-			for i, _ := range args {
+			for i := range args {
 				del(&args[i], recursive)
 			}
 		},

@@ -23,7 +23,7 @@ func SetupClient(clientConnection *grpc.ClientConn, ctx context.Context) {
 
 func inviteUsers(args []string, cmd *cobra.Command) {
 	if apiContext == nil {
-		common.CliExit(errors.New(fmt.Sprint("No login information found. Use: `dstrm auth login` first.")))
+		common.CliExit(errors.New(fmt.Sprint("No login information found. Use: `strm auth login` first.")))
 	}
 	emails := getEmails(args, cmd)
 	var invites []*organizations.UserInvite

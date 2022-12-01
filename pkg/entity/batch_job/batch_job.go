@@ -72,7 +72,10 @@ func create(cmd *cobra.Command) {
 		common.CliExit(err)
 	}
 	projectId := project.GetProjectId(cmd)
-	batchJob.PolicyId = policy.GetPolicyFromFlags(flags)
+	policyId := policy.GetPolicyFromFlags(flags)
+	if policyId != "" {
+		batchJob.PolicyId = policyId
+	}
 	setCommonProjectIds(batchJob, projectId)
 	createBatchJobRequest := &batch_jobs.CreateBatchJobRequest{BatchJob: batchJob}
 	response, err := client.CreateBatchJob(apiContext, createBatchJobRequest)

@@ -1,7 +1,6 @@
 package batch_job
 
 import (
-	"fmt"
 	"github.com/spf13/cobra"
 	"strmprivacy/strm/pkg/common"
 	"strmprivacy/strm/pkg/entity/policy"
@@ -11,23 +10,10 @@ const (
 	batchJobsFileFlagName = "file"
 )
 
-var longDoc = `
-A Batch Job reads all events from a Data Connector and writes them to one or more Data Connectors,
-applying our privacy algorithm as defined by the job's configuration file.
-
-A [Data Connector](docs/04-reference/01-cli-reference/` + fmt.Sprint(common.RootCommandName) + `/create/data-connector.md) is a configuration
-entity that comprises a location (GCS bucket, AWS S3 bucket, ...) and associated credentials.
-
-A Data Connector must be created *before* you can create a batch job that uses it.
-
-### Usage
-`
-
 func DeleteCmd() *cobra.Command {
 	batchJob := &cobra.Command{
-		Use:               "batch-job [id ...]",
+		Use:               "batch-job (id ...)",
 		Short:             "Delete on or more Batch Jobs by id",
-		Long:              longDoc,
 		DisableAutoGenTag: true,
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
@@ -47,9 +33,8 @@ func DeleteCmd() *cobra.Command {
 
 func GetCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:               "batch-job [id]",
+		Use:               "batch-job (id)",
 		Short:             "Get a Batch Job by id",
-		Long:              longDoc,
 		DisableAutoGenTag: true,
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
@@ -65,7 +50,6 @@ func ListCmd() *cobra.Command {
 	return &cobra.Command{
 		Use:               "batch-jobs",
 		Short:             "List Batch Jobs",
-		Long:              longDoc,
 		DisableAutoGenTag: true,
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
@@ -81,6 +65,7 @@ func CreateCmd() *cobra.Command {
 		Use:               "batch-job",
 		Short:             "Create a Batch Job",
 		Long:              longDoc,
+		Example:           example,
 		DisableAutoGenTag: true,
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
@@ -94,7 +79,7 @@ func CreateCmd() *cobra.Command {
 	flags := batchJob.Flags()
 
 	flags.StringP(batchJobsFileFlagName, "F", "",
-		`The path to the JSON file containing the batch job configuration`)
+		`the path to the JSON file containing the batch job configuration`)
 	policy.SetupFlags(batchJob, flags)
 	err := batchJob.MarkFlagRequired(batchJobsFileFlagName)
 	common.CliExit(err)

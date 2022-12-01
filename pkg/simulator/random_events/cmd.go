@@ -22,11 +22,11 @@ func RunCmd() (cmd *cobra.Command) {
 	}
 
 	flags := simCmd.Flags()
-	flags.String(EventsApiUrlFlag, "https://events.strmprivacy.io/event", "Endpoint to send events to")
-	flags.Int(IntervalFlag, 1000, "Interval in ms. between simulated events")
-	flags.Int(SessionRangeFlag, 1000, "Number of different sessions being generated")
-	flags.String(SessionPrefixFlag, "session", "Prefix string for sessions")
-	flags.Bool(QuietFlag, false, "Do not print to stderr")
+	flags.String(EventsApiUrlFlag, "https://events.strmprivacy.io/event", "endpoint to send events to")
+	flags.Int(IntervalFlag, 1000, "interval in ms. between simulated events")
+	flags.Int(SessionRangeFlag, 1000, "number of different sessions being generated")
+	flags.String(SessionPrefixFlag, "session", "prefix string for sessions")
+	flags.Bool(QuietFlag, false, "do not print to stderr")
 	flags.StringSlice(ConsentLevelsFlag, []string{"", "0", "0/1", "0/1/2", "0/1/2/3"}, "consent levels to be simulated")
 
 	return simCmd

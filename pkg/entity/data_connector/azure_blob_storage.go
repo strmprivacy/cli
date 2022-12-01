@@ -19,7 +19,7 @@ Client Secret Credentials, i.e. of an Application Principal.
 
 func createAzureBlobStorageCmd() *cobra.Command {
 	azureBlobStorage := &cobra.Command{
-		Use:               "azure-blob-storage [data-connector-name] [container-name]",
+		Use:               "azure-blob-storage (data-connector-name) (container-name)",
 		Short:             "Create a Data Connector for an Azure Blob Storage Container",
 		Long:              longDocBlobStorage,
 		DisableAutoGenTag: true,

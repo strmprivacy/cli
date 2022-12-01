@@ -1,14 +1,29 @@
 package member
 
-import "github.com/spf13/cobra"
+import (
+	"github.com/spf13/cobra"
+	"strings"
+	"strmprivacy/strm/pkg/util"
+)
+
+var longDoc = util.LongDocsUsage(`
+List all the current users in either your organization or just those that are member of your active project.
+
+Either set the organization flag or the project flag.
+`)
 
 func ListCmd() *cobra.Command {
-	longDoc := `List all the current members in either your organization or your active project.
-Either pass the organization flag or the project flag.`
 	members := &cobra.Command{
-		Use:   "members",
-		Short: "List all members of your organization or active project",
+		Use:   "users",
+		Short: "List all user of your organization or members of the active project",
 		Long:  longDoc,
+		Example: util.DedentTrim(`
+strm list users --organization
+ EMAIL                     FIRST NAME   LAST NAME   USER ROLES
+
+ bob+rbac@strmprivacy.io   bob          rbac        [MEMBER]
+ demo@strmprivacy.io       Demo         STRM        [ADMIN MEMBER]
+`),
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
 		},
@@ -19,15 +34,24 @@ Either pass the organization flag or the project flag.`
 		Args: cobra.NoArgs,
 	}
 	flags := members.Flags()
-	flags.Bool(organizationFlag, false, "")
-	flags.Bool(projectFlag, false, "")
+	flags.Bool(organizationFlag, false, "list the users in your organization")
+	flags.Bool(projectFlag, false, "list the members of your project")
 	return members
 }
 
 func GetCmd() *cobra.Command {
 	member := &cobra.Command{
-		Use:   "user",
-		Short: "Get a member of your organization",
+		Use:   "user (email)",
+		Short: "Get a users information of your organization by its email address",
+		Example: util.DedentTrim(`
+			strm get user demo@strmprivacy.io -o json
+			{
+				"email": "demo@strmprivacy.io",
+				"firstName": "Demo",
+				"lastName": "STRM",
+				"userRoles": [ "ADMIN", "MEMBER" ]
+			}
+		`),
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
 		},
@@ -41,13 +65,18 @@ func GetCmd() *cobra.Command {
 }
 
 func ManageCmd() *cobra.Command {
-	longDoc := `Changes the user roles for the given users. 
-All users in the request get all roles specified. Users are specified by their email address.
-Possible roles: admin, approver, project-admin, member`
+	longDoc := util.DedentTrim(`
+			Changes the user roles for the given users. 
+			All users in the request get all roles specified. Users are specified by their email address.
+
+			Possible roles: ` + validRolesString)
 	members := &cobra.Command{
 		Use:   "user-roles",
 		Short: "Change user roles.",
 		Long:  longDoc,
+		Example: util.DedentTrim(`
+			strm manage user-roles --roles approver --users user1@example.org,user2@example.org
+		`),
 		PreRun: func(cmd *cobra.Command, args []string) {
 		},
 		DisableAutoGenTag: true,
@@ -58,6 +87,9 @@ Possible roles: admin, approver, project-admin, member`
 	}
 	flags := members.Flags()
 	flags.StringSliceP(usersFlag, "u", []string{}, "Users by email for which roles should be changed")
-	flags.StringSliceP(rolesFlag, "r", []string{}, "All roles all users will get")
+	flags.StringSliceP(rolesFlag, "r", []string{}, "All roles the selected users will get")
 	return members
 }
+
+var validRoles = []string{"admin", "approver", "project-admin", "member"}
+var validRolesString = strings.Join(validRoles, ", ")
