@@ -78,7 +78,6 @@ func rootCmdPreRun(cmd *cobra.Command, args []string) error {
 
 	common.ApiHost = util.GetStringAndErr(cmd.Flags(), apiHostFlag)
 	common.ApiAuthHost = util.GetStringAndErr(cmd.Flags(), auth.ApiAuthUrlFlag)
-	common.EventAuthHost = util.GetStringAndErr(cmd.Flags(), auth.EventsAuthUrlFlag)
 
 	if auth.Auth.LoadLogin() == nil {
 		bootstrap.SetupServiceClients(auth.Auth.GetToken())
@@ -98,7 +97,6 @@ func init() {
 
 	persistentFlags := RootCmd.PersistentFlags()
 	persistentFlags.String(apiHostFlag, "api.strmprivacy.io:443", "API host and port")
-	persistentFlags.String(auth.EventsAuthUrlFlag, "https://sts.strmprivacy.io", "Event authentication host")
 	persistentFlags.String(auth.ApiAuthUrlFlag, "https://accounts.strmprivacy.io", "User authentication host")
 	persistentFlags.StringVar(&auth.TokenFile, "token-file", "",
 		"Token file that contains an access token (default is $HOME/.config/strmprivacy/credentials-<api-auth-url>.json)")

@@ -25,7 +25,6 @@ const activeProjectFilename = "active_project"
 
 var ApiAuthHost string
 var ApiHost string
-var EventAuthHost string
 
 var ProjectId string
 

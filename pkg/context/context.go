@@ -19,9 +19,8 @@ type configuration struct {
 }
 
 type apiUrls struct {
-	ApiHost       string
-	ApiAuthHost   string
-	EventAuthHost string
+	ApiHost     string
+	ApiAuthHost string
 }
 
 func showConfiguration() {
@@ -35,9 +34,8 @@ func showConfiguration() {
 		Contents:       string(contents),
 		SavedEntities:  listSavedEntities(path.Join(common.ConfigPath, common.SavedEntitiesDirectory)),
 		ApiUrls: apiUrls{
-			ApiHost:       common.ApiHost,
-			ApiAuthHost:   common.ApiAuthHost,
-			EventAuthHost: common.EventAuthHost,
+			ApiHost:     common.ApiHost,
+			ApiAuthHost: common.ApiAuthHost,
 		},
 	}
 	printer.Print(configuration)
