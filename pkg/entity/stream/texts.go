@@ -32,7 +32,7 @@ strm get stream demo -o json
         "stream": {
             "ref": { "name": "demo", },
             "enabled": true,
-            "limits": { "eventRate": "10000", "eventCount": "1000000" },
+            "limits": { "eventRate": "10000", "eventCount": "10000000" },
             "credentials": [
                 {
                     "clientId": "stream-2459..",
