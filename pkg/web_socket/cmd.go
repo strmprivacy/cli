@@ -17,7 +17,7 @@ var example = util.DedentTrim(`
 # Simulate some events
 strm create stream test
 strm simulate random-events test
-Starting to simulate random strmprivacy/demo/1.0.2 events to stream klaas. Sending one event every 1000 ms.
+Starting to simulate random strmprivacy/demo/1.0.2 events to stream test. Sending one event every 1000 ms.
 Sent 5 events
 Sent 10 events
 

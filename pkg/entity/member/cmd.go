@@ -15,14 +15,14 @@ Either set the organization flag or the project flag.
 func ListCmd() *cobra.Command {
 	members := &cobra.Command{
 		Use:   "users",
-		Short: "List all user of your organization or members of the active project",
+		Short: "List all users of your organization or members of the active project",
 		Long:  longDoc,
 		Example: util.DedentTrim(`
 strm list users --organization
  EMAIL                     FIRST NAME   LAST NAME   USER ROLES
 
- bob+rbac@strmprivacy.io   bob          rbac        [MEMBER]
- demo@strmprivacy.io       Demo         STRM        [ADMIN MEMBER]
+ [...]@strmprivacy.io   bob          rbac        [MEMBER]
+ [...]@strmprivacy.io       Demo         STRM        [ADMIN MEMBER]
 `),
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
@@ -42,11 +42,11 @@ strm list users --organization
 func GetCmd() *cobra.Command {
 	member := &cobra.Command{
 		Use:   "user (email)",
-		Short: "Get a users information of your organization by its email address",
+		Short: "Get the details of a user in your organization by their email address",
 		Example: util.DedentTrim(`
-			strm get user demo@strmprivacy.io -o json
+			strm get user [...]@strmprivacy.io -o json
 			{
-				"email": "demo@strmprivacy.io",
+				"email": "[...]@strmprivacy.io",
 				"firstName": "Demo",
 				"lastName": "STRM",
 				"userRoles": [ "ADMIN", "MEMBER" ]

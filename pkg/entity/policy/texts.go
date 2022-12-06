@@ -11,7 +11,7 @@ A policy has the following attributes
 * retention: the number of days that encryption keys created under this
   policy should be kept. This might be a minimum or a maximum...
 * legal grounds: a legal text or ruling that identifies why the organization
-  created this policy
+  created this policy.
 * state: draft, active or archived. Policies can only be used in pipelines
   when they're in active state. They can still be modified while in draft.
   Deletion of policies is not allowed for active policies.
