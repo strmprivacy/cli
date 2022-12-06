@@ -17,7 +17,7 @@ with the -f flag containing one email address per line.
 
 func InviteUsersCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:               "users [first-email,second-email,...]",
+		Use:               "users (email,...)",
 		Short:             "Invite users to your organization by email",
 		Long:              inviteLongDoc,
 		DisableAutoGenTag: true,

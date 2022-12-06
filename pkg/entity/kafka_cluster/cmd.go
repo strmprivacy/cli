@@ -19,8 +19,8 @@ Cluster.
 
 func GetCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:   "kafka-cluster [name]",
-		Short: "Get Kafka cluster by name",
+		Use:   "kafka-cluster (name)",
+		Short: "Get Kafka Cluster by name",
 		Long:  longDoc,
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
@@ -36,7 +36,7 @@ func GetCmd() *cobra.Command {
 func ListCmd() *cobra.Command {
 	return &cobra.Command{
 		Use:   "kafka-clusters",
-		Short: "List Kafka clusters",
+		Short: "List Kafka Clusters",
 		Long:  longDoc,
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)

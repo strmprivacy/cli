@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/spf13/cobra"
 	"path"
+	"strings"
 	"strmprivacy/strm/pkg/auth"
 	"strmprivacy/strm/pkg/common"
 	"strmprivacy/strm/pkg/entity/project"
@@ -33,7 +34,7 @@ func Configuration() *cobra.Command {
 		common.OutputFormatFlag,
 		common.OutputFormatFlagShort,
 		common.OutputFormatPlain,
-		fmt.Sprintf("Configuration output format [%v]", common.ConfigOutputFormatFlagAllowedValues),
+		fmt.Sprintf("configuration output format [%v]", common.ConfigOutputFormatFlagAllowedValues),
 	)
 	err := configuration.RegisterFlagCompletionFunc(common.OutputFormatFlag, func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		return common.ConfigOutputFormatFlagAllowedValues, cobra.ShellCompDirectiveNoFileComp
@@ -61,7 +62,7 @@ func Account() *cobra.Command {
 		common.OutputFormatFlag,
 		common.OutputFormatFlagShort,
 		common.OutputFormatPlain,
-		fmt.Sprintf("Configuration output format [%v]", common.AccountOutputFormatFlagAllowedValuesText),
+		fmt.Sprintf("configuration output format [%v]", common.AccountOutputFormatFlagAllowedValuesText),
 	)
 	err := cmd.RegisterFlagCompletionFunc(common.OutputFormatFlag, func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		return common.AccountOutputFormatFlagAllowedValues, cobra.ShellCompDirectiveNoFileComp
@@ -72,8 +73,16 @@ func Account() *cobra.Command {
 
 func EntityInfo() *cobra.Command {
 	entityInfo := &cobra.Command{
-		Use:               entityInfoCommandName,
-		Short:             "Show the stored information for a saved entity",
+		Use:     entityInfoCommandName + " (entity-reference)",
+		Short:   "Show the stored information for a saved entity",
+		Example: `strm context info Stream/demo1`,
+		Long: `Shows information of entities that have been saved with the --save option
+use tab-completion for easy access.
+
+One can see the file-system path, or the entity json contents depending on the output format flag.
+Note that these entities do not necessarily still exist on the STRM service. They don't get automatically
+removed if for instance you deleted an entity via another client.
+`,
 		DisableAutoGenTag: true,
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
@@ -89,7 +98,7 @@ func EntityInfo() *cobra.Command {
 		common.OutputFormatFlag,
 		common.OutputFormatFlagShort,
 		common.OutputFormatFilepath,
-		fmt.Sprintf("Entity information output format [%v]", common.ContextOutputFormatFlagAllowedValues),
+		fmt.Sprintf("entity information output format [%v]", strings.Join(common.ContextOutputFormatFlagAllowedValues, ", ")),
 	)
 	err := entityInfo.RegisterFlagCompletionFunc(common.OutputFormatFlag, func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		return common.ContextOutputFormatFlagAllowedValues, cobra.ShellCompDirectiveNoFileComp
@@ -104,7 +113,7 @@ func Project() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:               projectCommandName + " [name]",
 		Short:             "Show or set the active project",
-		Args:              cobra.MinimumNArgs(0),
+		Args:              cobra.MaximumNArgs(1),
 		DisableAutoGenTag: true,
 		PersistentPreRun:  auth.RequireAuthenticationPreRun,
 		PreRun: func(cmd *cobra.Command, args []string) {

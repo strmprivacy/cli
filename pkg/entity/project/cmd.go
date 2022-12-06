@@ -24,8 +24,8 @@ func ListCmd() *cobra.Command {
 
 func CreateCmd() *cobra.Command {
 	project := &cobra.Command{
-		Use:   "project [name]",
-		Short: "Create a new project",
+		Use:   "project (name)",
+		Short: "Create a Project",
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
 		},
@@ -77,7 +77,7 @@ func GetCmd() *cobra.Command {
 
 func DeleteCmd() *cobra.Command {
 	project := &cobra.Command{
-		Use:   "project [project-name]",
+		Use:   "project (project-name)",
 		Short: "Delete a project and all associated resources",
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)

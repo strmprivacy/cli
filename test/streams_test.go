@@ -9,7 +9,7 @@ import (
 )
 
 var creds = &entities.Credentials{ClientId: "clientId", ClientSecret: "clientSecret"}
-var limits = &entities.Limits{EventRate: 10000, EventCount: 1000000}
+var limits = &entities.Limits{EventRate: 10000, EventCount: 10000000}
 var streamWithTags *entities.Stream
 
 func init() {

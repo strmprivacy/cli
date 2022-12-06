@@ -15,7 +15,7 @@ const (
 
 func createS3BucketCmd() *cobra.Command {
 	s3Bucket := &cobra.Command{
-		Use:               "s3 [data-connector-name] [bucket-name]",
+		Use:               "s3 (data-connector-name) (bucket-name)",
 		Short:             "Create a Data Connector for an AWS S3 Bucket",
 		Long:              longDocS3,
 		DisableAutoGenTag: true,

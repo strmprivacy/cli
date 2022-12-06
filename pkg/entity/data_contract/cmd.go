@@ -1,17 +1,24 @@
 package data_contract
 
 import (
+	"github.com/lithammer/dedent"
 	"github.com/spf13/cobra"
+	"strings"
 	"strmprivacy/strm/pkg/common"
+	"strmprivacy/strm/pkg/util"
 )
 
-var longDoc = `### Usage`
+var longDoc = util.LongDocsUsage(`
+Data Contracts are the core of STRM Privacy.
+See [here](https://docs.strmprivacy.io/docs/latest/concepts/data-contracts/) for details
+`)
 
 func CreateCmd() *cobra.Command {
 	dataContract := &cobra.Command{
 		Use:               "data-contract (handle/name/version)",
-		Short:             "create a data contract",
+		Short:             "Create a Data Contract",
 		Long:              longDoc,
+		Example:           createExample,
 		DisableAutoGenTag: true,
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
@@ -24,22 +31,7 @@ func CreateCmd() *cobra.Command {
 	flags := dataContract.Flags()
 	flags.String(schemaDefinitionFlag, "", "filename of the schema definition (yaml or json) - either a Simple Schema, Avro Schema or Json Schema")
 	flags.Bool(publicFlag, false, "whether the data contract should be made public (accessible to other STRM Privacy customers)")
-	flags.String(contractDefinitionFlag, "",
-		`The path to the file with the keyField, and possibly piiFields and validations. Example JSON definition file:
-{
-    "keyField": "sessionId",
-    "piiFields": {
-        "sessionId": 2,
-        "referrerUrl": 1
-    },
-    "validations": [
-        {
-            "field": "referrerUrl",
-            "type": "regex",
-            "value": "^.*strmprivacy.*$"
-        }
-    ]
-}`)
+	flags.String(contractDefinitionFlag, "", dedent.Dedent(strings.TrimSpace(`the path to the file with the keyField, and possibly piiFields and validations. See example.`)))
 	common.MarkRequiredFlags(dataContract, schemaDefinitionFlag, contractDefinitionFlag)
 	return dataContract
 }
@@ -112,7 +104,6 @@ func DeleteCmd() *cobra.Command {
 	dataContract := &cobra.Command{
 		Use:   "data-contract (handle/name/version)",
 		Short: "Delete Data Contract by reference",
-		Long:  longDoc,
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
 		},
