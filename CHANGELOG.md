@@ -1,3 +1,10 @@
+## [3.1.1](https://github.com/strmprivacy/cli/compare/v3.1.0...v3.1.1) (2022-11-29)
+
+
+### Bug Fixes
+
+* **strm-2058:** do not resolve project if command is auth or create project ([#129](https://github.com/strmprivacy/cli/issues/129)) ([8242ceb](https://github.com/strmprivacy/cli/commit/8242cebee68b5ac49592fb7361643694f40cd15b))
+
 # [3.1.0](https://github.com/strmprivacy/cli/compare/v3.0.0...v3.1.0) (2022-11-02)
 
 

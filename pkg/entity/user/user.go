@@ -1,4 +1,4 @@
-package member
+package user
 
 import (
 	"context"
@@ -47,7 +47,7 @@ func list(cmd *cobra.Command) []*entities.User {
 	projectBool, err := flags.GetBool(projectFlag)
 	common.CliExit(err)
 	if organizationBool == projectBool {
-		common.CliExit(errors.New("strm list members requires organizations or projects flag, not neither nor both"))
+		common.CliExit(errors.New("strm list users requires organizations or projects flag, not neither nor both"))
 	}
 	if projectBool {
 		return listProjectMembers()

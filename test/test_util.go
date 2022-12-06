@@ -60,7 +60,6 @@ func newConfigDir() string {
 	_ = os.Setenv("TZ", "UTC")
 	_ = os.Setenv("STRM_CONFIG_PATH", configDir)
 
-	_ = os.Setenv("STRM_EVENTS_AUTH_URL", "https://sts.dev.strmprivacy.io")
 	_ = os.Setenv("STRM_EVENTS_API_URL", "https://events.dev.strmprivacy.io/event")
 	_ = os.Setenv("STRM_API_AUTH_URL", "https://accounts.dev.strmprivacy.io")
 	_ = os.Setenv("STRM_API_HOST", "api.dev.strmprivacy.io:443")

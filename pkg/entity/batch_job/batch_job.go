@@ -104,7 +104,10 @@ func createEncryptionBatchJob(cmd *cobra.Command,batchJobData []byte, flags *pfl
 		common.CliExit(err)
 	}
 	projectId := project.GetProjectId(cmd)
-	batchJob.PolicyId = policy.GetPolicyFromFlags(flags)
+	policyId := policy.GetPolicyFromFlags(flags)
+	if policyId != "" {
+		batchJob.PolicyId = policyId
+	}
 	setEncryptionBatchJobProjectIds(batchJob, projectId)
 	return &entities.BatchJobWrapper{
 		Job: &entities.BatchJobWrapper_EncryptionBatchJob{

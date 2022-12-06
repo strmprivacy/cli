@@ -13,12 +13,12 @@ import (
 	"strmprivacy/strm/pkg/entity/kafka_exporter"
 	"strmprivacy/strm/pkg/entity/kafka_user"
 	"strmprivacy/strm/pkg/entity/key_stream"
-	"strmprivacy/strm/pkg/entity/member"
 	"strmprivacy/strm/pkg/entity/policy"
 	"strmprivacy/strm/pkg/entity/project"
 	"strmprivacy/strm/pkg/entity/schema_code"
 	"strmprivacy/strm/pkg/entity/stream"
 	"strmprivacy/strm/pkg/entity/usage"
+	"strmprivacy/strm/pkg/entity/user"
 )
 
 var GetCmd = &cobra.Command{
@@ -40,7 +40,7 @@ func init() {
 	GetCmd.AddCommand(schema_code.GetCmd())
 	GetCmd.AddCommand(usage.GetCmd())
 	GetCmd.AddCommand(installation.GetCmd())
-	GetCmd.AddCommand(member.GetCmd())
+	GetCmd.AddCommand(user.GetCmd())
 	GetCmd.AddCommand(data_contract.GetCmd())
 	GetCmd.AddCommand(project.GetCmd())
 	GetCmd.AddCommand(policy.GetCmd())

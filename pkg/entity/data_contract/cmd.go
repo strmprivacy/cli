@@ -1,18 +1,24 @@
 package data_contract
 
 import (
+	"github.com/lithammer/dedent"
 	"github.com/spf13/cobra"
+	"strings"
 	"strmprivacy/strm/pkg/common"
+	"strmprivacy/strm/pkg/util"
 )
 
-var longDoc = `### Usage`
+var longDoc = util.LongDocsUsage(`
+Data Contracts are the core of STRM Privacy.
+See [here](https://docs.strmprivacy.io/docs/latest/concepts/data-contracts/) for details
+`)
 
 func CreateCmd() *cobra.Command {
 	dataContract := &cobra.Command{
 		Use:               "data-contract (handle/name/version)",
-		Short:             "create a data contract",
+		Short:             "Create a Data Contract",
 		Long:              longDoc,
-		Example:           "strm create data-contract my-handle/my-contract/1.0.0 --contract-definition my-def.json",
+		Example:           createExample,
 		DisableAutoGenTag: true,
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
@@ -25,43 +31,7 @@ func CreateCmd() *cobra.Command {
 	flags := dataContract.Flags()
 	flags.String(schemaDefinitionFlag, "", "filename of the schema definition (yaml or JSON) - either a Simple Schema, Avro Schema or JSON Schema")
 	flags.Bool(publicFlag, false, "whether the data contract should be made public (accessible to other STRM Privacy customers)")
-	flags.String(contractDefinitionFlag, "",
-		`filename of the JSON contract definition, containing the keyField, and possibly field metadata, validations and data subject field. Example JSON definition file:
-{
-  "keyField": "sessionId",
-  "fieldMetadata": [
-    {
-      "fieldName": "userName",
-      "personalDataConfig": {
-        "isPii": true,
-        "isQuasiId": false,
-        "purposeLevel": 1
-      }
-    },
-    {
-      "fieldName": "userAgeGroup",
-      "personalDataConfig": {
-        "isPii": false,
-        "isQuasiId": true
-      },
-      "statisticalDataType": "ORDINAL",
-      "ordinalValues": ["child","teenager","adult","senior"],
-      "nullHandlingConfig": {
-        "type": "DEFAULT_VALUE",
-        "defaultValue": "adult"
-      }
-    }
-  ],
-  "validations": [
-    {
-      "field": "referrerUrl",
-      "type": "regex",
-      "value": "^.*strmprivacy.*$"
-    }
-  ],
-  "dataSubjectField": "userId"
-}
-`)
+	flags.String(contractDefinitionFlag, "", dedent.Dedent(strings.TrimSpace(`the path to the file with the keyField, and possibly piiFields and validations. See example.`)))
 	common.MarkRequiredFlags(dataContract, schemaDefinitionFlag, contractDefinitionFlag)
 	return dataContract
 }
@@ -134,7 +104,6 @@ func DeleteCmd() *cobra.Command {
 	dataContract := &cobra.Command{
 		Use:   "data-contract (handle/name/version)",
 		Short: "Delete Data Contract by reference",
-		Long:  longDoc,
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
 		},

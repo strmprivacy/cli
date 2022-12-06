@@ -18,8 +18,7 @@ const DefaultConfigFilename = "config"
 const DefaultConfigFileSuffix = ".yaml"
 
 var DefaultConfigFileContents = []byte(`# The following configuration options are reflected in the CLI's flags
-# save: true
-# events-auth-url: https://sts.strmprivacy.io
+# save: false
 # events-api-url: https://events.strmprivacy.io/event
 # api-auth-url: https://accounts.strmprivacy.io
 # api-host: api.strmprivacy.io:443
