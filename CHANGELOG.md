@@ -1,3 +1,10 @@
+# [3.3.0](https://github.com/strmprivacy/cli/compare/v3.2.0...v3.3.0) (2022-12-07)
+
+
+### Features
+
+* **strm-1882:** add micro-aggregation batch job & FieldMetaData support ([#128](https://github.com/strmprivacy/cli/issues/128)) ([c760872](https://github.com/strmprivacy/cli/commit/c7608726b68497a755013bdbe25f61a174de728a))
+
 # [3.2.0](https://github.com/strmprivacy/cli/compare/v3.1.1...v3.2.0) (2022-12-06)
 
 
