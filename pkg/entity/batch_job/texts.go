@@ -1,19 +1,23 @@
 package batch_job
 
-import "strmprivacy/strm/pkg/util"
+import (
+	"strmprivacy/strm/pkg/util"
+)
 
 var longDoc = util.LongDocsUsage(`
-A Batch Job reads all events in a file via Data Connector and writes them to one or more output files Data Connectors,
-applying our privacy algorithm as defined by the job's configuration file.
+A Batch Job reads all events in a file via a Data Connector and writes them to one or more Data Connectors,
+applying one of our privacy algorithms as defined by the job's configuration file. An encryption batch job
+encrypts sensitive data, while a micro-aggregation batch job applies k-member clustering and replaces
+the values of quasi identifier fields with an aggregated value (e.g. mean value of a cluster). 
 
 A [Data Connector](docs/04-reference/01-cli-reference/!strm/create/data-connector.md) is a configuration
 entity that comprises a location (GCS bucket, AWS S3 bucket, ...) and associated credentials.
 
-A Data Connector must be created *before* you can create a batch job that uses it.
+A Data Connector must be created in the same project *before* you can create a batch job that uses it.
 
 The policy in the Batch Job configuration file can be overridden with the policy flags.
 
-Batch Jobs are [explained in the documentation](https://docs.strmprivacy.io/docs/latest/quickstart/batch/batch-jobs/)
+Batch Jobs are [explained in the documentation](https://docs.strmprivacy.io/docs/latest/quickstart/batch/batch-jobs/).
 `)
 
 var example = util.DedentTrim(`

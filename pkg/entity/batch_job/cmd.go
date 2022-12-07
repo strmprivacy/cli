@@ -2,18 +2,20 @@ package batch_job
 
 import (
 	"github.com/spf13/cobra"
-	"strmprivacy/strm/pkg/common"
 	"strmprivacy/strm/pkg/entity/policy"
 )
 
 const (
-	batchJobsFileFlagName = "file"
+	batchJobFileFlagName = "file"
+	batchJobTypeFlagName = "type"
+	encryptionType = "encryption"
+	microAggregationType = "micro-aggregation"
 )
 
 func DeleteCmd() *cobra.Command {
 	batchJob := &cobra.Command{
 		Use:               "batch-job (id ...)",
-		Short:             "Delete on or more Batch Jobs by id",
+		Short:             "Delete one or more Batch Jobs by id",
 		DisableAutoGenTag: true,
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
@@ -78,11 +80,12 @@ func CreateCmd() *cobra.Command {
 
 	flags := batchJob.Flags()
 
-	flags.StringP(batchJobsFileFlagName, "F", "",
+	flags.StringP(batchJobFileFlagName, "F", "",
 		`the path to the JSON file containing the batch job configuration`)
+	flags.StringP(batchJobTypeFlagName, "T", "encryption",
+		`the type of batch job (encryption, micro-aggregation), defaults to encryption`)
 	policy.SetupFlags(batchJob, flags)
-	err := batchJob.MarkFlagRequired(batchJobsFileFlagName)
-	common.CliExit(err)
+	_ = batchJob.MarkFlagRequired(batchJobFileFlagName)
 
 	return batchJob
 }

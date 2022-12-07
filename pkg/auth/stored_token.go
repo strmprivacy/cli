@@ -7,7 +7,6 @@ import (
 	"fmt"
 	log "github.com/sirupsen/logrus"
 	"golang.org/x/oauth2"
-	"io/ioutil"
 	"net/url"
 	"os"
 	"path"
@@ -36,7 +35,7 @@ func (e *EmptyTokenError) Error() string {
 
 func (authenticator *Authenticator) LoadLogin() error {
 	filename := authenticator.getSaveFilename()
-	b, err := ioutil.ReadFile(filename)
+	b, err := os.ReadFile(filename)
 
 	if errors.Is(err, os.ErrNotExist) {
 		return common.UnauthenticatedError()
@@ -65,7 +64,7 @@ func (authenticator *Authenticator) storeLogin() string {
 	common.CliExit(err)
 	b, err := json.Marshal(authenticator.storedToken)
 	common.CliExit(err)
-	err = ioutil.WriteFile(filename, b, 0644)
+	err = os.WriteFile(filename, b, 0644)
 	common.CliExit(err)
 	return filename
 }

@@ -29,7 +29,7 @@ func CreateCmd() *cobra.Command {
 		Args: cobra.ExactArgs(1),
 	}
 	flags := dataContract.Flags()
-	flags.String(schemaDefinitionFlag, "", "filename of the schema definition (yaml or json) - either a Simple Schema, Avro Schema or Json Schema")
+	flags.String(schemaDefinitionFlag, "", "filename of the schema definition (yaml or JSON) - either a Simple Schema, Avro Schema or JSON Schema")
 	flags.Bool(publicFlag, false, "whether the data contract should be made public (accessible to other STRM Privacy customers)")
 	flags.String(contractDefinitionFlag, "", dedent.Dedent(strings.TrimSpace(`the path to the file with the keyField, and possibly piiFields and validations. See example.`)))
 	common.MarkRequiredFlags(dataContract, schemaDefinitionFlag, contractDefinitionFlag)

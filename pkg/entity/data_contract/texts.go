@@ -26,25 +26,25 @@ Here's an example of a Simple Schema file
 Here's an example of Data Contract definition file'
 
 {
-	"ref": { "handle": "strmprivacy", "name": "GDDemo", "version": "1.0.10" },
-	"keyField": "transactionId",
-	"validations": [
-		{ "field": "email", "type": "regex", "value": "..." }
-	],
-	"metadata": {
-		"title": "Schema used for the GDDemo",
-		"description": "Somewhat valid e-commerce data",
-		"industries": [ "e-commerce" ]
-	},
-	"fieldMetadata": [
-	{
-		"fieldName": "email",
-		"personalDataConfig": { "isPii": true, "isQuasiId": true, "purposeLevel": 1 }
-	},
-	{
-		"fieldName": "userId",
-		"personalDataConfig": { "isPii": true, "isQuasiId": true, "purposeLevel": 1 }
-	}
-	]
+  "keyField": "transactionId",
+  "dataSubjectField": "userId",
+  "validations": [{"field": "email", "type": "regex", "value": "..."}],
+  "fieldMetadata": [
+    {
+      "fieldName": "email",
+      "personalDataConfig": {"isPii": true, "isQuasiId": true, "purposeLevel": 1}
+    },
+    {
+      "fieldName": "userId",
+      "personalDataConfig": {"isPii": false, "isQuasiId": true}
+    },
+    {
+      "fieldName": "userAgeGroup",
+      "personalDataConfig": {"isPii": false, "isQuasiId": true},
+      "statisticalDataType": "ORDINAL",
+      "ordinalValues": ["child", "teenager", "adult", "senior"],
+      "nullHandlingConfig": {"type": "DEFAULT_VALUE", "defaultValue": "adult"}
+    }
+  ]
 }
 `)

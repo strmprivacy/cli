@@ -3,12 +3,15 @@ package batch_job
 import (
 	"bytes"
 	"context"
+	"errors"
+	"fmt"
 	"github.com/golang/protobuf/jsonpb"
 	"github.com/spf13/cobra"
+	"github.com/spf13/pflag"
 	"github.com/strmprivacy/api-definitions-go/v2/api/batch_jobs/v1"
 	"github.com/strmprivacy/api-definitions-go/v2/api/entities/v1"
 	"google.golang.org/grpc"
-	"io/ioutil"
+	"os"
 	"strings"
 	"strmprivacy/strm/pkg/common"
 	"strmprivacy/strm/pkg/entity/policy"
@@ -18,6 +21,11 @@ import (
 
 var client batch_jobs.BatchJobsServiceClient
 var apiContext context.Context
+
+type refWithStates struct {
+	ref    *entities.BatchJobRef
+	states []*entities.BatchJobState
+}
 
 func SetupClient(clientConnection *grpc.ClientConn, ctx context.Context) {
 	apiContext = ctx
@@ -59,15 +67,39 @@ func del(id *string, cmd *cobra.Command) {
 
 func create(cmd *cobra.Command) {
 	flags := cmd.Flags()
-	batchJobFile := util.GetStringAndErr(flags, batchJobsFileFlagName)
+	batchJobFile := util.GetStringAndErr(flags, batchJobFileFlagName)
+	batchJobType := getBatchJobType(flags)
 
-	batchJobData, err := ioutil.ReadFile(batchJobFile)
+	batchJobData, err := os.ReadFile(batchJobFile)
 	if err != nil {
 		common.CliExit(err)
 	}
 
+	var batchJobWrapper *entities.BatchJobWrapper
+	if batchJobType == encryptionType {
+		batchJobWrapper = createEncryptionBatchJob(cmd, batchJobData, flags)
+	} else if batchJobType == microAggregationType {
+		batchJobWrapper = createMicroAggregationBatchJob(cmd, batchJobData)
+	}
+	createBatchJobRequest := &batch_jobs.CreateBatchJobRequest{Job: batchJobWrapper}
+	response, err := client.CreateBatchJob(apiContext, createBatchJobRequest)
+	common.CliExit(err)
+
+	printer.Print(response)
+}
+
+func getBatchJobType(flags *pflag.FlagSet) string {
+	batchJobType := util.GetStringAndErr(flags, batchJobTypeFlagName)
+	if !(batchJobType == encryptionType || batchJobType == microAggregationType) {
+		common.CliExit(errors.New(fmt.Sprintf("Batch job type should be one of: %s, %s",
+			encryptionType, microAggregationType)))
+	}
+	return batchJobType
+}
+
+func createEncryptionBatchJob(cmd *cobra.Command,batchJobData []byte, flags *pflag.FlagSet) *entities.BatchJobWrapper {
 	batchJob := &entities.BatchJob{}
-	err = jsonpb.Unmarshal(bytes.NewReader(batchJobData), batchJob)
+	err := jsonpb.Unmarshal(bytes.NewReader(batchJobData), batchJob)
 	if err != nil {
 		common.CliExit(err)
 	}
@@ -76,15 +108,15 @@ func create(cmd *cobra.Command) {
 	if policyId != "" {
 		batchJob.PolicyId = policyId
 	}
-	setCommonProjectIds(batchJob, projectId)
-	createBatchJobRequest := &batch_jobs.CreateBatchJobRequest{BatchJob: batchJob}
-	response, err := client.CreateBatchJob(apiContext, createBatchJobRequest)
-	common.CliExit(err)
-
-	printer.Print(response)
+	setEncryptionBatchJobProjectIds(batchJob, projectId)
+	return &entities.BatchJobWrapper{
+		Job: &entities.BatchJobWrapper_EncryptionBatchJob{
+			EncryptionBatchJob: batchJob,
+		},
+	}
 }
 
-func setCommonProjectIds(batchJob *entities.BatchJob, projectId string) {
+func setEncryptionBatchJobProjectIds(batchJob *entities.BatchJob, projectId string) {
 	if batchJob.Ref == nil {
 		// normal situation where the whole ref attribute in the json is absent.
 		batchJob.Ref = &entities.BatchJobRef{}
@@ -96,7 +128,31 @@ func setCommonProjectIds(batchJob *entities.BatchJob, projectId string) {
 	for _, d := range batchJob.DerivedData {
 		d.Target.DataConnectorRef.ProjectId = projectId
 	}
+}
 
+func createMicroAggregationBatchJob(cmd *cobra.Command, data []byte) *entities.BatchJobWrapper {
+	batchJob := &entities.MicroAggregationBatchJob{}
+	err := jsonpb.Unmarshal(bytes.NewReader(data), batchJob)
+	if err != nil {
+		common.CliExit(err)
+	}
+	projectId := project.GetProjectId(cmd)
+	setMicroAggregationBatchJobProjectIds(batchJob, projectId)
+	return &entities.BatchJobWrapper{
+		Job: &entities.BatchJobWrapper_MicroAggregationBatchJob{
+			MicroAggregationBatchJob: batchJob,
+		},
+	}
+}
+
+func setMicroAggregationBatchJobProjectIds(batchJob *entities.MicroAggregationBatchJob, projectId string) {
+	if batchJob.Ref == nil {
+		// normal situation where the whole ref attribute in the json is absent.
+		batchJob.Ref = &entities.BatchJobRef{}
+	}
+	batchJob.Ref.ProjectId = projectId
+	batchJob.SourceData.DataConnectorRef.ProjectId = projectId
+	batchJob.TargetData.DataConnectorRef.ProjectId = projectId
 }
 
 func namesCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
@@ -118,4 +174,20 @@ func namesCompletion(cmd *cobra.Command, args []string, complete string) ([]stri
 		batchJobIds = append(batchJobIds, s.Ref.Id)
 	}
 	return batchJobIds, cobra.ShellCompDirectiveNoFileComp
+}
+
+func toRefWithStates(batchJob *entities.BatchJobWrapper) refWithStates {
+	var ref *entities.BatchJobRef
+	var states []*entities.BatchJobState
+	if encryptionBatchJob := batchJob.GetEncryptionBatchJob(); encryptionBatchJob != nil {
+		ref = encryptionBatchJob.Ref
+		states = encryptionBatchJob.States
+	} else if microAggregationBatchJob := batchJob.GetMicroAggregationBatchJob(); microAggregationBatchJob != nil {
+		ref = microAggregationBatchJob.Ref
+		states = microAggregationBatchJob.States
+	}
+	return refWithStates{
+		states: states,
+		ref:    ref,
+	}
 }

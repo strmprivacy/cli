@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/jedib0t/go-pretty/v6/table"
+	"github.com/samber/lo"
 	"github.com/spf13/cobra"
 	"github.com/strmprivacy/api-definitions-go/v2/api/data_contracts/v1"
 	"github.com/strmprivacy/api-definitions-go/v2/api/entities/v1"
@@ -87,12 +88,15 @@ func printTable(contracts []*v1.DataContract) {
 	rows := make([]table.Row, 0, len(contracts))
 
 	for _, contract := range contracts {
+		nrOfPiiFields := lo.CountBy(contract.FieldMetadata, func(m *entities.FieldMetadata) bool {
+			return m.PersonalDataConfig != nil && m.PersonalDataConfig.IsPii
+		})
 		rows = append(rows, table.Row{
 			refToString(contract.Ref),
 			contract.State,
 			contract.IsPublic,
 			contract.KeyField,
-			len(contract.PiiFields),
+			nrOfPiiFields,
 			len(contract.Validations),
 		})
 	}
