@@ -15,7 +15,7 @@ import (
 	"strmprivacy/strm/pkg/entity/kafka_user"
 	"strmprivacy/strm/pkg/entity/key_stream"
 	"strmprivacy/strm/pkg/entity/keylinks"
-	"strmprivacy/strm/pkg/entity/member"
+	"strmprivacy/strm/pkg/entity/user"
 	"strmprivacy/strm/pkg/entity/policy"
 	"strmprivacy/strm/pkg/entity/project"
 	"strmprivacy/strm/pkg/entity/stream"
@@ -39,7 +39,7 @@ func init() {
 	ListCmd.AddCommand(key_stream.ListCmd())
 	ListCmd.AddCommand(installation.ListCmd())
 	ListCmd.AddCommand(project.ListCmd())
-	ListCmd.AddCommand(member.ListCmd())
+	ListCmd.AddCommand(user.ListCmd())
 	ListCmd.AddCommand(data_subject.ListCmd())
 	ListCmd.AddCommand(keylinks.ListCmd())
 	ListCmd.AddCommand(data_contract.ListCmd())

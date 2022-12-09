@@ -4,27 +4,27 @@ import (
 	"fmt"
 	"github.com/spf13/cobra"
 	"strmprivacy/strm/pkg/common"
+	"strmprivacy/strm/pkg/util"
 )
 
-var longDocPrintToken = `
+var longDocPrintToken = util.LongDocsUsage(`
 Print the current (JWT) access token to the terminal that can be used in a http header. Note that the token is printed
-on ` + "`stdout`" + `, and the Expiry on ` + "`stderr`" + ` so it’s easy to capture the token for scripting use with
+on °stdout°, and the Expiry on °stderr° so it’s easy to capture the token for scripting use with
 
-` + "```" + `bash
-export token=$(strm auth access-token)
-` + "```" + `
+°°°bash
+export token=$(strm auth print-access-token)
+°°°
 
 Note that this token might be expired, so a refresh may be required. Use token as follows:
 'Authorization: Bearer &lt;token&gt;'
 
-### Usage
-`
+`)
 
 func LoginCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "login",
 		Short: "Login",
-		Long: `Log a user in using its Console credentials and save the login token to disk, 
+		Long: `Log a user in using its Console credentials and save the login token to disk,
 to allow the CLI access to the STRM Privacy APIs.`,
 		Run: func(cmd *cobra.Command, args []string) {
 			login()

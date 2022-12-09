@@ -72,8 +72,7 @@ precedence over the configuration file, which takes precedence over the default 
 Below are the default values for all `strm` flags, in the YAML format used by the configuration file:
 
 ```yaml
-save: true
-events-auth-url: https://sts.strmprivacy.io
+save: false
 events-api-url: https://events.strmprivacy.io/event
 api-auth-url: https://accounts.strmprivacy.io
 api-host: api.strmprivacy.io:443

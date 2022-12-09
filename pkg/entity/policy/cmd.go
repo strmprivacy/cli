@@ -5,18 +5,18 @@ import (
 	"github.com/spf13/cobra"
 	"strings"
 	"strmprivacy/strm/pkg/common"
+	"strmprivacy/strm/pkg/util"
 )
 
 func ListCmd() *cobra.Command {
-	longDoc := `List the policies owned by this organization`
 	outputFormatFlagAllowedValues := []string{common.OutputFormatPlain, common.OutputFormatTable,
 		common.OutputFormatJson, common.OutputFormatJsonRaw}
 	outputFormatFlagAllowedValuesText := strings.Join(outputFormatFlagAllowedValues, ", ")
 	command := &cobra.Command{
 		Use:               "policies",
-		Short:             "List all policies belonging to this organization",
-		Example:           "strm list policies",
-		Long:              longDoc,
+		Short:             "list all policies belonging to this organization",
+		Example:           listExample,
+		Long:              `List the Policies owned by this organization`,
 		DisableAutoGenTag: true,
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
@@ -38,9 +38,9 @@ func GetCmd() *cobra.Command {
 	command := &cobra.Command{
 		Use:               "policy [name]",
 		Short:             "Get Policy by name or id",
-		Long:              "Get a policy by name or by --id=policy-id",
+		Long:              "Get a Policy by name or by --id=policy-id",
 		DisableAutoGenTag: true,
-		Example:           `strm get policy "1 year" or strm get policy --id=34c4709e-b8bc-4b45-aa5a-883f471869e3`,
+		Example:           policyExample,
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
 		},
@@ -64,8 +64,12 @@ func DeleteCmd() *cobra.Command {
 		common.OutputFormatJson, common.OutputFormatJsonRaw}
 	outputFormatFlagAllowedValuesText := strings.Join(outputFormatFlagAllowedValues, ", ")
 	command := &cobra.Command{
-		Use:               "policy [name]",
-		Short:             "Delete Policy by name or id",
+		Use:   "policy [name]",
+		Short: "Delete Policy by name or id",
+		Long: util.LongDocsUsage(`
+			Delete a Policy by name or id.
+			Policies can only be deleted in DRAFT state.
+		`),
 		Example:           `strm delete policy "1 year" or strm delete policy --id=34c4709e-b8bc-4b45-aa5a-883f471869e3`,
 		DisableAutoGenTag: true,
 		PreRun: func(cmd *cobra.Command, args []string) {
@@ -90,8 +94,9 @@ func ActivateCmd() *cobra.Command {
 		common.OutputFormatJson, common.OutputFormatJsonRaw}
 	outputFormatFlagAllowedValuesText := strings.Join(outputFormatFlagAllowedValues, ", ")
 	command := &cobra.Command{
-		Use:   "policy [policy]",
-		Short: "Set the state of a Policy to ACTIVATED",
+		Use:     "policy [policy]",
+		Short:   "Set the state of a Policy to ACTIVATED",
+		Example: `strm activate policy "1 year" or strm activate policy --id=34c4709e-b8bc-4b45-aa5a-883f471869e3`,
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
 		},
@@ -115,8 +120,9 @@ func ArchiveCmd() *cobra.Command {
 		common.OutputFormatJson, common.OutputFormatJsonRaw}
 	outputFormatFlagAllowedValuesText := strings.Join(outputFormatFlagAllowedValues, ", ")
 	command := &cobra.Command{
-		Use:   "policy [policy]",
-		Short: "Set the state of a Policy to ARCHIVED",
+		Use:     "policy [policy]",
+		Short:   "Set the state of a Policy to ARCHIVED",
+		Example: `strm archive policy "1 year" or strm archive policy --id=34c4709e-b8bc-4b45-aa5a-883f471869e3`,
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
 		},
@@ -141,22 +147,9 @@ func CreateCmd() *cobra.Command {
 		common.OutputFormatJson, common.OutputFormatJsonRaw}
 	outputFormatFlagAllowedValuesText := strings.Join(outputFormatFlagAllowedValues, ", ")
 	command := &cobra.Command{
-		Use:   "policy",
-		Short: "Create a Policy",
-		Long: `Create a Policy
-
-A policy has the following attributes
-* name: the name of a policy. This must be unique within one organization.
-* description: a description of the policy; what sort of data pipelines
-  would be subject to this policy?
-* retention: the number of days that encryption keys created under this
-  policy should be kept. This might be a minimum or a maximum...
-* legal grounds: a legal text or ruling that identifies why the organization
-  created this policy
-* state: draft, active or archived. Policies can only be used in pipelines
-  when they're in active state. They can still be modified while in draft.
-  Deletion of policies is not allowed for active policies.
-`,
+		Use:               "policy",
+		Short:             "Create a Policy",
+		Long:              longCreateDoc,
 		Example:           `strm create policy --name="1 year" --retention 365 --description "1 year for marketing"`,
 		DisableAutoGenTag: true,
 		PreRun: func(cmd *cobra.Command, args []string) {
@@ -187,14 +180,15 @@ func UpdateCmd() *cobra.Command {
 		Use:     "policy policy-id",
 		Short:   "Update a Policy",
 		Example: `strm update policy 34c4709e-b8bc-4b45-aa5a-883f471869e3 --legal-grounds "EU law x.y.z"`,
-		Long: `Update the attributes of a policy
+		Long: util.LongDocsUsage(`
+		Update the attributes of a Policy
 
-Policies can only be updated while in draft state!
-The policy to be updated must be referenced by its id.
-You can change all other attributes of a policy.
+		Policies can only be updated while in draft state!
+		The policy to be updated must be referenced by its id.
+		You can change all other attributes of a policy.
 
-In order to make a policy active for pipeline processing, you must first 'activate' it.
-`,
+		In order to make a policy active for pipeline processing, you must first 'activate' it.
+		`),
 		DisableAutoGenTag: true,
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)

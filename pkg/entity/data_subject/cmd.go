@@ -5,14 +5,16 @@ import (
 	"github.com/spf13/cobra"
 	"strings"
 	"strmprivacy/strm/pkg/common"
+	"strmprivacy/strm/pkg/util"
 )
 
 func ListCmd() *cobra.Command {
-	longDoc := `Query the Data Subjects service for a list of data-subjects.
+	longDoc := util.LongDocsUsage(`
+Query the Data Subjects service for a list of data-subjects.
 
-Returns paginated data. If one page of data has following pages, its 'next_page_token'
-field must be added to the following call via the '--page-token' flag.
-`
+Returns paginated data. If one page of data has following pages, its °next_page_token°
+field must be added to the following call via the °page-token° flag.
+`)
 	outputFormatFlagAllowedValues := []string{common.OutputFormatPlain, common.OutputFormatPlain + "0",
 		common.OutputFormatJson, common.OutputFormatJsonRaw}
 	outputFormatFlagAllowedValuesText := strings.Join(outputFormatFlagAllowedValues, ", ")
@@ -38,17 +40,17 @@ Use the nextPageToken (if any) returned from the previous call`)
 }
 
 func DeleteCmd() *cobra.Command {
-	longDoc := `Deletes 1 or more data subjects from the Data Subjects Service.
-
-Returns the number of deleted key links that were associated with these data subjects.
-`
+	longDoc := util.LongDocsUsage(`
+		Deletes 1 or more data subjects from the Data Subjects Service.
+		Returns the number of deleted key links that were associated with these data subjects.
+`)
 
 	outputFormatFlagAllowedValues := []string{common.OutputFormatPlain,
 		common.OutputFormatJson, common.OutputFormatJsonRaw}
 	outputFormatFlagAllowedValuesText := strings.Join(outputFormatFlagAllowedValues, ", ")
 	command := &cobra.Command{
-		Use:               "data-subjects <data-subject-id>...",
-		Short:             "Delete data subjects",
+		Use:               "data-subjects (data-subject-id...)",
+		Short:             "Delete Data Subjects",
 		Long:              longDoc,
 		DisableAutoGenTag: true,
 		PreRun: func(cmd *cobra.Command, args []string) {

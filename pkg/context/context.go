@@ -2,7 +2,7 @@ package context
 
 import (
 	"fmt"
-	"io/ioutil"
+	"os"
 	"path"
 	"strings"
 	"strmprivacy/strm/pkg/auth"
@@ -19,14 +19,13 @@ type configuration struct {
 }
 
 type apiUrls struct {
-	ApiHost       string
-	ApiAuthHost   string
-	EventAuthHost string
+	ApiHost     string
+	ApiAuthHost string
 }
 
 func showConfiguration() {
 	configFilepath := findConfigFile()
-	contents, err := ioutil.ReadFile(configFilepath)
+	contents, err := os.ReadFile(configFilepath)
 	common.CliExit(err)
 
 	configuration := configuration{
@@ -35,9 +34,8 @@ func showConfiguration() {
 		Contents:       string(contents),
 		SavedEntities:  listSavedEntities(path.Join(common.ConfigPath, common.SavedEntitiesDirectory)),
 		ApiUrls: apiUrls{
-			ApiHost:       common.ApiHost,
-			ApiAuthHost:   common.ApiAuthHost,
-			EventAuthHost: common.EventAuthHost,
+			ApiHost:     common.ApiHost,
+			ApiAuthHost: common.ApiAuthHost,
 		},
 	}
 	printer.Print(configuration)
@@ -50,7 +48,7 @@ type savedEntity struct {
 
 func entityInfo(args []string) {
 	filepath := path.Join(common.ConfigPath, common.SavedEntitiesDirectory, args[0]+".json")
-	contents, err := ioutil.ReadFile(filepath)
+	contents, err := os.ReadFile(filepath)
 	common.CliExit(err)
 
 	entity := savedEntity{Path: filepath, Contents: contents}
@@ -63,7 +61,7 @@ func showAccountDetails() {
 }
 
 func listSavedEntities(p string) []string {
-	files, err := ioutil.ReadDir(p)
+	dirEntries, err := os.ReadDir(p)
 
 	if err != nil {
 		return []string{}
@@ -72,11 +70,11 @@ func listSavedEntities(p string) []string {
 	entityTypeTemplate := path.Base(p) + "/%v"
 	var entities = make([]string, 0)
 
-	for _, f := range files {
-		if f.IsDir() {
-			entities = append(entities, listSavedEntities(path.Join(p, f.Name()))...)
-		} else if strings.HasSuffix(f.Name(), "json") && !strings.HasPrefix(f.Name(), auth.StrmCredsFilePrefix) {
-			entities = append(entities, fmt.Sprintf(entityTypeTemplate, strings.Replace(f.Name(), ".json", "", -1)))
+	for _, dirEntry := range dirEntries {
+		if dirEntry.IsDir() {
+			entities = append(entities, listSavedEntities(path.Join(p, dirEntry.Name()))...)
+		} else if strings.HasSuffix(dirEntry.Name(), "json") && !strings.HasPrefix(dirEntry.Name(), auth.StrmCredsFilePrefix) {
+			entities = append(entities, fmt.Sprintf(entityTypeTemplate, strings.Replace(dirEntry.Name(), ".json", "", -1)))
 		}
 	}
 
@@ -84,14 +82,14 @@ func listSavedEntities(p string) []string {
 }
 
 func findConfigFile() string {
-	files, err := ioutil.ReadDir(common.ConfigPath)
+	dirEntries, err := os.ReadDir(common.ConfigPath)
 	common.CliExit(err)
 
 	var configFilepath string
 
-	for _, f := range files {
-		if f.Name() == common.DefaultConfigFilename+common.DefaultConfigFileSuffix || f.Name() == common.DefaultConfigFilename+common.DefaultConfigFileSuffix {
-			configFilepath = path.Join(common.ConfigPath, f.Name())
+	for _, dirEntry := range dirEntries {
+		if dirEntry.Name() == common.DefaultConfigFilename+common.DefaultConfigFileSuffix || dirEntry.Name() == common.DefaultConfigFilename+common.DefaultConfigFileSuffix {
+			configFilepath = path.Join(common.ConfigPath, dirEntry.Name())
 		}
 	}
 

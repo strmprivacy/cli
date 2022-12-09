@@ -13,7 +13,7 @@ const (
 
 func createGcsBucketCmd() *cobra.Command {
 	gcsBucket := &cobra.Command{
-		Use:               "gcs [data-connector-name] [bucket-name]",
+		Use:               "gcs (data-connector-name) (bucket-name)",
 		Short:             "Create a Data Connector for a Google Cloud Storage Bucket",
 		Long:              longDocGcs,
 		DisableAutoGenTag: true,

@@ -10,7 +10,6 @@ import (
 	"golang.org/x/sync/errgroup"
 	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/proto"
-	"io/ioutil"
 	"os"
 	"os/exec"
 	"regexp"
@@ -52,7 +51,7 @@ func testConfig() *TestConfig {
 
 func newConfigDir() string {
 	var err error
-	configDir, err = ioutil.TempDir("", "test")
+	configDir, err = os.MkdirTemp("", "test")
 	if err != nil {
 		println(fmt.Sprintf("error: %v", err))
 	}
@@ -61,7 +60,6 @@ func newConfigDir() string {
 	_ = os.Setenv("TZ", "UTC")
 	_ = os.Setenv("STRM_CONFIG_PATH", configDir)
 
-	_ = os.Setenv("STRM_EVENTS_AUTH_URL", "https://sts.dev.strmprivacy.io")
 	_ = os.Setenv("STRM_EVENTS_API_URL", "https://events.dev.strmprivacy.io/event")
 	_ = os.Setenv("STRM_API_AUTH_URL", "https://accounts.dev.strmprivacy.io")
 	_ = os.Setenv("STRM_API_HOST", "api.dev.strmprivacy.io:443")
@@ -91,7 +89,7 @@ func ExecuteCliAndGetOutput(t *testing.T, tokenFile string, cmd ...string) strin
 func executeCli(t *testing.T, tokenFile string, cmd ...string) *exec.Cmd {
 	if len(tokenFile) == 0 {
 		if len(defaultTokenFileName) == 0 {
-			defaultTokenFile, _ := ioutil.TempFile(configDir, "strm_*.json")
+			defaultTokenFile, _ := os.CreateTemp(configDir, "strm_*.json")
 			defaultTokenFileName = defaultTokenFile.Name()
 
 			initializeStrmEntities(t, defaultTokenFileName)
@@ -146,7 +144,7 @@ func replaceSecretsWithPropertyNames(out string) string {
 }
 
 func CreateNonExistingTokenFileName() string {
-	tokenDir, _ := ioutil.TempDir("", "strm_test")
+	tokenDir, _ := os.MkdirTemp("", "strm_test")
 	tokenFileName := tokenDir + "/nonexisting.json"
 	return tokenFileName
 }

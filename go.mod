@@ -14,6 +14,7 @@ require (
 	github.com/int128/oauth2cli v1.14.0
 	github.com/jedib0t/go-pretty/v6 v6.4.0
 	github.com/joho/godotenv v1.4.0
+	github.com/lithammer/dedent v1.1.0
 	github.com/magiconair/properties v1.8.6
 	github.com/manifoldco/promptui v0.9.0
 	github.com/pkg/browser v0.0.0-20210911075715-681adbf594b8
@@ -23,8 +24,8 @@ require (
 	github.com/spf13/cobra v1.6.1
 	github.com/spf13/pflag v1.0.5
 	github.com/spf13/viper v1.13.0
-	github.com/strmprivacy/api-definitions-go/v2 v2.59.0
-	golang.org/x/exp v0.0.0-20221026153819-32f3d567a233
+	github.com/strmprivacy/api-definitions-go/v2 v2.65.1
+	golang.org/x/exp v0.0.0-20221026153819-32f3d567a233 // indirect
 	golang.org/x/oauth2 v0.1.0
 	golang.org/x/sync v0.1.0
 	google.golang.org/grpc v1.50.1

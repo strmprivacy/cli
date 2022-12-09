@@ -2,15 +2,16 @@ package util
 
 import (
 	"fmt"
+	"github.com/lithammer/dedent"
 	"github.com/samber/lo"
 	"github.com/spf13/pflag"
 	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/proto"
-	"io/ioutil"
 	"os"
 	"path"
 	"path/filepath"
 	"strconv"
+	"strings"
 	"strmprivacy/strm/pkg/common"
 )
 
@@ -61,7 +62,7 @@ func GetIntAndErr(f *pflag.FlagSet, k string) int {
 
 func TryLoad(m proto.Message, name *string) error {
 	filename := getSaveFilename(m, name)
-	bytes, err := ioutil.ReadFile(filename)
+	bytes, err := os.ReadFile(filename)
 	if err != nil {
 		return err
 	}
@@ -75,7 +76,7 @@ func Save(m proto.Message, name *string) {
 	common.CliExit(err)
 	jsonData, err := protojson.Marshal(m)
 	common.CliExit(err)
-	err = ioutil.WriteFile(filename, jsonData, 0644)
+	err = os.WriteFile(filename, jsonData, 0644)
 	common.CliExit(err)
 }
 
@@ -96,7 +97,7 @@ func CreateConfigDirAndFileIfNotExists() {
 	configFilepath := path.Join(common.ConfigPath, common.DefaultConfigFilename+common.DefaultConfigFileSuffix)
 
 	if _, err := os.Stat(configFilepath); os.IsNotExist(err) {
-		writeFileError := ioutil.WriteFile(
+		writeFileError := os.WriteFile(
 			configFilepath,
 			common.DefaultConfigFileContents,
 			0644,
@@ -104,4 +105,20 @@ func CreateConfigDirAndFileIfNotExists() {
 
 		common.CliExit(writeFileError)
 	}
+}
+
+// LongDocs dedents, trims surrounding whitespace, changes !strm for the command Name and changes ° for `
+func LongDocs(s string) string {
+	s2 := DedentTrim(strings.Replace(
+		strings.Replace(s, "!strm", common.RootCommandName, -1), "°", "`", -1))
+	return s2
+}
+
+func LongDocsUsage(s string) string {
+	return LongDocs(s) + "\n\n### Usage"
+}
+
+func DedentTrim(s string) string {
+	return strings.TrimSpace(dedent.Dedent(s))
+
 }

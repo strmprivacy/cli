@@ -49,7 +49,9 @@ func Run(cmd *cobra.Command, kafkaExporterName *string) {
 	config.Net.TLS.Enable = true
 	config.Consumer.Return.Errors = true
 	config.Version = sarama.MaxVersion
-	config.Net.SASL.TokenProvider = auth.NewTokenProvider(clientId, clientSecret, common.EventAuthHost+"/token")
+	// TODO needs to be tested, but should work
+	tokenUrl := fmt.Sprintf("%v/auth/realms/streams/protocol/openid-connect/token", common.ApiAuthHost)
+	config.Net.SASL.TokenProvider = auth.NewTokenProvider(clientId, clientSecret, tokenUrl)
 
 	consumer := Consumer{
 		ready: make(chan bool),
