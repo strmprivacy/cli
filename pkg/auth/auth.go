@@ -11,8 +11,8 @@ const (
 	ApiAuthUrlFlag = "api-auth-url"
 )
 
-func login() {
-	Auth.login()
+func login(cmd *cobra.Command) {
+	Auth.login(cmd)
 }
 
 func revoke() {
