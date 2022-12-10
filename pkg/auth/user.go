@@ -87,7 +87,7 @@ func (authenticator *Authenticator) login(cmd *cobra.Command) {
 
 	if nonInteractiveTarget {
 		baseOauthCliConfig.NonInteractive = true
-		baseOauthCliConfig.NonInteractivePromptText = "Please enter a valid authorization code flow code:\n"
+		baseOauthCliConfig.NonInteractivePromptText = fmt.Sprintf("On a machine with access to a browser, use `%s auth login --%s` to retrieve a valid code:\n", common.RootCommandName, nonInteractiveRemoteHostFlag)
 		baseOauthCliConfig.OAuth2Config.RedirectURL = "http://localhost:10000"
 		eg.Go(authenticator.handleLogin(ctx, baseOauthCliConfig))
 	} else {
