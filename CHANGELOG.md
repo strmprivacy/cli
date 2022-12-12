@@ -1,3 +1,10 @@
+# [3.4.0](https://github.com/strmprivacy/cli/compare/v3.3.0...v3.4.0) (2022-12-12)
+
+
+### Features
+
+* **strm-2101:** Non interactive logins ([#132](https://github.com/strmprivacy/cli/issues/132)) ([7b33925](https://github.com/strmprivacy/cli/commit/7b33925bbd770c4078810cd09ee3801d08dfe30f))
+
 # [3.3.0](https://github.com/strmprivacy/cli/compare/v3.2.0...v3.3.0) (2022-12-07)
 
 
