@@ -2,12 +2,15 @@ package auth
 
 import (
 	"context"
+	"encoding/base64"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"github.com/golang-jwt/jwt/v4"
-	"github.com/int128/oauth2cli"
 	"github.com/pkg/browser"
 	log "github.com/sirupsen/logrus"
+	"github.com/spf13/cobra"
+	"github.com/trietsch/oauth2cli"
 	"golang.org/x/oauth2"
 	"golang.org/x/sync/errgroup"
 	"net"
@@ -73,38 +76,74 @@ func (authenticator *Authenticator) revoke() {
 	common.CliExit(err)
 }
 
-func (authenticator *Authenticator) login() {
-	ready := make(chan string, 1)
-	defer close(ready)
-
-	port := findFreePort()
-
-	cfg := oauth2cli.Config{
-		OAuth2Config:           oAuth2Config(),
-		LocalServerReadyChan:   ready,
-		LocalServerBindAddress: strings.Split(fmt.Sprintf("127.0.0.1:%d", port), ","),
-		SuccessRedirectURL:     "https://strmprivacy.io/auth-success",
-		FailureRedirectURL:     "https://strmprivacy.io/auth-failure",
-		AuthCodeOptions: []oauth2.AuthCodeOption{
-			oauth2.SetAuthURLParam("prompt", "login"),
-		},
-	}
-
+func (authenticator *Authenticator) login(cmd *cobra.Command) {
 	ctx := context.Background()
 	eg, ctx := errgroup.WithContext(ctx)
 
-	eg.Go(startBrowserLoginFlow(ready, ctx))
-	eg.Go(authenticator.handleLogin(ctx, cfg))
+	baseOauthCliConfig := oauth2cli.Config{OAuth2Config: oAuth2Config()}
+
+	nonInteractiveTarget, _ := cmd.Flags().GetBool(nonInteractiveTargetHostFlag)
+	nonInteractiveRemote, _ := cmd.Flags().GetBool(nonInteractiveRemoteHostFlag)
+
+	if nonInteractiveTarget {
+		baseOauthCliConfig.NonInteractive = true
+		baseOauthCliConfig.NonInteractivePromptText = fmt.Sprintf("On a machine with access to a browser, use `%s auth login --%s` to retrieve a valid code:\n", common.RootCommandName, nonInteractiveRemoteHostFlag)
+		baseOauthCliConfig.OAuth2Config.RedirectURL = "http://localhost:10000"
+		eg.Go(authenticator.handleLogin(ctx, baseOauthCliConfig))
+	} else {
+		ready := make(chan string, 1)
+		defer close(ready)
+		port := findFreePort()
+
+		baseOauthCliConfig.LocalServerReadyChan = ready
+		baseOauthCliConfig.LocalServerBindAddress = strings.Split(fmt.Sprintf("127.0.0.1:%d", port), ",")
+		baseOauthCliConfig.SuccessRedirectURL = "https://strmprivacy.io/auth-success"
+		baseOauthCliConfig.FailureRedirectURL = "https://strmprivacy.io/auth-failure"
+		baseOauthCliConfig.AuthCodeOptions = []oauth2.AuthCodeOption{oauth2.SetAuthURLParam("prompt", "login")}
+
+		eg.Go(startBrowserLoginFlow(ready, ctx))
+
+		if nonInteractiveRemote {
+			eg.Go(authenticator.handleCode(ctx, baseOauthCliConfig))
+		} else {
+			eg.Go(authenticator.handleLogin(ctx, baseOauthCliConfig))
+		}
+	}
 
 	if err := eg.Wait(); err != nil {
 		common.CliExit(errors.New(fmt.Sprintf("Login failed, please check the logs for details at %v", common.LogFileName())))
 	}
 }
 
+func (authenticator *Authenticator) handleCode(ctx context.Context, cfg oauth2cli.Config) func() error {
+	return func() error {
+		codeAndConfig, err := oauth2cli.GetCodeAndConfig(ctx, cfg)
+		common.CliExit(err)
+
+		fmt.Println(fmt.Sprintf("\nUse the following text on the headless host to login:\n%v", *codeAndConfig))
+
+		return nil
+	}
+}
+
 func (authenticator *Authenticator) handleLogin(ctx context.Context, cfg oauth2cli.Config) func() error {
 	return func() error {
 		oAuthToken, err := oauth2cli.GetToken(ctx, cfg)
-		common.CliExit(err)
+		if err != nil {
+			rootCauseErr := getRootCause(err)
+
+			switch rootCauseErr.(type) {
+			case base64.CorruptInputError:
+				common.CliExit(errors.New(fmt.Sprintf("\nInvalid base64 encoded input. Make sure that the input you provide is retrieved using `%s auth login --%s`", common.RootCommandName, nonInteractiveRemoteHostFlag)))
+			case *json.SyntaxError:
+				common.CliExit(errors.New(fmt.Sprintf("\nMalformed JSON input. Make sure that the input you provide is retrieved using `%s auth login --%s`", common.RootCommandName, nonInteractiveRemoteHostFlag)))
+			case *oauth2.RetrieveError:
+				retrieveErr := (rootCauseErr).(*oauth2.RetrieveError)
+				common.CliExit(errors.New(fmt.Sprintf("\nUnable to exchange authorization code with token (HTTP Code: %v, Body: %v)", retrieveErr.Response.Status, string(retrieveErr.Body))))
+			default:
+				common.CliExit(fmt.Errorf("\n%w", rootCauseErr))
+			}
+		}
 
 		authenticator.populateValues(oauthTokenToStoredToken(*oAuthToken))
 		authenticator.storeLogin()
@@ -112,6 +151,16 @@ func (authenticator *Authenticator) handleLogin(ctx context.Context, cfg oauth2c
 		fmt.Println(fmt.Sprintf("\nYou are now logged in as [%v].", authenticator.Email))
 
 		return nil
+	}
+}
+
+func getRootCause(err error) error {
+	nextErr := errors.Unwrap(err)
+
+	if nextErr != nil {
+		return getRootCause(nextErr)
+	} else {
+		return err
 	}
 }
 
