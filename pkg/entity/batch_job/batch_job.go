@@ -97,7 +97,7 @@ func getBatchJobType(flags *pflag.FlagSet) string {
 	return batchJobType
 }
 
-func createEncryptionBatchJob(cmd *cobra.Command,batchJobData []byte, flags *pflag.FlagSet) *entities.BatchJobWrapper {
+func createEncryptionBatchJob(cmd *cobra.Command, batchJobData []byte, flags *pflag.FlagSet) *entities.BatchJobWrapper {
 	batchJob := &entities.BatchJob{}
 	err := jsonpb.Unmarshal(bytes.NewReader(batchJobData), batchJob)
 	if err != nil {

@@ -35,6 +35,7 @@ const ActivateCommandName = "activate"
 const ArchiveCommandName = "archive"
 const InviteCommandName = "invite"
 const ManageCommandName = "manage"
+const MonitorCommandName = "monitor"
 const UpdateCommandName = "update"
 
 const RecursiveFlagName = "recursive"

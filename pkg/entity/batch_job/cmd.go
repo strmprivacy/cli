@@ -8,7 +8,7 @@ import (
 const (
 	batchJobFileFlagName = "file"
 	batchJobTypeFlagName = "type"
-	encryptionType = "encryption"
+	encryptionType       = "encryption"
 	microAggregationType = "micro-aggregation"
 )
 

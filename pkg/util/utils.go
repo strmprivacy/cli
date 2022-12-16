@@ -2,17 +2,20 @@ package util
 
 import (
 	"fmt"
+	"github.com/bykof/gostradamus"
 	"github.com/lithammer/dedent"
 	"github.com/samber/lo"
 	"github.com/spf13/pflag"
 	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/types/known/timestamppb"
 	"os"
 	"path"
 	"path/filepath"
 	"strconv"
 	"strings"
 	"strmprivacy/strm/pkg/common"
+	"time"
 )
 
 func atoi(s string) int {
@@ -121,4 +124,10 @@ func LongDocsUsage(s string) string {
 func DedentTrim(s string) string {
 	return strings.TrimSpace(dedent.Dedent(s))
 
+}
+
+func IsoFormat(tz gostradamus.Timezone, t *timestamppb.Timestamp) string {
+	tt := time.Unix(t.Seconds, int64(t.Nanos))
+	n := gostradamus.DateTimeFromTime(tt)
+	return n.InTimezone(tz).IsoFormatTZ()
 }

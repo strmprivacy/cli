@@ -22,13 +22,14 @@ import (
 	"strmprivacy/strm/pkg/entity/kafka_user"
 	"strmprivacy/strm/pkg/entity/key_stream"
 	"strmprivacy/strm/pkg/entity/keylinks"
-	"strmprivacy/strm/pkg/entity/user"
 	"strmprivacy/strm/pkg/entity/organization"
 	"strmprivacy/strm/pkg/entity/policy"
 	"strmprivacy/strm/pkg/entity/project"
 	"strmprivacy/strm/pkg/entity/schema_code"
 	"strmprivacy/strm/pkg/entity/stream"
 	"strmprivacy/strm/pkg/entity/usage"
+	"strmprivacy/strm/pkg/entity/user"
+	"strmprivacy/strm/pkg/monitor"
 	"strmprivacy/strm/pkg/util"
 )
 
@@ -54,6 +55,7 @@ func SetupVerbs(rootCmd *cobra.Command) {
 	rootCmd.AddCommand(cmd.ArchiveCmd)
 	rootCmd.AddCommand(cmd.InviteCmd)
 	rootCmd.AddCommand(cmd.ManageCmd)
+	rootCmd.AddCommand(cmd.MonitorCmd)
 	rootCmd.AddCommand(cmd.UpdateCmd)
 }
 
@@ -79,6 +81,7 @@ func SetupServiceClients(accessToken *string) {
 	keylinks.SetupClient(clientConnection, ctx)
 	data_contract.SetupClient(clientConnection, ctx)
 	policy.SetupClient(clientConnection, ctx)
+	monitor.SetupClient(clientConnection, ctx)
 }
 
 func ConfigPath() string {
