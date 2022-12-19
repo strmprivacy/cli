@@ -73,7 +73,6 @@ func (authenticator *Authenticator) accessToken() *string {
 func (authenticator *Authenticator) revoke() {
 	filename := authenticator.getSaveFilename()
 	err := os.Remove(filename)
-	common.UserEmail = ""
 	common.CliExit(err)
 }
 
@@ -148,7 +147,6 @@ func (authenticator *Authenticator) handleLogin(ctx context.Context, cfg oauth2c
 
 		authenticator.populateValues(oauthTokenToStoredToken(*oAuthToken))
 		authenticator.storeLogin()
-		common.UserEmail = authenticator.Email
 
 		fmt.Println(fmt.Sprintf("\nYou are now logged in as [%v].", authenticator.Email))
 
