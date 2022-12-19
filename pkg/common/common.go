@@ -2,6 +2,7 @@ package common
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	log "github.com/sirupsen/logrus"
@@ -20,12 +21,53 @@ import (
 
 var RootCommandName = "strm"
 
-const activeProjectFilename = "active_project"
+const activeProjectFilename = "active_project.json"
 
 var ApiAuthHost string
 var ApiHost string
 
 var ProjectId string
+
+var UserEmail string
+
+var Projects = UsersProjects{}
+
+// UsersProjects is the printed json format of the different active projects
+// per past or currently logged-in user
+type UsersProjects struct {
+	Users []UserProject `json:"users"`
+}
+
+type UserProject struct {
+	Email         string `json:"email"`
+	ActiveProject string `json:"active_project"`
+}
+
+func (projects *UsersProjects) Init(projectId string) {
+	projects.Users = []UserProject{{Email: UserEmail, ActiveProject: projectId}}
+}
+
+func (projects *UsersProjects) GetCurrentProjectByEmail() string {
+	activeProject := ""
+	email := UserEmail
+	for _, user := range projects.Users {
+		if user.Email == email {
+			activeProject = user.ActiveProject
+		}
+	}
+	return activeProject
+}
+
+func (projects *UsersProjects) SetActiveProject(project string) {
+	email := UserEmail
+	// The `Project` var is already initialized when setActiveProject
+	// is called
+	for _, user := range projects.Users {
+		if user.Email == email {
+			user.ActiveProject = project
+		}
+	}
+}
 
 func SetupGrpc(host string, token *string) (*grpc.ClientConn, context.Context) {
 
@@ -124,7 +166,9 @@ func GetActiveProject() string {
 
 	bytes, err := os.ReadFile(activeProjectFilePath)
 	CliExit(err)
-	activeProject := string(bytes)
+	activeProjects := UsersProjects{}
+	_ = json.Unmarshal(bytes, &activeProjects)
+	activeProject := activeProjects.GetCurrentProjectByEmail()
 	log.Infoln("Current active project is: " + activeProject)
 	return activeProject
 }

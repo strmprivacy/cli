@@ -1,6 +1,7 @@
 package context
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	log "github.com/sirupsen/logrus"
@@ -11,7 +12,7 @@ import (
 	"strmprivacy/strm/pkg/entity/project"
 )
 
-const activeProjectFilename = "active_project"
+const activeProjectFilename = "active_projects.json"
 
 // ResolveProject resolves the project to use and makes its ID globally available.
 // The value passed through the flag takes precedence, then the value stored in the config dir, and finally
@@ -65,15 +66,21 @@ func initActiveProject() {
 		common.CliExit(errors.New("you do not have access to any projects; create a project first, or ask to be granted access to one"))
 	}
 	firstProjectName := projects[0].Name
+	common.Projects.Init(firstProjectName)
 	saveActiveProject(firstProjectName)
 }
 
 func saveActiveProject(projectName string) {
 	activeProjectFilepath := path.Join(common.ConfigPath, activeProjectFilename)
+	common.Projects.SetActiveProject(projectName)
+	projects, err := json.Marshal(common.Projects)
+	if err != nil {
+		common.CliExit(err)
+	}
 
-	err := os.WriteFile(
+	err = os.WriteFile(
 		activeProjectFilepath,
-		[]byte(projectName),
+		projects,
 		0644,
 	)
 	common.CliExit(err)
