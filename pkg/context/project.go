@@ -73,6 +73,7 @@ func initActiveProject() {
 
 func saveActiveProject(projectName string) {
 	activeProjectFilepath := path.Join(common.ConfigPath, activeProjectFilename)
+	user_project.LoadActiveProject()
 	user_project.Projects.SetActiveProject(projectName)
 	projects, err := json.Marshal(user_project.Projects)
 	if err != nil {

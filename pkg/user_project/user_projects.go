@@ -41,12 +41,10 @@ func (projects *UsersProjects) GetCurrentProjectByEmail() string {
 
 func (projects *UsersProjects) SetActiveProject(project string) {
 	email := GetUserEmail()
-	// The `Project` var is already initialized when setActiveProject
-	// is called
 	added := false
-	for _, user := range projects.Users {
+	for index, user := range projects.Users {
 		if user.Email == email {
-			user.ActiveProject = project
+			(*projects).Users[index].ActiveProject = project
 			added = true
 		}
 	}
@@ -69,15 +67,19 @@ func GetUserEmail() string {
 	return auth.Auth.Email
 }
 
-func GetActiveProject() string {
+func LoadActiveProject() {
 	activeProjectFilePath := path.Join(common.ConfigPath, ActiveProjectFilename)
 
 	bytes, err := os.ReadFile(activeProjectFilePath)
 	common.CliExit(err)
 	activeProjects := UsersProjects{}
 	_ = json.Unmarshal(bytes, &activeProjects)
-	activeProject := activeProjects.GetCurrentProjectByEmail()
 	Projects = activeProjects
-	log.Infoln("Current active user_project is: " + activeProject)
+}
+
+func GetActiveProject() string {
+	LoadActiveProject()
+	activeProject := Projects.GetCurrentProjectByEmail()
+	log.Infoln("Current active project is: " + activeProject)
 	return activeProject
 }
