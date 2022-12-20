@@ -23,10 +23,14 @@ func ResolveProject(f *pflag.FlagSet) {
 	activeProjectFilePath := path.Join(common.ConfigPath, activeProjectFilename)
 	projectFlagValue, _ := f.GetString(common.ProjectNameFlag)
 
-	if _, err := os.Stat(activeProjectFilePath); (os.IsNotExist(err) || user_project.GetActiveProject() == "") && projectFlagValue == "" {
+	if _, err := os.Stat(activeProjectFilePath); os.IsNotExist(err) && projectFlagValue == "" {
 		initActiveProject()
 		fmt.Println(fmt.Sprintf("Active project was not yet set, has been set to '%v'. You can set a project "+
 			"with 'strm context project <project-name>'\n", user_project.GetActiveProject()))
+	}
+
+	if user_project.GetActiveProject() == "" {
+		SetActiveProject(getFirstProject())
 	}
 
 	if projectFlagValue != "" {
@@ -50,6 +54,7 @@ func ResolveProject(f *pflag.FlagSet) {
 
 func SetActiveProject(projectName string) {
 	if len(project.GetProject(projectName).Projects) != 0 {
+		user_project.LoadActiveProject()
 		saveActiveProject(projectName)
 		message := "Active project set to: " + projectName
 		log.Infoln(message)
@@ -61,19 +66,22 @@ func SetActiveProject(projectName string) {
 	}
 }
 
-func initActiveProject() {
+func getFirstProject() string {
 	projects := project.ListProjects()
 	if len(projects) == 0 {
 		common.CliExit(errors.New("you do not have access to any projects; create a project first, or ask to be granted access to one"))
 	}
-	firstProjectName := projects[0].Name
+	return projects[0].Name
+}
+
+func initActiveProject() {
+	firstProjectName := getFirstProject()
 	user_project.Projects.Init(firstProjectName)
 	saveActiveProject(firstProjectName)
 }
 
 func saveActiveProject(projectName string) {
 	activeProjectFilepath := path.Join(common.ConfigPath, activeProjectFilename)
-	user_project.LoadActiveProject()
 	user_project.Projects.SetActiveProject(projectName)
 	projects, err := json.Marshal(user_project.Projects)
 	if err != nil {
