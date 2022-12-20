@@ -76,7 +76,6 @@ func getFirstProject() string {
 
 func initActiveProject() {
 	firstProjectName := getFirstProject()
-	user_project.Projects.Init(firstProjectName)
 	saveActiveProject(firstProjectName)
 }
 

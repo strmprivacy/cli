@@ -24,10 +24,6 @@ type UserProject struct {
 	ActiveProject string `json:"active_project"`
 }
 
-func (projects *UsersProjects) Init(projectId string) {
-	projects.Users = []UserProject{{Email: GetUserEmail(), ActiveProject: projectId}}
-}
-
 func (projects *UsersProjects) GetCurrentProjectByEmail() string {
 	activeProject := ""
 	email := GetUserEmail()
