@@ -29,7 +29,7 @@ func ResolveProject(f *pflag.FlagSet) {
 			"with 'strm context project <project-name>'\n", user_project.GetActiveProject()))
 	}
 
-	if user_project.GetActiveProject() == "" {
+	if user_project.GetActiveProject() == "" && projectFlagValue == "" {
 		SetActiveProject(getFirstProject())
 	}
 
