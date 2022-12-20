@@ -22,7 +22,7 @@ require (
 	github.com/spf13/cobra v1.6.1
 	github.com/spf13/pflag v1.0.5
 	github.com/spf13/viper v1.13.0
-	github.com/strmprivacy/api-definitions-go/v2 v2.0.0
+	github.com/strmprivacy/api-definitions-go/v2 v2.68.0
 	github.com/trietsch/oauth2cli v1.13.1-0.20221209222543-0e76591d5463
 	golang.org/x/oauth2 v0.3.0
 	golang.org/x/sync v0.1.0
@@ -32,8 +32,6 @@ require (
 	gopkg.in/natefinch/lumberjack.v2 v2.0.0
 	sigs.k8s.io/yaml v1.3.0
 )
-
-replace github.com/strmprivacy/api-definitions-go/v2 v2.0.0 => ../api-definitions/lang/go/src
 
 require (
 	github.com/chzyer/readline v0.0.0-20180603132655-2972be24d48e // indirect
