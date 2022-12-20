@@ -54,7 +54,6 @@ func ResolveProject(f *pflag.FlagSet) {
 
 func SetActiveProject(projectName string) {
 	if len(project.GetProject(projectName).Projects) != 0 {
-		user_project.LoadActiveProject()
 		saveActiveProject(projectName)
 		message := "Active project set to: " + projectName
 		log.Infoln(message)
