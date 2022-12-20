@@ -126,7 +126,7 @@ var noBordersStyle = table.Style{
 		BottomLeft:       " ",
 		BottomRight:      " ",
 		BottomSeparator:  " ",
-		EmptySeparator:   text.RepeatAndTrim(" ", text.RuneCount(" ")),
+		EmptySeparator:   text.RepeatAndTrim(" ", text.RuneWidthWithoutEscSequences(" ")),
 		Left:             " ",
 		LeftSeparator:    " ",
 		MiddleHorizontal: " ",

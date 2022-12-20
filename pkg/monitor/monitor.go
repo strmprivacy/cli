@@ -25,7 +25,6 @@ func SetupClient(clientConnection *grpc.ClientConn, ctx context.Context) {
 }
 
 func run(cmd *cobra.Command, entityType monitoring.EntityState_EntityType, args []string) {
-
 	flags := cmd.Flags()
 	entityName := ""
 	if len(args) > 0 {
@@ -56,9 +55,9 @@ func monitorGetLatest(ref *monitoring.EntityState_Ref, mask *field_mask.FieldMas
 		Ref:            ref,
 		ProjectionMask: mask,
 	}
-	_, err := client.GetLatestEntityStates(apiContext, request)
+	resp, err := client.GetLatestEntityStates(apiContext, request)
 	common.CliExit(err)
-	// TODO create printer and show response
+	printer.Print(resp)
 }
 
 /*
@@ -74,27 +73,20 @@ func monitorFollow(ref *monitoring.EntityState_Ref, mask *field_mask.FieldMask) 
 
 	done := make(chan bool)
 
-	// TODO create printer
 	go func() {
 		for {
 			resp, err := stream.Recv()
 			if err == io.EOF {
+				fmt.Fprintln(os.Stderr, "No more data to be received, closing connection.")
 				done <- true //close(done)
 				return
 			}
 			if err != nil {
-				fmt.Fprintf(os.Stderr, "can not receive %v", err)
 				done <- true //close(done)
+				common.CliExit(err)
 				return
 			}
-			fmt.Printf("%s %v %s %s %s %s\n",
-				util.IsoFormat(tz, resp.State.StateTime),
-				resp.State.Ref.Type,
-				resp.State.Ref.Name,
-				resp.State.Status,
-				resp.State.ResourceType,
-				resp.State.Message,
-			)
+			printer.Print(resp)
 		}
 	}()
 	<-done

@@ -46,6 +46,15 @@ func GetBoolAndErr(f *pflag.FlagSet, k string) bool {
 	common.CliExit(err)
 	return v
 }
+func GetBool(f *pflag.FlagSet, k string) bool {
+	v, err := f.GetBool(k)
+
+	if err != nil {
+		return false
+	} else {
+		return v
+	}
+}
 func GetInt64AndErr(f *pflag.FlagSet, k string) int64 {
 	v, err := f.GetInt64(k)
 	common.CliExit(err)
