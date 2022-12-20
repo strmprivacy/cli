@@ -19,4 +19,5 @@ func init() {
 	MonitorCmd.AddCommand(monitor.Command(monitoring.EntityState_BATCH_EXPORTER))
 	MonitorCmd.AddCommand(monitor.Command(monitoring.EntityState_BATCH_JOB))
 	MonitorCmd.AddCommand(monitor.Command(monitoring.EntityState_STREAM))
+	MonitorCmd.AddCommand(monitor.Command(0))
 }
