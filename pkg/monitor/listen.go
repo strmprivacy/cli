@@ -52,11 +52,11 @@ func run(cmd *cobra.Command, entityType monitoring.EntityState_EntityType, args 
 Call CRS to get the latest entity states of all entities defined by ref.
 */
 func monitorGetLatest(ref *monitoring.EntityState_Ref, mask *field_mask.FieldMask) {
-	request := &monitoring.GetLatestEntityStateRequest{
+	request := &monitoring.GetLatestEntityStatesRequest{
 		Ref:            ref,
 		ProjectionMask: mask,
 	}
-	_, err := client.GetLatestEntityState(apiContext, request)
+	_, err := client.GetLatestEntityStates(apiContext, request)
 	common.CliExit(err)
 	// TODO create printer and show response
 }

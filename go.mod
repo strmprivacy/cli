@@ -26,14 +26,14 @@ require (
 	github.com/trietsch/oauth2cli v1.13.1-0.20221209222543-0e76591d5463
 	golang.org/x/oauth2 v0.3.0
 	golang.org/x/sync v0.1.0
+	google.golang.org/genproto v0.0.0-20220519153652-3a47de7e79bd
 	google.golang.org/grpc v1.50.1
 	google.golang.org/protobuf v1.28.1
 	gopkg.in/natefinch/lumberjack.v2 v2.0.0
 	sigs.k8s.io/yaml v1.3.0
 )
-replace (
-	github.com/strmprivacy/api-definitions-go/v2 v2.0.0 => ../api-definitions/lang/go/src
-)
+
+replace github.com/strmprivacy/api-definitions-go/v2 v2.0.0 => ../api-definitions/lang/go/src
 
 require (
 	github.com/chzyer/readline v0.0.0-20180603132655-2972be24d48e // indirect
@@ -77,7 +77,6 @@ require (
 	golang.org/x/sys v0.3.0 // indirect
 	golang.org/x/text v0.5.0 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
-	google.golang.org/genproto v0.0.0-20220519153652-3a47de7e79bd // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
