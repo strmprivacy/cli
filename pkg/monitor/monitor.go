@@ -47,9 +47,6 @@ func run(cmd *cobra.Command, entityType monitoring.EntityState_EntityType, args 
 	}
 }
 
-/*
-Call CRS to get the latest entity states of all entities defined by ref.
-*/
 func monitorGetLatest(ref *monitoring.EntityState_Ref, mask *field_mask.FieldMask) {
 	request := &monitoring.GetLatestEntityStatesRequest{
 		Ref:            ref,
@@ -60,9 +57,6 @@ func monitorGetLatest(ref *monitoring.EntityState_Ref, mask *field_mask.FieldMas
 	printer.Print(resp)
 }
 
-/*
-Call CRS to get a stream of entity states of all entities defined by ref.
-*/
 func monitorFollow(ref *monitoring.EntityState_Ref, mask *field_mask.FieldMask) {
 	in := &monitoring.GetEntityStateRequest{
 		Ref:            ref,
