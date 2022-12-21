@@ -1,4 +1,4 @@
-package monitor
+package logs
 
 import (
 	"context"
@@ -24,28 +24,23 @@ func SetupClient(clientConnection *grpc.ClientConn, ctx context.Context) {
 
 func run(cmd *cobra.Command, entityType monitoring.EntityState_EntityType, args []string) {
 	flags := cmd.Flags()
-	entityName := ""
-	if len(args) > 0 {
-		entityName = args[0]
-	}
-	projectId := project.GetProjectId(cmd)
 	follow := util.GetBoolAndErr(flags, followFlag)
 	entityRef := &monitoring.EntityState_Ref{
-		ProjectId: projectId,
+		ProjectId: project.GetProjectId(cmd),
 		Type:      entityType,
-		Name:      entityName,
+		Name:      args[0],
 	}
 	mask := &field_mask.FieldMask{
-		Paths: []string{"state_time", "ref", "status", "message", "resource_type"},
+		Paths: []string{"logs"},
 	}
 	if follow {
-		monitorFollow(entityRef, mask)
+		logsFollow(entityRef, mask)
 	} else {
-		monitorGetLatest(entityRef, mask)
+		logsGetLatest(entityRef, mask)
 	}
 }
 
-func monitorGetLatest(ref *monitoring.EntityState_Ref, mask *field_mask.FieldMask) {
+func logsGetLatest(ref *monitoring.EntityState_Ref, mask *field_mask.FieldMask) {
 	request := &monitoring.GetLatestEntityStatesRequest{
 		Ref:            ref,
 		ProjectionMask: mask,
@@ -55,7 +50,7 @@ func monitorGetLatest(ref *monitoring.EntityState_Ref, mask *field_mask.FieldMas
 	printer.Print(resp)
 }
 
-func monitorFollow(ref *monitoring.EntityState_Ref, mask *field_mask.FieldMask) {
+func logsFollow(ref *monitoring.EntityState_Ref, mask *field_mask.FieldMask) {
 	in := &monitoring.GetEntityStateRequest{
 		Ref:            ref,
 		ProjectionMask: mask,

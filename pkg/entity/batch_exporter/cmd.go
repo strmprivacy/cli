@@ -47,7 +47,7 @@ func DeleteCmd() *cobra.Command {
 		},
 		Args:              cobra.MinimumNArgs(1), // the stream names
 		DisableAutoGenTag: true,
-		ValidArgsFunction: namesCompletion,
+		ValidArgsFunction: NamesCompletion,
 	}
 
 	return batchExporter
@@ -65,7 +65,7 @@ func GetCmd() *cobra.Command {
 		},
 		Args:              cobra.ExactArgs(1), // the stream name
 		DisableAutoGenTag: true,
-		ValidArgsFunction: namesCompletion,
+		ValidArgsFunction: NamesCompletion,
 	}
 }
 

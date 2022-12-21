@@ -3,6 +3,7 @@ package monitor
 import (
 	"errors"
 	"fmt"
+	"github.com/bykof/gostradamus"
 	"github.com/jedib0t/go-pretty/v6/table"
 	"github.com/spf13/cobra"
 	"github.com/strmprivacy/api-definitions-go/v2/api/monitoring/v1"
@@ -11,6 +12,7 @@ import (
 )
 
 var printer util.Printer
+var tz = gostradamus.Local()
 
 func configurePrinter(command *cobra.Command) util.Printer {
 	outputFormat := util.GetStringAndErr(command.Flags(), common.OutputFormatFlag)

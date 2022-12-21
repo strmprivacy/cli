@@ -26,7 +26,7 @@ func DeleteCmd() *cobra.Command {
 			}
 		},
 		Args:              cobra.MinimumNArgs(1),
-		ValidArgsFunction: namesCompletion,
+		ValidArgsFunction: NamesCompletion,
 	}
 
 	return batchJob
@@ -45,7 +45,7 @@ func GetCmd() *cobra.Command {
 			get(&args[0], cmd)
 		},
 		Args:              cobra.ExactArgs(1),
-		ValidArgsFunction: namesCompletion,
+		ValidArgsFunction: NamesCompletion,
 	}
 }
 func ListCmd() *cobra.Command {

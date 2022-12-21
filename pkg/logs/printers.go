@@ -3,7 +3,6 @@ package logs
 import (
 	"errors"
 	"fmt"
-	"github.com/jedib0t/go-pretty/v6/table"
 	"github.com/spf13/cobra"
 	"github.com/strmprivacy/api-definitions-go/v2/api/monitoring/v1"
 	"strmprivacy/strm/pkg/common"
@@ -17,18 +16,15 @@ func configurePrinter(command *cobra.Command) util.Printer {
 	follow := util.GetBool(command.Flags(), followFlag)
 
 	var p util.Printer
-	var allowedValues string
 
 	if follow {
 		p = availablePrinters()[outputFormat+command.Parent().Name()+followFlag]
-		allowedValues = common.MonitorFollowOutputFormatFlagAllowedValuesText
 	} else {
 		p = availablePrinters()[outputFormat+command.Parent().Name()]
-		allowedValues = common.MonitorOutputFormatFlagAllowedValuesText
 	}
 
 	if p == nil {
-		common.CliExit(errors.New(fmt.Sprintf("Output format '%v' is not supported. Allowed values: %v", outputFormat, allowedValues)))
+		common.CliExit(errors.New(fmt.Sprintf("Output format '%v' is not supported. Allowed values: %v", outputFormat, common.LogsOutputFormatFlagAllowedValuesText)))
 	}
 
 	return p
@@ -36,74 +32,29 @@ func configurePrinter(command *cobra.Command) util.Printer {
 
 func availablePrinters() map[string]util.Printer {
 	return map[string]util.Printer{
-		common.OutputFormatTable + common.MonitorCommandName:   monitorLatestTablePrinter{},
-		common.OutputFormatPlain + common.MonitorCommandName:   monitorLatestPlainPrinter{},
-		common.OutputFormatJson + common.MonitorCommandName:    util.ProtoMessageJsonPrettyPrinter{},
-		common.OutputFormatJsonRaw + common.MonitorCommandName: util.ProtoMessageJsonRawPrinter{},
-
-		common.OutputFormatPlain + common.MonitorCommandName + followFlag:   monitorFollowPlainPrinter{},
-		common.OutputFormatJson + common.MonitorCommandName + followFlag:    util.ProtoMessageJsonPrettyPrinter{},
-		common.OutputFormatJsonRaw + common.MonitorCommandName + followFlag: util.ProtoMessageJsonRawPrinter{},
+		common.OutputFormatPlain + common.LogsCommandName:              logsLatestPlainPrinter{},
+		common.OutputFormatPlain + common.LogsCommandName + followFlag: logsFollowPlainPrinter{},
 	}
 }
 
-type monitorLatestTablePrinter struct{}
-type monitorLatestPlainPrinter struct{}
-type monitorFollowPlainPrinter struct{}
+type logsLatestPlainPrinter struct{}
+type logsFollowPlainPrinter struct{}
 
-func (p monitorLatestTablePrinter) Print(data interface{}) {
-	response, _ := (data).(*monitoring.GetLatestEntityStatesResponse)
-	printTable(response.State)
-}
-func (p monitorLatestPlainPrinter) Print(data interface{}) {
+func (p logsLatestPlainPrinter) Print(data interface{}) {
 	response, _ := (data).(*monitoring.GetLatestEntityStatesResponse)
 
 	for _, state := range response.State {
-		fmt.Printf("%s %v %s %s %s %s\n",
-			util.IsoFormat(tz, state.StateTime),
-			state.Ref.Type,
-			state.Ref.Name,
-			state.Status,
-			state.ResourceType,
-			state.Message,
-		)
+		printLogEntries(state)
 	}
 }
 
-func (p monitorFollowPlainPrinter) Print(data interface{}) {
+func (p logsFollowPlainPrinter) Print(data interface{}) {
 	resp, _ := (data).(*monitoring.GetEntityStateResponse)
-	fmt.Printf("%s %v %s %s %s %s\n",
-		util.IsoFormat(tz, resp.State.StateTime),
-		resp.State.Ref.Type,
-		resp.State.Ref.Name,
-		resp.State.Status,
-		resp.State.ResourceType,
-		resp.State.Message,
-	)
+	printLogEntries(resp.State)
 }
 
-func printTable(entityStates []*monitoring.EntityState) {
-	rows := make([]table.Row, 0, len(entityStates))
-
-	for _, state := range entityStates {
-		row := table.Row{
-			state.StateTime.AsTime(),
-			state.Ref.Type.String(),
-			state.ResourceType.String(),
-			state.Ref.Name,
-			state.Status.String(),
-			state.Message,
-		}
-		rows = append(rows, row)
+func printLogEntries(state *monitoring.EntityState) {
+	for _, logLine := range state.Logs {
+		fmt.Printf("%s\n", logLine)
 	}
-
-	headers := table.Row{
-		"Timestamp",
-		"Entity Type",
-		"Resource Type",
-		"Name",
-		"Status",
-		"Message",
-	}
-	util.RenderTable(headers, rows)
 }

@@ -3,14 +3,12 @@ package usage
 import (
 	"errors"
 	"fmt"
-	"github.com/bykof/gostradamus"
 	"github.com/jedib0t/go-pretty/v6/table"
 	"github.com/spf13/cobra"
 	"github.com/strmprivacy/api-definitions-go/v2/api/usage/v1"
 	"math"
 	"strmprivacy/strm/pkg/common"
 	"strmprivacy/strm/pkg/util"
-	"time"
 )
 
 var printer util.Printer
@@ -54,7 +52,7 @@ func (p getCsvPrinter) Print(data interface{}) {
 		rate := change / windowDuration.Seconds()
 
 		rows = append(rows, table.Row{
-			isoFormat(window.StartTime.AsTime()),
+			util.IsoFormat(tz, window.StartTime),
 			fmt.Sprintf("%d", windowCount),
 			fmt.Sprintf("%.0f", windowDuration.Seconds()),
 			fmt.Sprintf("%v", change),
@@ -72,9 +70,4 @@ func (p getCsvPrinter) Print(data interface{}) {
 		},
 		rows,
 	)
-}
-
-func isoFormat(t time.Time) string {
-	n := gostradamus.DateTimeFromTime(t)
-	return n.InTimezone(tz).IsoFormatTZ()
 }

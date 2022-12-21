@@ -138,7 +138,7 @@ func getDataConnectorNames() []string {
 	return names
 }
 
-func namesCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
+func NamesCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
 	if len(args) != 0 && strings.Fields(cmd.Short)[0] != "Delete" {
 		// this one means you don't get multiple completion suggestions for one stream if it's not a delete call
 		return nil, cobra.ShellCompDirectiveNoFileComp

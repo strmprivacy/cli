@@ -28,6 +28,7 @@ import (
 	"strmprivacy/strm/pkg/entity/stream"
 	"strmprivacy/strm/pkg/entity/usage"
 	"strmprivacy/strm/pkg/entity/user"
+	"strmprivacy/strm/pkg/logs"
 	"strmprivacy/strm/pkg/monitor"
 )
 
@@ -54,6 +55,7 @@ func SetupVerbs(rootCmd *cobra.Command) {
 	rootCmd.AddCommand(cmd.InviteCmd)
 	rootCmd.AddCommand(cmd.ManageCmd)
 	rootCmd.AddCommand(cmd.MonitorCmd)
+	rootCmd.AddCommand(cmd.LogsCmd)
 	rootCmd.AddCommand(cmd.UpdateCmd)
 }
 
@@ -80,6 +82,7 @@ func SetupServiceClients(accessToken *string) {
 	data_contract.SetupClient(clientConnection, ctx)
 	policy.SetupClient(clientConnection, ctx)
 	monitor.SetupClient(clientConnection, ctx)
+	logs.SetupClient(clientConnection, ctx)
 }
 
 func InitializeConfig(cmd *cobra.Command) error {

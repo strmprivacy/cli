@@ -6,6 +6,7 @@ import (
 	"github.com/lithammer/dedent"
 	"github.com/samber/lo"
 	"github.com/spf13/pflag"
+	"github.com/strmprivacy/api-definitions-go/v2/api/monitoring/v1"
 	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/timestamppb"
@@ -139,4 +140,8 @@ func IsoFormat(tz gostradamus.Timezone, t *timestamppb.Timestamp) string {
 	tt := time.Unix(t.Seconds, int64(t.Nanos))
 	n := gostradamus.DateTimeFromTime(tt)
 	return n.InTimezone(tz).IsoFormatTZ()
+}
+
+func NormalizeEntityStateTypeName(entityType monitoring.EntityState_EntityType) string {
+	return strings.ReplaceAll(strings.ToLower(entityType.String()), "_", "-")
 }

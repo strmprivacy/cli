@@ -79,3 +79,6 @@ var MonitorFollowOutputFormatFlagAllowedValues = []string{OutputFormatPlain, Out
 var MonitorFollowOutputFormatFlagAllowedValuesText = strings.Join(MonitorFollowOutputFormatFlagAllowedValues, ", ")
 var MonitorOutputFormatFlagAllowedValues = []string{OutputFormatTable, OutputFormatPlain, OutputFormatJson, OutputFormatJsonRaw}
 var MonitorOutputFormatFlagAllowedValuesText = strings.Join(MonitorOutputFormatFlagAllowedValues, ", ")
+
+var LogsOutputFormatFlagAllowedValues = []string{OutputFormatPlain}
+var LogsOutputFormatFlagAllowedValuesText = strings.Join(LogsOutputFormatFlagAllowedValues, ", ")
