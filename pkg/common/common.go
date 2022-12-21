@@ -151,7 +151,7 @@ func LogFileName() string {
 			MaxSize:    1, // MB
 			MaxBackups: 0,
 		})
-		log.Info(fmt.Sprintf("Config path is set to: %v", ConfigPath))
+		log.Info(fmt.Sprintf("Config path is set to: %v", ConfigPath()))
 	}
 
 	return logFileName
