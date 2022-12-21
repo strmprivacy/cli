@@ -1,6 +1,7 @@
 package context
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	log "github.com/sirupsen/logrus"
@@ -9,9 +10,10 @@ import (
 	"path"
 	"strmprivacy/strm/pkg/common"
 	"strmprivacy/strm/pkg/entity/project"
+	"strmprivacy/strm/pkg/user_project"
 )
 
-const activeProjectFilename = "active_project"
+const activeProjectFilename = "active_projects.json"
 
 // ResolveProject resolves the project to use and makes its ID globally available.
 // The value passed through the flag takes precedence, then the value stored in the config dir, and finally
@@ -21,10 +23,14 @@ func ResolveProject(f *pflag.FlagSet) {
 	activeProjectFilePath := path.Join(common.ConfigPath, activeProjectFilename)
 	projectFlagValue, _ := f.GetString(common.ProjectNameFlag)
 
-	if _, err := os.Stat(activeProjectFilePath); (os.IsNotExist(err) || common.GetActiveProject() == "") && projectFlagValue == "" {
+	if _, err := os.Stat(activeProjectFilePath); os.IsNotExist(err) && projectFlagValue == "" {
 		initActiveProject()
 		fmt.Println(fmt.Sprintf("Active project was not yet set, has been set to '%v'. You can set a project "+
-			"with 'strm context project <project-name>'\n", common.GetActiveProject()))
+			"with 'strm context project <project-name>'\n", user_project.GetActiveProject()))
+	}
+
+	if user_project.GetActiveProject() == "" && projectFlagValue == "" {
+		SetActiveProject(getFirstProject())
 	}
 
 	if projectFlagValue != "" {
@@ -35,12 +41,12 @@ func ResolveProject(f *pflag.FlagSet) {
 		}
 		common.ProjectId = resolvedProject.Projects[0].Id
 	} else {
-		activeProject := common.GetActiveProject()
+		activeProject := user_project.GetActiveProject()
 		resolvedProject := project.GetProject(activeProject)
 		if len(resolvedProject.Projects) == 0 {
 			initActiveProject()
 			common.CliExit(errors.New(fmt.Sprintf("Active project '%v' does not exist, or you do not have access "+
-				"to it. The following project has been set instead: %v", activeProject, common.GetActiveProject())))
+				"to it. The following project has been set instead: %v", activeProject, user_project.GetActiveProject())))
 		}
 		common.ProjectId = resolvedProject.Projects[0].Id
 	}
@@ -59,21 +65,30 @@ func SetActiveProject(projectName string) {
 	}
 }
 
-func initActiveProject() {
+func getFirstProject() string {
 	projects := project.ListProjects()
 	if len(projects) == 0 {
 		common.CliExit(errors.New("you do not have access to any projects; create a project first, or ask to be granted access to one"))
 	}
-	firstProjectName := projects[0].Name
+	return projects[0].Name
+}
+
+func initActiveProject() {
+	firstProjectName := getFirstProject()
 	saveActiveProject(firstProjectName)
 }
 
 func saveActiveProject(projectName string) {
 	activeProjectFilepath := path.Join(common.ConfigPath, activeProjectFilename)
+	user_project.Projects.SetActiveProject(projectName)
+	projects, err := json.Marshal(user_project.Projects)
+	if err != nil {
+		common.CliExit(err)
+	}
 
-	err := os.WriteFile(
+	err = os.WriteFile(
 		activeProjectFilepath,
-		[]byte(projectName),
+		projects,
 		0644,
 	)
 	common.CliExit(err)
