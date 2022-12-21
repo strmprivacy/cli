@@ -38,5 +38,21 @@ func Command(entityType monitoring.EntityState_EntityType) *cobra.Command {
 	flags := cmd.Flags()
 	flags.Bool(followFlag, false, "continuously monitor these events")
 
+	//FIXME somehow this breaks all autocompletion.
+	//err := cmd.RegisterFlagCompletionFunc(common.OutputFormatFlag, func(command *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	//	follow := util.GetBool(command.Flags(), followFlag)
+	//	var allowedValues []string
+	//
+	//	if follow {
+	//		allowedValues = common.MonitorFollowOutputFormatFlagAllowedValues
+	//	} else {
+	//		allowedValues = common.MonitorOutputFormatFlagAllowedValues
+	//	}
+	//
+	//	return allowedValues, cobra.ShellCompDirectiveNoFileComp
+	//})
+	//
+	//common.CliExit(err)
+
 	return cmd
 }

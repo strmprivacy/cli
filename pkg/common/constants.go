@@ -73,3 +73,8 @@ var AccountOutputFormatFlagAllowedValuesText = strings.Join(AccountOutputFormatF
 
 var ProjectOutputFormatFlagAllowedValues = []string{OutputFormatPlain}
 var ProjectOutputFormatFlagAllowedValuesText = strings.Join(ProjectOutputFormatFlagAllowedValues, ", ")
+
+var MonitorFollowOutputFormatFlagAllowedValues = []string{OutputFormatPlain, OutputFormatJson, OutputFormatJsonRaw}
+var MonitorFollowOutputFormatFlagAllowedValuesText = strings.Join(MonitorFollowOutputFormatFlagAllowedValues, ", ")
+var MonitorOutputFormatFlagAllowedValues = []string{OutputFormatTable, OutputFormatPlain, OutputFormatJson, OutputFormatJsonRaw}
+var MonitorOutputFormatFlagAllowedValuesText = strings.Join(MonitorOutputFormatFlagAllowedValues, ", ")

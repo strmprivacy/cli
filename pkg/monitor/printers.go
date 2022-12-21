@@ -17,15 +17,18 @@ func configurePrinter(command *cobra.Command) util.Printer {
 	follow := util.GetBool(command.Flags(), followFlag)
 
 	var p util.Printer
+	var allowedValues string
 
 	if follow {
 		p = availablePrinters()[outputFormat+command.Parent().Name()+followFlag]
+		allowedValues = common.MonitorFollowOutputFormatFlagAllowedValuesText
 	} else {
 		p = availablePrinters()[outputFormat+command.Parent().Name()]
+		allowedValues = common.MonitorOutputFormatFlagAllowedValuesText
 	}
 
 	if p == nil {
-		common.CliExit(errors.New(fmt.Sprintf("Output format '%v' is not supported. Allowed values: %v", outputFormat, common.OutputFormatFlagAllowedValuesText)))
+		common.CliExit(errors.New(fmt.Sprintf("Output format '%v' is not supported. Allowed values: %v", outputFormat, allowedValues)))
 	}
 
 	return p
