@@ -1,3 +1,10 @@
+# [3.5.0](https://github.com/strmprivacy/cli/compare/v3.4.0...v3.5.0) (2022-12-21)
+
+
+### Features
+
+* **strm-1883:** change active project configuration to account level ([#134](https://github.com/strmprivacy/cli/issues/134)) ([9193117](https://github.com/strmprivacy/cli/commit/9193117e4b8dec75963f31a48f407a8790105362))
+
 # [3.4.0](https://github.com/strmprivacy/cli/compare/v3.3.0...v3.4.0) (2022-12-12)
 
 
