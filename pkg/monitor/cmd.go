@@ -2,6 +2,7 @@ package monitor
 
 import (
 	"github.com/spf13/cobra"
+	"github.com/spf13/pflag"
 	"github.com/strmprivacy/api-definitions-go/v2/api/monitoring/v1"
 	"strings"
 	"strmprivacy/strm/pkg/util"
@@ -10,6 +11,7 @@ import (
 var longDoc = util.LongDocsUsage(``)
 
 const followFlag = "follow"
+const followFlagWatchAlias = "watch"
 
 func Command(entityType monitoring.EntityState_EntityType) *cobra.Command {
 	typeLowercase := "all"
@@ -54,5 +56,16 @@ func Command(entityType monitoring.EntityState_EntityType) *cobra.Command {
 	//
 	//common.CliExit(err)
 
+	flags.Bool(followFlagWatchAlias, false, "continuously monitor these events")
+	cmd.Flags().SetNormalizeFunc(normalizeWatch)
 	return cmd
+}
+
+func normalizeWatch(f *pflag.FlagSet, name string) pflag.NormalizedName {
+	switch name {
+	case followFlagWatchAlias:
+		name = followFlag
+		break
+	}
+	return pflag.NormalizedName(name)
 }
