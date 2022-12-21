@@ -17,7 +17,7 @@ func Command(entityType monitoring.EntityState_EntityType) *cobra.Command {
 	short := "monitor all entity types"
 	if entityType != 0 {
 		typeLowercase = strings.ReplaceAll(strings.ToLower(entityType.String()), "_", "-")
-		maxArgs = 0
+		maxArgs = 1
 		short = "monitor entities of type " + typeLowercase
 	}
 

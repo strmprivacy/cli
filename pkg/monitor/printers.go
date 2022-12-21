@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"github.com/jedib0t/go-pretty/v6/table"
 	"github.com/spf13/cobra"
-	v1 "github.com/strmprivacy/api-definitions-go/v2/api/entities/v1"
 	"github.com/strmprivacy/api-definitions-go/v2/api/monitoring/v1"
 	"strmprivacy/strm/pkg/common"
 	"strmprivacy/strm/pkg/util"
@@ -33,25 +32,51 @@ func configurePrinter(command *cobra.Command) util.Printer {
 }
 
 func availablePrinters() map[string]util.Printer {
-	return util.MergePrinterMaps(
-		map[string]util.Printer{
-			common.OutputFormatTable + common.MonitorCommandName:              monitorLatestTablePrinter{},
-			common.OutputFormatTable + common.MonitorCommandName + followFlag: monitorFollowTablePrinter{},
-		},
-	)
+	return map[string]util.Printer{
+		common.OutputFormatTable + common.MonitorCommandName:   monitorLatestTablePrinter{},
+		common.OutputFormatPlain + common.MonitorCommandName:   monitorLatestPlainPrinter{},
+		common.OutputFormatJson + common.MonitorCommandName:    util.ProtoMessageJsonPrettyPrinter{},
+		common.OutputFormatJsonRaw + common.MonitorCommandName: util.ProtoMessageJsonRawPrinter{},
+
+		common.OutputFormatPlain + common.MonitorCommandName + followFlag:   monitorFollowPlainPrinter{},
+		common.OutputFormatJson + common.MonitorCommandName + followFlag:    util.ProtoMessageJsonPrettyPrinter{},
+		common.OutputFormatJsonRaw + common.MonitorCommandName + followFlag: util.ProtoMessageJsonRawPrinter{},
+	}
 }
 
 type monitorLatestTablePrinter struct{}
-type monitorFollowTablePrinter struct{}
+type monitorLatestPlainPrinter struct{}
+type monitorFollowPlainPrinter struct{}
 
 func (p monitorLatestTablePrinter) Print(data interface{}) {
 	response, _ := (data).(*monitoring.GetLatestEntityStatesResponse)
 	printTable(response.State)
 }
-
-func (p monitorFollowTablePrinter) Print(data interface{}) {
+func (p monitorLatestPlainPrinter) Print(data interface{}) {
 	response, _ := (data).(*monitoring.GetLatestEntityStatesResponse)
-	printTable(response.State)
+
+	for _, state := range response.State {
+		fmt.Printf("%s %v %s %s %s %s\n",
+			util.IsoFormat(tz, state.StateTime),
+			state.Ref.Type,
+			state.Ref.Name,
+			state.Status,
+			state.ResourceType,
+			state.Message,
+		)
+	}
+}
+
+func (p monitorFollowPlainPrinter) Print(data interface{}) {
+	resp, _ := (data).(*monitoring.GetEntityStateResponse)
+	fmt.Printf("%s %v %s %s %s %s\n",
+		util.IsoFormat(tz, resp.State.StateTime),
+		resp.State.Ref.Type,
+		resp.State.Ref.Name,
+		resp.State.Status,
+		resp.State.ResourceType,
+		resp.State.Message,
+	)
 }
 
 func printTable(entityStates []*monitoring.EntityState) {
@@ -78,19 +103,4 @@ func printTable(entityStates []*monitoring.EntityState) {
 		"Message",
 	}
 	util.RenderTable(headers, rows)
-}
-
-func printPlain(streamTreeArray []*v1.StreamTree) {
-	var names string
-	lastIndex := len(streamTreeArray) - 1
-
-	for index, stream := range streamTreeArray {
-		names = names + stream.Stream.Ref.Name
-
-		if index != lastIndex {
-			names = names + "\n"
-		}
-	}
-
-	util.RenderPlain(names)
 }
