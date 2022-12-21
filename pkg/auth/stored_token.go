@@ -74,7 +74,7 @@ func (authenticator *Authenticator) getSaveFilename() string {
 		u, err := url.Parse(common.ApiAuthHost)
 		common.CliExit(err)
 		filename := fmt.Sprintf("%v-%s.json", StrmCredsFilePrefix, u.Hostname())
-		return path.Join(common.ConfigPath, filename)
+		return path.Join(common.ConfigPath(), filename)
 	} else {
 		return TokenFile
 	}

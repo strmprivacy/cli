@@ -1,10 +1,12 @@
 package monitor
 
 import (
+	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 	"github.com/strmprivacy/api-definitions-go/v2/api/monitoring/v1"
 	"strings"
+	"strmprivacy/strm/pkg/common"
 	"strmprivacy/strm/pkg/util"
 )
 
@@ -36,28 +38,38 @@ func Command(entityType monitoring.EntityState_EntityType) *cobra.Command {
 		},
 		Args: cobra.MaximumNArgs(maxArgs), // the optional followFlag of the entity
 	}
+	log.Infoln("Hello")
 
 	flags := cmd.Flags()
-	flags.Bool(followFlag, false, "continuously monitor these events")
+	//flags.StringP(
+	//	common.OutputFormatFlag,
+	//	common.OutputFormatFlagShort,
+	//	common.OutputFormatTable,
+	//	fmt.Sprintf("configuration output format [%v]", common.ConfigOutputFormatFlagAllowedValues),
+	//)
 
-	//FIXME somehow this breaks all autocompletion.
 	//err := cmd.RegisterFlagCompletionFunc(common.OutputFormatFlag, func(command *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
-	//	follow := util.GetBool(command.Flags(), followFlag)
-	//	var allowedValues []string
+	//	//log.Infoln(fmt.Sprintf("Registering flag completion for: %v", cmd.CommandPath()))
+	//	//
+	//	//follow := util.GetBool(command.Flags(), followFlag)
+	//	//log.Traceln(fmt.Sprintf("%v should follow: %v", cmd.CommandPath(), follow))
+	//	//var allowedValues []string
+	//	//
+	//	//if follow {
+	//	//	allowedValues = common.MonitorFollowOutputFormatFlagAllowedValues
+	//	//} else {
+	//	//	allowedValues = common.MonitorOutputFormatFlagAllowedValues
+	//	//}
+	//	//
+	//	//log.Traceln(fmt.Sprintf("%v allowed values: %v", cmd.CommandPath(), allowedValues))
 	//
-	//	if follow {
-	//		allowedValues = common.MonitorFollowOutputFormatFlagAllowedValues
-	//	} else {
-	//		allowedValues = common.MonitorOutputFormatFlagAllowedValues
-	//	}
-	//
-	//	return allowedValues, cobra.ShellCompDirectiveNoFileComp
+	//	return common.MonitorOutputFormatFlagAllowedValues, cobra.ShellCompDirectiveNoFileComp
 	//})
-	//
 	//common.CliExit(err)
 
-	flags.Bool(followFlagWatchAlias, false, "continuously monitor these events")
-	cmd.Flags().SetNormalizeFunc(normalizeWatch)
+	flags.Bool(followFlag, false, "continuously monitor these events")
+	//flags.Bool(followFlagWatchAlias, false, "continuously monitor these events")
+	//cmd.Flags().SetNormalizeFunc(normalizeWatch)
 	return cmd
 }
 
@@ -65,6 +77,13 @@ func normalizeWatch(f *pflag.FlagSet, name string) pflag.NormalizedName {
 	switch name {
 	case followFlagWatchAlias:
 		name = followFlag
+	case followFlag:
+		follow := util.GetBool(f, followFlag)
+		outputFormat := util.GetStringAndErr(f, common.OutputFormatFlag)
+		if follow && outputFormat == common.OutputFormatTable {
+			err := f.Set(common.OutputFormatFlag, common.OutputFormatJson)
+			common.CliExit(err)
+		}
 		break
 	}
 	return pflag.NormalizedName(name)

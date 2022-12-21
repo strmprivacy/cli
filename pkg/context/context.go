@@ -29,10 +29,10 @@ func showConfiguration() {
 	common.CliExit(err)
 
 	configuration := configuration{
-		ConfigPath:     common.ConfigPath,
+		ConfigPath:     common.ConfigPath(),
 		ConfigFilepath: configFilepath,
 		Contents:       string(contents),
-		SavedEntities:  listSavedEntities(path.Join(common.ConfigPath, common.SavedEntitiesDirectory)),
+		SavedEntities:  listSavedEntities(path.Join(common.ConfigPath(), common.SavedEntitiesDirectory)),
 		ApiUrls: apiUrls{
 			ApiHost:     common.ApiHost,
 			ApiAuthHost: common.ApiAuthHost,
@@ -47,7 +47,7 @@ type savedEntity struct {
 }
 
 func entityInfo(args []string) {
-	filepath := path.Join(common.ConfigPath, common.SavedEntitiesDirectory, args[0]+".json")
+	filepath := path.Join(common.ConfigPath(), common.SavedEntitiesDirectory, args[0]+".json")
 	contents, err := os.ReadFile(filepath)
 	common.CliExit(err)
 
@@ -82,14 +82,14 @@ func listSavedEntities(p string) []string {
 }
 
 func findConfigFile() string {
-	dirEntries, err := os.ReadDir(common.ConfigPath)
+	dirEntries, err := os.ReadDir(common.ConfigPath())
 	common.CliExit(err)
 
 	var configFilepath string
 
 	for _, dirEntry := range dirEntries {
 		if dirEntry.Name() == common.DefaultConfigFilename+common.DefaultConfigFileSuffix || dirEntry.Name() == common.DefaultConfigFilename+common.DefaultConfigFileSuffix {
-			configFilepath = path.Join(common.ConfigPath, dirEntry.Name())
+			configFilepath = path.Join(common.ConfigPath(), dirEntry.Name())
 		}
 	}
 

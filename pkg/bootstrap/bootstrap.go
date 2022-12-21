@@ -6,7 +6,6 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
-	"os"
 	"strings"
 	"strmprivacy/strm/pkg/cmd"
 	"strmprivacy/strm/pkg/common"
@@ -30,7 +29,6 @@ import (
 	"strmprivacy/strm/pkg/entity/usage"
 	"strmprivacy/strm/pkg/entity/user"
 	"strmprivacy/strm/pkg/monitor"
-	"strmprivacy/strm/pkg/util"
 )
 
 /*
@@ -84,32 +82,6 @@ func SetupServiceClients(accessToken *string) {
 	monitor.SetupClient(clientConnection, ctx)
 }
 
-func ConfigPath() string {
-	// if we set this environment variable, we work in a completely different configuration directory
-	// Here you will define your flags and configuration settings.
-	// Cobra supports persistent flags, which, if defined here,
-	// will be global for your application.
-	// set the default configuration path
-	configPathEnvVar := common.EnvPrefix + "_CONFIG_PATH"
-	configPathEnv := os.Getenv(configPathEnvVar)
-	defaultConfigPath := "~/.config/strmprivacy"
-
-	var err error
-
-	var configPath string
-	if len(configPathEnv) != 0 {
-		log.Debugln("Value for " + configPathEnvVar + " found in environment: " + configPathEnv)
-		configPath, err = util.ExpandTilde(configPathEnv)
-	} else {
-		log.Debugln("No value for " + configPathEnvVar + " found. Falling back to default: " + defaultConfigPath)
-		configPath, err = util.ExpandTilde(defaultConfigPath)
-	}
-
-	common.CliExit(err)
-
-	return configPath
-}
-
 func InitializeConfig(cmd *cobra.Command) error {
 	viperConfig := viper.New()
 
@@ -118,7 +90,7 @@ func InitializeConfig(cmd *cobra.Command) error {
 
 	// Set as many paths as you like where viper should look for the
 	// config file.
-	viperConfig.AddConfigPath(common.ConfigPath)
+	viperConfig.AddConfigPath(common.ConfigPath())
 
 	// Attempt to read the config file, gracefully ignoring errors
 	// caused by a config file not being found. Return an error

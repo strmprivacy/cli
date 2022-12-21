@@ -99,14 +99,14 @@ func DeleteSaved(m proto.Message, name *string) {
 
 func getSaveFilename(m proto.Message, name *string) string {
 	cat := fmt.Sprint(m.ProtoReflect().Descriptor().Name())
-	return path.Join(common.ConfigPath, common.SavedEntitiesDirectory, cat, *name+".json")
+	return path.Join(common.ConfigPath(), common.SavedEntitiesDirectory, cat, *name+".json")
 }
 
 func CreateConfigDirAndFileIfNotExists() {
-	err := os.MkdirAll(filepath.Dir(common.ConfigPath), 0700)
+	err := os.MkdirAll(filepath.Dir(common.ConfigPath()), 0700)
 	common.CliExit(err)
 
-	configFilepath := path.Join(common.ConfigPath, common.DefaultConfigFilename+common.DefaultConfigFileSuffix)
+	configFilepath := path.Join(common.ConfigPath(), common.DefaultConfigFilename+common.DefaultConfigFileSuffix)
 
 	if _, err := os.Stat(configFilepath); os.IsNotExist(err) {
 		writeFileError := os.WriteFile(

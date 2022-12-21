@@ -52,20 +52,6 @@ func SetupGrpc(host string, token *string) (*grpc.ClientConn, context.Context) {
 	return clientConnection, ctx
 }
 
-func InitLogging() {
-	log.SetLevel(log.TraceLevel)
-	log.SetOutput(&lumberjack.Logger{
-		Filename:   LogFileName(),
-		MaxSize:    1, // MB
-		MaxBackups: 0,
-	})
-	log.Info(fmt.Sprintf("Config path is set to: %v", ConfigPath))
-}
-
-func LogFileName() string {
-	return ConfigPath + "/" + RootCommandName + ".log"
-}
-
 func CliExit(err error) {
 	if err != nil {
 		_, file, line, _ := runtime.Caller(1)
@@ -120,11 +106,53 @@ func MarkRequiredFlags(cmd *cobra.Command, flagNames ...string) {
 }
 
 func GetActiveProject() string {
-	activeProjectFilePath := path.Join(ConfigPath, activeProjectFilename)
+	activeProjectFilePath := path.Join(ConfigPath(), activeProjectFilename)
 
 	bytes, err := os.ReadFile(activeProjectFilePath)
 	CliExit(err)
 	activeProject := string(bytes)
 	log.Infoln("Current active project is: " + activeProject)
 	return activeProject
+}
+
+func ConfigPath() string {
+	if configPath == "" {
+		// if we set this environment variable, we work in a completely different configuration directory
+		// Here you will define your flags and configuration settings.
+		// Cobra supports persistent flags, which, if defined here,
+		// will be global for your application.
+		// set the default configuration path
+		configPathEnvVar := EnvPrefix + "_CONFIG_PATH"
+		configPathEnv := os.Getenv(configPathEnvVar)
+		defaultConfigPath := "~/.config/strmprivacy"
+
+		var err error
+
+		if len(configPathEnv) != 0 {
+			log.Debugln("Value for " + configPathEnvVar + " found in environment: " + configPathEnv)
+			configPath, err = ExpandTilde(configPathEnv)
+		} else {
+			log.Debugln("No value for " + configPathEnvVar + " found. Falling back to default: " + defaultConfigPath)
+			configPath, err = ExpandTilde(defaultConfigPath)
+		}
+
+		CliExit(err)
+	}
+
+	return configPath
+}
+
+func LogFileName() string {
+	if logFileName == "" {
+		logFileName = ConfigPath() + "/" + RootCommandName + ".log"
+		log.SetLevel(log.TraceLevel)
+		log.SetOutput(&lumberjack.Logger{
+			Filename:   LogFileName(),
+			MaxSize:    1, // MB
+			MaxBackups: 0,
+		})
+		log.Info(fmt.Sprintf("Config path is set to: %v", ConfigPath))
+	}
+
+	return logFileName
 }

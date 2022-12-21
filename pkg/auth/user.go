@@ -111,7 +111,7 @@ func (authenticator *Authenticator) login(cmd *cobra.Command) {
 	}
 
 	if err := eg.Wait(); err != nil {
-		common.CliExit(errors.New(fmt.Sprintf("Login failed, please check the logs for details at %v", common.LogFileName())))
+		common.CliExit(errors.New(fmt.Sprintf("Login failed, please check the logs for details at %v", common.LogFileName)))
 	}
 }
 

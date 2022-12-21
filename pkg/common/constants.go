@@ -2,7 +2,8 @@ package common
 
 import "strings"
 
-var ConfigPath string
+var configPath string
+var logFileName string
 
 var GitSha = "dev"
 var Version = "dev"

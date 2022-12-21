@@ -90,9 +90,6 @@ func rootCmdPreRun(cmd *cobra.Command, args []string) error {
 }
 
 func init() {
-	common.ConfigPath = bootstrap.ConfigPath()
-	common.InitLogging()
-
 	persistentFlags := RootCmd.PersistentFlags()
 	persistentFlags.String(apiHostFlag, "api.strmprivacy.io:443", "api host and port")
 	persistentFlags.String(auth.ApiAuthUrlFlag, "https://accounts.strmprivacy.io", "user authentication host")
