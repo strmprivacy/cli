@@ -55,6 +55,8 @@ func (p logsFollowPlainPrinter) Print(data interface{}) {
 
 func printLogEntries(state *monitoring.EntityState) {
 	for _, logLine := range state.Logs {
-		fmt.Printf("%s\n", logLine)
+		if len(logLine) > 0 {
+			println(logLine)
+		}
 	}
 }
