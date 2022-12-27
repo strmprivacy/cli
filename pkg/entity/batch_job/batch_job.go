@@ -97,7 +97,7 @@ func getBatchJobType(flags *pflag.FlagSet) string {
 	return batchJobType
 }
 
-func createEncryptionBatchJob(cmd *cobra.Command,batchJobData []byte, flags *pflag.FlagSet) *entities.BatchJobWrapper {
+func createEncryptionBatchJob(cmd *cobra.Command, batchJobData []byte, flags *pflag.FlagSet) *entities.BatchJobWrapper {
 	batchJob := &entities.BatchJob{}
 	err := jsonpb.Unmarshal(bytes.NewReader(batchJobData), batchJob)
 	if err != nil {
@@ -155,7 +155,7 @@ func setMicroAggregationBatchJobProjectIds(batchJob *entities.MicroAggregationBa
 	batchJob.TargetData.DataConnectorRef.ProjectId = projectId
 }
 
-func namesCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
+func NamesCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
 	if len(args) != 0 && strings.Fields(cmd.Short)[0] != "Delete" {
 		// this one means you don't get multiple completion suggestions for one stream if it's not a delete call
 		return nil, cobra.ShellCompDirectiveNoFileComp

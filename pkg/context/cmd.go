@@ -143,5 +143,5 @@ func Project() *cobra.Command {
 }
 
 func savedEntitiesCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
-	return listSavedEntities(path.Join(common.ConfigPath, common.SavedEntitiesDirectory)), cobra.ShellCompDirectiveNoFileComp
+	return listSavedEntities(path.Join(common.ConfigPath(), common.SavedEntitiesDirectory)), cobra.ShellCompDirectiveNoFileComp
 }

@@ -3,6 +3,7 @@ package batch_job
 import (
 	"errors"
 	"fmt"
+	"github.com/bykof/gostradamus"
 	"github.com/jedib0t/go-pretty/v6/table"
 	"github.com/spf13/cobra"
 	"github.com/strmprivacy/api-definitions-go/v2/api/batch_jobs/v1"
@@ -13,6 +14,7 @@ import (
 )
 
 var printer util.Printer
+var tz = gostradamus.Local()
 
 func configurePrinter(command *cobra.Command) util.Printer {
 	outputFormat := util.GetStringAndErr(command.Flags(), common.OutputFormatFlag)
@@ -105,7 +107,7 @@ func printTable(batchJobs []*entities.BatchJobWrapper) {
 
 		rows = append(rows, table.Row{
 			batchJobRefWithStates.ref.Id,
-			batchJobState.StateTime.AsTime(),
+			util.IsoFormat(tz, batchJobState.StateTime),
 			batchJobState.State.String(),
 			message,
 		})

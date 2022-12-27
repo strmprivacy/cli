@@ -2,17 +2,21 @@ package util
 
 import (
 	"fmt"
+	"github.com/bykof/gostradamus"
 	"github.com/lithammer/dedent"
 	"github.com/samber/lo"
 	"github.com/spf13/pflag"
+	"github.com/strmprivacy/api-definitions-go/v2/api/monitoring/v1"
 	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/types/known/timestamppb"
 	"os"
 	"path"
 	"path/filepath"
 	"strconv"
 	"strings"
 	"strmprivacy/strm/pkg/common"
+	"time"
 )
 
 func atoi(s string) int {
@@ -42,6 +46,15 @@ func GetBoolAndErr(f *pflag.FlagSet, k string) bool {
 	v, err := f.GetBool(k)
 	common.CliExit(err)
 	return v
+}
+func GetBool(f *pflag.FlagSet, k string) bool {
+	v, err := f.GetBool(k)
+
+	if err != nil {
+		return false
+	} else {
+		return v
+	}
 }
 func GetInt64AndErr(f *pflag.FlagSet, k string) int64 {
 	v, err := f.GetInt64(k)
@@ -87,14 +100,14 @@ func DeleteSaved(m proto.Message, name *string) {
 
 func getSaveFilename(m proto.Message, name *string) string {
 	cat := fmt.Sprint(m.ProtoReflect().Descriptor().Name())
-	return path.Join(common.ConfigPath, common.SavedEntitiesDirectory, cat, *name+".json")
+	return path.Join(common.ConfigPath(), common.SavedEntitiesDirectory, cat, *name+".json")
 }
 
 func CreateConfigDirAndFileIfNotExists() {
-	err := os.MkdirAll(filepath.Dir(common.ConfigPath), 0700)
+	err := os.MkdirAll(filepath.Dir(common.ConfigPath()), 0700)
 	common.CliExit(err)
 
-	configFilepath := path.Join(common.ConfigPath, common.DefaultConfigFilename+common.DefaultConfigFileSuffix)
+	configFilepath := path.Join(common.ConfigPath(), common.DefaultConfigFilename+common.DefaultConfigFileSuffix)
 
 	if _, err := os.Stat(configFilepath); os.IsNotExist(err) {
 		writeFileError := os.WriteFile(
@@ -121,4 +134,14 @@ func LongDocsUsage(s string) string {
 func DedentTrim(s string) string {
 	return strings.TrimSpace(dedent.Dedent(s))
 
+}
+
+func IsoFormat(tz gostradamus.Timezone, t *timestamppb.Timestamp) string {
+	tt := time.Unix(t.Seconds, int64(t.Nanos))
+	n := gostradamus.DateTimeFromTime(tt)
+	return n.InTimezone(tz).IsoFormatTZ()
+}
+
+func NormalizeEntityStateTypeName(entityType monitoring.EntityState_EntityType) string {
+	return strings.ReplaceAll(strings.ToLower(entityType.String()), "_", "-")
 }

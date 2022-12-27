@@ -6,7 +6,6 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
-	"os"
 	"strings"
 	"strmprivacy/strm/pkg/cmd"
 	"strmprivacy/strm/pkg/common"
@@ -22,14 +21,15 @@ import (
 	"strmprivacy/strm/pkg/entity/kafka_user"
 	"strmprivacy/strm/pkg/entity/key_stream"
 	"strmprivacy/strm/pkg/entity/keylinks"
-	"strmprivacy/strm/pkg/entity/user"
 	"strmprivacy/strm/pkg/entity/organization"
 	"strmprivacy/strm/pkg/entity/policy"
 	"strmprivacy/strm/pkg/entity/project"
 	"strmprivacy/strm/pkg/entity/schema_code"
 	"strmprivacy/strm/pkg/entity/stream"
 	"strmprivacy/strm/pkg/entity/usage"
-	"strmprivacy/strm/pkg/util"
+	"strmprivacy/strm/pkg/entity/user"
+	"strmprivacy/strm/pkg/logs"
+	"strmprivacy/strm/pkg/monitor"
 )
 
 /*
@@ -54,6 +54,8 @@ func SetupVerbs(rootCmd *cobra.Command) {
 	rootCmd.AddCommand(cmd.ArchiveCmd)
 	rootCmd.AddCommand(cmd.InviteCmd)
 	rootCmd.AddCommand(cmd.ManageCmd)
+	rootCmd.AddCommand(cmd.MonitorCmd)
+	rootCmd.AddCommand(cmd.LogsCmd)
 	rootCmd.AddCommand(cmd.UpdateCmd)
 }
 
@@ -79,32 +81,8 @@ func SetupServiceClients(accessToken *string) {
 	keylinks.SetupClient(clientConnection, ctx)
 	data_contract.SetupClient(clientConnection, ctx)
 	policy.SetupClient(clientConnection, ctx)
-}
-
-func ConfigPath() string {
-	// if we set this environment variable, we work in a completely different configuration directory
-	// Here you will define your flags and configuration settings.
-	// Cobra supports persistent flags, which, if defined here,
-	// will be global for your application.
-	// set the default configuration path
-	configPathEnvVar := common.EnvPrefix + "_CONFIG_PATH"
-	configPathEnv := os.Getenv(configPathEnvVar)
-	defaultConfigPath := "~/.config/strmprivacy"
-
-	var err error
-
-	var configPath string
-	if len(configPathEnv) != 0 {
-		log.Debugln("Value for " + configPathEnvVar + " found in environment: " + configPathEnv)
-		configPath, err = util.ExpandTilde(configPathEnv)
-	} else {
-		log.Debugln("No value for " + configPathEnvVar + " found. Falling back to default: " + defaultConfigPath)
-		configPath, err = util.ExpandTilde(defaultConfigPath)
-	}
-
-	common.CliExit(err)
-
-	return configPath
+	monitor.SetupClient(clientConnection, ctx)
+	logs.SetupClient(clientConnection, ctx)
 }
 
 func InitializeConfig(cmd *cobra.Command) error {
@@ -115,7 +93,7 @@ func InitializeConfig(cmd *cobra.Command) error {
 
 	// Set as many paths as you like where viper should look for the
 	// config file.
-	viperConfig.AddConfigPath(common.ConfigPath)
+	viperConfig.AddConfigPath(common.ConfigPath())
 
 	// Attempt to read the config file, gracefully ignoring errors
 	// caused by a config file not being found. Return an error

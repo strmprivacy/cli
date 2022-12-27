@@ -64,7 +64,7 @@ func GetUserEmail() string {
 }
 
 func LoadActiveProject() {
-	activeProjectFilePath := path.Join(common.ConfigPath, ActiveProjectFilename)
+	activeProjectFilePath := path.Join(common.ConfigPath(), ActiveProjectFilename)
 
 	bytes, err := os.ReadFile(activeProjectFilePath)
 	common.CliExit(err)

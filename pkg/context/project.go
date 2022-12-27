@@ -20,7 +20,7 @@ const activeProjectFilename = "active_projects.json"
 // a fallback to default project.
 func ResolveProject(f *pflag.FlagSet) {
 
-	activeProjectFilePath := path.Join(common.ConfigPath, activeProjectFilename)
+	activeProjectFilePath := path.Join(common.ConfigPath(), activeProjectFilename)
 	projectFlagValue, _ := f.GetString(common.ProjectNameFlag)
 
 	if _, err := os.Stat(activeProjectFilePath); os.IsNotExist(err) && projectFlagValue == "" {
@@ -79,7 +79,7 @@ func initActiveProject() {
 }
 
 func saveActiveProject(projectName string) {
-	activeProjectFilepath := path.Join(common.ConfigPath, activeProjectFilename)
+	activeProjectFilepath := path.Join(common.ConfigPath(), activeProjectFilename)
 	user_project.Projects.SetActiveProject(projectName)
 	projects, err := json.Marshal(user_project.Projects)
 	if err != nil {

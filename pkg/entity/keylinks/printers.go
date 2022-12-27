@@ -6,10 +6,8 @@ import (
 	"github.com/jedib0t/go-pretty/v6/table"
 	"github.com/spf13/cobra"
 	"github.com/strmprivacy/api-definitions-go/v2/api/data_subjects/v1"
-	"google.golang.org/protobuf/types/known/timestamppb"
 	"strmprivacy/strm/pkg/common"
 	"strmprivacy/strm/pkg/util"
-	"time"
 )
 
 import (
@@ -68,7 +66,7 @@ func printTable(infos []*data_subjects.DatasubjectKeylinks) {
 			rows = append(rows, table.Row{
 				dataSubject.DataSubjectId,
 				keyLinkAndTimestamp.KeyLink,
-				isoFormat(keyLinkAndTimestamp.ExpiryTime),
+				util.IsoFormat(tz, keyLinkAndTimestamp.ExpiryTime),
 			})
 
 		}
@@ -96,10 +94,4 @@ func printPlain(infos []*data_subjects.DatasubjectKeylinks) {
 		}
 	}
 	util.RenderPlain(names)
-}
-
-func isoFormat(t *timestamppb.Timestamp) string {
-	tt := time.Unix(t.Seconds, int64(t.Nanos))
-	n := gostradamus.DateTimeFromTime(tt)
-	return n.InTimezone(tz).IsoFormatTZ()
 }

@@ -2,7 +2,8 @@ package common
 
 import "strings"
 
-var ConfigPath string
+var configPath string
+var logFileName string
 
 var GitSha = "dev"
 var Version = "dev"
@@ -35,6 +36,8 @@ const ActivateCommandName = "activate"
 const ArchiveCommandName = "archive"
 const InviteCommandName = "invite"
 const ManageCommandName = "manage"
+const MonitorCommandName = "monitor"
+const LogsCommandName = "logs"
 const UpdateCommandName = "update"
 
 const RecursiveFlagName = "recursive"
@@ -71,3 +74,11 @@ var AccountOutputFormatFlagAllowedValuesText = strings.Join(AccountOutputFormatF
 
 var ProjectOutputFormatFlagAllowedValues = []string{OutputFormatPlain}
 var ProjectOutputFormatFlagAllowedValuesText = strings.Join(ProjectOutputFormatFlagAllowedValues, ", ")
+
+var MonitorFollowOutputFormatFlagAllowedValues = []string{OutputFormatPlain, OutputFormatJson, OutputFormatJsonRaw}
+var MonitorFollowOutputFormatFlagAllowedValuesText = strings.Join(MonitorFollowOutputFormatFlagAllowedValues, ", ")
+var MonitorOutputFormatFlagAllowedValues = []string{OutputFormatTable, OutputFormatPlain, OutputFormatJson, OutputFormatJsonRaw}
+var MonitorOutputFormatFlagAllowedValuesText = strings.Join(MonitorOutputFormatFlagAllowedValues, ", ")
+
+var LogsOutputFormatFlagAllowedValues = []string{OutputFormatPlain}
+var LogsOutputFormatFlagAllowedValuesText = strings.Join(LogsOutputFormatFlagAllowedValues, ", ")

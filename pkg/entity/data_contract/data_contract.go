@@ -93,7 +93,7 @@ func create(cmd *cobra.Command, args *string) {
 	dataContract.Metadata = &entities.DataContractMetadata{}
 
 	req := &data_contracts.CreateDataContractRequest{
-		ProjectId: projectId,
+		ProjectId:    projectId,
 		DataContract: dataContract,
 	}
 	response, err := client.CreateDataContract(apiContext, req)
