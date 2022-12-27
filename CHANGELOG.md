@@ -1,3 +1,10 @@
+# [3.6.0](https://github.com/strmprivacy/cli/compare/v3.5.0...v3.6.0) (2022-12-27)
+
+
+### Features
+
+* **strm-2115:** start of entity monitoring ([#133](https://github.com/strmprivacy/cli/issues/133)) ([5feeeae](https://github.com/strmprivacy/cli/commit/5feeeaeb2d681aee2b38938d5c37a293340af550))
+
 # [3.5.0](https://github.com/strmprivacy/cli/compare/v3.4.0...v3.5.0) (2022-12-21)
 
 
