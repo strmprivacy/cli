@@ -13,8 +13,9 @@ import (
 	"strmprivacy/strm/pkg/util"
 )
 
-// TODO long docs
-var longDoc = util.LongDocsUsage(``)
+var longDoc = util.LongDocsUsage(`
+View states for an entity. Can be used to determine why certain entities are not behaving as expected.
+`)
 
 const followFlag = "follow"
 const followFlagWatchAlias = "watch"

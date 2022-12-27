@@ -12,8 +12,10 @@ import (
 	"strmprivacy/strm/pkg/util"
 )
 
-// TODO long docs
-var longDoc = util.LongDocsUsage(``)
+var longDoc = util.LongDocsUsage(`
+View logs for an entity if available. Logs are collected for SaaS by default. For self-hosted Data Planes,
+logs are only collected if enabled.
+`)
 
 const followFlag = "follow"
 const followFlagWatchAlias = "watch"
