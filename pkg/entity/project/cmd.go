@@ -6,6 +6,12 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/strmprivacy/api-definitions-go/v2/api/projects/v1"
 	"strmprivacy/strm/pkg/common"
+	"strmprivacy/strm/pkg/util"
+)
+
+const (
+	assumeYesFlag      = "assume-yes"
+	assumeYesShortFlag = "y"
 )
 
 func ListCmd() *cobra.Command {
@@ -51,7 +57,8 @@ func ManageCmd() *cobra.Command {
 		Run: func(cmd *cobra.Command, args []string) {
 			manage(args, cmd)
 		},
-		Args: cobra.MaximumNArgs(1),
+		Args:              cobra.MaximumNArgs(1),
+		ValidArgsFunction: NamesCompletion,
 	}
 	flags := project.Flags()
 	flags.StringArray(addMembersFlag, []string{}, "[email1,email2,..]")
@@ -70,7 +77,8 @@ func GetCmd() *cobra.Command {
 		Run: func(cmd *cobra.Command, args []string) {
 			printer.Print(get(args[0]))
 		},
-		Args: cobra.ExactArgs(1),
+		Args:              cobra.ExactArgs(1),
+		ValidArgsFunction: NamesCompletion,
 	}
 	return project
 }
@@ -84,15 +92,25 @@ func DeleteCmd() *cobra.Command {
 		},
 		DisableAutoGenTag: true,
 		Run: func(cmd *cobra.Command, args []string) {
-			if deleteConfirmation(args[0]) {
+			assumeYes := util.GetBool(cmd.Flags(), assumeYesFlag)
+			if assumeYes {
 				del(args[0])
 				fmt.Println("Project " + args[0] + " deleted")
 			} else {
-				fmt.Println("Project deletion cancelled")
+				if deleteConfirmation(args[0]) {
+					del(args[0])
+					fmt.Println("Project " + args[0] + " deleted")
+				} else {
+					fmt.Println("Project deletion cancelled")
+				}
 			}
 		},
-		Args: cobra.ExactArgs(1),
+		Args:              cobra.ExactArgs(1),
+		ValidArgsFunction: NamesCompletion,
 	}
+	flags := project.Flags()
+	flags.BoolP(assumeYesFlag, assumeYesShortFlag, false, "automatic yes to prompts.")
+
 	return project
 }
 
