@@ -24,7 +24,7 @@ In order to set up command completion, please follow the instructions below:
     - macOS users: `strm completion bash > /usr/local/etc/bash_completion.d/strm`
 - for `zsh` users \
   ensure that shell completion is enabled, then run (only needs to be done once):
-  `/bin/zsh -c 'strm completion zsh > "${fpath[1]}/_strm"'`
+  `strm completion zsh > "${fpath[1]}/_strm"`
 - for fish users \
   `strm completion fish > ~/.config/fish/completions/strm.fish` (or `$XDG_CONFIG_HOME` instead of `~/.config`)
 

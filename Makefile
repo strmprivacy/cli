@@ -7,7 +7,7 @@ build:
 	goreleaser --snapshot --skip-publish --rm-dist
 
 zsh-completion:
-	/bin/zsh -c 'strm completion zsh > "$${fpath[1]}/_strm"'
+	strm completion zsh > "$${fpath[1]}/_strm"
 
 # for a speedier build than with goreleaser
 source_files := $(shell find . -name "*.go")

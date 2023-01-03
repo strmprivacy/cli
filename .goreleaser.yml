@@ -53,7 +53,7 @@ brews:
 
        for zsh users
          ensure that shell completion is enabled, then run (only needs to be done once):
-           /bin/zsh -c '{{ .ProjectName }} completion zsh > "${fpath[1]}/_{{ .ProjectName }}"'
+           {{ .ProjectName }} completion zsh > "${fpath[1]}/_{{ .ProjectName }}"
 
        for fish users
          {{ .ProjectName }} completion fish > ~/.config/fish/completions/{{ .ProjectName }}.fish # or $XDG_CONFIG_HOME instead of ~/.config
