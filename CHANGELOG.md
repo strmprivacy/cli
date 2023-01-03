@@ -1,3 +1,10 @@
+# [3.7.0](https://github.com/strmprivacy/cli/compare/v3.6.0...v3.7.0) (2023-01-03)
+
+
+### Features
+
+* **strm-2197:** autocomplete for get, delete, manage project; allow delete without prompt ([#135](https://github.com/strmprivacy/cli/issues/135)) ([3b74428](https://github.com/strmprivacy/cli/commit/3b7442852251757ce5403cce5d36a87cb49f8432))
+
 # [3.6.0](https://github.com/strmprivacy/cli/compare/v3.5.0...v3.6.0) (2022-12-27)
 
 
