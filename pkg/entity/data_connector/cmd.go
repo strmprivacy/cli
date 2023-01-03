@@ -1,9 +1,10 @@
 package data_connector
 
 import (
+	"fmt"
+	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/strmprivacy/api-definitions-go/v2/api/data_connectors/v1"
-	"strings"
 	"strmprivacy/strm/pkg/common"
 	"strmprivacy/strm/pkg/util"
 )
@@ -83,14 +84,14 @@ func CreateCmd() *cobra.Command {
 }
 
 func NamesCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
-	if len(args) != 0 && strings.Fields(cmd.Short)[0] != "Delete" {
-		// this one means you don't get multiple completion suggestions for one stream if it's not a delete call
-		return nil, cobra.ShellCompDirectiveNoFileComp
-	}
+	log.Traceln(fmt.Sprintf("cmd: %s, args: %s, cmdShort: %s", cmd.CommandPath(), args))
+
 	req := &data_connectors.ListDataConnectorsRequest{
 		ProjectId: common.ProjectId,
 	}
 	response, err := Client.ListDataConnectors(apiContext, req)
+
+	log.Traceln(response)
 
 	if err != nil {
 		return common.GrpcRequestCompletionError(err)
@@ -100,6 +101,8 @@ func NamesCompletion(cmd *cobra.Command, args []string, complete string) ([]stri
 	for _, dataConnector := range response.DataConnectors {
 		names = append(names, dataConnector.Ref.Name)
 	}
+
+	log.Traceln(names)
 
 	return names, cobra.ShellCompDirectiveNoFileComp
 }
