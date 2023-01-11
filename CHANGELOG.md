@@ -1,3 +1,10 @@
+## [3.7.1](https://github.com/strmprivacy/cli/compare/v3.7.0...v3.7.1) (2023-01-11)
+
+
+### Bug Fixes
+
+* **strm-2223:** set default policy retention to 0, the proto default value ([#137](https://github.com/strmprivacy/cli/issues/137)) ([5d2934c](https://github.com/strmprivacy/cli/commit/5d2934c6b83f25a26f1561a889ac00e25c39c900))
+
 # [3.7.0](https://github.com/strmprivacy/cli/compare/v3.6.0...v3.7.0) (2023-01-03)
 
 
