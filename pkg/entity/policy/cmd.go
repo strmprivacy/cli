@@ -166,7 +166,7 @@ func CreateCmd() *cobra.Command {
 	flags.String(nameFlag, "", "name")
 	flags.String(descriptionFlag, "", "description of the policy")
 	flags.String(legalGroundsFlag, "", "legal grounds of this policy")
-	flags.Int32(retentionFlag, 365, "retention in days of this policy")
+	flags.Int32(retentionFlag, 0, "retention in days of this policy")
 	_ = command.MarkFlagRequired(nameFlag)
 	_ = command.MarkFlagRequired(retentionFlag)
 	return command
@@ -205,6 +205,6 @@ func UpdateCmd() *cobra.Command {
 	flags.String(nameFlag, "", "name")
 	flags.String(descriptionFlag, "", "description of the policy")
 	flags.String(legalGroundsFlag, "", "legal grounds of this policy")
-	flags.Int32(retentionFlag, 365, "retention in days of this policy")
+	flags.Int32(retentionFlag, 0, "retention in days of this policy")
 	return command
 }
