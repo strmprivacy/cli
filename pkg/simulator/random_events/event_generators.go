@@ -27,7 +27,7 @@ func createRandomDemoEvent(consentLevels []int32, sessionId string) StrmPrivacyE
 }
 
 var EventGenerators = map[string]func([]int32, string) StrmPrivacyEvent{
-	"strmprivacy/demo/1.0.2": createRandomDemoEvent,
+	"strmprivacy/example/1.3.0": createRandomDemoEvent,
 }
 
 func createUnionString(s string) *demoschema.UnionNullString {
