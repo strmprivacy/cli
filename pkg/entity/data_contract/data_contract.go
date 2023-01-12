@@ -131,6 +131,24 @@ func get(refString *string) {
 	printer.Print(response)
 }
 
+func review(refString *string) {
+	req := &data_contracts.ReviewDataContractRequest{
+		DataContractRef: ref(refString),
+	}
+
+	_, err := client.ReviewDataContract(apiContext, req)
+	common.CliExit(err)
+}
+
+func approve(refString *string) {
+	req := &data_contracts.ApproveDataContractRequest{
+		DataContractRef: ref(refString),
+	}
+
+	_, err := client.ApproveDataContract(apiContext, req)
+	common.CliExit(err)
+}
+
 func activate(refString *string) {
 	req := &data_contracts.ActivateDataContractRequest{
 		DataContractRef: ref(refString),

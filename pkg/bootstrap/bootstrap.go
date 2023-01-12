@@ -50,6 +50,8 @@ func SetupVerbs(rootCmd *cobra.Command) {
 	rootCmd.AddCommand(cmd.AuthCmd)
 	rootCmd.AddCommand(cmd.VersionCmd)
 	rootCmd.AddCommand(cmd.ContextCommand)
+	rootCmd.AddCommand(cmd.ReviewCmd)
+	rootCmd.AddCommand(cmd.ApproveCmd)
 	rootCmd.AddCommand(cmd.ActivateCmd)
 	rootCmd.AddCommand(cmd.ArchiveCmd)
 	rootCmd.AddCommand(cmd.InviteCmd)
