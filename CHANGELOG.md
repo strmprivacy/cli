@@ -1,3 +1,10 @@
+# [3.8.0](https://github.com/strmprivacy/cli/compare/v3.7.1...v3.8.0) (2023-01-12)
+
+
+### Features
+
+* **strm-2212:** update cli for new DRAFT -> ACTIVE flow ([#138](https://github.com/strmprivacy/cli/issues/138)) ([af2fee3](https://github.com/strmprivacy/cli/commit/af2fee375907048716ec80d0a8acc19cd0c2d48e))
+
 ## [3.7.1](https://github.com/strmprivacy/cli/compare/v3.7.0...v3.7.1) (2023-01-11)
 
 
