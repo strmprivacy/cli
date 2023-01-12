@@ -1,3 +1,10 @@
+## [3.8.1](https://github.com/strmprivacy/cli/compare/v3.8.0...v3.8.1) (2023-01-12)
+
+
+### Bug Fixes
+
+* **strm-2231:** use matching schema refs in random-events command ([#139](https://github.com/strmprivacy/cli/issues/139)) ([a564339](https://github.com/strmprivacy/cli/commit/a56433951c15be1cfddeca25e8c1dc52fa106200))
+
 # [3.8.0](https://github.com/strmprivacy/cli/compare/v3.7.1...v3.8.0) (2023-01-12)
 
 
