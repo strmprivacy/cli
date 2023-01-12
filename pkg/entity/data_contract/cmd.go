@@ -84,6 +84,34 @@ func ActivateCmd() *cobra.Command {
 	return dataContract
 }
 
+func ReviewCmd() *cobra.Command {
+	return &cobra.Command{
+		Use:               "data-contract (handle/name/version)",
+		Short:             "Set the state of a Data Contract to IN_REVIEW",
+		Long:              longDoc,
+		DisableAutoGenTag: true,
+		Run: func(cmd *cobra.Command, args []string) {
+			review(&args[0])
+		},
+		Args:              cobra.ExactArgs(1), // the contract reference
+		ValidArgsFunction: RefsCompletion,
+	}
+}
+
+func ApproveCmd() *cobra.Command {
+	return &cobra.Command{
+		Use:               "data-contract (handle/name/version)",
+		Short:             "Set the state of a Data Contract to APPROVED",
+		Long:              longDoc,
+		DisableAutoGenTag: true,
+		Run: func(cmd *cobra.Command, args []string) {
+			approve(&args[0])
+		},
+		Args:              cobra.ExactArgs(1), // the contract reference
+		ValidArgsFunction: RefsCompletion,
+	}
+}
+
 func ArchiveCmd() *cobra.Command {
 	dataContract := &cobra.Command{
 		Use:   "data-contract (handle/name/version)",
