@@ -1,3 +1,10 @@
+# [3.9.0](https://github.com/strmprivacy/cli/compare/v3.8.1...v3.9.0) (2023-01-17)
+
+
+### Features
+
+* update api defs to 2.75.0 ([ecf5fde](https://github.com/strmprivacy/cli/commit/ecf5fde21566769a33fc5cc6f27b8da885e6aa07))
+
 ## [3.8.1](https://github.com/strmprivacy/cli/compare/v3.8.0...v3.8.1) (2023-01-12)
 
 
