@@ -281,8 +281,8 @@ github.com/stretchr/testify v1.7.1/go.mod h1:6Fq8oRcR53rry900zMqJjRRixrwX3KX962/
 github.com/stretchr/testify v1.7.4/go.mod h1:yNjHg4UonilssWZ8iaSj1OCr/vHnekPRkoO+kdMU+MU=
 github.com/stretchr/testify v1.8.0 h1:pSgiaMZlXftHpm5L7V1+rVB+AZJydKsMxsQBIJw4PKk=
 github.com/stretchr/testify v1.8.0/go.mod h1:yNjHg4UonilssWZ8iaSj1OCr/vHnekPRkoO+kdMU+MU=
-github.com/strmprivacy/api-definitions-go/v2 v2.73.1 h1:yAUYWHvKf2bTkwrS6dQ5pbxaMP7QTPDbTV+LiJplwrs=
-github.com/strmprivacy/api-definitions-go/v2 v2.73.1/go.mod h1:w/9E4kfnf9vtE43sj8O/vR8h7VzHKxxMhYSbv66iwWY=
+github.com/strmprivacy/api-definitions-go/v2 v2.75.0 h1:xCCGOadgJ/XCEwF50rdrZnCj2wmHHxjAlp4d8vo5szo=
+github.com/strmprivacy/api-definitions-go/v2 v2.75.0/go.mod h1:w/9E4kfnf9vtE43sj8O/vR8h7VzHKxxMhYSbv66iwWY=
 github.com/subosito/gotenv v1.4.1 h1:jyEFiXpy21Wm81FBN71l9VoMMV8H8jG+qIK3GCpY6Qs=
 github.com/subosito/gotenv v1.4.1/go.mod h1:ayKnFf/c6rvx/2iiLrJUk1e6plDbT3edrFNGqEflhK0=
 github.com/thoas/go-funk v0.9.1 h1:O549iLZqPpTUQ10ykd26sZhzD+rmR5pWhuElrhbC20M=
