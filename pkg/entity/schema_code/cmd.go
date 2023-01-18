@@ -19,7 +19,7 @@ make this fully operational in your development setting (using a JDK, a Python o
 ### Usage`
 
 var example = util.DedentTrim(`
-strm get schema-code strmprivacy/example/1.3.0 --language=python
+strm get schema-code strmprivacy/example/1.5.0 --language=python
 Saved to python-avro-example-1.3.0.zip
 `)
 var languages = []string{"java", "typescript", "python", "rust"}

@@ -26,7 +26,7 @@ const (
 	saveFlag             = "save"
 	maskedFieldsFlag     = "masked-fields"
 	maskedFieldsSeed     = "mask-seed"
-	maskedFieldHelp      = `-M strmprivacy/example/1.3.0:sensitiveValue,consistentValue \
+	maskedFieldHelp      = `-M strmprivacy/example/1.5.0:sensitiveValue,consistentValue \
 -M strmprivacy/clickstream/1.0.0:sessionId
 
 Masks fields values in the output stream via hashing.
@@ -125,7 +125,7 @@ func create(args []string, cmd *cobra.Command) {
 }
 
 /*
-			-M strmprivacy/example/1.3.0:sensitiveValue,anotherOne \
+			-M strmprivacy/example/1.5.0:sensitiveValue,anotherOne \
 	   		-M dpg/nps_unified/v3:kiosk_v1,customer_id --masked_fields_file
 */
 func parseMaskedFields(flags *pflag.FlagSet) *entities.MaskedFields {

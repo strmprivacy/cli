@@ -17,16 +17,16 @@ var example = util.DedentTrim(`
 # Simulate some events
 strm create stream test
 strm simulate random-events test
-Starting to simulate random strmprivacy/example/1.3.0 events to stream test. Sending one event every 1000 ms.
+Starting to simulate random strmprivacy/example/1.5.0 events to stream test. Sending one event every 1000 ms.
 Sent 5 events
 Sent 10 events
 
 # And in another terminal
 
 strm listen web-socket test
-{"strmMeta": {"eventContractRef": "strmprivacy/example/1.3.0", "nonce": 1782462093, "timestamp": 1669990806395, "keyLink": "e6f...
-{"strmMeta": {"eventContractRef": "strmprivacy/example/1.3.0", "nonce": 1159687711, "timestamp": 1669990807404, "keyLink": "b58...
-{"strmMeta": {"eventContractRef": "strmprivacy/example/1.3.0", "nonce": -192240390, "timestamp": 1669990808413, "keyLink": "ba0...
+{"strmMeta": {"eventContractRef": "strmprivacy/example/1.5.0", "nonce": 1782462093, "timestamp": 1669990806395, "keyLink": "e6f...
+{"strmMeta": {"eventContractRef": "strmprivacy/example/1.5.0", "nonce": 1159687711, "timestamp": 1669990807404, "keyLink": "b58...
+{"strmMeta": {"eventContractRef": "strmprivacy/example/1.5.0", "nonce": -192240390, "timestamp": 1669990808413, "keyLink": "ba0...
 `)
 
 var WebSocketCmd = &cobra.Command{
