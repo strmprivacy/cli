@@ -1,3 +1,10 @@
+# [3.10.0](https://github.com/strmprivacy/cli/compare/v3.9.0...v3.10.0) (2023-01-18)
+
+
+### Features
+
+* **strm-2247:** use data contract 1.5.0 ([#140](https://github.com/strmprivacy/cli/issues/140)) ([84a3bb9](https://github.com/strmprivacy/cli/commit/84a3bb933b209b2de6ed3499f74770eb06c79004))
+
 # [3.9.0](https://github.com/strmprivacy/cli/compare/v3.8.1...v3.9.0) (2023-01-17)
 
 
