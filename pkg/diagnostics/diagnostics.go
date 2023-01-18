@@ -34,6 +34,7 @@ func evaluate(cmd *cobra.Command) {
 	client := &http.Client{}
 	response, err := client.Do(request)
 	common.CliExit(err)
+
 	err = fw.Close()
 	common.CliExit(err)
 	body, err := io.ReadAll(response.Body)
