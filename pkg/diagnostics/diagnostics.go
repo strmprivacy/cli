@@ -28,15 +28,21 @@ func evaluate(cmd *cobra.Command) {
 	qi := getFlags(cmd, quasiIdentifierFlagName)
 	sa := getFlags(cmd, sensitiveAttributeFlagName)
 	metrics := getFlags(cmd, metricsFlagName)
-	//metrics, err := flags.GetStringArray(metricsFlagName)
 	b, fw := buildForm(dataFile, qi, sa, metrics)
+
 	request, err := createRequest(b, fw)
+
+	// TODO change client
 	client := &http.Client{}
 	response, err := client.Do(request)
 	common.CliExit(err)
+
 	err = fw.Close()
 	common.CliExit(err)
+
 	body, err := io.ReadAll(response.Body)
+	common.CliExit(err)
+
 	output := Metrics{}
 	err = json.Unmarshal(body, &output)
 	common.CliExit(err)
@@ -44,6 +50,7 @@ func evaluate(cmd *cobra.Command) {
 }
 
 func createRequest(b *bytes.Buffer, formWriter *multipart.Writer) (*http.Request, error) {
+	// TODO change url
 	request, err := http.NewRequest("POST", "http://localhost:8080/upload", b)
 	common.CliExit(err)
 	contentType := fmt.Sprintf("multipart/form-data;boundary=%v", formWriter.Boundary())
@@ -56,11 +63,14 @@ func buildForm(dataFile string, qi []string, sa []string, metrics []string) (*by
 	formWriter := multipart.NewWriter(b)
 
 	part, err := formWriter.CreateFormFile("upload", filepath.Base(dataFile))
-	data, err := os.ReadFile(dataFile)
-	//fmt.Println(data)
 	common.CliExit(err)
+
+	data, err := os.ReadFile(dataFile)
+	common.CliExit(err)
+
 	_, err = part.Write(data)
 	common.CliExit(err)
+
 	for ix, value := range qi {
 		key := "qi[" + strconv.Itoa(ix) + "]"
 		err = formWriter.WriteField(key, value)
