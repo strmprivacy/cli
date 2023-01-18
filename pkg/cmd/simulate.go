@@ -15,7 +15,7 @@ var SimulateCmd = &cobra.Command{
 
 func init() {
 	flags := SimulateCmd.PersistentFlags()
-	flags.String(random_events.SchemaFlag, "strmprivacy/example/1.3.0", "Which schema to use for creating simulated events")
+	flags.String(random_events.SchemaFlag, "strmprivacy/example/1.5.0", "Which schema to use for creating simulated events")
 	_ = SimulateCmd.RegisterFlagCompletionFunc(random_events.SchemaFlag, schemaCompletion)
 	SimulateCmd.AddCommand(random_events.RunCmd())
 }

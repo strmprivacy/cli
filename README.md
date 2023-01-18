@@ -47,7 +47,7 @@ More package managers will be added in the future, so stay tuned.
 ## Commands
 
 For the complete command reference, see
-the [CLI documentation section](https://docs.strmprivacy.io/docs/cli-commands.html)
+the [CLI section in our docs](https://docs.strmprivacy.io/docs/latest/reference/cli-reference/).
 
 ## Configuration
 
@@ -100,7 +100,7 @@ i.e. "Stream" or "DataConnector" and the `name` is the unique name of the create
 ## Getting help
 
 If you encounter an error, or you'd like a new feature, please create an
-issue [here](https://github.com/strmprivacy/cli-wip/issues/new). Please be thorough in your description, as it helps us
+issue [here](https://github.com/strmprivacy/cli/issues/new). Please be thorough in your description, as it helps us
 to help you more quickly. At least include the version of the CLI, your OS. terminal and any custom STRM Privacy flags
 that are present in your config or environment.
 
