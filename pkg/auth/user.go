@@ -40,11 +40,11 @@ func oAuth2Config() oauth2.Config {
 }
 
 func (authenticator *Authenticator) GetToken() *string {
-	return authenticator.accessToken()
+	return authenticator.AccessToken()
 }
 
 func (authenticator *Authenticator) printAccessToken() {
-	accessToken := authenticator.accessToken()
+	accessToken := authenticator.AccessToken()
 
 	if accessToken != nil {
 		fmt.Println(*accessToken)
@@ -53,7 +53,7 @@ func (authenticator *Authenticator) printAccessToken() {
 	}
 }
 
-func (authenticator *Authenticator) accessToken() *string {
+func (authenticator *Authenticator) AccessToken() *string {
 	if authenticator.tokenSource == nil {
 		return nil
 	} else {

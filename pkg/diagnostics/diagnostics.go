@@ -13,6 +13,7 @@ import (
 	"path/filepath"
 	"strconv"
 	"strings"
+	"strmprivacy/strm/pkg/auth"
 	"strmprivacy/strm/pkg/common"
 	"strmprivacy/strm/pkg/util"
 )
@@ -23,6 +24,8 @@ type Metrics struct {
 	T float64        `json:"T"`
 	E string         `json:"error"`
 }
+
+const privacyDiagnosticsServiceUrl = "/privacy-diagnostics/upload"
 
 func evaluate(cmd *cobra.Command) {
 	flags := cmd.Flags()
@@ -50,10 +53,12 @@ func evaluate(cmd *cobra.Command) {
 }
 
 func createRequest(b *bytes.Buffer, formWriter *multipart.Writer) (*http.Request, error) {
-	request, err := http.NewRequest("POST", "http://localhost:8080/upload", b)
+	request, err := http.NewRequest("POST", "https://"+common.ApiHost+privacyDiagnosticsServiceUrl, b)
 	common.CliExit(err)
 	contentType := fmt.Sprintf("multipart/form-data;boundary=%v", formWriter.Boundary())
+	token := auth.Auth.AccessToken()
 	request.Header.Add("Content-Type", contentType)
+	request.Header.Add("Authorization", "Bearer "+(*token))
 	return request, err
 }
 

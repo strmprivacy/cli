@@ -1,6 +1,9 @@
 package diagnostics
 
-import "github.com/spf13/cobra"
+import (
+	"github.com/spf13/cobra"
+	"strmprivacy/strm/pkg/auth"
+)
 
 const (
 	quasiIdentifierFlagName    = "qi"
@@ -14,6 +17,7 @@ func EvaluateCmd() *cobra.Command {
 		Use:               "diagnostics",
 		Short:             "Evaluate privacy diagnostics for your dataset",
 		DisableAutoGenTag: true,
+		PersistentPreRun:  auth.RequireAuthenticationPreRun,
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)
 		},
