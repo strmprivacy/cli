@@ -3,6 +3,7 @@ package diagnostics
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"github.com/spf13/cobra"
 	"io"
@@ -20,6 +21,7 @@ type Metrics struct {
 	K int            `json:"k"`
 	L map[string]int `json:"L"`
 	T float64        `json:"T"`
+	E string         `json:"error"`
 }
 
 func evaluate(cmd *cobra.Command) {
@@ -40,7 +42,10 @@ func evaluate(cmd *cobra.Command) {
 	body, err := io.ReadAll(response.Body)
 	output := Metrics{}
 	err = json.Unmarshal(body, &output)
-	common.CliExit(err)
+	common.CliExit(errors.New(string(body)))
+	if output.E != "" {
+		common.CliExit(errors.New(output.E))
+	}
 	printer.Print(output)
 }
 
