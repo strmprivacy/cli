@@ -45,7 +45,7 @@ func evaluate(cmd *cobra.Command) {
 	body, err := io.ReadAll(response.Body)
 	output := Metrics{}
 	err = json.Unmarshal(body, &output)
-	common.CliExit(errors.New(string(body)))
+	common.CliExit(err)
 	if output.Error != "" {
 		common.CliExit(errors.New(output.Error))
 	}
