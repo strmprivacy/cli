@@ -33,7 +33,7 @@ func evaluate(cmd *cobra.Command) {
 	qi := getFlags(cmd, quasiIdentifierFlagName)
 	sa := getFlags(cmd, sensitiveAttributeFlagName)
 	metrics := getFlags(cmd, metricsFlagName)
-	//metrics, err := flags.GetStringArray(metricsFlagName)
+
 	b, fw := buildForm(dataFile, qi, sa, metrics)
 	request, err := createRequest(b, fw)
 	client := &http.Client{}
@@ -68,7 +68,7 @@ func buildForm(dataFile string, qi []string, sa []string, metrics []string) (*by
 
 	part, err := formWriter.CreateFormFile("upload", filepath.Base(dataFile))
 	data, err := os.ReadFile(dataFile)
-	//fmt.Println(data)
+
 	common.CliExit(err)
 	_, err = part.Write(data)
 	common.CliExit(err)
