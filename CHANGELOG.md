@@ -1,3 +1,10 @@
+# [3.11.0](https://github.com/strmprivacy/cli/compare/v3.10.0...v3.11.0) (2023-01-26)
+
+
+### Features
+
+* **strm-2244:** initial commit for cli support for privacy metrics ([#142](https://github.com/strmprivacy/cli/issues/142)) ([7f8ab15](https://github.com/strmprivacy/cli/commit/7f8ab158d67ed29ae75285f4ac9ac1719e8b52f2))
+
 # [3.10.0](https://github.com/strmprivacy/cli/compare/v3.9.0...v3.10.0) (2023-01-18)
 
 
