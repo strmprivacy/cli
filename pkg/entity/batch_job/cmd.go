@@ -82,7 +82,7 @@ func CreateCmd() *cobra.Command {
 
 	flags.StringP(batchJobFileFlagName, "F", "",
 		`the path to the JSON file containing the batch job configuration`)
-	flags.StringP(batchJobTypeFlagName, "TCloseness", "encryption",
+	flags.StringP(batchJobTypeFlagName, "T", "encryption",
 		`the type of batch job (encryption, micro-aggregation), defaults to encryption`)
 	policy.SetupFlags(batchJob, flags)
 	_ = batchJob.MarkFlagRequired(batchJobFileFlagName)
