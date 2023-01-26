@@ -19,10 +19,10 @@ import (
 )
 
 type Metrics struct {
-	K int            `json:"k"`
-	L map[string]int `json:"l"`
-	T float64        `json:"t"`
-	E string         `json:"error"`
+	KAnonymity int            `json:"k"`
+	LDiversity map[string]int `json:"l"`
+	TCloseness float64        `json:"t"`
+	Error      string         `json:"error"`
 }
 
 const privacyDiagnosticsServiceUrl = "/privacy-diagnostics/upload"
@@ -46,8 +46,8 @@ func evaluate(cmd *cobra.Command) {
 	output := Metrics{}
 	err = json.Unmarshal(body, &output)
 	common.CliExit(errors.New(string(body)))
-	if output.E != "" {
-		common.CliExit(errors.New(output.E))
+	if output.Error != "" {
+		common.CliExit(errors.New(output.Error))
 	}
 	printer.Print(output)
 }

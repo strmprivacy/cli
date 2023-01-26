@@ -49,11 +49,11 @@ func (p diagnosticsPlainPrinter) Print(data interface{}) {
 }
 
 func printTable(metricsResponse Metrics) {
-	nRows := metricsResponse.K/1 + len(metricsResponse.L) + int(math.Ceil(metricsResponse.T/1))
+	nRows := metricsResponse.KAnonymity/1 + len(metricsResponse.LDiversity) + int(math.Ceil(metricsResponse.TCloseness/1))
 	rows := make([]table.Row, 0, nRows)
-	rows = append(rows, table.Row{"k-Anonymity", metricsResponse.K, ""})
+	rows = append(rows, table.Row{"k-Anonymity", metricsResponse.KAnonymity, ""})
 	ix := 0
-	for column, ld := range metricsResponse.L {
+	for column, ld := range metricsResponse.LDiversity {
 		if ix == 0 {
 			rows = append(rows, table.Row{"l-Diversity", ld, column})
 		} else {
@@ -61,7 +61,7 @@ func printTable(metricsResponse Metrics) {
 		}
 		ix += 1
 	}
-	rows = append(rows, table.Row{"t-Closeness", metricsResponse.T, ""})
+	rows = append(rows, table.Row{"t-Closeness", metricsResponse.TCloseness, ""})
 
 	util.RenderTable(
 		table.Row{
@@ -75,12 +75,12 @@ func printTable(metricsResponse Metrics) {
 
 func printPlain(metricsResponse Metrics) {
 	var metrics string
-	metrics = metrics + "k-Anonymity: " + strconv.Itoa(metricsResponse.K) + "\n"
+	metrics = metrics + "k-Anonymity: " + strconv.Itoa(metricsResponse.KAnonymity) + "\n"
 	metrics = metrics + "l-Diversity: "
-	for k, v := range metricsResponse.L {
+	for k, v := range metricsResponse.LDiversity {
 		metrics = metrics + k + ": " + strconv.Itoa(v) + "\t"
 	}
 	metrics = metrics + "\n"
-	metrics = metrics + "t-Closeness: " + strconv.FormatFloat(metricsResponse.T, byte('e'), 5, 32) + "\n"
+	metrics = metrics + "t-Closeness: " + strconv.FormatFloat(metricsResponse.TCloseness, byte('e'), 5, 32) + "\n"
 	util.RenderPlain(metrics)
 }

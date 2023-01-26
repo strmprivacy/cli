@@ -30,7 +30,7 @@ func CreateCmd() *cobra.Command {
 	// TODO github.com/thediveo/enumflag might be nicer!
 	flags.String(consentLevelTypeFlag, "CUMULATIVE",
 		"CUMULATIVE or GRANULAR")
-	flags.Int32SliceP(consentLevelsFlag, "L", []int32{},
+	flags.Int32SliceP(consentLevelsFlag, "LDiversity", []int32{},
 		"comma separated list of integers for derived streams")
 	flags.String(descriptionFlag, "", "description of this stream")
 	flags.StringSlice(tagsFlag, []string{}, "a list of tags for this stream")
