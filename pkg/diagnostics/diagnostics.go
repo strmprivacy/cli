@@ -20,8 +20,8 @@ import (
 
 type Metrics struct {
 	K int            `json:"k"`
-	L map[string]int `json:"L"`
-	T float64        `json:"T"`
+	L map[string]int `json:"l"`
+	T float64        `json:"t"`
 	E string         `json:"error"`
 }
 
