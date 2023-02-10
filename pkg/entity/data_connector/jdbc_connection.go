@@ -61,14 +61,11 @@ func determineDatabaseType(jdbcUrl string) entities.DatabaseType {
 		databaseType = entities.DatabaseType_BIGQUERY
 	case "mysql":
 		databaseType = entities.DatabaseType_MYSQL
-	case "mongodb":
-		databaseType = entities.DatabaseType_MONGODB
 	default:
 		common.CliExit(errors.New(fmt.Sprintf("Unknown jdbc url (supported types: %s, %s, %s, %s)",
 			entities.DatabaseType_MYSQL.String(),
 			entities.DatabaseType_POSTGRES.String(),
 			entities.DatabaseType_BIGQUERY.String(),
-			entities.DatabaseType_MONGODB.String(),
 		)))
 	}
 
@@ -78,7 +75,17 @@ func determineDatabaseType(jdbcUrl string) entities.DatabaseType {
 func loadPrivateKey(jdbcUrl string, databaseType entities.DatabaseType) string {
 	var privateKey string
 	if databaseType == entities.DatabaseType_BIGQUERY {
-		filePath := strings.Split(jdbcUrl, "ServiceAccountPrivateKey=")[1]
+		var filePath string
+		for _, s := range strings.Split(jdbcUrl, ";") {
+			if strings.Contains(s, "OAuthPvtKeyPath") {
+				filePath = strings.TrimLeft(s, "OAuthPvtKeyPath=")
+				break
+			} else if strings.Contains(s, "ServiceAccountPrivateKey=") {
+				filePath = strings.TrimLeft(s, "ServiceAccountPrivateKey=")
+				break
+			}
+		}
+		fmt.Println(filePath)
 		content, err := os.ReadFile(filePath)
 		common.CliExit(err)
 		privateKey = string(content)
