@@ -50,19 +50,16 @@ func createJdbcConnectionCmd() *cobra.Command {
 }
 
 func determineDatabaseType(jdbcUrl string) entities.DatabaseType {
-	splitUrl := strings.Split(jdbcUrl, ":")
-
 	var databaseType entities.DatabaseType
-
-	switch db := splitUrl[1]; db {
-	case "postgres":
+	switch {
+	case strings.Contains(jdbcUrl, "postgres"):
 		databaseType = entities.DatabaseType_POSTGRES
-	case "datadirect":
+	case strings.Contains(jdbcUrl, "bigquery"):
 		databaseType = entities.DatabaseType_BIGQUERY
-	case "mysql":
+	case strings.Contains(jdbcUrl, "mysql"):
 		databaseType = entities.DatabaseType_MYSQL
 	default:
-		common.CliExit(errors.New(fmt.Sprintf("Unknown jdbc url (supported types: %s, %s, %s, %s)",
+		common.CliExit(errors.New(fmt.Sprintf("Unknown jdbc url (supported types: %s, %s, %s)",
 			entities.DatabaseType_MYSQL.String(),
 			entities.DatabaseType_POSTGRES.String(),
 			entities.DatabaseType_BIGQUERY.String(),
