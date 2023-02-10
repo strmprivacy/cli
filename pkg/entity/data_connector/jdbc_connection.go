@@ -75,14 +75,13 @@ func loadPrivateKey(jdbcUrl string, databaseType entities.DatabaseType) string {
 		var filePath string
 		for _, s := range strings.Split(jdbcUrl, ";") {
 			if strings.Contains(s, "OAuthPvtKeyPath") {
-				filePath = strings.TrimLeft(s, "OAuthPvtKeyPath=")
+				_, filePath, _ = strings.Cut(s, "OAuthPvtKeyPath=")
 				break
 			} else if strings.Contains(s, "ServiceAccountPrivateKey=") {
-				filePath = strings.TrimLeft(s, "ServiceAccountPrivateKey=")
+				_, filePath, _ = strings.Cut(s, "ServiceAccountPrivateKey=")
 				break
 			}
 		}
-		fmt.Println(filePath)
 		content, err := os.ReadFile(filePath)
 		common.CliExit(err)
 		privateKey = string(content)
