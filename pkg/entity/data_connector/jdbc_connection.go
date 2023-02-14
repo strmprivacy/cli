@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	longDocJdbc = `Creates a data connector for a jdbc database.
+	longDocJdbc = `Creates a data connector for a JDBC-compatible database.
 
 ### Usage`
 )
