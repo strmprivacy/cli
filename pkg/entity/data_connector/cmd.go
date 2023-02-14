@@ -14,7 +14,7 @@ const (
 
 var longDoc = util.LongDocsUsage(`
 A Data Connector represents a location from which data can be read, or to which data can be written.  For
-example, an AWS S3 bucket or a Google Cloud Storage bucket or a JDBC database. By itself, a Data Connector does nothing.  A Data Connector
+example, an AWS S3 bucket, a Google Cloud Storage bucket or a JDBC database connection. By itself, a Data Connector does nothing.  A Data Connector
 with valid credentials is required when creating a Batch Exporter or Batch Job.
 `)
 
