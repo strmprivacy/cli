@@ -121,6 +121,9 @@ func printTable(dataConnectors []*entities.DataConnector, recursive bool) {
 		case *entities.DataConnector_AzureBlobStorageContainer:
 			locationType = "Azure Blob Storage Container"
 			locationName = location.AzureBlobStorageContainer.ContainerName
+		case *entities.DataConnector_JdbcLocation:
+			locationType = "JDBC Database"
+			locationName = location.JdbcLocation.DatabaseType.String()
 		}
 
 		var row table.Row
