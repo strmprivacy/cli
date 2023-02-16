@@ -1,3 +1,10 @@
+# [3.12.0](https://github.com/strmprivacy/cli/compare/v3.11.0...v3.12.0) (2023-02-16)
+
+
+### Features
+
+* expose jdbc connector support ([#143](https://github.com/strmprivacy/cli/issues/143)) ([d780bec](https://github.com/strmprivacy/cli/commit/d780bec46e83cc2ed6831721e5b2fccfc03584c3))
+
 # [3.11.0](https://github.com/strmprivacy/cli/compare/v3.10.0...v3.11.0) (2023-01-26)
 
 
