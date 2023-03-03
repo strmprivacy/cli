@@ -58,6 +58,8 @@ func determineDatabaseType(jdbcUrl string) entities.DatabaseType {
 		databaseType = entities.DatabaseType_BIGQUERY
 	case strings.Contains(jdbcUrl, "mysql"):
 		databaseType = entities.DatabaseType_MYSQL
+	case strings.Contains(jdbcUrl, "snowflake"):
+		databaseType = entities.DatabaseType_SNOWFLAKE
 	default:
 		common.CliExit(errors.New(fmt.Sprintf("Unknown jdbc url (supported types: %s, %s, %s)",
 			entities.DatabaseType_MYSQL.String(),
