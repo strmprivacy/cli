@@ -20,11 +20,11 @@ const (
 	linkedStreamFlag = "derived-from"
 	purposesFlag     = "purposes"
 	tagsFlag         = "tags"
-	descriptionFlag      = "description"
-	saveFlag             = "save"
-	maskedFieldsFlag     = "masked-fields"
-	maskedFieldsSeed     = "mask-seed"
-	maskedFieldHelp      = `-M strmprivacy/example/1.5.0:sensitiveValue,consistentValue \
+	descriptionFlag  = "description"
+	saveFlag         = "save"
+	maskedFieldsFlag = "masked-fields"
+	maskedFieldsSeed = "mask-seed"
+	maskedFieldHelp  = `-M strmprivacy/example/1.5.0:sensitiveValue,consistentValue \
 -M strmprivacy/clickstream/1.0.0:sessionId
 
 Masks fields values in the output stream via hashing.

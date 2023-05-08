@@ -1,3 +1,10 @@
+# [3.13.0](https://github.com/strmprivacy/cli/compare/v3.12.0...v3.13.0) (2023-05-08)
+
+
+### Features
+
+* **strm-2399:** remove consent level type for derived streams ([#145](https://github.com/strmprivacy/cli/issues/145)) ([71c5e69](https://github.com/strmprivacy/cli/commit/71c5e692b11b917631db6f8457ef5ee10467981e))
+
 # [3.12.0](https://github.com/strmprivacy/cli/compare/v3.11.0...v3.12.0) (2023-02-16)
 
 
