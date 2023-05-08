@@ -27,11 +27,8 @@ func CreateCmd() *cobra.Command {
 	flags.StringP(linkedStreamFlag, "D", "",
 		"name of stream that this stream is derived from")
 
-	// TODO github.com/thediveo/enumflag might be nicer!
-	flags.String(consentLevelTypeFlag, "CUMULATIVE",
-		"CUMULATIVE or GRANULAR")
-	flags.Int32SliceP(consentLevelsFlag, "L", []int32{},
-		"comma separated list of integers for derived streams")
+	flags.Int32SliceP(purposesFlag, "P", []int32{},
+		"comma separated list of integers referring to purposes (only for derived streams)")
 	flags.String(descriptionFlag, "", "description of this stream")
 	flags.StringSlice(tagsFlag, []string{}, "a list of tags for this stream")
 	flags.Bool(saveFlag, true, "if true, save the credentials in ~/.config/strmprivacy/saved-entities.")

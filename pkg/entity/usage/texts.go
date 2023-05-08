@@ -6,7 +6,7 @@ var longGetDoc = util.LongDocsUsage(`
 Usage allows you to see how many events were sent on a certain stream. This is currently only the events received on the
 event-gateway. Extracting events via Kafka or Batch exporters is not included.
 
-The values are interpolated from cumulative event accounts, and sampled over intervals
+The values are interpolated from cumulative event counts, and sampled over intervals
 (the --by option). The default output is csv, but json is also available.
 
 The default range is over the last 24 hours, with a default interval of 15 minutes.

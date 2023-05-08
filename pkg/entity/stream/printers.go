@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"github.com/jedib0t/go-pretty/v6/table"
 	"github.com/spf13/cobra"
-	"github.com/strmprivacy/api-definitions-go/v2/api/entities/v1"
 	v1 "github.com/strmprivacy/api-definitions-go/v2/api/entities/v1"
 	"github.com/strmprivacy/api-definitions-go/v2/api/streams/v1"
 	"strmprivacy/strm/pkg/common"
@@ -96,18 +95,10 @@ func printTable(streamTreeArray []*v1.StreamTree) {
 	_, m := policy.PoliciesNameIdMap()
 
 	for _, stream := range streamTreeArray {
-		var consentLevelType string
-
-		if stream.Stream.ConsentLevelType != entities.ConsentLevelType_CONSENT_LEVEL_TYPE_UNSPECIFIED {
-			consentLevelType = stream.Stream.ConsentLevelType.String()
-		} else {
-			consentLevelType = ""
-		}
 
 		row := table.Row{
 			stream.Stream.Ref.Name,
 			len(stream.Stream.LinkedStream) != 0,
-			consentLevelType,
 			stream.Stream.ConsentLevels,
 			stream.Stream.Enabled,
 			m[stream.Stream.PolicyId],
@@ -122,8 +113,7 @@ func printTable(streamTreeArray []*v1.StreamTree) {
 	headers := table.Row{
 		"Stream",
 		"Derived",
-		"Consent Level Type",
-		"Consent Levels",
+		"Purposes",
 		"Enabled",
 		"Policy Name",
 	}

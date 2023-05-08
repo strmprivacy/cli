@@ -58,7 +58,7 @@ A simplified example Batch Job configuration file
 		  "file_name": "online_retail_II/decrypted-0-small.csv"
 		},
 		"consent_levels": [ 2 ],
-		"consent_level_type": "CUMULATIVE"
+		"consent_level_type": "GRANULAR"
 	  }
 	]
   }

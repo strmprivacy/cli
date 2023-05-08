@@ -22,7 +22,7 @@ const (
 	EventsApiUrlFlag  = "events-api-url"
 	SessionRangeFlag  = "session-range"
 	SessionPrefixFlag = "session-prefix"
-	ConsentLevelsFlag = "consent-levels"
+	purposesFlag      = "purposes"
 	QuietFlag         = "quiet"
 	SchemaFlag        = "schema"
 )
@@ -37,7 +37,7 @@ func randomEvents(cmd *cobra.Command, streamName *string) {
 	sessionPrefix := util.GetStringAndErr(flags, SessionPrefixFlag)
 	gateway := util.GetStringAndErr(flags, EventsApiUrlFlag)
 	quiet := util.GetBoolAndErr(flags, QuietFlag)
-	consentLevels, err := flags.GetStringSlice(ConsentLevelsFlag)
+	purposeConsentLevels, err := flags.GetStringSlice(purposesFlag)
 	common.CliExit(err)
 
 	schema := util.GetStringAndErr(flags, SchemaFlag)
@@ -46,8 +46,8 @@ func randomEvents(cmd *cobra.Command, streamName *string) {
 		common.CliExit(errors.New(fmt.Sprintf("The schema %s is not supported in the CLI", schema)))
 	}
 
-	if len(consentLevels) == 0 {
-		common.CliExit(errors.New(fmt.Sprintf("%v is not a valid set of consent levels", consentLevels)))
+	if len(purposeConsentLevels) == 0 {
+		common.CliExit(errors.New(fmt.Sprintf("%v is not a valid set of purpose levels", purposeConsentLevels)))
 	}
 
 	if !quiet {
@@ -56,7 +56,7 @@ func randomEvents(cmd *cobra.Command, streamName *string) {
 		fmt.Printf("Sending one event every %d ms.\n", interval)
 	}
 
-	simulate(s, gateway, schema, sessionPrefix, sessionRange, consentLevels, interval, quiet)
+	simulate(s, gateway, schema, sessionPrefix, sessionRange, purposeConsentLevels, interval, quiet)
 }
 
 func simulate(s *entities.Stream, gateway string, schema string, sessionPrefix string, sessionRange int, consentLevels []string, interval time.Duration, quiet bool) {

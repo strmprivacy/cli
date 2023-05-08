@@ -61,13 +61,13 @@ func createDerivedStream1(t *testing.T) {
 		Stream: &entities.Stream{
 			Ref:              &entities.StreamRef{Name: "clitest-with-tags-2", ProjectId: testConfig().projectId},
 			ConsentLevels:    []int32{2},
-			ConsentLevelType: entities.ConsentLevelType_CUMULATIVE,
+			ConsentLevelType: entities.ConsentLevelType_GRANULAR,
 			Enabled:          true,
 			LinkedStream:     "clitest-with-tags",
 			Credentials:      []*entities.Credentials{creds},
 			MaskedFields:     &entities.MaskedFields{}}}
 	ExecuteAndVerify(t, expected,
-		"create", "stream", "--derived-from=clitest-with-tags", "--levels=2")
+		"create", "stream", "--derived-from=clitest-with-tags", "--purposes=2")
 }
 
 func getStream1(t *testing.T) {
