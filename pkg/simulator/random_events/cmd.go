@@ -27,7 +27,7 @@ func RunCmd() (cmd *cobra.Command) {
 	flags.Int(SessionRangeFlag, 1000, "number of different sessions being generated")
 	flags.String(SessionPrefixFlag, "session", "prefix string for sessions")
 	flags.Bool(QuietFlag, false, "do not print to stderr")
-	flags.StringSlice(ConsentLevelsFlag, []string{"", "0", "0/1", "0/1/2", "0/1/2/3"}, "consent levels to be simulated")
+	flags.StringSlice(purposesFlag, []string{"", "0", "0/1", "0/1/2", "0/1/2/3"}, "purpose consent to be simulated")
 
 	return simCmd
 }

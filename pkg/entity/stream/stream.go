@@ -3,7 +3,6 @@ package stream
 import (
 	"context"
 	"errors"
-	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 	"github.com/strmprivacy/api-definitions-go/v2/api/entities/v1"
@@ -18,10 +17,9 @@ import (
 
 // strings used in the cli
 const (
-	linkedStreamFlag     = "derived-from"
-	consentLevelTypeFlag = "consent-type"
-	consentLevelsFlag    = "levels"
-	tagsFlag             = "tags"
+	linkedStreamFlag = "derived-from"
+	purposesFlag     = "purposes"
+	tagsFlag         = "tags"
 	descriptionFlag      = "description"
 	saveFlag             = "save"
 	maskedFieldsFlag     = "masked-fields"
@@ -95,11 +93,12 @@ func create(args []string, cmd *cobra.Command) {
 	}
 
 	if len(linkedStream) != 0 {
-		stream.ConsentLevels, err = flags.GetInt32Slice(consentLevelsFlag)
+		stream.ConsentLevels, err = flags.GetInt32Slice(purposesFlag)
 		if len(stream.ConsentLevels) == 0 {
-			common.CliExit(errors.New("You need consent levels when creating a derived stream"))
+			common.CliExit(errors.New("You need to specify which purposes may be decrypted when creating a derived stream"))
 		}
-		stream.ConsentLevelType, err = parseConsentLevelType(flags)
+		// As of STRM-2399, granular is the default (cumulative is deprecated)
+		stream.ConsentLevelType = entities.ConsentLevelType_GRANULAR
 		stream.LinkedStream = linkedStream
 	} else {
 		if len(stream.Ref.Name) == 0 {
@@ -144,21 +143,6 @@ func parseMaskedFields(flags *pflag.FlagSet) *entities.MaskedFields {
 		maskedField.FieldPatterns[ecRef] = p
 	}
 	return maskedField
-}
-
-func parseConsentLevelType(flags *pflag.FlagSet) (entities.ConsentLevelType, error) {
-	var err error
-	var consentLevelTypeString string
-	consentLevelTypeString = util.GetStringAndErr(flags, consentLevelTypeFlag)
-	consentLevelType, ok := entities.ConsentLevelType_value[consentLevelTypeString]
-	if !ok {
-		log.Fatalf("Can't convert %s to a known consent level type, types are %v",
-			consentLevelTypeString, entities.ConsentLevelType_value)
-	}
-	if consentLevelType == int32(entities.ConsentLevelType_CONSENT_LEVEL_TYPE_UNSPECIFIED) {
-		consentLevelType = int32(entities.ConsentLevelType_CUMULATIVE)
-	}
-	return entities.ConsentLevelType(consentLevelType), err
 }
 
 func NamesCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
