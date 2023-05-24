@@ -12,7 +12,7 @@ import (
 	"strings"
 	"strmprivacy/strm/pkg/common"
 	"strmprivacy/strm/pkg/entity/project"
-	context2 "strmprivacy/strm/pkg/user_projects"
+	context2 "strmprivacy/strm/pkg/user_project"
 )
 
 const (

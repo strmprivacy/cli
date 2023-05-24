@@ -1,4 +1,4 @@
-package user_projects
+package user_project
 
 import (
 	"encoding/json"

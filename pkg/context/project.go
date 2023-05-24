@@ -8,7 +8,7 @@ import (
 	"os"
 	"strmprivacy/strm/pkg/common"
 	"strmprivacy/strm/pkg/entity/project"
-	"strmprivacy/strm/pkg/user_projects"
+	"strmprivacy/strm/pkg/user_project"
 )
 
 // ResolveProject resolves the project to use and makes its ID globally available.
@@ -17,13 +17,13 @@ import (
 func ResolveProject(f *pflag.FlagSet) {
 	projectFlagValue, _ := f.GetString(common.ProjectNameFlag)
 
-	if _, err := os.Stat(user_projects.ActiveProjectFilepath); os.IsNotExist(err) && projectFlagValue == "" {
+	if _, err := os.Stat(user_project.ActiveProjectFilepath); os.IsNotExist(err) && projectFlagValue == "" {
 		initActiveProject()
 		fmt.Println(fmt.Sprintf("Active project was not yet set, has been set to '%v'. You can set a project "+
-			"with 'strm context project <project-name>'\n", user_projects.GetActiveProject()))
+			"with 'strm context project <project-name>'\n", user_project.GetActiveProject()))
 	}
 
-	if user_projects.GetActiveProject() == "" && projectFlagValue == "" {
+	if user_project.GetActiveProject() == "" && projectFlagValue == "" {
 		SetActiveProject(getFirstProject())
 	}
 
@@ -35,12 +35,12 @@ func ResolveProject(f *pflag.FlagSet) {
 		}
 		common.ProjectId = resolvedProject.Projects[0].Id
 	} else {
-		activeProject := user_projects.GetActiveProject()
+		activeProject := user_project.GetActiveProject()
 		resolvedProject := project.GetProject(activeProject)
 		if len(resolvedProject.Projects) == 0 {
 			initActiveProject()
 			common.CliExit(errors.New(fmt.Sprintf("Active project '%v' does not exist, or you do not have access "+
-				"to it. The following project has been set instead: %v", activeProject, user_projects.GetActiveProject())))
+				"to it. The following project has been set instead: %v", activeProject, user_project.GetActiveProject())))
 		}
 		common.ProjectId = resolvedProject.Projects[0].Id
 	}
@@ -48,7 +48,7 @@ func ResolveProject(f *pflag.FlagSet) {
 
 func SetActiveProject(projectName string) {
 	if len(project.GetProject(projectName).Projects) != 0 {
-		user_projects.Projects.SetActiveProject(projectName)
+		user_project.Projects.SetActiveProject(projectName)
 		message := "Active project set to: " + projectName
 		log.Infoln(message)
 		fmt.Println(message)
@@ -69,5 +69,5 @@ func getFirstProject() string {
 
 func initActiveProject() {
 	firstProjectName := getFirstProject()
-	user_projects.Projects.SetActiveProject(firstProjectName)
+	user_project.Projects.SetActiveProject(firstProjectName)
 }

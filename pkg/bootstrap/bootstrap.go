@@ -35,7 +35,7 @@ import (
 	"strmprivacy/strm/pkg/entity/user"
 	"strmprivacy/strm/pkg/logs"
 	"strmprivacy/strm/pkg/monitor"
-	"strmprivacy/strm/pkg/user_projects"
+	"strmprivacy/strm/pkg/user_project"
 )
 
 const (
@@ -193,7 +193,7 @@ func clientInterceptor(
 	invoker grpc.UnaryInvoker,
 	opts ...grpc.CallOption,
 ) error {
-	zedToken := user_projects.GetZedToken()
+	zedToken := user_project.GetZedToken()
 
 	if zedToken != nil {
 		ctx = metadata.AppendToOutgoingContext(ctx, zedTokenHeader, *zedToken)
@@ -206,7 +206,7 @@ func clientInterceptor(
 	zedTokenValue := header.Get(zedTokenHeader)
 
 	if len(zedTokenValue) > 0 {
-		user_projects.SetZedToken(zedTokenValue[0])
+		user_project.SetZedToken(zedTokenValue[0])
 	}
 
 	return err
