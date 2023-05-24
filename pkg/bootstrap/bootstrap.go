@@ -1,11 +1,16 @@
 package bootstrap
 
 import (
+	"context"
 	"fmt"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials"
+	"google.golang.org/grpc/credentials/insecure"
+	"google.golang.org/grpc/metadata"
 	"strings"
 	"strmprivacy/strm/pkg/cmd"
 	"strmprivacy/strm/pkg/common"
@@ -30,6 +35,12 @@ import (
 	"strmprivacy/strm/pkg/entity/user"
 	"strmprivacy/strm/pkg/logs"
 	"strmprivacy/strm/pkg/monitor"
+	"strmprivacy/strm/pkg/user_projects"
+)
+
+const (
+	cliVersionHeader = "strm-cli-version"
+	zedTokenHeader   = "strm-zed-token"
 )
 
 /*
@@ -62,8 +73,8 @@ func SetupVerbs(rootCmd *cobra.Command) {
 	rootCmd.AddCommand(cmd.EvaluateCmd)
 }
 
-func SetupServiceClients(accessToken *string) {
-	clientConnection, ctx := common.SetupGrpc(common.ApiHost, accessToken)
+func SetupServiceClients(accessToken *string, zedToken *string) {
+	clientConnection, ctx := SetupGrpc(common.ApiHost, accessToken, zedToken)
 
 	stream.SetupClient(clientConnection, ctx)
 	kafka_exporter.SetupClient(clientConnection, ctx)
@@ -145,4 +156,58 @@ func bindFlags(cmd *cobra.Command, v *viper.Viper) {
 			common.CliExit(err)
 		}
 	})
+}
+
+func SetupGrpc(host string, token *string, zedToken *string) (*grpc.ClientConn, context.Context) {
+
+	var err error
+	var creds grpc.DialOption
+
+	if strings.Contains(host, ":50051") {
+		creds = grpc.WithTransportCredentials(insecure.NewCredentials())
+	} else {
+		creds = grpc.WithTransportCredentials(credentials.NewClientTLSFromCert(nil, ""))
+	}
+
+	clientConnection, err := grpc.Dial(host, creds, grpc.WithUnaryInterceptor(clientInterceptor))
+	common.CliExit(err)
+
+	var mdMap = map[string]string{cliVersionHeader: common.Version}
+
+	if token != nil {
+		mdMap["authorization"] = "Bearer " + *token
+	}
+	if zedToken != nil {
+		mdMap[zedTokenHeader] = *zedToken
+	}
+
+	return clientConnection, metadata.NewOutgoingContext(context.Background(), metadata.New(mdMap))
+}
+
+func clientInterceptor(
+	ctx context.Context,
+	method string,
+	req interface{},
+	reply interface{},
+	cc *grpc.ClientConn,
+	invoker grpc.UnaryInvoker,
+	opts ...grpc.CallOption,
+) error {
+	zedToken := user_projects.GetZedToken()
+
+	if zedToken != nil {
+		ctx = metadata.AppendToOutgoingContext(ctx, zedTokenHeader, *zedToken)
+	}
+
+	var header metadata.MD
+	opts = append(opts, grpc.Header(&header))
+	err := invoker(ctx, method, req, reply, cc, opts...)
+
+	zedTokenValue := header.Get(zedTokenHeader)
+
+	if len(zedTokenValue) > 0 {
+		user_projects.SetZedToken(zedTokenValue[0])
+	}
+
+	return err
 }

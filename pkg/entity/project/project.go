@@ -9,7 +9,7 @@ import (
 	"github.com/strmprivacy/api-definitions-go/v2/api/projects/v1"
 	"google.golang.org/grpc"
 	"strmprivacy/strm/pkg/common"
-	"strmprivacy/strm/pkg/user_project"
+	context2 "strmprivacy/strm/pkg/user_projects"
 	"strmprivacy/strm/pkg/util"
 )
 
@@ -41,7 +41,7 @@ func ListProjects() []*entities.Project {
 func ListProjectsWithActive() ProjectsAndActiveProject {
 	return ProjectsAndActiveProject{
 		Projects:      ListProjects(),
-		activeProject: user_project.GetActiveProject(),
+		activeProject: context2.GetActiveProject(),
 	}
 }
 
@@ -50,7 +50,7 @@ func GetProject(projectName string) ProjectsAndActiveProject {
 		if project.Name == projectName {
 			return ProjectsAndActiveProject{
 				Projects:      []*entities.Project{project},
-				activeProject: user_project.GetActiveProject(),
+				activeProject: context2.GetActiveProject(),
 			}
 		}
 	}
@@ -70,14 +70,14 @@ func create(projectName *string, cmd *cobra.Command) ProjectsAndActiveProject {
 	common.CliExit(err)
 	return ProjectsAndActiveProject{
 		Projects:      []*entities.Project{response.Project},
-		activeProject: user_project.GetActiveProject(),
+		activeProject: context2.GetActiveProject(),
 	}
 }
 
 func GetProjectIdFromName(projectName string) string {
 	activeProject := ""
 	if projectName == "" {
-		activeProject = user_project.GetActiveProject()
+		activeProject = context2.GetActiveProject()
 	} else {
 		activeProject = projectName
 	}
@@ -96,7 +96,7 @@ func GetProjectId(cmd *cobra.Command) string {
 	if len(projectName) > 0 {
 		projectId = GetProjectIdFromName(projectName)
 	} else {
-		projectId = GetProjectIdFromName(user_project.GetActiveProject())
+		projectId = GetProjectIdFromName(context2.GetActiveProject())
 	}
 	return projectId
 }
@@ -141,7 +141,7 @@ func get(projectName string) ProjectsAndActiveProject {
 
 	return ProjectsAndActiveProject{
 		Projects:      []*entities.Project{response.Project},
-		activeProject: user_project.GetActiveProject(),
+		activeProject: context2.GetActiveProject(),
 	}
 }
 

@@ -8,7 +8,7 @@ import (
 	"strmprivacy/strm/pkg/auth"
 	"strmprivacy/strm/pkg/common"
 	"strmprivacy/strm/pkg/entity/account"
-	"strmprivacy/strm/pkg/user_project"
+	"strmprivacy/strm/pkg/user_projects"
 )
 
 type configuration struct {
@@ -98,5 +98,5 @@ func findConfigFile() string {
 }
 
 func showActiveProject() {
-	printer.Print("Active project: " + user_project.GetActiveProject())
+	printer.Print("Active project: " + user_projects.GetActiveProject())
 }

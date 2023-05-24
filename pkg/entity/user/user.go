@@ -12,7 +12,7 @@ import (
 	"strings"
 	"strmprivacy/strm/pkg/common"
 	"strmprivacy/strm/pkg/entity/project"
-	"strmprivacy/strm/pkg/user_project"
+	context2 "strmprivacy/strm/pkg/user_projects"
 )
 
 const (
@@ -58,7 +58,7 @@ func list(cmd *cobra.Command) []*entities.User {
 }
 
 func listProjectMembers() []*entities.User {
-	projectId := project.GetProjectIdFromName(user_project.GetActiveProject())
+	projectId := project.GetProjectIdFromName(context2.GetActiveProject())
 	req := &projects.ListProjectMembersRequest{
 		ProjectId: projectId,
 	}
