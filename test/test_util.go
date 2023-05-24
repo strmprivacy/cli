@@ -33,7 +33,7 @@ func testConfig() *TestConfig {
 	if (TestConfig{}) == _testConfig {
 		err := godotenv.Load()
 
-		if err != nil {
+		if err != nil && os.Getenv("GITHUB_ACTION") == "" {
 			fmt.Fprintf(os.Stderr, "Error loading .env file: %v\n", err)
 			os.Exit(1)
 		}
