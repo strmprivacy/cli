@@ -31,7 +31,13 @@ var _testConfig TestConfig
 
 func testConfig() *TestConfig {
 	if (TestConfig{}) == _testConfig {
-		_ = godotenv.Load()
+		err := godotenv.Load()
+
+		if err != nil && os.Getenv("GITHUB_ACTION") == "" {
+			fmt.Fprintf(os.Stderr, "Error loading .env file: %v\n", err)
+			os.Exit(1)
+		}
+
 		_testConfig = TestConfig{
 			projectId:         os.Getenv("STRM_TEST_PROJECT_ID"),
 			email:             os.Getenv("STRM_TEST_USER_EMAIL"),
@@ -64,7 +70,7 @@ func newConfigDir() string {
 	_ = os.Setenv("STRM_API_AUTH_URL", "https://accounts.dev.strmprivacy.io")
 	_ = os.Setenv("STRM_API_HOST", "api.dev.strmprivacy.io:443")
 	_ = os.Setenv("STRM_HEADLESS", "true")
-	_ = os.WriteFile(configDir+"/active_project", []byte("default"), 0644)
+	_ = os.WriteFile(configDir+"/active_projects.json", []byte(fmt.Sprintf(`{"users":[{"email":"%s","active_project":"default"}]}`, os.Getenv("STRM_TEST_USER_EMAIL"))), 0644)
 	return configDir
 }
 
@@ -212,6 +218,7 @@ func ExecuteAndVerify(t *testing.T, expected proto.Message, args ...string) {
 	out, err := TryLoad(outputMessage, output)
 	if err != nil {
 		fmt.Println("Can't execute", args)
+		fmt.Fprintln(os.Stderr, err)
 		t.Fail()
 	}
 	assertProtoEquals(t, out, expected)

@@ -9,22 +9,25 @@ import (
 	"strmprivacy/strm/pkg/common"
 )
 
-const ActiveProjectFilename = "active_projects.json"
+const activeProjectFilename = "active_projects.json"
 
-var Projects UsersProjects
+var ActiveProjectFilepath = path.Join(common.ConfigPath(), activeProjectFilename)
 
-// UsersProjects is the printed json format of the different active projects
+var Projects *UsersProjectsContext
+
+// UsersProjectsContext is the printed json format of the different active projects
 // per past or currently logged-in user
-type UsersProjects struct {
-	Users []UserProject `json:"users"`
+type UsersProjectsContext struct {
+	Users []UserProjectContext `json:"users"`
 }
 
-type UserProject struct {
+type UserProjectContext struct {
 	Email         string `json:"email"`
 	ActiveProject string `json:"active_project"`
+	ZedToken      string `json:"zed_token"`
 }
 
-func (projects *UsersProjects) GetCurrentProjectByEmail() string {
+func (projects *UsersProjectsContext) GetCurrentProjectByEmail() string {
 	activeProject := ""
 	email := GetUserEmail()
 	for _, user := range projects.Users {
@@ -35,7 +38,7 @@ func (projects *UsersProjects) GetCurrentProjectByEmail() string {
 	return activeProject
 }
 
-func (projects *UsersProjects) SetActiveProject(project string) {
+func (projects *UsersProjectsContext) SetActiveProject(project string) {
 	email := GetUserEmail()
 	added := false
 	for index, user := range projects.Users {
@@ -46,11 +49,13 @@ func (projects *UsersProjects) SetActiveProject(project string) {
 	}
 
 	if !added {
-		projects.Users = append(projects.Users, UserProject{
+		projects.Users = append(projects.Users, UserProjectContext{
 			Email:         email,
 			ActiveProject: project,
 		})
 	}
+
+	storeUserProjectContext()
 }
 
 func GetUserEmail() string {
@@ -63,19 +68,53 @@ func GetUserEmail() string {
 	return auth.Auth.Email
 }
 
-func LoadActiveProject() {
-	activeProjectFilePath := path.Join(common.ConfigPath(), ActiveProjectFilename)
+func initializeUsersProjectsContext() {
+	if Projects == nil {
+		activeProjectFilePath := path.Join(common.ConfigPath(), activeProjectFilename)
 
-	bytes, err := os.ReadFile(activeProjectFilePath)
-	common.CliExit(err)
-	activeProjects := UsersProjects{}
-	_ = json.Unmarshal(bytes, &activeProjects)
-	Projects = activeProjects
+		bytes, err := os.ReadFile(activeProjectFilePath)
+		common.CliExit(err)
+		activeProjects := UsersProjectsContext{}
+		_ = json.Unmarshal(bytes, &activeProjects)
+		Projects = &activeProjects
+	}
 }
 
 func GetActiveProject() string {
-	LoadActiveProject()
+	initializeUsersProjectsContext()
 	activeProject := Projects.GetCurrentProjectByEmail()
 	log.Infoln("Current active project is: " + activeProject)
 	return activeProject
+}
+
+func SetZedToken(zedToken string) {
+	initializeUsersProjectsContext()
+	email := GetUserEmail()
+	for index, user := range Projects.Users {
+		// If there is no entry for the user, a zed token will be added the next time, when it is present
+		if user.Email == email {
+			(*Projects).Users[index].ZedToken = zedToken
+		}
+	}
+
+	storeUserProjectContext()
+}
+
+func GetZedToken() *string {
+	initializeUsersProjectsContext()
+	email := GetUserEmail()
+	for _, user := range Projects.Users {
+		if user.Email == email && user.ZedToken != "" {
+			return &user.ZedToken
+		}
+	}
+	return nil
+}
+
+func storeUserProjectContext() {
+	projects, err := json.Marshal(Projects)
+	common.CliExit(err)
+
+	err = os.WriteFile(ActiveProjectFilepath, projects, 0644)
+	common.CliExit(err)
 }

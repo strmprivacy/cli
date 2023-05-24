@@ -24,6 +24,8 @@ dist/${target}: ${source_files} Makefile
 clean:
 	rm -f dist/${target}
 
+# Make sure the .env containing all `STRM_TEST_*` variables is present in the ./test directory
+# godotenv loads the .env file from that directory when running the tests
 test: dist/${target}
 	go clean -testcache
 	go test ./test -v

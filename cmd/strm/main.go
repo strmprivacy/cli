@@ -12,6 +12,7 @@ import (
 	"strmprivacy/strm/pkg/bootstrap"
 	"strmprivacy/strm/pkg/common"
 	"strmprivacy/strm/pkg/context"
+	"strmprivacy/strm/pkg/user_project"
 	"strmprivacy/strm/pkg/util"
 )
 
@@ -78,7 +79,7 @@ func rootCmdPreRun(cmd *cobra.Command, args []string) error {
 	common.ApiAuthHost = util.GetStringAndErr(cmd.Flags(), auth.ApiAuthUrlFlag)
 
 	if auth.Auth.LoadLogin() == nil {
-		bootstrap.SetupServiceClients(auth.Auth.GetToken())
+		bootstrap.SetupServiceClients(auth.Auth.GetToken(), user_project.GetZedToken())
 		splitCommand := strings.Split(cmd.CommandPath(), " ")
 		if splitCommand[1] != "auth" && !(splitCommand[1] == "create" && splitCommand[2] == "project") {
 			context.ResolveProject(cmd.Flags())
