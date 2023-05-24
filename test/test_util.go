@@ -70,7 +70,7 @@ func newConfigDir() string {
 	_ = os.Setenv("STRM_API_AUTH_URL", "https://accounts.dev.strmprivacy.io")
 	_ = os.Setenv("STRM_API_HOST", "api.dev.strmprivacy.io:443")
 	_ = os.Setenv("STRM_HEADLESS", "true")
-	_ = os.WriteFile(configDir+"/active_projects.json", []byte(fmt.Sprintf(`{"users":[{"email":"%s","active_project":"%s"}]}`, os.Getenv("STRM_TEST_USER_EMAIL"), os.Getenv("STRM_TEST_PROJECT_ID"))), 0644)
+	_ = os.WriteFile(configDir+"/active_projects.json", []byte(fmt.Sprintf(`{"users":[{"email":"%s","active_project":"default"}]}`, os.Getenv("STRM_TEST_USER_EMAIL"))), 0644)
 	return configDir
 }
 
