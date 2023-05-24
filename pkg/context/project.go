@@ -60,7 +60,7 @@ func SetActiveProject(projectName string) {
 }
 
 func getFirstProject() string {
-	projects := project.ListProjects()
+	projects := project.ListProjects().Projects
 	if len(projects) == 0 {
 		common.CliExit(errors.New("you do not have access to any projects; create a project first, or ask to be granted access to one"))
 	}

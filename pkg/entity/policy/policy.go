@@ -38,6 +38,7 @@ func SetupClient(clientConnection *grpc.ClientConn, ctx context.Context) {
 // list all the policies owned by a certain organization
 func list() {
 	var err error
+	println("list policies")
 	response, err := client.ListPolicies(apiContext, &policiesApi.ListPoliciesRequest{})
 	common.CliExit(err)
 	printer.Print(response)

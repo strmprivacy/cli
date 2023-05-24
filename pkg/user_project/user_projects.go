@@ -22,9 +22,9 @@ type UsersProjectsContext struct {
 }
 
 type UserProjectContext struct {
-	Email         string `json:"email"`
-	ActiveProject string `json:"active_project"`
-	ZedToken      string `json:"zed_token"`
+	Email             string `json:"email"`
+	ActiveProjectName string `json:"active_project"`
+	ZedToken          string `json:"zed_token"`
 }
 
 func (projects *UsersProjectsContext) GetCurrentProjectByEmail() string {
@@ -32,7 +32,7 @@ func (projects *UsersProjectsContext) GetCurrentProjectByEmail() string {
 	email := GetUserEmail()
 	for _, user := range projects.Users {
 		if user.Email == email {
-			activeProject = user.ActiveProject
+			activeProject = user.ActiveProjectName
 		}
 	}
 	return activeProject
@@ -43,15 +43,15 @@ func (projects *UsersProjectsContext) SetActiveProject(project string) {
 	added := false
 	for index, user := range projects.Users {
 		if user.Email == email {
-			(*projects).Users[index].ActiveProject = project
+			(*projects).Users[index].ActiveProjectName = project
 			added = true
 		}
 	}
 
 	if !added {
 		projects.Users = append(projects.Users, UserProjectContext{
-			Email:         email,
-			ActiveProject: project,
+			Email:             email,
+			ActiveProjectName: project,
 		})
 	}
 

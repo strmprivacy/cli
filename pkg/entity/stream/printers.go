@@ -92,16 +92,21 @@ func printTable(streamTreeArray []*v1.StreamTree) {
 	// id inside the StreamTree, so we have this workaround to only show a topic
 	// column if any of the shown streams has a topic
 	hasTopics := false
-	_, m := policy.PoliciesNameIdMap()
+
+	var policies = map[string]string{}
 
 	for _, stream := range streamTreeArray {
+		if stream.Stream.PolicyId != "" && len(policies) == 0 {
+			_, p := policy.PoliciesNameIdMap()
+			policies = p
+		}
 
 		row := table.Row{
 			stream.Stream.Ref.Name,
 			len(stream.Stream.LinkedStream) != 0,
 			stream.Stream.ConsentLevels,
 			stream.Stream.Enabled,
-			m[stream.Stream.PolicyId],
+			policies[stream.Stream.PolicyId],
 		}
 		if len(stream.Stream.KafkaTopic) != 0 {
 			row = append(row, stream.Stream.KafkaTopic)
