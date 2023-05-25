@@ -100,16 +100,11 @@ func printTable(batchJobs []*entities.BatchJobWrapper) {
 
 		batchJobState := states[0]
 
-		var message = ""
-		if batchJobState.State == entities.BatchJobStateType_ERROR {
-			message = batchJobState.Message
-		}
-
 		rows = append(rows, table.Row{
 			batchJobRefWithStates.ref.Id,
 			util.IsoFormat(tz, batchJobState.StateTime),
 			batchJobState.State.String(),
-			message,
+			batchJobState.Message,
 		})
 	}
 
