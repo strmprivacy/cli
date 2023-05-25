@@ -23,7 +23,12 @@ func ListCmd() *cobra.Command {
 		},
 		DisableAutoGenTag: true,
 		Run: func(cmd *cobra.Command, args []string) {
-			printer.Print(ListProjectsWithActive())
+			outputFormat := util.GetStringAndErr(cmd.Flags(), common.OutputFormatFlag)
+			if outputFormat == common.OutputFormatJson || outputFormat == common.OutputFormatJsonRaw {
+				printer.Print(ListProjects())
+			} else {
+				printer.Print(ListProjectsWithActive())
+			}
 		},
 	}
 }

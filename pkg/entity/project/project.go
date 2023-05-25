@@ -22,27 +22,36 @@ const (
 	removeMembersFlag = "remove-member"
 )
 
+var projectsAndActiveProject *ProjectsAndActiveProject
+
 func SetupClient(clientConnection *grpc.ClientConn, ctx context.Context) {
 	apiContext = ctx
 	client = projects.NewProjectsServiceClient(clientConnection)
 }
 
-func ListProjects() []*entities.Project {
-	if apiContext == nil {
-		common.CliExit(errors.New(fmt.Sprint("No login information found. Use: `" + common.RootCommandName + " auth login` first.")))
+func ListProjects() *projects.ListProjectsResponse {
+	return &projects.ListProjectsResponse{
+		Projects: ListProjectsWithActive().Projects,
 	}
-
-	req := &projects.ListProjectsRequest{}
-	response, err := client.ListProjects(apiContext, req)
-	common.CliExit(err)
-	return response.Projects
 }
 
 func ListProjectsWithActive() ProjectsAndActiveProject {
-	return ProjectsAndActiveProject{
-		Projects:      ListProjects(),
-		activeProject: user_project.GetActiveProject(),
+	if projectsAndActiveProject == nil {
+		if apiContext == nil {
+			common.CliExit(errors.New(fmt.Sprint("No login information found. Use: `" + common.RootCommandName + " auth login` first.")))
+		}
+
+		req := &projects.ListProjectsRequest{}
+		response, err := client.ListProjects(apiContext, req)
+		common.CliExit(err)
+
+		projectsAndActiveProject = &ProjectsAndActiveProject{
+			Projects:      response.Projects,
+			activeProject: user_project.GetActiveProject(),
+		}
 	}
+
+	return *projectsAndActiveProject
 }
 
 func GetProject(projectName string) ProjectsAndActiveProject {
@@ -92,13 +101,8 @@ func GetProjectIdFromName(projectName string) string {
 func GetProjectId(cmd *cobra.Command) string {
 	flags := cmd.Flags()
 	projectName, _ := flags.GetString(common.ProjectNameFlag)
-	var projectId string
-	if len(projectName) > 0 {
-		projectId = GetProjectIdFromName(projectName)
-	} else {
-		projectId = GetProjectIdFromName(user_project.GetActiveProject())
-	}
-	return projectId
+
+	return GetProjectIdFromName(projectName)
 }
 
 func manage(args []string, cmd *cobra.Command) {
