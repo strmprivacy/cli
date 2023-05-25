@@ -1,3 +1,10 @@
+## [3.14.1](https://github.com/strmprivacy/cli/compare/v3.14.0...v3.14.1) (2023-05-25)
+
+
+### Bug Fixes
+
+* **strm-2422:** remove redundant API calls ([#147](https://github.com/strmprivacy/cli/issues/147)) ([aae05f8](https://github.com/strmprivacy/cli/commit/aae05f8199a89fe0a9778bd35437d78fe25e04c4))
+
 # [3.14.0](https://github.com/strmprivacy/cli/compare/v3.13.0...v3.14.0) (2023-05-24)
 
 
