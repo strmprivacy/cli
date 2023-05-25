@@ -1,3 +1,10 @@
+## [3.14.2](https://github.com/strmprivacy/cli/compare/v3.14.1...v3.14.2) (2023-05-25)
+
+
+### Bug Fixes
+
+* always print the batch job state message ([#148](https://github.com/strmprivacy/cli/issues/148)) ([2b18e83](https://github.com/strmprivacy/cli/commit/2b18e83aaf9ac4473b87511e8c89a5fdb50edfb4))
+
 ## [3.14.1](https://github.com/strmprivacy/cli/compare/v3.14.0...v3.14.1) (2023-05-25)
 
 
