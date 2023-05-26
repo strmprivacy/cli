@@ -29,6 +29,7 @@ import (
 	"strmprivacy/strm/pkg/entity/organization"
 	"strmprivacy/strm/pkg/entity/policy"
 	"strmprivacy/strm/pkg/entity/project"
+	"strmprivacy/strm/pkg/entity/purpose_mapping"
 	"strmprivacy/strm/pkg/entity/schema_code"
 	"strmprivacy/strm/pkg/entity/stream"
 	"strmprivacy/strm/pkg/entity/usage"
@@ -97,6 +98,7 @@ func SetupServiceClients(accessToken *string, zedToken *string) {
 	policy.SetupClient(clientConnection, ctx)
 	monitor.SetupClient(clientConnection, ctx)
 	logs.SetupClient(clientConnection, ctx)
+	purpose_mapping.SetupClient(clientConnection, ctx)
 }
 
 func InitializeConfig(cmd *cobra.Command) error {
