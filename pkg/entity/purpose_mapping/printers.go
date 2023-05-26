@@ -84,6 +84,7 @@ func printTable(purposeMappings []*v1.PurposeMapping) {
 		row := table.Row{
 			purposeMapping.Purpose,
 			purposeMapping.Level,
+			purposeMapping.Description,
 		}
 		rows = append(rows, row)
 	}
@@ -91,6 +92,7 @@ func printTable(purposeMappings []*v1.PurposeMapping) {
 	headers := table.Row{
 		"Purpose Mapping",
 		"Value",
+		"Description",
 	}
 	util.RenderTable(headers, rows)
 }

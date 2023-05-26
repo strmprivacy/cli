@@ -19,15 +19,15 @@ strm create purpose-mapping "Legitimate Interest"
 var getExample = util.DedentTrim(`
 strm get purpose-mapping 0
 
- PURPOSE MAPPING              VALUE
+ PURPOSE MAPPING   VALUE   DESCRIPTION
 
- Legitimate Interest          0
+ Legitimate Interest   2
 `)
 var listExample = util.DedentTrim(`
 strm list purpose-mappings
 
- PURPOSE MAPPING              VALUE
+ PURPOSE MAPPING   VALUE   DESCRIPTION
 
- Legitimate Interest          0
- Marketing                    1
+ Marketing             1
+ Legitimate Interest   2
 `)
