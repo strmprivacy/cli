@@ -40,7 +40,7 @@ func GetCmd() *cobra.Command {
 			get(int32(level))
 		},
 		Args:              cobra.ExactArgs(1), // the integer value of the purpose mapping
-		ValidArgsFunction: NamesCompletion,
+		ValidArgsFunction: LevelsCompletion,
 	}
 }
 func ListCmd() *cobra.Command {

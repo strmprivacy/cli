@@ -90,7 +90,7 @@ func printTable(purposeMappings []*v1.PurposeMapping) {
 	}
 
 	headers := table.Row{
-		"Purpose Mapping",
+		"Purpose",
 		"Value",
 		"Description",
 	}

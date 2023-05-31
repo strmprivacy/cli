@@ -8,8 +8,8 @@ the name when creating a new purpose mapping. The mapping is intended to make it
 creating data contracts and streams. The integer value that the purpose mapping is assigned to is used in the
 actual transport / creation of events, as an integer value is more efficient to transport than a string.
 
-Please note that purpose mappings cannot be deleted once created. This is to ensure that the integer values
-
+Please note that purpose mappings cannot be deleted once created. This is to ensure that the integer values are
+linked to one and only one purpose mapping, and the purpose remains the same for derived streams that use it.
 `)
 
 var createExample = `

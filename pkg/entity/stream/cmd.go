@@ -5,6 +5,7 @@ import (
 	"strmprivacy/strm/pkg/common"
 	"strmprivacy/strm/pkg/entity/data_contract"
 	"strmprivacy/strm/pkg/entity/policy"
+	"strmprivacy/strm/pkg/entity/purpose_mapping"
 	"strmprivacy/strm/pkg/util"
 )
 
@@ -37,6 +38,7 @@ func CreateCmd() *cobra.Command {
 	policy.SetupFlags(stream, flags)
 	err := stream.RegisterFlagCompletionFunc(linkedStreamFlag, SourceNamesCompletion)
 	err = stream.RegisterFlagCompletionFunc(maskedFieldsFlag, completion)
+	err = stream.RegisterFlagCompletionFunc(purposesFlag, purpose_mapping.LevelsCompletion)
 	common.CliExit(err)
 	return stream
 }

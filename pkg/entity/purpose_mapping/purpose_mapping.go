@@ -58,7 +58,7 @@ func create(newPurposeMapping string) {
 	printer.Print(response)
 }
 
-func NamesCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
+func LevelsCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
 	response, err := list()
 
 	if err != nil {
