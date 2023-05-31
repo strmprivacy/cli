@@ -12,6 +12,7 @@ import (
 	"strmprivacy/strm/pkg/entity/kafka_user"
 	"strmprivacy/strm/pkg/entity/policy"
 	"strmprivacy/strm/pkg/entity/project"
+	"strmprivacy/strm/pkg/entity/purpose_mapping"
 	"strmprivacy/strm/pkg/entity/stream"
 )
 
@@ -33,4 +34,5 @@ func init() {
 	CreateCmd.AddCommand(kafka_user.CreateCmd())
 	CreateCmd.AddCommand(project.CreateCmd())
 	CreateCmd.AddCommand(policy.CreateCmd())
+	CreateCmd.AddCommand(purpose_mapping.CreateCmd())
 }
