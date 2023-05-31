@@ -1,3 +1,10 @@
+# [3.15.0](https://github.com/strmprivacy/cli/compare/v3.14.2...v3.15.0) (2023-05-31)
+
+
+### Features
+
+* **strm-2424:** add purpose mapping calls ([#149](https://github.com/strmprivacy/cli/issues/149)) ([f62777c](https://github.com/strmprivacy/cli/commit/f62777c3ca8c48cf92c82b5b2ab2a50545582c7f))
+
 ## [3.14.2](https://github.com/strmprivacy/cli/compare/v3.14.1...v3.14.2) (2023-05-25)
 
 
