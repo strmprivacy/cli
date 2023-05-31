@@ -19,7 +19,7 @@ func CreateCmd() *cobra.Command {
 		Run: func(cmd *cobra.Command, args []string) {
 			create(args[0])
 		},
-		Args:              cobra.MaximumNArgs(1), // the name of the purpose mapping
+		Args:              cobra.ExactArgs(1), // the name of the purpose mapping
 		ValidArgsFunction: common.NoFilesEmptyCompletion,
 	}
 }
