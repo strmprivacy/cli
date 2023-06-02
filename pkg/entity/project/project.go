@@ -38,7 +38,7 @@ func ListProjects() *projects.ListProjectsResponse {
 func ListProjectsWithActive() ProjectsAndActiveProject {
 	if projectsAndActiveProject == nil {
 		if apiContext == nil {
-			common.CliExit(errors.New(fmt.Sprint("No login information found. Use: `" + common.RootCommandName + " auth login` first.")))
+			common.CliExit(errors.New(fmt.Sprintf("No login information found. Use: %s auth login first.", common.RootCommandName)))
 		}
 
 		req := &projects.ListProjectsRequest{}

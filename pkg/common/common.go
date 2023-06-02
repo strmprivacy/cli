@@ -45,7 +45,7 @@ func Abort(format string, args ...interface{}) {
 }
 
 func UnauthenticatedError() error {
-	return errors.New(fmt.Sprintf("No login information found. Use: `%v auth login` first.", RootCommandName))
+	return errors.New(fmt.Sprintf("No login information found. Use: %v auth login first.", RootCommandName))
 }
 
 func UnauthenticatedErrorWithExit() {

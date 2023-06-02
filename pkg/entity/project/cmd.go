@@ -121,7 +121,7 @@ func DeleteCmd() *cobra.Command {
 
 func deleteConfirmation(projectName string) bool {
 	prompt := promptui.Prompt{
-		Label: "Confirm you want to delete `" + projectName + "` by entering the project name",
+		Label: "Confirm you want to delete '" + projectName + "' by entering the project name",
 	}
 	result, _ := prompt.Run()
 	return result == projectName

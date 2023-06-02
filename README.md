@@ -7,21 +7,27 @@ This package contains a command line interface (CLI) for interacting with [STRM 
 
 ## Installation
 
+### Builds
+The STRM CLI is available for major OS platforms: Linux, Mac and Windows. Please note Windows builds are not tested by us, but should work properly.
+
 ### Manually
 
 Download the latest release for your platform from
 the [releases page](https://github.com/strmprivacy/cli/releases/latest). Put the binary somewhere on your path.
 
+#### Authentication
+Authentication is handled through the browser with the `strm auth login` command. If you can't login through browser (e.g. when using the CLI in scripts or on remote machines), a headless auth flow is supported through the `--remote` and `--non-interactive` flags. Note: this requires both a browser-accessible machine to run `--remote` to initiate authentication and the non-browser machine to run `strm auth login --non-interactive`. The help command `strm auth login --help` also provides directions.
+
 #### Shell Completion
 
-In order to set up command completion, please follow the instructions below: 
+In order to set up command completion, please follow the instructions below:
 
 - for `bash` users \
   add the following line to your `.bash_profile` or `.bashrc`:
   `source <(strm completion bash)`
   or, to load completions for each session, execute once:
-    - Linux users: `strm completion bash > /etc/bash_completion.d/strm`
-    - macOS users: `strm completion bash > /usr/local/etc/bash_completion.d/strm`
+  - Linux users: `strm completion bash > /etc/bash_completion.d/strm`
+  - macOS users: `strm completion bash > /usr/local/etc/bash_completion.d/strm`
 - for `zsh` users \
   ensure that shell completion is enabled, then run (only needs to be done once):
   `strm completion zsh > "${fpath[1]}/_strm"`
@@ -94,7 +100,7 @@ manual editing.
 
 In this directory you can also find all entities that have been `save`d (see the [Save](#configuration) option). These
 entities are saved in the following files: `<config-dir>/<Entity>/<name>.json`, where `Entity` is the Entity name,
-i.e. "Stream" or "DataConnector" and the `name` is the unique name of the created entity, i.e. "MyImportantStream" or 
+i.e. "Stream" or "DataConnector" and the `name` is the unique name of the created entity, i.e. "MyImportantStream" or
 "s3-data-connector".
 
 ## Getting help
@@ -114,4 +120,3 @@ you have to option to include an MWE, please do so.
 
 See our [documentation](https://docs.strmprivacy.io)
 or [reach out to us](https://docs.strmprivacy.io/docs/latest/contact/index.html).
-
