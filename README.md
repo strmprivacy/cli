@@ -16,7 +16,7 @@ Download the latest release for your platform from
 the [releases page](https://github.com/strmprivacy/cli/releases/latest). Put the binary somewhere on your path.
 
 #### Authentication
-Authentication is handled through the browser with the `strm auth login` command. If you can't login through browser (e.g. when using the CLI in scripts or on remote machines), a headless auth flow is supported through the `--remote` and `--non-interactive` flags. Note: this requires both a browser-accessible machine to run `--remote` to initiate authication and the non-browser machine to run `strm auth login --non-interactive`. The help command `strm auth login --help` also provides directions.
+Authentication is handled through the browser with the `strm auth login` command. If you can't login through browser (e.g. when using the CLI in scripts or on remote machines), a headless auth flow is supported through the `--remote` and `--non-interactive` flags. Note: this requires both a browser-accessible machine to run `--remote` to initiate authentication and the non-browser machine to run `strm auth login --non-interactive`. The help command `strm auth login --help` also provides directions.
 
 #### Shell Completion
 
