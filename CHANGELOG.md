@@ -1,3 +1,10 @@
+## [3.15.1](https://github.com/strmprivacy/cli/compare/v3.15.0...v3.15.1) (2023-06-02)
+
+
+### Bug Fixes
+
+* **strm-2441:** remove backticks in usage commands ([#151](https://github.com/strmprivacy/cli/issues/151)) ([067f196](https://github.com/strmprivacy/cli/commit/067f196e771e51b2f31a3b90f1d23d12a42cc214)), closes [/github.com/spf13/pflag/blob/85dd5c8bc61cfa382fecd072378089d4e856579d/flag.go#L568-L573](https://github.com//github.com/spf13/pflag/blob/85dd5c8bc61cfa382fecd072378089d4e856579d/flag.go/issues/L568-L573)
+
 # [3.15.0](https://github.com/strmprivacy/cli/compare/v3.14.2...v3.15.0) (2023-05-31)
 
 
