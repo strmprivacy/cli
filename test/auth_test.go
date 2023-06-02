@@ -11,5 +11,5 @@ func TestAuthAccessTokenOutputsAnErrorWhenNotLoggedIn(t *testing.T) {
 
 	out := ExecuteCliAndGetOutput(t, tokenFileName, "auth", "print-access-token")
 
-	assert.Equal(t, out, "No login information found. Use: `dstrm auth login` first.\n")
+	assert.Equal(t, out, "No login information found. Use: dstrm auth login first.\n")
 }
