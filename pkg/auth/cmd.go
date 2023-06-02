@@ -14,25 +14,19 @@ const (
 	nonInteractiveRemoteHostShortFlag = "r"
 )
 
-var longDocPrintToken = util.LongDocsUsage(`
-Print the current (JWT) access token to the terminal that can be used in a http header. Note that the token is printed
-on °stdout°, and the Expiry on °stderr° so it’s easy to capture the token for scripting use with
-
-°°°bash
-export token=$(strm auth print-access-token)
-°°°
-
-Note that this token might be expired, so a refresh may be required. Use token as follows:
-'Authorization: Bearer &lt;token&gt;'
-
-`)
-
 func LoginCmd() *cobra.Command {
 	loginCmd := &cobra.Command{
 		Use:   "login",
 		Short: "Login",
-		Long: `Log a user in using its Console credentials and save the login token to disk,
-to allow the CLI access to the STRM Privacy APIs.`,
+		Long: util.LongDocsUsage(`
+Log a user in using its Console credentials and save the login token to disk, to allow the CLI access to the STRM Privacy APIs.
+
+Authentication is handled through the browser with the ` + "`" + common.RootCommandName + " auth login`" + ` command. If you
+can't login through browser (e.g. when using the CLI in scripts or on remote machines), a headless auth flow is supported
+through the ` + "`--remote` and `--non-interactive`" + ` flags. Note: this requires both a browser-accessible machine to
+run ` + "`--remote`" + ` to initiate authentication and the non-browser machine to run ` + "`" + common.RootCommandName + " auth login --non-interactive`" + `.
+The help command ` + "`" + common.RootCommandName + " auth login --help`" + ` also provides directions.
+`),
 		Run: func(cmd *cobra.Command, args []string) {
 			login(cmd)
 		},
@@ -67,7 +61,18 @@ func PrintTokenCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "print-access-token",
 		Short: "Print your current access-token to stdout",
-		Long:  longDocPrintToken,
+		Long: util.LongDocsUsage(`
+Print the current (JWT) access token to the terminal that can be used in a http header. Note that the token is printed
+on °stdout°, and the Expiry on °stderr° so it’s easy to capture the token for scripting use with
+
+°°°bash
+export token=$(strm auth print-access-token)
+°°°
+
+Note that this token might be expired, so a refresh may be required. Use token as follows:
+'Authorization: Bearer &lt;token&gt;'
+
+`),
 		Run: func(cmd *cobra.Command, args []string) {
 			printAccessToken()
 		},
