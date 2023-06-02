@@ -21,8 +21,8 @@ func ListCmd() *cobra.Command {
 strm list users --organization
  EMAIL                     FIRST NAME   LAST NAME   USER ROLES
 
- [...]@strmprivacy.io   bob          rbac        [MEMBER]
- [...]@strmprivacy.io       Demo         STRM        [ADMIN MEMBER]
+ [...]@strmprivacy.io      bob          rbac        [MEMBER]
+ [...]@strmprivacy.io      Demo         STRM        [ADMIN MEMBER]
 `),
 		PreRun: func(cmd *cobra.Command, args []string) {
 			printer = configurePrinter(cmd)

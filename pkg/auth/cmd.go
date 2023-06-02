@@ -41,7 +41,7 @@ to allow the CLI access to the STRM Privacy APIs.`,
 	}
 
 	flags := loginCmd.Flags()
-	flags.BoolP(nonInteractiveTargetHostFlag, nonInteractiveTargetHostShortFlag, false, fmt.Sprintf("is the current host a headless system, without access to a browser? If true, use `%s auth login --%s`", common.RootCommandName, nonInteractiveRemoteHostFlag))
+	flags.BoolP(nonInteractiveTargetHostFlag, nonInteractiveTargetHostShortFlag, false, fmt.Sprintf("is the current host a headless system, without access to a browser? If true, use %s auth login --%s", common.RootCommandName, nonInteractiveRemoteHostFlag))
 	flags.BoolP(nonInteractiveRemoteHostFlag, nonInteractiveRemoteHostShortFlag, false, "should the current host act as a remote login for a headless system? If true, an authorization code flow result will be printed, that can be used for the non-interactive target host.")
 
 	loginCmd.MarkFlagsMutuallyExclusive(nonInteractiveTargetHostFlag, nonInteractiveRemoteHostFlag)

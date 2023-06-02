@@ -60,7 +60,7 @@ func (authenticator *Authenticator) AccessToken() *string {
 		tokens, err := authenticator.tokenSource.Token()
 		if err != nil {
 			authenticator.revoke()
-			common.CliExit(errors.New(fmt.Sprintf("Your session has expired. Please re-login using: `%s auth login`", common.RootCommandName)))
+			common.CliExit(errors.New(fmt.Sprintf("Your session has expired. Please re-login using: %s auth login", common.RootCommandName)))
 		}
 		if authenticator.storedToken.AccessToken != tokens.AccessToken {
 			authenticator.populateValues(oauthTokenToStoredToken(*tokens))
@@ -87,7 +87,7 @@ func (authenticator *Authenticator) login(cmd *cobra.Command) {
 
 	if nonInteractiveTarget {
 		baseOauthCliConfig.NonInteractive = true
-		baseOauthCliConfig.NonInteractivePromptText = fmt.Sprintf("On a machine with access to a browser, use `%s auth login --%s` to retrieve a valid code:\n", common.RootCommandName, nonInteractiveRemoteHostFlag)
+		baseOauthCliConfig.NonInteractivePromptText = fmt.Sprintf("On a machine with access to a browser, use %s auth login --%s to retrieve a valid code:\n", common.RootCommandName, nonInteractiveRemoteHostFlag)
 		baseOauthCliConfig.OAuth2Config.RedirectURL = "http://localhost:10000"
 		eg.Go(authenticator.handleLogin(ctx, baseOauthCliConfig))
 	} else {
@@ -134,9 +134,9 @@ func (authenticator *Authenticator) handleLogin(ctx context.Context, cfg oauth2c
 
 			switch rootCauseErr.(type) {
 			case base64.CorruptInputError:
-				common.CliExit(errors.New(fmt.Sprintf("\nInvalid base64 encoded input. Make sure that the input you provide is retrieved using `%s auth login --%s`", common.RootCommandName, nonInteractiveRemoteHostFlag)))
+				common.CliExit(errors.New(fmt.Sprintf("\nInvalid base64 encoded input. Make sure that the input you provide is retrieved using %s auth login --%s", common.RootCommandName, nonInteractiveRemoteHostFlag)))
 			case *json.SyntaxError:
-				common.CliExit(errors.New(fmt.Sprintf("\nMalformed JSON input. Make sure that the input you provide is retrieved using `%s auth login --%s`", common.RootCommandName, nonInteractiveRemoteHostFlag)))
+				common.CliExit(errors.New(fmt.Sprintf("\nMalformed JSON input. Make sure that the input you provide is retrieved using %s auth login --%s", common.RootCommandName, nonInteractiveRemoteHostFlag)))
 			case *oauth2.RetrieveError:
 				retrieveErr := (rootCauseErr).(*oauth2.RetrieveError)
 				common.CliExit(errors.New(fmt.Sprintf("\nUnable to exchange authorization code with token (HTTP Code: %v, Body: %v)", retrieveErr.Response.Status, string(retrieveErr.Body))))
