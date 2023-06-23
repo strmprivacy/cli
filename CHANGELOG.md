@@ -1,3 +1,10 @@
+## [3.15.2](https://github.com/strmprivacy/cli/compare/v3.15.1...v3.15.2) (2023-06-23)
+
+
+### Bug Fixes
+
+* **strm-2469:** correctly handle the absence of an active_projects.json file ([#152](https://github.com/strmprivacy/cli/issues/152)) ([b97e54e](https://github.com/strmprivacy/cli/commit/b97e54e0bfdd258347a487a9ff4afa107a5d7c1c))
+
 ## [3.15.1](https://github.com/strmprivacy/cli/compare/v3.15.0...v3.15.1) (2023-06-02)
 
 
