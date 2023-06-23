@@ -73,6 +73,10 @@ func initializeUsersProjectsContext() {
 		activeProjectFilePath := path.Join(common.ConfigPath(), activeProjectFilename)
 
 		bytes, err := os.ReadFile(activeProjectFilePath)
+		if os.IsNotExist(err) {
+			Projects = &UsersProjectsContext{}
+			return
+		}
 		common.CliExit(err)
 		activeProjects := UsersProjectsContext{}
 		_ = json.Unmarshal(bytes, &activeProjects)
