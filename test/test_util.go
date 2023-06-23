@@ -180,6 +180,7 @@ func loginInBrowser() error {
 	page := connection.MustPage("http://localhost:10000")
 
 	page.MustElement("#username").MustInput(testConfig().email)
+	page.MustElement("button[name=login]").MustClick()
 	page.MustElement("#password").MustInput(testConfig().password)
 	page.MustElement("button[name=login]").MustClick()
 	page.MustWaitLoad()
