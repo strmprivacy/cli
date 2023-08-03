@@ -3,8 +3,8 @@ package purpose_mapping
 import (
 	"context"
 	"github.com/spf13/cobra"
-	"github.com/strmprivacy/api-definitions-go/v2/api/entities/v1"
-	"github.com/strmprivacy/api-definitions-go/v2/api/purpose_mapping/v1"
+	"github.com/strmprivacy/api-definitions-go/v3/api/entities/v1"
+	"github.com/strmprivacy/api-definitions-go/v3/api/purpose_mapping/v1"
 	"google.golang.org/grpc"
 	"sort"
 	"strconv"

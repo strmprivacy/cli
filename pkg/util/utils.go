@@ -6,7 +6,7 @@ import (
 	"github.com/lithammer/dedent"
 	"github.com/samber/lo"
 	"github.com/spf13/pflag"
-	"github.com/strmprivacy/api-definitions-go/v2/api/monitoring/v1"
+	"github.com/strmprivacy/api-definitions-go/v3/api/monitoring/v1"
 	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/timestamppb"

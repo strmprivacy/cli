@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/spf13/cobra"
-	"github.com/strmprivacy/api-definitions-go/v2/api/monitoring/v1"
+	"github.com/strmprivacy/api-definitions-go/v3/api/monitoring/v1"
 	"google.golang.org/genproto/protobuf/field_mask"
 	"google.golang.org/grpc"
 	"io"

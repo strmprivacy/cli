@@ -5,7 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/spf13/cobra"
-	"github.com/strmprivacy/api-definitions-go/v2/api/organizations/v1"
+	"github.com/strmprivacy/api-definitions-go/v3/api/organizations/v1"
 	"google.golang.org/grpc"
 	"os"
 	"strings"

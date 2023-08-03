@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/manifoldco/promptui"
 	"github.com/spf13/cobra"
-	"github.com/strmprivacy/api-definitions-go/v2/api/projects/v1"
+	"github.com/strmprivacy/api-definitions-go/v3/api/projects/v1"
 	"strmprivacy/strm/pkg/common"
 	"strmprivacy/strm/pkg/util"
 )
