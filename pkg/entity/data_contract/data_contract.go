@@ -171,7 +171,9 @@ func RefsCompletion(cmd *cobra.Command, args []string, complete string) ([]strin
 		return nil, cobra.ShellCompDirectiveNoFileComp
 	}
 
-	req := &data_contracts.ListDataContractsRequest{}
+	req := &data_contracts.ListDataContractsRequest{
+		ProjectId: project.GetProjectId(cmd),
+	}
 	response, err := client.ListDataContracts(apiContext, req)
 
 	if err != nil {

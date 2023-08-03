@@ -54,7 +54,7 @@ func ListCmd() *cobra.Command {
 func GetCmd() *cobra.Command {
 	return &cobra.Command{
 		Use:               "data-contract (handle/name/version)",
-		Short:             "Get Event Contract by reference",
+		Short:             "Get Data-Contract by reference",
 		Long:              longDoc,
 		DisableAutoGenTag: true,
 		PreRun: func(cmd *cobra.Command, args []string) {
