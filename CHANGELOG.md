@@ -1,3 +1,10 @@
+## [3.15.3](https://github.com/strmprivacy/cli/compare/v3.15.2...v3.15.3) (2023-08-04)
+
+
+### Bug Fixes
+
+* autocomplete for data connector as flag ([#136](https://github.com/strmprivacy/cli/issues/136)) ([8ded383](https://github.com/strmprivacy/cli/commit/8ded3836649471768bbf244f3c57985029ba785f))
+
 ## [3.15.2](https://github.com/strmprivacy/cli/compare/v3.15.1...v3.15.2) (2023-06-23)
 
 
