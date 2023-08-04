@@ -1,3 +1,10 @@
+# [3.16.0](https://github.com/strmprivacy/cli/compare/v3.15.3...v3.16.0) (2023-08-04)
+
+
+### Features
+
+* **strm-2427:** upgraded to api v3 ([c9c048f](https://github.com/strmprivacy/cli/commit/c9c048f458da9dfb1be0dbabb09f7d4b35273835)), closes [#153](https://github.com/strmprivacy/cli/issues/153) [#154](https://github.com/strmprivacy/cli/issues/154)
+
 ## [3.15.3](https://github.com/strmprivacy/cli/compare/v3.15.2...v3.15.3) (2023-08-04)
 
 
