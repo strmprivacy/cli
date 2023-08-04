@@ -1,3 +1,10 @@
+## [3.16.1](https://github.com/strmprivacy/cli/compare/v3.16.0...v3.16.1) (2023-08-04)
+
+
+### Bug Fixes
+
+* **master:** homebrew formula new location ([b1334bb](https://github.com/strmprivacy/cli/commit/b1334bbb6af1b7be90b8dbbe085ecab576b15bba))
+
 # [3.16.0](https://github.com/strmprivacy/cli/compare/v3.15.3...v3.16.0) (2023-08-04)
 
 
