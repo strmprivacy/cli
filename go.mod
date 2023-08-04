@@ -2,8 +2,6 @@ module strmprivacy/strm
 
 go 1.20
 
-replace github.com/strmprivacy/api-definitions-go/v3 => ../api-definitions/lang/go/src
-
 require (
 	github.com/Shopify/sarama v1.37.2
 	github.com/actgardner/gogen-avro/v7 v7.3.1
@@ -24,7 +22,7 @@ require (
 	github.com/spf13/cobra v1.6.1
 	github.com/spf13/pflag v1.0.5
 	github.com/spf13/viper v1.13.0
-	github.com/strmprivacy/api-definitions-go/v3 v3.13.0
+	github.com/strmprivacy/api-definitions-go/v3 v3.14.0
 	github.com/trietsch/oauth2cli v1.13.1-0.20221209222543-0e76591d5463
 	golang.org/x/oauth2 v0.3.0
 	golang.org/x/sync v0.3.0
