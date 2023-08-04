@@ -4,7 +4,7 @@
 SHELL := /bin/bash
 
 build:
-	goreleaser --snapshot --skip-publish --rm-dist
+	goreleaser --snapshot --skip-publish --clean
 
 zsh-completion:
 	strm completion zsh > "$${fpath[1]}/_strm"

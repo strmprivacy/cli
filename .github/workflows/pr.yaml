@@ -38,7 +38,7 @@ jobs:
         with:
             distribution: goreleaser
             version: latest
-            args: --snapshot --skip-publish --rm-dist
+            args: --snapshot --skip-publish --clean
       - name: Verify Docs
         env:
             GITHUB_TOKEN: ${{secrets.GH_TOKEN}}
