@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/spf13/cobra"
-	"github.com/strmprivacy/api-definitions-go/v2/api/data_subjects/v1"
+	"github.com/strmprivacy/api-definitions-go/v3/api/data_subjects/v1"
 	"google.golang.org/grpc"
 	"os"
 	"strmprivacy/strm/pkg/common"

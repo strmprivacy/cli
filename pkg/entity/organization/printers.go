@@ -2,7 +2,7 @@ package organization
 
 import (
 	"github.com/jedib0t/go-pretty/v6/table"
-	"github.com/strmprivacy/api-definitions-go/v2/api/organizations/v1"
+	"github.com/strmprivacy/api-definitions-go/v3/api/organizations/v1"
 	"strmprivacy/strm/pkg/util"
 )
 

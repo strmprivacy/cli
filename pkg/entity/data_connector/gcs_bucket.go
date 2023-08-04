@@ -2,7 +2,7 @@ package data_connector
 
 import (
 	"github.com/spf13/cobra"
-	"github.com/strmprivacy/api-definitions-go/v2/api/entities/v1"
+	"github.com/strmprivacy/api-definitions-go/v3/api/entities/v1"
 )
 
 const (

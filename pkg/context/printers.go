@@ -11,7 +11,7 @@ import (
 
 	"github.com/jedib0t/go-pretty/v6/list"
 	"github.com/spf13/cobra"
-	"github.com/strmprivacy/api-definitions-go/v2/api/account/v1"
+	"github.com/strmprivacy/api-definitions-go/v3/api/account/v1"
 )
 
 var printer util.Printer

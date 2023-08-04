@@ -4,8 +4,8 @@ import (
 	"context"
 	"errors"
 	"github.com/spf13/cobra"
-	"github.com/strmprivacy/api-definitions-go/v2/api/data_contracts/v1"
-	"github.com/strmprivacy/api-definitions-go/v2/api/entities/v1"
+	"github.com/strmprivacy/api-definitions-go/v3/api/data_contracts/v1"
+	"github.com/strmprivacy/api-definitions-go/v3/api/entities/v1"
 	"google.golang.org/grpc"
 	"google.golang.org/protobuf/encoding/protojson"
 	"os"
@@ -171,7 +171,9 @@ func RefsCompletion(cmd *cobra.Command, args []string, complete string) ([]strin
 		return nil, cobra.ShellCompDirectiveNoFileComp
 	}
 
-	req := &data_contracts.ListDataContractsRequest{}
+	req := &data_contracts.ListDataContractsRequest{
+		ProjectId: project.GetProjectId(cmd),
+	}
 	response, err := client.ListDataContracts(apiContext, req)
 
 	if err != nil {

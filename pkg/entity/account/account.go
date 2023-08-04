@@ -2,7 +2,7 @@ package account
 
 import (
 	"context"
-	"github.com/strmprivacy/api-definitions-go/v2/api/account/v1"
+	"github.com/strmprivacy/api-definitions-go/v3/api/account/v1"
 	"google.golang.org/grpc"
 	"strmprivacy/strm/pkg/common"
 )
